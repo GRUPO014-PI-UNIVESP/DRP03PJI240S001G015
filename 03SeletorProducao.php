@@ -7,10 +7,7 @@ include_once 'EstruturaPrincipal.php';
   <!-- Área Principal -->
   <div class="main">
     <div class="container-fluid">
-
-      <p style="margin-left: 2%; font-size: 25px; color: whitesmoke">Departamento de Produção</p>
-
-      <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <ul style="padding:5px" class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="manage-tab" data-bs-toggle="tab" data-bs-target="#manage-tab-pane" type="button" 
             role="tab" aria-controls="manage-tab-pane" aria-selected="true">Gerente</button>
@@ -27,6 +24,7 @@ include_once 'EstruturaPrincipal.php';
           <button class="nav-link" id="other-tab" data-bs-toggle="tab" data-bs-target="#other-tab-pane" type="button" 
             role="tab" aria-controls="other-tab-pane" aria-selected="false">Outros</button>
         </li>
+        <p style="margin-left: 15%; font-size: 20px; color: whitesmoke">Departamento de Produção</p>
       </ul>
 
       <div class="tab-content" id="myTabContent">

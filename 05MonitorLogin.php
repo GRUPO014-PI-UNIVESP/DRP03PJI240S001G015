@@ -9,7 +9,7 @@ $listar->execute();
 <!-- Área Principal -->
   <div class="main">
     <div class="container">
-      <p style="margin-left: 2%; font-size: 25px; color: whitesmoke">Departamento Administrativo - Histórico de Login no Sistema</p>
+      <p style="margin-left: 2%; font-size: 20px; color: whitesmoke">Departamento Administrativo - Histórico de Login no Sistema</p>
       <div class="overflow-auto">
         <table class="table table-dark table-hover">
           <thead style="font-size: 12px">

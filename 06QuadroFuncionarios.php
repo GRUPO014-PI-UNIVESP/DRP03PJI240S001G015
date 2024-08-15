@@ -9,7 +9,7 @@ $listar->execute();
 <!-- Área Principal -->
   <div class="main">
     <div class="container">
-      <p style="margin-left: 2%; font-size: 25px; color: whitesmoke">Departamento Administrativo - Quadro de Funcionários</p>
+      <p style="margin-left: 0%; font-size: 20px; color: whitesmoke">Departamento Administrativo - Quadro de Funcionários</p>
       <!-- Reorganiza a lista de funcionários de acordo com a escolha do usuário-->
       <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Reordenar por</button>
         <ul class="dropdown-menu">
