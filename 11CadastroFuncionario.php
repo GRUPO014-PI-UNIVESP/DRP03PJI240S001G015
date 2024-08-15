@@ -1,0 +1,237 @@
+<?php
+// inclusão do banco de dados e estrutura base da página web
+include_once 'ConnectDB.php';
+include_once 'EstruturaPrincipal.php';
+
+$queryLast = $connDB->prepare("SELECT MAX(ID_FUNCIONARIO) AS ID_FUNCIONARIO FROM quadro_funcionarios");
+$queryLast->execute();
+$rowID = $queryLast->fetch(PDO::FETCH_ASSOC); $novoID = $rowID['ID_FUNCIONARIO'] + 1;
+
+$geraIDuser   = substr(str_shuffle("abcdefghijklmnopqrstvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 6);
+$geraPassword = substr(str_shuffle("0123456789"), 0, 6);
+
+// capta os dados inseridos no formulário Login
+$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+
+//verifica se foi digitado dados
+if(!empty($dados['submit'])){
+
+  //busca dados cadastrados
+  $result = $connDB->prepare("SELECT NOME_FUNCIONARIO, DATA_NASCIMENTO
+                              FROM   quadro_funcionarios 
+                              WHERE  NOME_FUNCIONARIO = :nomeFunc AND DATA_NASCIMENTO = :dataNasc LIMIT 1");
+
+  // atribui valor do campo para o link de dados :usuario
+  $result->bindParam(':nomeFunc', $dados['nomeFunc'], PDO::PARAM_STR);
+  $result->bindParam(':dataNasc', $dados['dataNasc'], PDO::PARAM_STR);
+  $result->execute();
+
+  // verifica se foi encontrado algum registro contendo nome e data de nascimento idênticos
+  if(($result) AND ($result->rowCount() == 1)){
+
+    // abre caixa de alerta com mensagem de erro
+    $mensagemErro = 'Erro: O nome e data nascimento correspondente já existe no banco de dados!';
+    echo "<script type='text/javascript'>alert('$mensagemErro');</script>";
+
+  }else{
+
+    //atribuir valores dos campos para variáveis
+    $cargo       = $dados['cargo'];        $departamento = $dados['departamento']; $nomeFunc = strtoupper($dados['nomeFunc']);
+    $idUser      = $geraIDuser;            $passUser     = $geraPassword;          $dataNasc = date('Y-m-d', strtotime($dados['dataNasc']));
+    $responsavel = $_SESSION['nome_func']; $dataAdmi     = date('Y-m-d', strtotime($dados['dataAdmi']));
+  
+    if(!empty($dados['cpfFunc']))  {$cpf      = $dados['cpfFunc'];             }else{$cpf      = 'Nada Consta';}
+    if(!empty($dados['rgFunc']))   {$rg       = $dados['rgFunc'];              }else{$rg       = 'Nada Consta';}
+    if(!empty($dados['telefone'])) {$telefone = $dados['telefone'];            }else{$telefone = 'Nada Consta';}
+    if(!empty($dados['emailFunc'])){$email    = strtolower($dados['nomeFunc']);}else{$email    = 'Nada Consta';}
+    if(!empty($dados['ruaRes']))   {$ruaRes   = $dados['ruaRes'];              }else{$ruaRes   = 'Nada Consta';}
+    if(!empty($dados['numRes']))   {$numRes   = $dados['numRes'];              }else{$numRes   = 'Nada Consta';}
+    if(!empty($dados['cplRes']))   {$cplRes   = $dados['cplRes'];              }else{$cplRes   = 'Nada Consta';}
+    if(!empty($dados['bairro']))   {$bairro   = strtoupper($dados['bairro']);  }else{$bairro   = 'Nada Consta';}
+    if(!empty($dados['cidade']))   {$cidade   = strtoupper($dados['cidade']);  }else{$cidade   = 'Nada Consta';}
+    if(!empty($dados['uf']))       {$estado   = strtoupper($dados['estado']);  }else{$estado   = 'NC';}  
+        
+    // criptografar senha e usuário geradas
+    $usuario      = password_hash($geraIDuser  , PASSWORD_DEFAULT);
+    $senha        = password_hash($geraPassword, PASSWORD_DEFAULT);
+
+    // definir credencial de acordo com cargo
+    $credencial = '';
+    switch($cargo){
+      case 'DIRETOR(A) EXECUTIVO(A)': $credencial = 7; break;  case 'GERENTE'               : $credencial = 6; break;
+      case 'SUPERVISOR(A)'          : $credencial = 5; break;  case 'ANALISTA SR'           : $credencial = 4; break;
+      case 'ANALISTA JR'            : $credencial = 3; break;  case 'ASSISTENTE'            : $credencial = 2; break;
+      case 'LÍDER DE PRODUÇÃO'      : $credencial = 3; break;  case 'OPERADOR(A) DE MÁQUINA': $credencial = 2; break;
+      case 'SERVENTE'               : $credencial = 1; break;  case 'MECÂNICO(A) CHEFE'     : $credencial = 4; break;
+      case 'MECÂNICO'               : $credencial = 3; break;  case 'ENGENHEIRO(A)'         : $credencial = 5; break;
+      case 'TECNICO(A)'             : $credencial = 3; break;  case 'PROGRAMADOR(A)'        : $credencial = 2; break;
+      case 'MOTORISTA'              : $credencial = 1; break;  case 'FAXINEIRO'             : $credencial = 1; break;
+    }
+
+    $registra = $connDB->prepare("INSERT INTO quadro_funcionarios (NOME_FUNCIONARIO, DATA_ADMISSAO, CARGO, DEPARTAMENTO,
+                                  CREDENCIAL, USUARIO, SENHA, ID_USUARIO, SENHA_USUARIO, DATA_NASCIMENTO, CPF, RG, TELEFONE,
+                                  EMAIL, RUA_RES, NUM_RES, COMPLEMENTO, BAIRRO, CIDADE, UF, RESPONSAVEL_CADASTRO)
+                                VALUES (:nomeFunc, :dataAdmi, :cargo, :departamento, :credencial,:usuario, :senha, :idUser, :passUser, 
+                                  :dataNasc, :cpf, :rg, :telefone, :email, :ruaRes, :numRes, :cplRes, :bairro, :cidade, :estado, :responsavel)");
+
+    $registra->bindParam(':nomeFunc'    , $nomeFunc,     PDO::PARAM_STR);   $registra->bindParam(':dataAdmi'    , $dataAdmi,     PDO::PARAM_STR);
+    $registra->bindParam(':cargo'       , $cargo,        PDO::PARAM_STR);   $registra->bindParam(':departamento', $departamento, PDO::PARAM_STR);
+    $registra->bindParam(':credencial'  , $credencial,   PDO::PARAM_INT);   $registra->bindParam(':usuario'     , $idUser,       PDO::PARAM_STR);
+    $registra->bindParam(':senha'       , $passUser,     PDO::PARAM_STR);   $registra->bindParam(':idUser'      , $usuario,      PDO::PARAM_STR);
+    $registra->bindParam(':passUser'    , $senha,        PDO::PARAM_STR);   $registra->bindParam(':dataNasc'    , $dataNasc,     PDO::PARAM_STR);
+    $registra->bindParam(':cpf'         , $cpf,          PDO::PARAM_STR);   $registra->bindParam(':rg'          , $rg,           PDO::PARAM_STR);
+    $registra->bindParam(':telefone'    , $telefone,     PDO::PARAM_STR);   $registra->bindParam(':email'       , $email,        PDO::PARAM_STR);
+    $registra->bindParam(':ruaRes'      , $ruaRes,       PDO::PARAM_STR);   $registra->bindParam(':numRes'      , $numRes,       PDO::PARAM_STR);
+    $registra->bindParam(':cplRes'      , $cplRes,       PDO::PARAM_STR);   $registra->bindParam(':bairro'      , $bairro,       PDO::PARAM_STR);
+    $registra->bindParam(':cidade'      , $cidade,       PDO::PARAM_STR);   $registra->bindParam(':estado'      , $estado,       PDO::PARAM_STR);
+    $registra->bindParam(':responsavel' , $responsavel,  PDO::PARAM_STR);
+
+    $registra->execute();
+    
+    header('Location: 11CadastroFuncionario.php');
+  }
+}
+//se houver erro de entrada mostra erro na página
+if(isset($_SESSION['msg'])){
+   echo  $_SESSION['msg'];
+   unset($_SESSION['msg']);
+}
+?>
+<!-- Área Principal -->
+  <div class="main">
+    <div class="container">
+      <p style="margin-left: 2%; font-size: 25px; color: whitesmoke">Departamento Administrativo - Cadastro de Novo Funcionário</p>
+
+      <form class="row g-2" method="POST" action="#">
+
+        <div class="col-md-2">
+          <label for="idFunc" class="form-label" style="color:aqua; font-size: 10px">Cadastro No.</label>
+          <input style="text-align:right; font-size: 12px" type="number" class="form-control" id="idFunc" name="idFunc" value="<?php echo $novoID?>" readonly>
+        </div>
+
+        <div class="col-md-2">
+          <label for="dataNasc" class="form-label" style="font-size: 10px; color:aqua">Data de Nascimento</label>
+          <input style="font-size: 12px" type="date" class="form-control" id="dataNasc" name="dataNasc" required autofocus>
+        </div>
+
+        <div class="col-md-3">
+          <label for="cpfFunc" class="form-label" style="font-size: 10px; color:aqua">C.P.F.</label>
+          <input style="font-size: 12px" type="text" class="form-control" id="CPFInput" name="cpfFunc" placeholder="Opcional, somente números" maxlength="11" oninput="criaMascara('CPF')">
+        </div>
+
+        <div class="col-md-3">
+          <label for="rgFunc" class="form-label" style="font-size: 10px; color:aqua">R.G.</label>
+          <input style="font-size: 12px" type="text" class="form-control" id="RGInput" name="rgFunc" placeholder="Opcional, somente números" maxlength="9" oninput="criaMascara('RG')">
+        </div>
+
+        <div class="col-12">
+          <label for="nomeFunc" class="form-label" style="font-size: 10px; color:aqua">Nome Completo</label>
+          <input style="font-size: 12px; text-transform:uppercase" type="text" class="form-control" id="nomeFunc" name="nomeFunc" placeholder="" maxlength="120" required>
+        </div>
+
+        <div class="col-8">
+          <label for="emailFunc" class="form-label" style="font-size: 10px; color:aqua">Email</label>
+          <input style="font-size: 12px; text-transform:lowercase" type="email" class="form-control" id="emailFunc" name="emailFunc" placeholder="Opcional">
+        </div>
+
+        <div class="col-md-4">
+          <label for="telefone" class="form-label" style="font-size: 10px; color:aqua">Telefone de Contato</label>
+          <input style="font-size: 12px; " type="text" class="form-control" id="CelularInput" name="telefone" placeholder="Opcional, somente números" maxlength="11" oninput="criaMascara('Celular')">
+        </div>
+
+        <div class="col-md-2">
+          <label for="dataAdmi" class="form-label" style="font-size: 10px; color:aqua">Data de Admissão</label>
+          <input style="font-size: 12px" type="date" class="form-control" id="dataAdmi" name="dataAdmi" required>
+        </div>
+
+        <div class="col-md-4">
+          <label for="departamento" class="form-label" style="font-size: 10px; color:aqua">Departamento</label>
+          <select style="font-size: 12px" id="departamento" class="form-select" name="departamento">
+            <option style="font-size: 12px" selected>Selecione uma opção</option>
+            <option style="font-size: 12px">ADMINISTRATIVO</option> <option style="font-size: 12px">GARANTIA DA QUALIDADE</option>
+            <option style="font-size: 12px">LOGÍSTICA</option>      <option style="font-size: 12px">PRODUÇÃO</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label for="cargo" class="form-label" style="font-size: 10px; color:aqua">Cargo</label>
+          <select style="font-size: 12px" id="cargo" class="form-select" name="cargo" >
+            <option style="font-size: 12px" selected>Selecione uma opção</option>
+            <option style="font-size: 12px">ANALISTA JR</option>    <option style="font-size: 12px">ANALISTA SR</option>
+            <option style="font-size: 12px">ASSISTENTE</option>     <option style="font-size: 12px">DIRETOR(A) EXECUTIVO(A)</option>
+            <option style="font-size: 12px">ENGENHEIRO(A)</option>  <option style="font-size: 12px">FAXINEIRO(A)</option>
+            <option style="font-size: 12px">GERENTE</option>        <option style="font-size: 12px">LÍDER DE PRODUÇÃO</option>
+            <option style="font-size: 12px">MECÂNICO(A)</option>    <option style="font-size: 12px">MECÂNICO(A) CHEFE</option>
+            <option style="font-size: 12px">MOTORISTA</option>      <option style="font-size: 12px">OPERADOR(A) DE MÁQUINA</option>
+            <option style="font-size: 12px">PROGRAMADOR(A)</option> <option style="font-size: 12px">TECNICO(A)</option>
+            <option style="font-size: 12px">O CARA DO T.I.</option> <option style="font-size: 12px">ZELADOR(A)</option>
+          </select>
+        </div>
+
+        <div class="col-10"><br><br>
+          <label for="ruaRes" class="form-label" style="font-size: 10px; color:aqua">Endereço Residencial: Rua/Avenida</label>
+          <input style="font-size: 12px" type="text" class="form-control" id="ruaRes" name="ruaRes" placeholder="Opcional">
+        </div>
+
+        <div class="col-md-2"><br><br>
+          <label for="numRes" class="form-label" style="font-size: 10px; color:aqua">Número da Residência</label>
+          <input style="font-size: 12px" type="text" class="form-control" id="numRes" name="numRes" placeholder="Opcional" maxlength="6">
+        </div>
+
+        <div class="col-md-2">
+          <label for="cplRes" class="form-label" style="font-size: 10px; color:aqua">Complemento</label>
+          <input style="font-size: 12px" type="text" class="form-control" id="cplRes" name="cplRes" placeholder="Opcional">
+        </div>
+
+        <div class="col-md-4">
+          <label for="bairro" class="form-label" style="font-size: 10px; color:aqua">Bairro</label>
+          <input style="font-size: 12px; text-transform:uppercase" type="text" class="form-control" id="bairro" name="bairro" placeholder="Opcional">
+        </div>
+
+        <div class="col-md-4">
+          <label for="cidade" class="form-label" style="font-size: 10px; color:aqua">Cidade</label>
+          <input style="font-size: 12px; text-transform:uppercase" type="text" class="form-control" id="cidade" name="cidade" placeholder="Opcional">
+        </div>
+
+        <div class="col-md-2">
+          <label for="uf" class="form-label" style="font-size: 10px; color:aqua">Estado (U.F.)</label>
+          <input style="font-size: 12px; text-transform:uppercase" type="text" class="form-control" id="uf" name="uf" placeholder="Opcional" maxlength="2">
+        </div>
+
+        <!-- Botão para confirmar -->
+        <div class="col-md-4"><br>
+          <!-- Aciona Modal -->
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="width: 300px">Confirmar Dados</button>
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 style="color: aqua" class="modal-title fs-5" id="exampleModalLabel">Informações de Acesso do novo funcionário</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p style="font-size: 20px;color:yellow">
+                    <?php 
+                      // gerar ID de usuário provisória
+                      echo('Usuário: ' .  $geraIDuser .'<br>'. 'Senha: ' . $geraPassword); 
+                    ?>
+                  </p>
+                  <p style="color: grey; font-size: 12px">Chaves provisórias. Anote e informe o funcionário. Pode ser alterado posteriormente</p>
+                </div>
+                <div class="modal-footer">
+                  <button style="width: 210px" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar sem Salvar</button>
+                  <input style="width: 210px" class="btn btn-primary" type="submit" id="submit" name="submit" value="Salvar">
+                </div>
+              </div>
+            </div>
+          </div>            
+        </div>
+
+        <div class="col-md-4"><br>
+          <input class="btn btn-secondary" type="reset"  id="reset"  name="reset"  value="Descartar Dados e Sair" style="width: 300px" onclick="location.href='06QuadroFuncionarios.php'">
+        </div>
+      </form>
+    </div>
+  </div>
+    
