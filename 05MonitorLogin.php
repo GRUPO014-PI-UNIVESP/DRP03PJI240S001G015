@@ -18,7 +18,8 @@ $listar->execute();
               <th scope="col" style="width: 10%">Hora</th>
               <th scope="col" style="width: 10%">Log-Out</th>
               <th scope="col" style="width: 10%">Hora</th>
-              <th scope="col" style="width: 60%">Nome do Funcionário</th>
+              <th scope="col" style="width: 40%">Nome do Funcionário</th>
+              <th scope="col" style="width: 10%">Departamento</th>
             </tr>
           </thead>
           <tbody style="height: 80%; font-size: 11px;">
@@ -32,8 +33,10 @@ $listar->execute();
                 <?php if(!empty($rowLog['DATA_LOGOUT'])){$dO = $rowLog['DATA_LOGOUT']; $DO = strtotime($dO); echo date('d/m/Y', $DO);}else{ echo 'Logado';} ?> </td>
               <td style="width: 10%"> 
                 <?php if(!empty($rowLog['HORA_LOGOUT'])){$hO = $rowLog['HORA_LOGOUT']; $HO = strtotime($hO); echo date('H:i:s', $HO);}else{ echo '';} ?> </td>
-              <td style="width: 60%"> 
+              <td style="width: 40%"> 
                 <?php echo limitador($rowLog['NOME_FUNCIONARIO'], 80); ?> </td>
+              <td style="width: 20%"> 
+                <?php echo limitador($rowLog['DEPARTAMENTO'], 25); ?> </td>
             </tr><?php } ?>
           </tbody>
         </table>

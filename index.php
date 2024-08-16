@@ -56,8 +56,9 @@
               $dataLog  = date('Y-m-d'); $_SESSION['dataLog'] = $dataLog; $horaLog  = date('H:i:s'); $_SESSION['horaLog'] = $horaLog;
 
               //inserir dados do usuário no histórico de Login
-              $register = $connDB->prepare("INSERT INTO historico_login (NOME_FUNCIONARIO, DATA_LOGIN, HORA_LOGIN)
-                                            VALUES ('" . $row_user['NOME_FUNCIONARIO'] . "', '" . $dataLog . "', '" . $horaLog . "')");
+              $register = $connDB->prepare("INSERT INTO historico_login (NOME_FUNCIONARIO, DEPARTAMENTO, DATA_LOGIN, HORA_LOGIN)
+                                            VALUES ('" . $row_user['NOME_FUNCIONARIO'] . "','" . $row_user['DEPARTAMENTO'] . "',
+                                                    '" . $dataLog . "', '" . $horaLog . "')");
               $register->execute();
 
               //direciona fluxo
