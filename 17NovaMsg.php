@@ -92,7 +92,7 @@ if(!empty($msg_query['enviar'])){
         <input style="width: 150px" class="btn btn-primary" type="submit" id="enviar" name="enviar" value="Enviar">
       </div><br>
       <div class="col-md-3">
-        <input style="width: 150px" class="btn btn-secondary" type="reset" id="reset" name="reset" value="Descartar e Sair">
+        <input style="width: 150px" class="btn btn-secondary" type="reset" id="reset" name="reset" value="Descartar e Sair" onclick="location.href='15Mensagens.php'">
       </div><br>   
     </form>
   </div>
