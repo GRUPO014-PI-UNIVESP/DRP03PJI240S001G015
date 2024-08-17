@@ -110,7 +110,7 @@ if(isset($_SESSION['msg'])){
 
         <div class="col-md-4">
           <label for="telefone" class="form-label" style="font-size: 10px; color:aqua">Telefone de Contato</label>
-          <input style="font-size: 12px" type="text" class="form-control" id="CelularInput" name="telefone" value="<?php echo $rowID['TELEFONE'];?>" maxlength="12" oninput="criaMascara('Celular')">
+          <input style="font-size: 12px" type="text" class="form-control" id="CelularInput" name="telefone" value="<?php echo $rowID['TELEFONE'];?>" maxlength="11" oninput="criaMascara('Celular')">
         </div>
 
         <div class="col-md-2">

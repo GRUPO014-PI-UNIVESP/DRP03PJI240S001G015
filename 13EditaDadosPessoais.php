@@ -129,12 +129,12 @@ if(isset($_SESSION['msg'])){
 
       <!-- Botão para acessar -->
       <div class="col-md-4"><br>
-        <input class="btn btn-primary" type="submit" id="submit" name="submit" value="Confirmar e Salvar" style="width: 300px">
+        <input class="btn btn-primary" type="submit" id="submit" name="submit" value="Confirmar e Salvar" style="width: 280px">
       </div><br>
 
       <!-- Botão para recarregar e começar nova entrada caso ocorra algum erro -->
       <div class="col-md-4"><br>
-        <input class="btn btn-secondary" type="reset" id="reset" name="reset" value="Descartar e Sair" style="width: 300px" onclick="location.href='Dashboard.php'">
+        <input class="btn btn-secondary" type="reset" id="reset" name="reset" value="Descartar e Sair" style="width: 280px" onclick="location.href='Dashboard.php'">
       </div>
     </form>
   </div>
