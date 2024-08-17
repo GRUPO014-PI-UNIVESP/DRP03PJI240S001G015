@@ -49,7 +49,7 @@ if(!empty($dados['submit'])){
     if(!empty($dados['cplRes']))   {$cplRes   = $dados['cplRes'];              }else{$cplRes   = 'Nada Consta';}
     if(!empty($dados['bairro']))   {$bairro   = strtoupper($dados['bairro']);  }else{$bairro   = 'Nada Consta';}
     if(!empty($dados['cidade']))   {$cidade   = strtoupper($dados['cidade']);  }else{$cidade   = 'Nada Consta';}
-    if(!empty($dados['uf']))       {$estado   = strtoupper($dados['estado']);  }else{$estado   = 'NC';}  
+    if(!empty($dados['uf']))       {$estado   = strtoupper($dados['uf']);      }else{$estado   = 'NC';}  
         
     // criptografar senha e usuário geradas
     $usuario      = password_hash($geraIDuser  , PASSWORD_DEFAULT);
@@ -201,7 +201,7 @@ if(isset($_SESSION['msg'])){
         <!-- Botão para confirmar -->
         <div class="col-md-4"><br>
           <!-- Aciona Modal -->
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="width: 300px">Confirmar Dados</button>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="width: 280px">Confirmar Dados</button>
           <!-- Modal -->
           <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -229,7 +229,7 @@ if(isset($_SESSION['msg'])){
         </div>
 
         <div class="col-md-4"><br>
-          <input class="btn btn-secondary" type="reset"  id="reset"  name="reset"  value="Descartar Dados e Sair" style="width: 300px" onclick="location.href='06QuadroFuncionarios.php'">
+          <input class="btn btn-secondary" type="reset"  id="reset"  name="reset"  value="Descartar Dados e Sair" style="width: 280px" onclick="location.href='06QuadroFuncionarios.php'">
         </div>
       </form>
     </div>

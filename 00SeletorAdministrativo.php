@@ -29,9 +29,11 @@
         <div class="tab-content" id="myTabContent">
         <?php
           // faz verificação de credencial para acesso de subsistemas 
-          if($_SESSION['credencial'] >= 4){$acesso5 = '06QuadroFuncionarios.php';$acesso7 = '11CadastroFuncionario.php'; $_SESSION['ordena'] = 'NOME_FUNCIONARIO';}else{$acesso5 = '';$acesso7 = '';}
-          if($_SESSION['credencial'] >= 2){$acesso6 = '05MonitorLogin.php';      }else{$acesso6 = '';}
-
+          if($_SESSION['credencial'] >= 4){$acesso5 = '06QuadroFuncionarios.php';
+                                           $acesso7 = '11CadastroFuncionario.php'; $_SESSION['ordena'] = 'NOME_FUNCIONARIO';
+                                          }else{ $acesso5 = ''; $acesso7 = ''; }
+          if($_SESSION['credencial'] >= 2){$acesso6 = '05MonitorLogin.php';
+                                          }else{ $acesso6 = '';}
         ?>
           <div class="tab-pane fade show active" id="rh-tab-pane" role="tabpanel" aria-labelledby="rh-tab" tabindex="0"><br><br>
             <button type="button" class="btn btn-outline-info" style="width:300px" 
@@ -45,17 +47,19 @@
           </div>
           
           <div class="tab-pane fade" id="prod-tab-pane" role="tabpanel" aria-labelledby="prod-tab" tabindex="0"><br><br>
-            <button type="button" class="btn btn-outline-info" style="width:300px" onclick="">Ordem de Produção</button><br><br>          
+            <button type="button" class="btn btn-outline-info" style="width:300px" 
+              onclick="">Ordem de Produção</button><br><br>          
           </div>
 
           <div class="tab-pane fade" id="comercial-tab-pane" role="tabpanel" aria-labelledby="comercial-tab" tabindex="0"><br><br>
-            <button type="button" class="btn btn-outline-info" style="width:300px" onclick="">Vendas</button><br><br>
+            <button type="button" class="btn btn-outline-info" style="width:300px" 
+              onclick="">Vendas</button><br><br>
           </div>
 
           <div class="tab-pane fade" id="finance-tab-pane" role="tabpanel" aria-labelledby="finance-tab" tabindex="0" style="color: whitesmoke"><br><br>
-            <button type="button" class="btn btn-outline-info" style="width:300px" onclick="">Folha de Pagamento</button><br><br>
+            <button type="button" class="btn btn-outline-info" style="width:300px" 
+              onclick="">Folha de Pagamento</button><br><br>
           </div>
-
         </div> 
       </div>
     </div>

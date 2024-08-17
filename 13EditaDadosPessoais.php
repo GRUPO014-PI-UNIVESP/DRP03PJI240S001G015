@@ -32,9 +32,10 @@ if(!empty($atualizado['submit'])){
   if(!empty($atualizado['uf']))       {$estado   = strtoupper($atualizado['uf']);       }else{$estado   = 'NC';}
 
   $registra = $connDB->prepare("UPDATE quadro_funcionarios 
-                                SET NOME_FUNCIONARIO = :nomeFunc, DATA_NASCIMENTO = :dataNasc, CPF = :cpf, RG = :rg, TELEFONE = :telefone,
-                                    EMAIL = :email, RUA_RES = :ruaRes, NUM_RES = :numRes, COMPLEMENTO = :cplRes, BAIRRO = :bairro, CIDADE = :cidade, UF = :estado
-                                WHERE ID_FUNCIONARIO = :idUser");
+                                SET NOME_FUNCIONARIO  = :nomeFunc, DATA_NASCIMENTO = :dataNasc, CPF     = :cpf   , RG          = :rg    , TELEFONE = :telefone,
+                                               EMAIL  = :email   , RUA_RES         = :ruaRes  , NUM_RES = :numRes, COMPLEMENTO = :cplRes, BAIRRO   = :bairro,
+                                               CIDADE = :cidade  , UF              = :estado
+                                WHERE ID_FUNCIONARIO  = :idUser");
 
   $registra->bindParam(':idUser'  , $idUser  , PDO::PARAM_INT);   $registra->bindParam(':nomeFunc', $nomeFunc, PDO::PARAM_STR);
   $registra->bindParam(':dataNasc', $dataNasc, PDO::PARAM_STR);   $registra->bindParam(':cpf'     , $cpf     , PDO::PARAM_STR);
