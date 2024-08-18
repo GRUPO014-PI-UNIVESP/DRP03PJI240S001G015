@@ -157,6 +157,22 @@ function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
       valorInput.length === maximoInput ? document.getElementById(`${mascaraInput}Input`).value = mascaras[mascaraInput]
       : document.getElementById(`${mascaraInput}Input`).value = valorSemPonto;
     };
+    function forMilhar() {
+      var elemento = document.getElementById('valor');
+      var valor = elemento.value;
+
+      valor = valor + '';
+      valor = parseInt(valor.replace(/[\D]+/g, ''));
+      valor = valor + '';
+      valor = valor.replace(/([0-9]{2})$/g, ",$1");
+
+      if (valor.length > 6) {
+          valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+      }
+
+      elemento.value = valor;
+      if(valor == 'NaN') elemento.value = '';
+    };
   </script>
   <body>
     <!-- Barra lateral Superior-->

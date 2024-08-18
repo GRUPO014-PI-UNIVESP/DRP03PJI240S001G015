@@ -100,7 +100,7 @@ if(isset($_SESSION['msg'])){
 <!-- Área Principal -->
   <div class="main">
     <div class="container">
-      <p style="margin-left: 2%; font-size: 25px; color: whitesmoke">Departamento Administrativo - Cadastro de Novo Funcionário</p>
+      <p style="margin-left: 2%; font-size: 20px; color: whitesmoke">Departamento Administrativo - Cadastro de Novo Funcionário</p>
 
       <form class="row g-2" method="POST" action="#">
 
@@ -116,12 +116,12 @@ if(isset($_SESSION['msg'])){
 
         <div class="col-md-3">
           <label for="cpfFunc" class="form-label" style="font-size: 10px; color:aqua">C.P.F.</label>
-          <input style="font-size: 12px" type="text" class="form-control" id="CPFInput" name="cpfFunc" placeholder="Opcional, somente números" maxlength="11" oninput="criaMascara('CPF')">
+          <input style="font-size: 12px" type="text" class="form-control" id="CPFInput" name="cpfFunc" placeholder="Opcional, somente números" maxlength="11" onkeyup="criaMascara('CPF')">
         </div>
 
         <div class="col-md-3">
           <label for="rgFunc" class="form-label" style="font-size: 10px; color:aqua">R.G.</label>
-          <input style="font-size: 12px" type="text" class="form-control" id="RGInput" name="rgFunc" placeholder="Opcional, somente números" maxlength="9" oninput="criaMascara('RG')">
+          <input style="font-size: 12px" type="text" class="form-control" id="RGInput" name="rgFunc" placeholder="Opcional, somente números" maxlength="9" onkeyup="criaMascara('RG')">
         </div>
 
         <div class="col-12">
@@ -136,7 +136,7 @@ if(isset($_SESSION['msg'])){
 
         <div class="col-md-4">
           <label for="telefone" class="form-label" style="font-size: 10px; color:aqua">Telefone de Contato</label>
-          <input style="font-size: 12px; " type="text" class="form-control" id="CelularInput" name="telefone" placeholder="Opcional, somente números" maxlength="11" oninput="criaMascara('Celular')">
+          <input style="font-size: 12px; " type="text" class="form-control" id="CelularInput" name="telefone" placeholder="Opcional, somente números" maxlength="11" onkeyup="criaMascara('Celular')">
         </div>
 
         <div class="col-md-2">

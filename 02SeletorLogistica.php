@@ -10,7 +10,7 @@ include_once 'EstruturaPrincipal.php';
       <ul style="padding:5px" class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="manage-tab" data-bs-toggle="tab" data-bs-target="#manage-tab-pane" type="button" 
-            role="tab" aria-controls="manage-tab-pane" aria-selected="true">Gerente</button>
+            role="tab" aria-controls="manage-tab-pane" aria-selected="true">Controle</button>
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="lab-tab" data-bs-toggle="tab" data-bs-target="#lab-tab-pane" type="button" 
@@ -30,17 +30,22 @@ include_once 'EstruturaPrincipal.php';
       <div class="tab-content" id="myTabContent">
 
         <div class="tab-pane fade show active" id="manage-tab-pane" role="tabpanel" aria-labelledby="manage-tab" tabindex="0"><br><br>
-          <button type="button" class="btn btn-outline-info" style="width:400px" onclick="">Registro de Entrada/Saída</button><br><br>
-          <button type="button" class="btn btn-outline-info" style="width:400px" onclick="">Cronograma de Despacho de Produtos</button><br><br>
-          <button type="button" class="btn btn-outline-info" style="width:400px" onclick="">Cronograma de Entrada de Material</button><br><br>
+          <button type="button" class="btn btn-outline-info" style="width:400px" 
+            onclick="location.href='20EntradaMaterial.php'">Entrada de Material</button><br><br>
+          <button type="button" class="btn btn-outline-info" style="width:400px" 
+            onclick="">Saída de Produto Final</button><br><br>
+          <button type="button" class="btn btn-outline-info" style="width:400px" 
+            onclick="">Situação do Armazém</button><br><br>
         </div>
           
         <div class="tab-pane fade" id="lab-tab-pane" role="tabpanel" aria-labelledby="lab-tab" tabindex="0"><br><br>
-          <button type="button" class="btn btn-outline-info" style="width:300px" onclick="">Monitoramento do Estoque</button><br><br>   
+          <button type="button" class="btn btn-outline-info" style="width:300px" 
+            onclick="">Monitoramento do Estoque</button><br><br>   
         </div>
 
         <div class="tab-pane fade" id="warehouse-tab-pane" role="tabpanel" aria-labelledby="warehouse-tab" tabindex="0"><br><br>
-          <button type="button" class="btn btn-outline-info" style="width:400px" onclick="">Rastreamento de Entrega</button><br><br>
+          <button type="button" class="btn btn-outline-info" style="width:400px" 
+            onclick="">Rastreamento de Entrega</button><br><br>
         </div>
 
         <div class="tab-pane fade" id="other-tab-pane" role="tabpanel" aria-labelledby="other-tab" tabindex="0" style="color: whitesmoke"><br><br>

@@ -90,12 +90,12 @@ if(isset($_SESSION['msg'])){
 
         <div class="col-md-3">
           <label for="cpfFunc" class="form-label" style="font-size: 10px; color:aqua">C.P.F.</label>
-          <input style="font-size: 12px" type="text" class="form-control" id="CPFInput" name="cpfFunc" value="<?php echo $rowID['CPF'];?>" maxlength="11" oninput="criaMascara('CPF')">
+          <input style="font-size: 12px" type="text" class="form-control" id="CPFInput" name="cpfFunc" value="<?php echo $rowID['CPF'];?>" maxlength="11" onkeyup="criaMascara('CPF')">
         </div>
 
         <div class="col-md-3">
           <label for="rgFunc" class="form-label" style="font-size: 10px; color:aqua">R.G.</label>
-          <input style="font-size: 12px" type="text" class="form-control" id="RGInput" name="rgFunc" value="<?php echo $rowID['RG'];?>" maxlength="9" oninput="criaMascara('RG')">
+          <input style="font-size: 12px" type="text" class="form-control" id="RGInput" name="rgFunc" value="<?php echo $rowID['RG'];?>" maxlength="9" onkeyup="criaMascara('RG')">
         </div>
 
         <div class="col-12">
@@ -110,7 +110,7 @@ if(isset($_SESSION['msg'])){
 
         <div class="col-md-4">
           <label for="telefone" class="form-label" style="font-size: 10px; color:aqua">Telefone de Contato</label>
-          <input style="font-size: 12px" type="text" class="form-control" id="CelularInput" name="telefone" value="<?php echo $rowID['TELEFONE'];?>" maxlength="11" oninput="criaMascara('Celular')">
+          <input style="font-size: 12px" type="text" class="form-control" id="CelularInput" name="telefone" value="<?php echo $rowID['TELEFONE'];?>" maxlength="11" onkeyup="criaMascara('Celular')">
         </div>
 
         <div class="col-md-2">
