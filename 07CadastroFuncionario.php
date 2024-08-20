@@ -3,39 +3,47 @@
 include_once 'ConnectDB.php';
 include_once 'EstruturaPrincipal.php';
 
+// verifica o identificador do último registro
 $queryLast = $connDB->prepare("SELECT MAX(ID_FUNCIONARIO) AS ID_FUNCIONARIO FROM quadro_funcionarios");
 $queryLast->execute();
 $rowID = $queryLast->fetch(PDO::FETCH_ASSOC); $novoID = $rowID['ID_FUNCIONARIO'] + 1;
 
+// busca dos departamentos da tabela 'departamentos'
+$query_depto = $connDB->prepare("SELECT * FROM departamentos");
+$query_depto->execute();
+
+// busca todos os cargos registrados na tabela 'cargos'
+$query_cargo = $connDB->prepare("SELECT * FROM cargos");
+$query_cargo->execute();
+
+// gerador de usuário e senha provisórios 
 $geraIDuser   = substr(str_shuffle("abcdefghijklmnopqrstvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 6);
 $geraPassword = substr(str_shuffle("0123456789"), 0, 6);
 
 // capta os dados inseridos no formulário Login
 $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
-//verifica se foi digitado dados
+// verifica se foi digitado dados
 if(!empty($dados['submit'])){
 
-  //busca dados cadastrados
+// busca dados cadastrados
   $result = $connDB->prepare("SELECT NOME_FUNCIONARIO, DATA_NASCIMENTO
                               FROM   quadro_funcionarios 
                               WHERE  NOME_FUNCIONARIO = :nomeFunc AND DATA_NASCIMENTO = :dataNasc LIMIT 1");
-
-  // atribui valor do campo para o link de dados :usuario
+// atribui valor do campo para o link de dados :usuario
   $result->bindParam(':nomeFunc', $dados['nomeFunc'], PDO::PARAM_STR);
   $result->bindParam(':dataNasc', $dados['dataNasc'], PDO::PARAM_STR);
   $result->execute();
 
-  // verifica se foi encontrado algum registro contendo nome e data de nascimento idênticos
+// verifica se foi encontrado algum registro contendo nome e data de nascimento idênticos
   if(($result) AND ($result->rowCount() == 1)){
 
-    // abre caixa de alerta com mensagem de erro
+// abre caixa de alerta com mensagem de erro
     $mensagemErro = 'Erro: O nome e data nascimento correspondente já existe no banco de dados!';
     echo "<script type='text/javascript'>alert('$mensagemErro');</script>";
 
   }else{
-
-    //atribuir valores dos campos para variáveis
+// atribuir valores dos campos para variáveis
     $cargo       = $dados['cargo'];        $departamento = $dados['departamento']; $nomeFunc = strtoupper($dados['nomeFunc']);
     $idUser      = $geraIDuser;            $passUser     = $geraPassword;          $dataNasc = date('Y-m-d', strtotime($dados['dataNasc']));
     $responsavel = $_SESSION['nome_func']; $dataAdmi     = date('Y-m-d', strtotime($dados['dataAdmi']));
@@ -51,22 +59,16 @@ if(!empty($dados['submit'])){
     if(!empty($dados['cidade']))   {$cidade   = strtoupper($dados['cidade']);  }else{$cidade   = 'Nada Consta';}
     if(!empty($dados['uf']))       {$estado   = strtoupper($dados['uf']);      }else{$estado   = 'NC';}  
         
-    // criptografar senha e usuário geradas
+// criptografar senha e usuário geradas
     $usuario      = password_hash($geraIDuser  , PASSWORD_DEFAULT);
     $senha        = password_hash($geraPassword, PASSWORD_DEFAULT);
 
-    // definir credencial de acordo com cargo
-    $credencial = '';
-    switch($cargo){
-      case 'DIRETOR(A) EXECUTIVO(A)': $credencial = 7; break;  case 'GERENTE'               : $credencial = 6; break;
-      case 'SUPERVISOR(A)'          : $credencial = 5; break;  case 'ANALISTA SR'           : $credencial = 4; break;
-      case 'ANALISTA JR'            : $credencial = 3; break;  case 'ASSISTENTE'            : $credencial = 2; break;
-      case 'LÍDER DE PRODUÇÃO'      : $credencial = 3; break;  case 'OPERADOR(A) DE MÁQUINA': $credencial = 2; break;
-      case 'SERVENTE'               : $credencial = 1; break;  case 'MECÂNICO(A) CHEFE'     : $credencial = 4; break;
-      case 'MECÂNICO'               : $credencial = 3; break;  case 'ENGENHEIRO(A)'         : $credencial = 5; break;
-      case 'TECNICO(A)'             : $credencial = 3; break;  case 'PROGRAMADOR(A)'        : $credencial = 2; break;
-      case 'MOTORISTA'              : $credencial = 1; break;  case 'FAXINEIRO'             : $credencial = 1; break;
-    }
+// definir credencial de acordo com cargo
+    $query_cred = $connDB->prepare("SELECT CREDENCIAL FROM cargos WHERE CARGO = :cargo LIMIT 1");
+    $query_cred->bindParam(':cargo', $dados['cargo'], PDO::PARAM_STR);
+    $query_cred->execute();
+    $result_cred = $query_cred->fetch(PDO::FETCH_ASSOC);
+    $credencial = $result_cred['CREDENCIAL'];
 
     $registra = $connDB->prepare("INSERT INTO quadro_funcionarios (NOME_FUNCIONARIO, DATA_ADMISSAO, CARGO, DEPARTAMENTO,
                                   CREDENCIAL, USUARIO, SENHA, ID_USUARIO, SENHA_USUARIO, DATA_NASCIMENTO, CPF, RG, TELEFONE,
@@ -88,7 +90,7 @@ if(!empty($dados['submit'])){
 
     $registra->execute();
     
-    header('Location: 11CadastroFuncionario.php');
+    header('Location: 07CadastroFuncionario.php');
   }
 }
 //se houver erro de entrada mostra erro na página
@@ -148,8 +150,10 @@ if(isset($_SESSION['msg'])){
           <label for="departamento" class="form-label" style="font-size: 10px; color:aqua">Departamento</label>
           <select style="font-size: 12px" id="departamento" class="form-select" name="departamento">
             <option style="font-size: 12px" selected>Selecione uma opção</option>
-            <option style="font-size: 12px">ADMINISTRATIVO</option> <option style="font-size: 12px">GARANTIA DA QUALIDADE</option>
-            <option style="font-size: 12px">LOGÍSTICA</option>      <option style="font-size: 12px">PRODUÇÃO</option>
+            <?php
+              while($selDepto = $query_depto->fetch(PDO::FETCH_ASSOC)){?>
+                <option style="font-size: 12px"><?php echo $selDepto['DEPARTAMENTO']; ?></option> <?php
+              }?>
           </select>
         </div>
 
@@ -157,14 +161,10 @@ if(isset($_SESSION['msg'])){
           <label for="cargo" class="form-label" style="font-size: 10px; color:aqua">Cargo</label>
           <select style="font-size: 12px" id="cargo" class="form-select" name="cargo" >
             <option style="font-size: 12px" selected>Selecione uma opção</option>
-            <option style="font-size: 12px">ANALISTA JR</option>    <option style="font-size: 12px">ANALISTA SR</option>
-            <option style="font-size: 12px">ASSISTENTE</option>     <option style="font-size: 12px">DIRETOR(A) EXECUTIVO(A)</option>
-            <option style="font-size: 12px">ENGENHEIRO(A)</option>  <option style="font-size: 12px">FAXINEIRO(A)</option>
-            <option style="font-size: 12px">GERENTE</option>        <option style="font-size: 12px">LÍDER DE PRODUÇÃO</option>
-            <option style="font-size: 12px">MECÂNICO(A)</option>    <option style="font-size: 12px">MECÂNICO(A) CHEFE</option>
-            <option style="font-size: 12px">MOTORISTA</option>      <option style="font-size: 12px">OPERADOR(A) DE MÁQUINA</option>
-            <option style="font-size: 12px">PROGRAMADOR(A)</option> <option style="font-size: 12px">TECNICO(A)</option>
-            <option style="font-size: 12px">O CARA DO T.I.</option> <option style="font-size: 12px">ZELADOR(A)</option>
+            <?php
+              while($selCargo = $query_cargo->fetch(PDO::FETCH_ASSOC)){?>
+                <option style="font-size: 12px"><?php echo $selCargo['CARGO']; ?></option> <?php
+              }?>               
           </select>
         </div>
 
