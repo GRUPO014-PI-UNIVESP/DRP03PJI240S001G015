@@ -3,10 +3,87 @@
 include_once 'ConnectDB.php';
 include_once 'EstruturaPrincipal.php';
 
-$query_supplier = $connDB->prepare("SELECT FORNECEDOR FROM tabela_mp");
+//atribui usuário como responsável por registro de entrada do material ou cadastramento
+$responsavel = $_SESSION['nome_func'];
+
+//Pesquisa por fornecedores para seleção
+$query_supplier = $connDB->prepare("SELECT RAZAO_SOCIAL FROM mp_fornecedor");
 $query_supplier->execute();
-$query_material = $connDB->prepare("SELECT DESCRICAO_MATERIAL FROM tabela_mp");
+
+//Pesquisa de descrição do material para seleção
+$query_material = $connDB->prepare("SELECT DESCRICAO_MP FROM mp_tabela");
 $query_material->execute();
+
+//verifica quadro de funcionários para seleção do encarregado pela tarefa de recebimento do material
+$query_encarregado1 = $connDB->prepare("SELECT NOME_FUNCIONARIO FROM quadro_funcionarios WHERE DEPARTAMENTO = 'LOGÍSTICA' OR CREDENCIAL >= 4");
+$query_encarregado1->execute();
+$query_encarregado2 = $connDB->prepare("SELECT NOME_FUNCIONARIO FROM quadro_funcionarios WHERE DEPARTAMENTO = 'LOGÍSTICA' OR CREDENCIAL >= 4");
+$query_encarregado2->execute();
+
+// capta dados do formulário
+$confirma = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+
+//verifica se foi preenchido formulário de entrada de material já existente no banco de dados
+if(!empty($confirma['salvar1'])){
+
+  $dataEntr1 = date('Y-m-d', strtotime($confirma['dataEntr1']));
+  $dataFabr1 = date('Y-m-d', strtotime($confirma['dataFabr1']));
+  $dataVali1 = date('Y-m-d', strtotime($confirma['dataVali1']));
+  $loteF1 = strtoupper($confirma['numLoteF1']);
+  $loteI1 = strtoupper($confirma['numLoteI1']);
+  
+  $salvar1      = $connDB->prepare("INSERT INTO mp_estoque (FORNECEDOR, DESCRICAO_MP, NUMERO_LOTE_FORNECEDOR, DATA_FABRICACAO, DATA_VALIDADE, NOTA_FISCAL_LOTE, QTDE_LOTE,
+                                                            QTDE_ESTOQUE, UNIDADE_MEDIDA, NUMERO_LOTE_INTERNO, DATA_ENTRADA, ENCARREGADO_RECEBIMENTO, RESPONSAVEL_REGISTRO)
+                                    VALUES (:fornecedor, :descrMat, :numLoteF1, :dataFabr, :dataVali, :notaFiscal, :qtdeLote, :qtdeStock, :uniMed, numLoteI1, dataEntr,
+                                            :encarregado, :responsavel)");
+  $salvar1->bindParam(':fornecedor'  , $confirma['fornecedor1'] , PDO::PARAM_STR);
+  $salvar1->bindParam(':descrMat'    , $confirma['descrMat1']   , PDO::PARAM_STR);
+  $salvar1->bindParam(':numLoteF'    , $loteF1                  , PDO::PARAM_STR);
+  $salvar1->bindParam(':dataFabr'    , $dataFabr1               , PDO::PARAM_STR);
+  $salvar1->bindParam(':dataVali'    , $dataVali1               , PDO::PARAM_STR);
+  $salvar1->bindParam(':notaFiscal'  , $confirma['notaFiscal1'] , PDO::PARAM_STR);
+  $salvar1->bindParam(':qtdeLote'    , $confirma['qtdeLote1']   , PDO::PARAM_STR);
+  $salvar1->bindParam(':qtdeEstoque' , $confirma['qtdeLote1']   , PDO::PARAM_STR);
+  $salvar1->bindParam(':uniMed'      , $confirma['uniMed1']     , PDO::PARAM_STR);
+  $salvar1->bindParam(':numLoteI'    , $loteI1                  , PDO::PARAM_STR);
+  $salvar1->bindParam(':dataEntr'    , $dataEntrada1            , PDO::PARAM_STR);
+  $salvar1->bindParam(':encarregado' , $confirma['encarregado1'], PDO::PARAM_STR);
+  $salvar1->bindParam(':responsavel' , $responsavel             , PDO::PARAM_STR);
+  $salvar1->execute();
+
+  header('Location: 20EntradaMaterial.php');
+
+} else if(!empty($confirma['salvar2'])){
+
+  $dataEntr2 = date('Y-m-d', strtotime($confirma['dataEntr2']));
+  $dataFabr2 = date('Y-m-d', strtotime($confirma['dataFabr2']));
+  $dataVali2 = date('Y-m-d', strtotime($confirma['dataVali2']));
+  $loteF2 = strtoupper($confirma['numLoteF2']);
+  $loteI2 = strtoupper($confirma['numLoteI2']);
+                                                    // MODIFICAR TODOS OS CAMPOS 
+  $salvar2      = $connDB->prepare("INSERT INTO mp_estoque (FORNECEDOR, DESCRICAO_MP, NUMERO_LOTE_FORNECEDOR, DATA_FABRICACAO, DATA_VALIDADE, NOTA_FISCAL_LOTE, QTDE_LOTE,
+                                                            QTDE_ESTOQUE, UNIDADE_MEDIDA, NUMERO_LOTE_INTERNO, DATA_ENTRADA, ENCARREGADO_RECEBIMENTO, RESPONSAVEL_REGISTRO)
+                                    VALUES (:fornecedor, :descrMat, :numLoteF1, :dataFabr, :dataVali, :notaFiscal, :qtdeLote, :qtdeStock, :uniMed, numLoteI1, dataEntr,
+                                            :encarregado, :responsavel)");
+  $salvar2->bindParam(':fornecedor'  , $confirma['fornecedor2'] , PDO::PARAM_STR);
+  $salvar2->bindParam(':descrMat'    , $confirma['descrMat2']   , PDO::PARAM_STR);
+  $salvar2->bindParam(':numLoteF'    , $loteF2                  , PDO::PARAM_STR);
+  $salvar2->bindParam(':dataFabr'    , $dataFabr2               , PDO::PARAM_STR);
+  $salvar2->bindParam(':dataVali'    , $dataVali2               , PDO::PARAM_STR);
+  $salvar2->bindParam(':notaFiscal'  , $confirma['notaFiscal2'] , PDO::PARAM_STR);
+  $salvar2->bindParam(':qtdeLote'    , $confirma['qtdeLote2']   , PDO::PARAM_STR);
+  $salvar2->bindParam(':qtdeEstoque' , $confirma['qtdeLote2']   , PDO::PARAM_STR);
+  $salvar2->bindParam(':uniMed'      , $confirma['uniMed2']     , PDO::PARAM_STR);
+  $salvar2->bindParam(':numLoteI'    , $loteI2                  , PDO::PARAM_STR);
+  $salvar2->bindParam(':dataEntr'    , $dataEntrada2            , PDO::PARAM_STR);
+  $salvar2->bindParam(':encarregado' , $confirma['encarregado2'], PDO::PARAM_STR);
+  $salvar2->bindParam(':responsavel' , $responsavel             , PDO::PARAM_STR);
+  $salvar2->execute();
+
+  header('Location: 20EntradaMaterial.php');
+
+}
+
 ?>
 <!-- Área Principal -->
 <div class="main">
@@ -21,48 +98,164 @@ $query_material->execute();
           role="tab" aria-controls="lab-tab-pane" aria-selected="false">Cadastro de Novo Material</button>
       </li>
     </ul>
-    <div class="tab-content" id="myTabContent">
+    <div class="tab-content" id="myTabContent"><br>
+
       <!-- Entrada de Material -->
         <div class="tab-pane fade show active" id="manage-tab-pane" role="tabpanel" aria-labelledby="manage-tab" tabindex="0">
-          <form class="row g-2" method="POST" action="#">
+          <form class="row g-4" method="POST" action="#">
+
             <div class="col-md-2">
-              <label for="dataEntrada" class="form-label" style="font-size: 10px; color:aqua">Data de Entrada</label>
-              <input style="font-size: 12px" type="date" class="form-control" id="dataEntrada" name="dataEntrada" required autofocus>
+              <label for="dataEntr1" class="form-label" style="font-size: 10px; color:aqua">Data de Entrada</label>
+              <input style="font-size: 12px;" type="date" class="form-control" id="dataEntr1" name="dataEntr1" required autofocus>
             </div>
+
             <div class="col-md-10">
-              <label for="fornecedor" class="form-label" style="font-size: 10px; color:aqua">Fornecedor</label>
-              <select style="font-size: 12px;" id="fornecedor" class="form-select" name="fornecedor">
-                <option style="font-size: 12px" selected>Selecione um fornecedor</option>
+              <label for="fornecedor1" class="form-label" style="font-size: 10px; color:aqua">Fornecedor: Razão Social ou Nome Fantasia</label>
+              <select style="font-size: 12px;" class="form-select" id="fornecedor1" name="fornecedor1">
+                <option style="font-size: 12px" selected>Selecione o fornecedor</option>
                 <?php
                   while($supplier = $query_supplier->fetch(PDO::FETCH_ASSOC)){?>
-                    <option style="font-size: 12px"><?php echo $supplier['FORNECEDOR']; ?></option> <?php
+                    <option style="font-size: 12px"><?php echo $supplier['RAZAO_SOCIAL']; ?></option> <?php
                   }?>
               </select>
             </div>
+
             <div class="col-md-12">
-              <label for="descrMat" class="form-label" style="font-size: 10px; color:aqua">Descrição do Material</label>
-              <select style="font-size: 12px;" id="descrMat" class="form-select" name="descrMat">
+              <label for="descrMat1" class="form-label" style="font-size: 10px; color:aqua">Descrição do Material</label>
+              <select style="font-size: 12px;" class="form-select" id="descrMat1" name="descrMat1">
                 <option style="font-size: 12px" selected>Selecione o material</option>
                 <?php
                   while($material = $query_material->fetch(PDO::FETCH_ASSOC)){?>
-                    <option style="font-size: 12px"><?php echo $material['DESCRICAO_MATERIAL']; ?></option> <?php
+                    <option style="font-size: 12px"><?php echo $material['DESCRICAO_MP']; ?></option> <?php
                   }?>
               </select>
             </div>
-            <div class="col-3">
-              <label for="numLoteF" class="form-label" style="font-size: 10px; color:aqua">Número do Lote / Fornecedor</label>
-              <input style="font-size: 14px;" type="text" class="form-control" id="numLoteF" name="numLoteF" required>
-            </div>
-            <div class="col-3">
-              <label for="quantidade" class="form-label" style="font-size: 10px; color:aqua">Quantidade Recebida</label>
-              <input style="font-size: 14px; text-align:right" type="text" class="form-control" id="valor" name="quantidade" maxlength="9" onkeyup="forMilhar()" required>
+
+            <div class="col-md-2">
+              <label for="numLoteF1" class="form-label" style="font-size: 10px; color:aqua">No. do Lote / Fornecedor</label>
+              <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="numLoteF1" name="numLoteF1" required>
             </div>
 
+            <div class="col-md-2">
+              <label for="numLoteI1" class="form-label" style="font-size: 10px; color:aqua">No. do Lote / Interno</label>
+              <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="numLoteI1" name="numLoteI1" required>
+            </div>
+
+            <div class="col-md-2">
+              <label for="dataFabr1" class="form-label" style="font-size: 10px; color:aqua">Data de Fabricação</label>
+              <input style="font-size: 12px;" type="date" class="form-control" id="dataFabr1" name="dataFabr1">
+            </div>
+
+            <div class="col-md-2">
+              <label for="dataVali1" class="form-label" style="font-size: 10px; color:aqua">Data de Validade</label>
+              <input style="font-size: 12px;" type="date" class="form-control" id="dataVali1" name="dataVali1">
+            </div>
+
+            <div class="col-md-2">
+              <label for="qtdeLote1" class="form-label" style="font-size: 10px; color:aqua">Quantidade Recebida</label>
+              <input style="font-size: 14px; text-align:right" type="number" class="form-control" id="valor1" name="qtdeLote1" required>
+            </div>
+
+            <div class="col-md-2">
+              <label for="uniMed1" class="form-label" style="font-size: 10px; color:aqua">Unidade de Medida</label>
+              <select style="font-size: 12px;" class="form-select" id="uniMed1" name="uniMed1">
+                <option selected>Selecione</option>
+                <option value="KG">KG</option>
+                <option value="LT">LT</option>
+                <option value="UN">UNIDADE</option>
+              </select>
+            </div>
+            <div class="col-md-12">
+              <label for="encarregado1" class="form-label" style="font-size: 10px; color:aqua">Nome do Encarregado pelo Recebimento</label>
+              <select style="font-size: 12px;" class="form-select" id="encarregado1" name="encarregado1">
+                <option style="font-size: 12px" selected>Selecione um nome</option>
+                <?php
+                  while($nomeEncarregado = $query_encarregado1->fetch(PDO::FETCH_ASSOC)){?>
+                    <option style="font-size: 12px"><?php echo $nomeEncarregado['NOME_FUNCIONARIO']; ?></option> <?php
+                  }?>
+              </select>
+            </div>
+            <div class="col-md-2" style="padding: 3px;">
+              <input style="width: 140px; text-align:center" class="btn btn-primary" type="submit" id="salvar1" name="salvar1" value="Confirmar">
+            </div>
+            <div class="col-md-3" style="padding: 3px;">
+              <input style="width: 140px; text-align:center" class="btn btn-secondary" type="reset" id="reset1" name="reset1" value="Descartar" onclick="location.href='20EntradaMaterial.php'">
+            </div>
           </form>
         </div>
+        
       <!-- Novo Cadastro -->  
         <div class="tab-pane fade" id="lab-tab-pane" role="tabpanel" aria-labelledby="lab-tab" tabindex="0">
- 
+          <form class="row g-4" method="POST" action="#">
+
+              <div class="col-md-2">
+                <label for="dataEntr2" class="form-label" style="font-size: 10px; color:aqua">Data de Entrada</label>
+                <input style="font-size: 12px" type="date" class="form-control" id="dataEntr2" name="dataEntr2" required autofocus>
+              </div>
+
+              <div class="col-md-10">
+                <label for="fornecedor2" class="form-label" style="font-size: 10px; color:aqua">Fornecedor</label>
+                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="fornecedor2" name="fornecedor2" 
+                       placeholder="Digite a Razão Social ou Nome Fantasia do fornecedor" required>
+              </div>
+
+              <div class="col-md-12">
+                <label for="descrMat2" class="form-label" style="font-size: 10px; color:aqua">Descrição do Material</label>
+                <input style="font-size: 12px; text-transform: uppercase;" type="text" class="form-control" id="descrMat2" name="descrMat2" 
+                       placeholder="Digite a descrição completa do material " required>
+              </div>
+
+              <div class="col-md-2">
+              <label for="numLoteF2" class="form-label" style="font-size: 10px; color:aqua">No. do Lote / Fornecedor</label>
+              <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="numLoteF2" name="numLoteF2" required>
+            </div>
+
+            <div class="col-md-2">
+              <label for="numLoteI2" class="form-label" style="font-size: 10px; color:aqua">No. do Lote / Interno</label>
+              <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="numLoteI2" name="numLoteI2" required>
+            </div>
+
+            <div class="col-md-2">
+              <label for="dataFabr2" class="form-label" style="font-size: 10px; color:aqua">Data de Fabricação</label>
+              <input style="font-size: 12px;" type="date" class="form-control" id="dataFabr2" name="dataFabr2">
+            </div>
+
+            <div class="col-md-2">
+              <label for="dataVali2" class="form-label" style="font-size: 10px; color:aqua">Data de Validade</label>
+              <input style="font-size: 12px;" type="date" class="form-control" id="dataVali2" name="dataVali2">
+            </div>
+
+            <div class="col-md-2">
+              <label for="qtdeLote2" class="form-label" style="font-size: 10px; color:aqua">Quantidade Recebida</label>
+              <input style="font-size: 14px; text-align:right" type="number" class="form-control" id="valor2" name="qtdeLote2" required>
+            </div>
+
+            <div class="col-md-2">
+              <label for="uniMed2" class="form-label" style="font-size: 10px; color:aqua">Unidade de Medida</label>
+              <select style="font-size: 12px;" class="form-select" id="uniMed2" name="uniMed2">
+                <option selected>Selecione</option>
+                <option value="KG">KG</option>
+                <option value="LT">LT</option>
+                <option value="UN">UNIDADE</option>
+              </select>
+            </div>
+              <div class="col-md-12">
+                <label for="encarregado2" class="form-label" style="font-size: 10px; color:aqua">Nome do Encarregado pelo Recebimento</label>
+                <select style="font-size: 12px;" class="form-select" id="encarregado2" name="encarregado2">
+                  <option style="font-size: 12px" selected>Selecione um nome</option>
+                  <?php
+                    while($nomeEncarregado = $query_encarregado2->fetch(PDO::FETCH_ASSOC)){?>
+                      <option style="font-size: 12px"><?php echo $nomeEncarregado['NOME_FUNCIONARIO']; ?></option> <?php
+                    }?>
+                </select>
+              </div>
+              <div class="col-md-2" style="padding: 3px">
+                <input style="width: 140px;" class="btn btn-primary" type="submit" id="salvar2" name="salvar2" value="Confirmar">
+              </div>
+              <div class="col-md-3" style="padding: 3px">
+                <input style="width: 140px;" class="btn btn-secondary" type="reset" id="reset2" name="reset2" value="Descartar" onclick="location.href='20EntradaMaterial.php'">
+              </div>
+            </form>
         </div>
     </div>
   </div>

@@ -157,21 +157,37 @@ function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
       valorInput.length === maximoInput ? document.getElementById(`${mascaraInput}Input`).value = mascaras[mascaraInput]
       : document.getElementById(`${mascaraInput}Input`).value = valorSemPonto;
     };
-    function forMilhar() {
-      var elemento = document.getElementById('valor');
-      var valor = elemento.value;
+    function forMilhar1() {
+      var elemento = document.getElementById('valor1');
+      var valor1 = elemento.value;
 
-      valor = valor + '';
-      valor = parseInt(valor.replace(/[\D]+/g, ''));
-      valor = valor + '';
-      valor = valor.replace(/([0-9]{2})$/g, ",$1");
+      valor1 = valor1 + '';
+      valor1 = parseInt(valor1.replace(/[\D]+/g, ''));
+      valor1 = valor1 + '';
+      valor1 = valor1.replace(/([0-9]{2})$/g, ",$1");
 
-      if (valor.length > 6) {
-          valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+      if (valor1.length > 6) {
+          valor1 = valor1.replace(/([0-9]{3}).([0-9]{2}$)/g, ".$1,$2");
       }
 
-      elemento.value = valor;
-      if(valor == 'NaN') elemento.value = '';
+      elemento.value = valor1;
+      if(valor1 == 'NaN') elemento.value = '';
+    };
+    function forMilhar2() {
+      var elemento = document.getElementById('valor2');
+      var valor2 = elemento.value;
+
+      valor2 = valor2 + '';
+      valor2 = parseInt(valor2.replace(/[\D]+/g, ''));
+      valor2 = valor2 + '';
+      valor2 = valor2.replace(/([0-9]{2})$/g, ",$1");
+
+      if (valor2.length > 6) {
+          valor2 = valor2.replace(/([0-9]{3}).([0-9]{2}$)/g, ".$1,$2");
+      }
+
+      elemento.value = valor2;
+      if(valor2 == 'NaN') elemento.value = '';
     };
   </script>
   <body>
