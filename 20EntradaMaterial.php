@@ -59,18 +59,20 @@ if(!empty($confirma['salvar1'])){
   //verifica se foi feito o cadastramento de novo material
 } else if(!empty($confirma['salvar2'])){
 
-  $dataEntr2 = date('Y-m-d', strtotime($confirma['dataEntr2']));
-  $dataFabr2 = date('Y-m-d', strtotime($confirma['dataFabr2']));
-  $dataVali2 = date('Y-m-d', strtotime($confirma['dataVali2']));
-  $loteF2 = strtoupper($confirma['numLoteF2']);
-  $loteI2 = strtoupper($confirma['numLoteI2']);
+  $dataEntr2   = date('Y-m-d', strtotime($confirma['dataEntr2']));
+  $dataFabr2   = date('Y-m-d', strtotime($confirma['dataFabr2']));
+  $dataVali2   = date('Y-m-d', strtotime($confirma['dataVali2']));
+  $loteF2      = strtoupper($confirma['numLoteF2']);
+  $loteI2      = strtoupper($confirma['numLoteI2']);
+  $fornecedor2 = strtoupper($confirma['fornecedor2']);
+  $descrMat2   = strtoupper($confirma['descrMat2']);
   
   $salvar2      = $connDB->prepare("INSERT INTO mp_estoque (FORNECEDOR, DESCRICAO_MP, NUMERO_LOTE_FORNECEDOR, DATA_FABRICACAO, DATA_VALIDADE, NOTA_FISCAL_LOTE, QTDE_LOTE,
                                                             QTDE_ESTOQUE, UNIDADE_MEDIDA, NUMERO_LOTE_INTERNO, DATA_ENTRADA, ENCARREGADO_RECEBIMENTO, RESPONSAVEL_REGISTRO)
                                     VALUES (:fornecedor, :descrMat, :numLoteF, :dataFabr, :dataVali, :notaFiscal, :qtdeLote, :qtdeStock, :uniMed, :numLoteI, :dataEntr,
                                             :encarregado, :responsavel)");
-  $salvar2->bindParam(':fornecedor'  , $confirma['fornecedor2'] , PDO::PARAM_STR);
-  $salvar2->bindParam(':descrMat'    , $confirma['descrMat2']   , PDO::PARAM_STR);
+  $salvar2->bindParam(':fornecedor'  , $fornecedor2             , PDO::PARAM_STR);
+  $salvar2->bindParam(':descrMat'    , $descrMat2               , PDO::PARAM_STR);
   $salvar2->bindParam(':numLoteF'    , $loteF2                  , PDO::PARAM_STR);
   $salvar2->bindParam(':dataFabr'    , $dataFabr2               , PDO::PARAM_STR);
   $salvar2->bindParam(':dataVali'    , $dataVali2               , PDO::PARAM_STR);
@@ -85,12 +87,12 @@ if(!empty($confirma['salvar1'])){
   $salvar2->execute();
 
   $saveFornecedor = $connDB->prepare("INSERT INTO mp_fornecedor (RAZAO_SOCIAL) VALUES (:fornecedor)");
-  $saveFornecedor->bindParam(':fornecedor', $confirma['fornecedor2'], PDO::PARAM_STR);
+  $saveFornecedor->bindParam(':fornecedor', $fornecedor2, PDO::PARAM_STR);
   $saveFornecedor->execute();
 
   $saveMP = $connDB->prepare("INSERT INTO mp_tabela (FORNECEDOR, DESCRICAO_MP) VALUES (:fornecedor, :descrMat)");
-  $saveMP->bindParam(':fornecedor', $confirma['fornecedor2'], PDO::PARAM_STR);
-  $saveMP->bindParam(':descrMat'  , $confirma['descrMat2']  , PDO::PARAM_STR);
+  $saveMP->bindParam(':fornecedor', $fornecedor2, PDO::PARAM_STR);
+  $saveMP->bindParam(':descrMat'  , $descrMat2  , PDO::PARAM_STR);
   $saveMP->execute();
 
   header('Location: 20EntradaMaterial.php');

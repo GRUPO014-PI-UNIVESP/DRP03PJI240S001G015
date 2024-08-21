@@ -34,8 +34,6 @@ include_once 'EstruturaPrincipal.php';
             onclick="location.href='20EntradaMaterial.php'">Entrada de Material</button><br><br>
           <button type="button" class="btn btn-outline-info" style="width:400px" 
             onclick="">Saída de Produto Final</button><br><br>
-          <button type="button" class="btn btn-outline-info" style="width:400px" 
-            onclick="">Situação do Armazém</button><br><br>
         </div>
           
         <div class="tab-pane fade" id="lab-tab-pane" role="tabpanel" aria-labelledby="lab-tab" tabindex="0"><br><br>

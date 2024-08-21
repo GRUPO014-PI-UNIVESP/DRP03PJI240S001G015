@@ -30,8 +30,7 @@ include_once 'EstruturaPrincipal.php';
       <div class="tab-content" id="myTabContent">
 
         <div class="tab-pane fade show active" id="manage-tab-pane" role="tabpanel" aria-labelledby="manage-tab" tabindex="0"><br><br>
-          <button type="button" class="btn btn-outline-info" style="width:400px" onclick="">Ordem de Produção</button><br><br>
-          <button type="button" class="btn btn-outline-info" style="width:400px" onclick="">Cronograma de Produção</button><br><br>
+          <button type="button" class="btn btn-outline-info" style="width:400px" onclick="location.href='30EntradaPedido.php'">Entrada de Pedido de Produto</button><br><br>
         </div>
           
         <div class="tab-pane fade" id="lab-tab-pane" role="tabpanel" aria-labelledby="lab-tab" tabindex="0"><br><br>
