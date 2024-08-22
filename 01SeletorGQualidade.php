@@ -9,15 +9,11 @@
       <ul style="padding:5px" class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="manage-tab" data-bs-toggle="tab" data-bs-target="#manage-tab-pane" type="button" 
-            role="tab" aria-controls="manage-tab-pane" aria-selected="true">Gerente</button>
+            role="tab" aria-controls="manage-tab-pane" aria-selected="true">Laboratório</button>
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="lab-tab" data-bs-toggle="tab" data-bs-target="#lab-tab-pane" type="button" 
-            role="tab" aria-controls="lab-tab-pane" aria-selected="false">Laboratório</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="warehouse-tab" data-bs-toggle="tab" data-bs-target="#warehouse-tab-pane" type="button" 
-            role="tab" aria-controls="warehouse-tab-pane" aria-selected="false">Estoque</button>
+            role="tab" aria-controls="lab-tab-pane" aria-selected="false">Estoque</button>
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="other-tab" data-bs-toggle="tab" data-bs-target="#other-tab-pane" type="button" 
@@ -27,26 +23,16 @@
       </ul>
 
       <div class="tab-content" id="myTabContent">
-
         <div class="tab-pane fade show active" id="manage-tab-pane" role="tabpanel" aria-labelledby="manage-tab" tabindex="0"><br><br>
           <button type="button" class="btn btn-outline-info" style="width:300px" 
-            onclick="">Monitor dos Serviços de Laboratório</button><br><br>
-        </div>
-          
+            onclick="location.href='40RegistroAnalise.php'">Registro de Análise</button><br><br>
+        </div>         
         <div class="tab-pane fade" id="lab-tab-pane" role="tabpanel" aria-labelledby="lab-tab" tabindex="0"><br><br>
-          <button type="button" class="btn btn-outline-info" style="width:300px" onclick="">Registro de Análise Concluída</button><br><br>
-          <button type="button" class="btn btn-outline-info" style="width:300px" onclick="">Cronograma de Execução de Análises</button><br><br>       
+          <button type="button" class="btn btn-outline-info" style="width:350px" onclick="">Reabastecimento de Estoque de Reagentes</button><br><br>
+          <button type="button" class="btn btn-outline-info" style="width:350px" onclick="">Tabela Geral do Estoque de Reagentes</button><br><br>       
         </div>
-
-        <div class="tab-pane fade" id="warehouse-tab-pane" role="tabpanel" aria-labelledby="warehouse-tab" tabindex="0"><br><br>
-          <button type="button" class="btn btn-outline-info" style="width:400px" 
-            onclick="location.href='20EstoqueReagentes.php'">Reabastecimento de Estoque de Reagentes</button><br><br>
-          <button type="button" class="btn btn-outline-info" style="width:400px" onclick="">Tabela Geral do Estoque de Reagentes</button><br><br>
-        </div>
-
         <div class="tab-pane fade" id="other-tab-pane" role="tabpanel" aria-labelledby="other-tab" tabindex="0" style="color: whitesmoke"><br><br>
           <a href="" class="font-family: aria-current=">
-
         </div>
       </div> 
     </div>
