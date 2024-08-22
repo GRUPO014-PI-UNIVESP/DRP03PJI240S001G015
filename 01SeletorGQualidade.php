@@ -30,11 +30,7 @@
 
         <div class="tab-pane fade show active" id="manage-tab-pane" role="tabpanel" aria-labelledby="manage-tab" tabindex="0"><br><br>
           <button type="button" class="btn btn-outline-info" style="width:300px" 
-            onclick="">Ordem para Serviço de Análise</button><br><br>
-          <button type="button" class="btn btn-outline-info" style="width:300px" 
             onclick="">Monitor dos Serviços de Laboratório</button><br><br>
-          <button type="button" class="btn btn-outline-info" style="width:300px" 
-            onclick="">Cadastro de Novas Amostras</button><br><br>
         </div>
           
         <div class="tab-pane fade" id="lab-tab-pane" role="tabpanel" aria-labelledby="lab-tab" tabindex="0"><br><br>

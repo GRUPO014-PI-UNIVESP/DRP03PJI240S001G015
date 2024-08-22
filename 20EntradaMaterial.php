@@ -122,7 +122,7 @@ if(!empty($confirma['salvar1'])){
             </div>
 
             <div class="col-md-10">
-              <label for="fornecedor1" class="form-label" style="font-size: 10px; color:aqua">Fornecedor: Razão Social ou Nome Fantasia</label>
+              <label for="fornecedor1" class="form-label" style="font-size: 10px; color:aqua">Fornecedor</label>
               <select style="font-size: 12px;" class="form-select" id="fornecedor1" name="fornecedor1">
                 <option style="font-size: 12px" selected>Selecione o fornecedor</option>
                 <?php
@@ -217,13 +217,13 @@ if(!empty($confirma['salvar1'])){
               <div class="col-md-10">
                 <label for="fornecedor2" class="form-label" style="font-size: 10px; color:aqua">Fornecedor</label>
                 <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="fornecedor2" name="fornecedor2" 
-                       placeholder="Digite a Razão Social ou Nome Fantasia do fornecedor" required>
+                       placeholder="" required>
               </div>
 
               <div class="col-md-12">
                 <label for="descrMat2" class="form-label" style="font-size: 10px; color:aqua">Descrição do Material</label>
                 <input style="font-size: 12px; text-transform: uppercase;" type="text" class="form-control" id="descrMat2" name="descrMat2" 
-                       placeholder="Digite a descrição completa do material " required>
+                       placeholder="" required>
               </div>
 
               <div class="col-md-3">
