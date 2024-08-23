@@ -18,14 +18,19 @@
   $numMsg = $msg->rowCount();
 
   if($_SESSION['departamento'] === 'ADMINISTRATIVO' || $_SESSION['credencial'] >= 4){
-    $acesso1 = '00SeletorAdministrativo.php'   ; $acesso9 = '10DeletaFunc.php'   ;
-    $acesso7 = '07CadastroFuncionario.php'     ;
-    $acesso8 = '08EditaRegistroFuncionario.php';
-  }else{ $acesso1 = ''; $acesso7 = ''; $acesso8 = ''; $acesso9 = ''; }
+     $acesso1  = '00SeletorAdministrativo.php'   ;     $_SESSION['ordena'] = 'NOME_FUNCIONARIO';
+     $acesso5  = '06QuadroFuncionarios.php'      ;
+     $acesso7  = '07CadastroFuncionario.php'     ;
+     $acesso8  = '08EditaRegistroFuncionario.php';
+     $acesso9  = '10DeletaFunc.php'              ;
+     $acesso10 = '11CadastroFuncionario.php'     ;
+     $acesso11 = '30EntradaPedido.php'           ;
+  }else{ $acesso1 = ''; $acesso5 = ''; $acesso7 = ''; $acesso8 = ''; $acesso9 = ''; $acesso10 = ''; $acesso11 = '';}
 
   if($_SESSION['departamento'] === 'QUALIDADE'      || $_SESSION['credencial'] >= 4){
-    $acesso2 = '01SeletorGQualidade.php';    
-  }else{ $acesso2 = ''; }
+    $acesso2 = '01SeletorGQualidade.php';
+    $acesso12 = '40RegistroAnalise.php'           ;  
+  }else{ $acesso2 = ''; $acesso12 = ''; }
 
   if($_SESSION['departamento'] === 'LOGÍSTICA'      || $_SESSION['credencial'] >= 4){
     $acesso3 = '02SeletorLogistica.php';     
@@ -34,6 +39,8 @@
   if($_SESSION['departamento'] === 'PRODUÇÃO'       || $_SESSION['credencial'] >= 4){
     $acesso4 = '03SeletorProducao.php';      
   }else{ $acesso4 = ''; }
+  if($_SESSION['credencial'] >= 2){ $acesso6 = '05MonitorLogin.php';
+  }else{ $acesso6 = ''; }
 
 function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
   if($tamanho <= $limite){ $novo_texto = $texto; }else{

@@ -26,7 +26,8 @@ $query_depto->execute();
         <button class="nav-link" id="lab-tab" data-bs-toggle="tab" data-bs-target="#lab-tab-pane" type="button" 
           role="tab" aria-controls="lab-tab-pane" aria-selected="false" style="font-size: 13px">por Departamento</button>
       </li>
-      <button class="btn btn-sm btn-primary" style="margin-left: 30%; width:220px; height: 32px" onclick="location.href='<?php echo $acesso7 ?>'">Cadastrar Novo Funcionario</button><br><br>
+      <button class="btn btn-sm btn-primary" style="margin-left: 30%; width:220px; height: 32px" 
+        onclick="location.href='<?php echo $acesso7 ?>'">Cadastrar Novo Funcionario</button><br><br>
     </ul>
     <div class="tab-content" id="myTabContent"><br>
       <!-- Visualização por Nome do Funcionário -->

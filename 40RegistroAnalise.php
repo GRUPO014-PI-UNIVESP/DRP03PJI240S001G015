@@ -31,18 +31,23 @@
       <!-- Conteúdos das Abas -->
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="entrada-tab-pane" role="tabpanel" aria-labelledby="entrada-tab" tabindex="0">
+          <br><br><br>
           <p>Espaço para entrada de dados</p>
         </div>
         <div class="tab-pane fade" id="ET-tab-pane" role="tabpanel" aria-labelledby="ET-tab" tabindex="0">
+          <br><br><br>
           <p>Espaço para documentação de especificação técnica</p>
         </div>
         <div class="tab-pane fade" id="MA-tab-pane" role="tabpanel" aria-labelledby="MA-tab" tabindex="0">
+          <br><br><br>
           <p>Espaço para documentação MA</p>
         </div>
         <div class="tab-pane fade" id="PQ-tab-pane" role="tabpanel" aria-labelledby="PQ-tab" tabindex="0">
+          <br><br><br>
           <p>Espaço para documentação PQ</p>
         </div>
         <div class="tab-pane fade" id="RE-tab-pane" role="tabpanel" aria-labelledby="RE-tab" tabindex="0">
+          <br><br><br>
           <p>Espaço para documentação RE</p>
         </div>
       </div>      
