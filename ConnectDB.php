@@ -2,9 +2,9 @@
   // ConnectDB.php
   // faz a conexão com o banco de dados MySQL
 
-  $dbHost = 'localHost';
-  $dbUser = 'root';
-  $dbPass = '';
+  $dbHost = 'projetointegrador-drp03-pji240-s001-g015.c5i6gk06k3tm.sa-east-1.rds.amazonaws.com';
+  $dbUser = 'EdsOn';
+  $dbPass = 'pji240G015';
   $dbBase = 'drp03pji240s001g015';
   $dbPort = 3306;
 
