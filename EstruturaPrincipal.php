@@ -19,17 +19,15 @@
 
   if($_SESSION['departamento'] === 'ADMINISTRATIVO' || $_SESSION['credencial'] >= 4){
      $acesso1  = '00SeletorAdministrativo.php'   ;     $_SESSION['ordena'] = 'NOME_FUNCIONARIO';
-     $acesso5  = '06QuadroFuncionarios.php'      ;
-     $acesso7  = '07CadastroFuncionario.php'     ;
-     $acesso8  = '08EditaRegistroFuncionario.php';
-     $acesso9  = '10DeletaFunc.php'              ;
-     $acesso10 = '11CadastroFuncionario.php'     ;
-     $acesso11 = '30EntradaPedido.php'           ;
+     $acesso5  = '06QuadroFuncionarios.php'      ;     $acesso7  = '07CadastroFuncionario.php' ;
+     $acesso8  = '08EditaRegistroFuncionario.php';     $acesso9  = '10DeletaFunc.php'          ;
+     $acesso10 = '11CadastroFuncionario.php'     ;     $acesso11 = '30EntradaPedido.php'           ;
+
   }else{ $acesso1 = ''; $acesso5 = ''; $acesso7 = ''; $acesso8 = ''; $acesso9 = ''; $acesso10 = ''; $acesso11 = '';}
 
   if($_SESSION['departamento'] === 'QUALIDADE'      || $_SESSION['credencial'] >= 4){
-    $acesso2 = '01SeletorGQualidade.php';
-    $acesso12 = '40RegistroAnalise.php'           ;  
+    $acesso2  = '01SeletorGQualidade.php';
+    $acesso12 = '40RegistroAnalise.php'  ;  
   }else{ $acesso2 = ''; $acesso12 = ''; }
 
   if($_SESSION['departamento'] === 'LOGÍSTICA'      || $_SESSION['credencial'] >= 4){
@@ -272,13 +270,20 @@ function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
             <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
           </svg> Mensagens</a>
       <P style="padding: 5px; color: greenyellow; float: right"><?php echo ' Você tem ' .$numMsg. ' mensagens não lidas' ?></P><br><br><br>
-      <a class="btn btn-outline-light" href="Cenário do Projeto.pdf" target="_blank" role="button" style="margin-left: 15%; width: 120px;">Documentação</a>      
+      <div class="container text-center">
+        <div class="row">
+          <div class="col" style="margin-left: 10%">
+          <a class="btn btn-outline-light" href="Cenário do Projeto.pdf" target="_blank" role="button" style="width: 125px; text-align: center">Documentação do Sistema</a>    
+          </div>
+        </div>
+      </div> 
     </div>
 
     <!-- Rodapé com créditos-->
     <div class="sidebarFoot">
       <p style="font-size:9px; color:bisque;text-align: center;">Developed by DRP03PJI240S001G015 2024</p>
     </div>
+    
     <!-- Área Principal-->
     <div class="main">
 

@@ -3,6 +3,13 @@
 include_once 'ConnectDB.php';
 include_once 'EstruturaPrincipal.php';
 
+// busca informações da tabela 'departamentos'
+$query_depto = $connDB->prepare("SELECT * FROM departamentos");
+$query_depto->execute();
+// busca informações da tabela 'cargos'
+$query_cargo = $connDB->prepare("SELECT * FROM cargos");
+$query_cargo->execute();
+
 //verifica identificador do registro para busca no banco de dados
 if(!empty($_GET['id'])){
 
@@ -33,17 +40,11 @@ if(!empty($dados['submit'])){
   if(!empty($dados['uf']))       {$estado   = strtoupper($dados['uf']);       }else{$estado   = 'NC';}  
 
   // definir credencial de acordo com cargo
-  $credencial = '';
-  switch($cargo){
-    case 'DIRETOR(A) EXECUTIVO(A)': $credencial = 7; break;  case 'GERENTE'               : $credencial = 6; break;
-    case 'SUPERVISOR(A)'          : $credencial = 5; break;  case 'ANALISTA SR'           : $credencial = 4; break;
-    case 'ANALISTA JR'            : $credencial = 3; break;  case 'ASSISTENTE'            : $credencial = 2; break;
-    case 'LÍDER DE PRODUÇÃO'      : $credencial = 3; break;  case 'OPERADOR(A) DE MÁQUINA': $credencial = 2; break;
-    case 'SERVENTE'               : $credencial = 1; break;  case 'MECÂNICO(A) CHEFE'     : $credencial = 4; break;
-    case 'MECÂNICO'               : $credencial = 3; break;  case 'ENGENHEIRO(A)'         : $credencial = 5; break;
-    case 'TECNICO(A)'             : $credencial = 3; break;  case 'PROGRAMADOR(A)'        : $credencial = 2; break;
-    case 'MOTORISTA'              : $credencial = 1; break;  case 'FAXINEIRO'             : $credencial = 1; break;
-  }
+  $query_cred = $connDB->prepare("SELECT CREDENCIAL FROM cargos WHERE CARGO = :cargo LIMIT 1");
+  $query_cred->bindParam(':cargo', $dados['cargo'], PDO::PARAM_STR);
+  $query_cred->execute();
+  $result_cred = $query_cred->fetch(PDO::FETCH_ASSOC);
+  $credencial = $result_cred['CREDENCIAL'];
 
   $registra = $connDB->prepare("UPDATE quadro_funcionarios 
                                 SET    NOME_FUNCIONARIO = :nomeFunc, DATA_ADMISSAO = :dataAdmi, CARGO = :cargo, DEPARTAMENTO = :departamento, CREDENCIAL = :credencial, 
@@ -91,26 +92,31 @@ if(isset($_SESSION['msg'])){
         <div class="col-md-3">
           <label for="cpfFunc" class="form-label" style="font-size: 10px; color:aqua">C.P.F.</label>
           <input style="font-size: 12px" type="text" class="form-control" id="CPFInput" name="cpfFunc" value="<?php echo $rowID['CPF'];?>" maxlength="11" onkeyup="criaMascara('CPF')">
+          <p style="font-size: 10px; color: grey">Somente números</p>
         </div>
 
         <div class="col-md-3">
           <label for="rgFunc" class="form-label" style="font-size: 10px; color:aqua">R.G.</label>
           <input style="font-size: 12px" type="text" class="form-control" id="RGInput" name="rgFunc" value="<?php echo $rowID['RG'];?>" maxlength="9" onkeyup="criaMascara('RG')">
+          <p style="font-size: 10px; color: grey">Somente números</p>
         </div>
 
         <div class="col-12">
           <label for="nomeFunc" class="form-label" style="font-size: 10px; color:aqua">Nome Completo</label>
           <input style="font-size: 12px; text-transform:uppercase" type="text" class="form-control" id="nomeFunc" name="nomeFunc" value="<?php echo $rowID['NOME_FUNCIONARIO'];?>" maxlength="120">
+          <p style="font-size: 10px; color: grey">Tamanho máximo de 120 caracteres</p>
         </div>
 
         <div class="col-8">
           <label for="emailFunc" class="form-label" style="font-size: 10px; color:aqua">Email</label>
           <input style="font-size: 12px; text-transform:lowercase" type="text" class="form-control" id="emailFunc" name="emailFunc" value="<?php echo $rowID['EMAIL'];?>">
+          <p style="font-size: 10px; color: grey">Tamanho máximo de 120 caracteres</p>
         </div>
 
         <div class="col-md-4">
           <label for="telefone" class="form-label" style="font-size: 10px; color:aqua">Telefone de Contato</label>
           <input style="font-size: 12px" type="text" class="form-control" id="CelularInput" name="telefone" value="<?php echo $rowID['TELEFONE'];?>" maxlength="11" onkeyup="criaMascara('Celular')">
+          <p style="font-size: 10px; color: grey">Somente números incluindo DDD</p>
         </div>
 
         <div class="col-md-2">
@@ -120,32 +126,44 @@ if(isset($_SESSION['msg'])){
 
         <div class="col-md-4">
           <label for="departamento" class="form-label" style="font-size: 10px; color:aqua">Departamento</label>
-          <input style="font-size: 12px; text-transform:uppercase" type="text" class="form-control" id="departamento" name="departamento" value="<?php echo $rowID['DEPARTAMENTO'];?>">
+          <select style="font-size: 12px" id="departamento" class="form-select" name="departamento" value="<?php echo $rowID['DEPARTAMENTO'];?>">
+            <option style="font-size: 12px" selected><?php echo $rowID['DEPARTAMENTO'];?></option>
+            <?php
+              while($selDepto = $query_depto->fetch(PDO::FETCH_ASSOC)){?>
+                <option style="font-size: 12px"><?php echo $selDepto['DEPARTAMENTO']; ?></option> <?php
+              }?>
+          </select>
         </div>
 
         <div class="col-md-4">
-          <label for="cargo" class="form-label" style="font-size: 10px; color:aqua">Cargo Ocupado</label>
-          <input style="font-size: 12px; text-transform:uppercase" type="text" class="form-control" id="cargo" name="cargo" value="<?php echo $rowID['CARGO'];?>">
+          <label for="cargo" class="form-label" style="font-size: 10px; color:aqua">Cargo</label>
+          <select style="font-size: 12px" id="cargo" class="form-select" name="cargo" value="<?php echo $rowID['CARGO'];?>">
+            <option style="font-size: 12px" selected><?php echo $rowID['CARGO'];?></option>
+            <?php
+              while($selCargo = $query_cargo->fetch(PDO::FETCH_ASSOC)){?>
+                <option style="font-size: 12px"><?php echo $selCargo['CARGO']; ?></option> <?php
+              }?>               
+          </select>
         </div>
 
         <div class="col-10">
-          <br><br>
           <label for="ruaRes" class="form-label" style="font-size: 10px; color:aqua">Endereço Residencial: Rua/Avenida</label>
           <input style="font-size: 12px" type="text" class="form-control" id="ruaRes" name="ruaRes" value="<?php echo $rowID['RUA_RES'];?>">
         </div>
 
         <div class="col-md-2">
-          <br><br>
           <label for="numRes" class="form-label" style="font-size: 10px; color:aqua">Número da Residência</label>
-          <input style="font-size: 12px" type="text" class="form-control" id="numRes" name="numRes" value="<?php echo $rowID['NUM_RES'];?>"maxlength="6">
+          <input style="font-size: 12px" type="number" class="form-control" id="numRes" name="numRes" value="<?php echo $rowID['NUM_RES'];?>"maxlength="6">
+          <p style="font-size: 10px; color: grey">Somente números</p>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-3">
           <label for="cplRes" class="form-label" style="font-size: 10px; color:aqua">Complemento</label>
           <input style="font-size: 12px" type="text" class="form-control" id="cplRes" name="cplRes" value="<?php echo $rowID['COMPLEMENTO'];?>">
+          <p style="font-size: 10px; color: grey">Apto, Bloco, Casa, Ed. etc</p>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label for="bairro" class="form-label" style="font-size: 10px; color:aqua">Bairro</label>
           <input style="font-size: 12px; text-transform:uppercase" type="text" class="form-control" id="bairro" name="bairro" value="<?php echo $rowID['BAIRRO'];?>">
         </div>

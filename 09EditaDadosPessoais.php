@@ -75,44 +75,51 @@ if(isset($_SESSION['msg'])){
       <div class="col-md-3">
         <label for="cpfFunc" class="form-label" style="font-size: 10px; color:aqua">C.P.F.</label>
         <input style="font-size: 12px" type="text" class="form-control" id="CPFInput" name="cpfFunc" value="<?php echo $dados['CPF']; ?>" maxlength="11" onkeyup="criaMascara('CPF')">
+        <p style="font-size: 10px; color: grey">Somente números</p>
       </div>
 
       <div class="col-md-3">
         <label for="rgFunc" class="form-label" style="font-size: 10px; color:aqua">R.G.</label>
         <input style="font-size: 12px" type="text" class="form-control" id="RGInput" name="rgFunc" value="<?php echo $dados['RG']; ?>" maxlength="9" onkeyup="criaMascara('RG')">
+        <p style="font-size: 10px; color: grey">Somente números</p>
       </div>
 
       <div class="col-12">
         <label for="nomeFunc" class="form-label" style="font-size: 10px; color:aqua">Nome Completo</label>
         <input style="font-size: 12px; text-transform:uppercase" type="text" class="form-control" id="nomeFunc" name="nomeFunc" value="<?php echo $dados['NOME_FUNCIONARIO']; ?>" maxlength="120">
+        <p style="font-size: 10px; color: grey">Tamanho máximo de 120 caracteres</p>
       </div>
 
       <div class="col-8">
         <label for="emailFunc" class="form-label" style="font-size: 10px; color:aqua">Email</label>
         <input style="font-size: 12px; text-transform:lowercase" type="email" class="form-control" id="emailFunc" name="emailFunc" value="<?php echo $dados['EMAIL']; ?>">
+        <p style="font-size: 10px; color: grey">Tamanho máximo de 120 caracteres</p>
       </div>
 
       <div class="col-md-4">
         <label for="telefone" class="form-label" style="font-size: 10px; color:aqua">Telefone de Contato</label>
         <input style="font-size: 12px" type="text" class="form-control" id="CelularInput" name="telefone" value="<?php echo $dados['TELEFONE']; ?>" maxlength="11" onkeyup="criaMascara('Celular')">
+        <p style="font-size: 10px; color: grey">Somente números incluindo DDD</p>
       </div>
 
-      <div class="col-10"><br><br>
+      <div class="col-10">
         <label for="ruaRes" class="form-label" style="font-size: 10px; color:aqua">Endereço Residencial: Rua/Avenida</label>
         <input style="font-size: 12px" type="text" class="form-control" id="ruaRes" name="ruaRes" value="<?php echo $dados['RUA_RES']; ?>">
       </div>
 
-      <div class="col-md-2"><br><br>
+      <div class="col-md-2">
         <label for="numRes" class="form-label" style="font-size: 10px; color:aqua">Número da Residência</label>
         <input style="font-size: 12px" type="text" class="form-control" id="numRes" name="numRes" value="<?php echo $dados['NUM_RES']; ?>" maxlength="6">
+        <p style="font-size: 10px; color: grey">Somente números</p>
       </div>
 
-      <div class="col-md-2">
+      <div class="col-md-3">
         <label for="cplRes" class="form-label" style="font-size: 10px; color:aqua">Complemento</label>
         <input style="font-size: 12px" type="text" class="form-control" id="cplRes" name="cplRes" value="<?php echo $dados['COMPLEMENTO']; ?>">
+        <p style="font-size: 10px; color: grey">Apto, Bloco, Casa, Ed. etc</p>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-md-3">
         <label for="bairro" class="form-label" style="font-size: 10px; color:aqua">Bairro</label>
         <input style="font-size: 12px; text-transform:uppercase" type="text" class="form-control" id="bairro" name="bairro" value="<?php echo $dados['BAIRRO']; ?>">
       </div>

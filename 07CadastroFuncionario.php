@@ -48,16 +48,16 @@ if(!empty($dados['submit'])){
     $idUser      = $geraIDuser;            $passUser     = $geraPassword;          $dataNasc = date('Y-m-d', strtotime($dados['dataNasc']));
     $responsavel = $_SESSION['nome_func']; $dataAdmi     = date('Y-m-d', strtotime($dados['dataAdmi']));
   
-    if(!empty($dados['cpfFunc']))  {$cpf      = $dados['cpfFunc'];             }else{$cpf      = 'Nada Consta';}
-    if(!empty($dados['rgFunc']))   {$rg       = $dados['rgFunc'];              }else{$rg       = 'Nada Consta';}
-    if(!empty($dados['telefone'])) {$telefone = $dados['telefone'];            }else{$telefone = 'Nada Consta';}
-    if(!empty($dados['emailFunc'])){$email    = strtolower($dados['nomeFunc']);}else{$email    = 'Nada Consta';}
-    if(!empty($dados['ruaRes']))   {$ruaRes   = $dados['ruaRes'];              }else{$ruaRes   = 'Nada Consta';}
-    if(!empty($dados['numRes']))   {$numRes   = $dados['numRes'];              }else{$numRes   = 'Nada Consta';}
-    if(!empty($dados['cplRes']))   {$cplRes   = $dados['cplRes'];              }else{$cplRes   = 'Nada Consta';}
-    if(!empty($dados['bairro']))   {$bairro   = strtoupper($dados['bairro']);  }else{$bairro   = 'Nada Consta';}
-    if(!empty($dados['cidade']))   {$cidade   = strtoupper($dados['cidade']);  }else{$cidade   = 'Nada Consta';}
-    if(!empty($dados['uf']))       {$estado   = strtoupper($dados['uf']);      }else{$estado   = 'NC';}  
+    if(!empty($dados['cpfFunc']))  {$cpf      = $dados['cpfFunc'];              }else{$cpf      = 'Nada Consta';}
+    if(!empty($dados['rgFunc']))   {$rg       = $dados['rgFunc'];               }else{$rg       = 'Nada Consta';}
+    if(!empty($dados['telefone'])) {$telefone = $dados['telefone'];             }else{$telefone = 'Nada Consta';}
+    if(!empty($dados['emailFunc'])){$email    = strtolower($dados['emailFunc']);}else{$email    = 'Nada Consta';}
+    if(!empty($dados['ruaRes']))   {$ruaRes   = $dados['ruaRes'];               }else{$ruaRes   = 'Nada Consta';}
+    if(!empty($dados['numRes']))   {$numRes   = $dados['numRes'];               }else{$numRes   = 'Nada Consta';}
+    if(!empty($dados['cplRes']))   {$cplRes   = $dados['cplRes'];               }else{$cplRes   = 'Nada Consta';}
+    if(!empty($dados['bairro']))   {$bairro   = strtoupper($dados['bairro']);   }else{$bairro   = 'Nada Consta';}
+    if(!empty($dados['cidade']))   {$cidade   = strtoupper($dados['cidade']);   }else{$cidade   = 'Nada Consta';}
+    if(!empty($dados['uf']))       {$estado   = strtoupper($dados['uf']);       }else{$estado   = 'NC';}  
         
 // criptografar senha e usuário geradas
     $usuario      = password_hash($geraIDuser  , PASSWORD_DEFAULT);
@@ -73,7 +73,7 @@ if(!empty($dados['submit'])){
     $registra = $connDB->prepare("INSERT INTO quadro_funcionarios (NOME_FUNCIONARIO, DATA_ADMISSAO, CARGO, DEPARTAMENTO,
                                   CREDENCIAL, USUARIO, SENHA, ID_USUARIO, SENHA_USUARIO, DATA_NASCIMENTO, CPF, RG, TELEFONE,
                                   EMAIL, RUA_RES, NUM_RES, COMPLEMENTO, BAIRRO, CIDADE, UF, RESPONSAVEL_CADASTRO)
-                                VALUES (:nomeFunc, :dataAdmi, :cargo, :departamento, :credencial,:usuario, :senha, :idUser, :passUser, 
+                                VALUES (:nomeFunc, :dataAdmi, :cargo, :departamento, :credencial, :usuario, :senha, :idUser, :passUser, 
                                   :dataNasc, :cpf, :rg, :telefone, :email, :ruaRes, :numRes, :cplRes, :bairro, :cidade, :estado, :responsavel)");
 
     $registra->bindParam(':nomeFunc'    , $nomeFunc,     PDO::PARAM_STR);   $registra->bindParam(':dataAdmi'    , $dataAdmi,     PDO::PARAM_STR);
@@ -109,6 +109,7 @@ if(isset($_SESSION['msg'])){
         <div class="col-md-2">
           <label for="idFunc" class="form-label" style="color:aqua; font-size: 10px">Cadastro No.</label>
           <input style="text-align:right; font-size: 12px" type="number" class="form-control" id="idFunc" name="idFunc" value="<?php echo $novoID?>" readonly>
+          <p style="font-size: 10px; color: grey">Campo não editável</p>
         </div>
 
         <div class="col-md-2">
@@ -119,26 +120,31 @@ if(isset($_SESSION['msg'])){
         <div class="col-md-3">
           <label for="cpfFunc" class="form-label" style="font-size: 10px; color:aqua">C.P.F.</label>
           <input style="font-size: 12px" type="text" class="form-control" id="CPFInput" name="cpfFunc" placeholder="Opcional, somente números" maxlength="11" onkeyup="criaMascara('CPF')">
+          <p style="font-size: 10px; color: grey">Somente números</p>
         </div>
 
         <div class="col-md-3">
           <label for="rgFunc" class="form-label" style="font-size: 10px; color:aqua">R.G.</label>
           <input style="font-size: 12px" type="text" class="form-control" id="RGInput" name="rgFunc" placeholder="Opcional, somente números" maxlength="9" onkeyup="criaMascara('RG')">
+          <p style="font-size: 10px; color: grey">Somente números</p>
         </div>
 
         <div class="col-12">
           <label for="nomeFunc" class="form-label" style="font-size: 10px; color:aqua">Nome Completo</label>
           <input style="font-size: 12px; text-transform:uppercase" type="text" class="form-control" id="nomeFunc" name="nomeFunc" placeholder="" maxlength="120" required>
+          <p style="font-size: 10px; color: grey">Tamanho máximo de 120 caracteres</p>
         </div>
 
         <div class="col-8">
           <label for="emailFunc" class="form-label" style="font-size: 10px; color:aqua">Email</label>
           <input style="font-size: 12px; text-transform:lowercase" type="email" class="form-control" id="emailFunc" name="emailFunc" placeholder="Opcional">
+          <p style="font-size: 10px; color: grey">Tamanho máximo de 120 caracteres</p>
         </div>
 
         <div class="col-md-4">
           <label for="telefone" class="form-label" style="font-size: 10px; color:aqua">Telefone de Contato</label>
           <input style="font-size: 12px; " type="text" class="form-control" id="CelularInput" name="telefone" placeholder="Opcional, somente números" maxlength="11" onkeyup="criaMascara('Celular')">
+          <p style="font-size: 10px; color: grey">Somente números incluindo DDD</p>
         </div>
 
         <div class="col-md-2">
@@ -168,22 +174,24 @@ if(isset($_SESSION['msg'])){
           </select>
         </div>
 
-        <div class="col-10"><br><br>
+        <div class="col-10">
           <label for="ruaRes" class="form-label" style="font-size: 10px; color:aqua">Endereço Residencial: Rua/Avenida</label>
           <input style="font-size: 12px" type="text" class="form-control" id="ruaRes" name="ruaRes" placeholder="Opcional">
         </div>
 
-        <div class="col-md-2"><br><br>
+        <div class="col-md-2">
           <label for="numRes" class="form-label" style="font-size: 10px; color:aqua">Número da Residência</label>
-          <input style="font-size: 12px" type="text" class="form-control" id="numRes" name="numRes" placeholder="Opcional" maxlength="6">
+          <input style="font-size: 12px" type="number" class="form-control" id="numRes" name="numRes" maxlength="6">
+          <p style="font-size: 10px; color: grey">Somente números</p>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-3">
           <label for="cplRes" class="form-label" style="font-size: 10px; color:aqua">Complemento</label>
           <input style="font-size: 12px" type="text" class="form-control" id="cplRes" name="cplRes" placeholder="Opcional">
+          <p style="font-size: 10px; color: grey">Apto, Bloco, Casa, Ed. etc</p>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label for="bairro" class="form-label" style="font-size: 10px; color:aqua">Bairro</label>
           <input style="font-size: 12px; text-transform:uppercase" type="text" class="form-control" id="bairro" name="bairro" placeholder="Opcional">
         </div>
@@ -217,7 +225,7 @@ if(isset($_SESSION['msg'])){
                       echo('Usuário: ' .  $geraIDuser .'<br>'. 'Senha: ' . $geraPassword); 
                     ?>
                   </p>
-                  <p style="color: grey; font-size: 12px">Chaves provisórias. Anote e informe o funcionário. Pode ser alterado posteriormente</p>
+                  <p style="color: grey; font-size: 12px">Chaves provisórias. Anote e informe ao funcionário. Pode ser alterado posteriormente</p>
                 </div>
                 <div class="modal-footer">
                   <button style="width: 210px" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar sem Salvar</button>
