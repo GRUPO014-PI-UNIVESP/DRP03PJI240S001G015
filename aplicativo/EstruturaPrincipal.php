@@ -25,7 +25,7 @@
 
   }else{ $acesso1 = ''; $acesso5 = ''; $acesso7 = ''; $acesso8 = ''; $acesso9 = ''; $acesso10 = ''; $acesso11 = '';}
 
-  if($_SESSION['departamento'] === 'QUALIDADE'      || $_SESSION['credencial'] >= 4){
+  if($_SESSION['departamento'] === 'GARANTIA DA QUALIDADE'|| $_SESSION['credencial'] >= 4){
     $acesso2  = '01SeletorGQualidade.php';
     $acesso12 = '40RegistroAnalise.php'  ;  
   }else{ $acesso2 = ''; $acesso12 = ''; }
@@ -37,8 +37,7 @@
   if($_SESSION['departamento'] === 'PRODUÇÃO'       || $_SESSION['credencial'] >= 4){
     $acesso4 = '03SeletorProducao.php';      
   }else{ $acesso4 = ''; }
-  if($_SESSION['credencial'] >= 2){ $acesso6 = '05MonitorLogin.php';
-  }else{ $acesso6 = ''; }
+  if($_SESSION['credencial'] >= 2){ $acesso6 = '05MonitorLogin.php'; } else{ $acesso6 = ''; }
 
 function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
   if($tamanho <= $limite){ $novo_texto = $texto; }else{
