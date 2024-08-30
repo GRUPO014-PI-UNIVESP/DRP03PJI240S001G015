@@ -1,5 +1,5 @@
 <?php
-  // index.php
+  // index.php aprendendo vscode
   // Programa de abertura do sistema pedindo usuário e senha
 
   // inicia sessão de trabalho
@@ -71,7 +71,7 @@
           }else{
 
             //mensagem de erro de entrada
-            $_SESSION['msg'] = "<p style='color: red; text-align: center'>Erro: usuário ou senha incorreta!</p>";
+            $_SESSION['msg'] = "<p style='color: orange; text-align: center'>Erro: usuário ou senha incorreta!</p>";
           }
         }
       }
