@@ -3,7 +3,7 @@
   // faz a conexão com o banco de dados MySQL
 
   // Conexão ao banco de Dados alocado na AWS
-  $dbHost = 'projetointegrador-drp03-pji240-s001-g015.c5i6gk06k3tm.sa-east-1.rds.amazonaws.com';
+  $dbHost = 'projetointegradordb.c5i6gk06k3tm.sa-east-1.rds.amazonaws.com';
   $dbUser = 'EdsOn';
   $dbPass = 'pji240G015';
   $dbBase = 'drp03pji240s001g015';
