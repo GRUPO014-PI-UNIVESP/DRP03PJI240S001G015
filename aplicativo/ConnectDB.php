@@ -21,7 +21,7 @@
     //$connDB = new PDO('mysqli:host=$dbHost; port=$dbPort; dbname=' . $dbBase, $dbUser, $dbPass);
 
     //conexão sem porta
-    $connDB = new PDO("mysql:host=$dbHost; dbname=" . $dbBase, $dbUser, $dbPass);
+    $connDB = new PDO("mysql:host=$dbHost; port=$dbPort; dbname=" . $dbBase, $dbUser, $dbPass);
 
     //echo "Conexão realizada com sucesso!";
 
