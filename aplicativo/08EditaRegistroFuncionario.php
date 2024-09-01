@@ -1,7 +1,7 @@
 <?php
 // inclusão do banco de dados e estrutura base da página web
-include_once 'ConnectDB.php';
-include_once 'EstruturaPrincipal.php';
+include_once 'aplicativo/ConnectDB.php';
+include_once 'aplicativo/EstruturaPrincipal.php';
 
 // busca informações da tabela 'departamentos'
 $query_depto = $connDB->prepare("SELECT * FROM departamentos");
@@ -64,7 +64,7 @@ if(!empty($dados['submit'])){
 
   $registra->execute();
   
-  header('Location: 06QuadroFuncionarios.php');
+  header('Location: aplicativo/06QuadroFuncionarios.php');
 }
 //se houver erro de entrada mostra erro na página
 if(isset($_SESSION['msg'])){

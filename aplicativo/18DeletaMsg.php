@@ -1,7 +1,7 @@
 <?php
 // inclusão do banco de dados e estrutura base da página web
-include_once 'ConnectDB.php';
-include_once 'EstruturaPrincipal.php';
+include_once 'aplicativo/ConnectDB.php';
+include_once 'aplicativo/EstruturaPrincipal.php';
 
 //verifica identificador do registro para busca no banco de dados
 if(!empty($_GET['id'])){
@@ -10,5 +10,5 @@ if(!empty($_GET['id'])){
   $queryMsg = $connDB->prepare("DELETE FROM mensagens WHERE ID_MENSAGEM = :id");
   $queryMsg->bindParam(':id', $id_del, PDO::PARAM_INT);
   $queryMsg->execute();
-  header('Location: 15Mensagens.php');
+  header('Location: aplicativo/15Mensagens.php');
 }

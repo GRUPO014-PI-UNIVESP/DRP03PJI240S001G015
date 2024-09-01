@@ -1,7 +1,7 @@
 <?php
 // inclusão de banco de dados e estrutura base da página web
-include_once 'ConnectDB.php';
-include_once 'EstruturaPrincipal.php';
+include_once 'aplicativo/ConnectDB.php';
+include_once 'aplicativo/EstruturaPrincipal.php';
 
 // verifica dados do usuário para edição dos dados pessoais
 $idUser    = $_SESSION['idFunc'];
@@ -47,7 +47,7 @@ if(!empty($atualizado['submit'])){
 
   $registra->execute();
   
-  header('Location: 00SeletorAdministrativo.php');
+  header('Location: aplicativo/00SeletorAdministrativo.php');
 }
 //se houver erro de entrada mostra erro na página
 if(isset($_SESSION['msg'])){

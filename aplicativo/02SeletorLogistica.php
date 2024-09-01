@@ -1,7 +1,7 @@
 <?php
 // inclusão do banco de dados e estrutura base da página web
-include_once 'ConnectDB.php';
-include_once 'EstruturaPrincipal.php';
+include_once 'aplicativo/ConnectDB.php';
+include_once 'aplicativo/EstruturaPrincipal.php';
 ?>
 
   <!-- Área Principal -->
@@ -31,7 +31,7 @@ include_once 'EstruturaPrincipal.php';
 
         <div class="tab-pane fade show active" id="manage-tab-pane" role="tabpanel" aria-labelledby="manage-tab" tabindex="0"><br><br>
           <button type="button" class="btn btn-outline-info" style="width:400px" 
-            onclick="location.href='20EntradaMaterial.php'">Entrada de Material</button><br><br>
+            onclick="location.href='aplicativo/20EntradaMaterial.php'">Entrada de Material</button><br><br>
           <button type="button" class="btn btn-outline-info" style="width:400px" 
             onclick="">Saída de Produto Final</button><br><br>
         </div>

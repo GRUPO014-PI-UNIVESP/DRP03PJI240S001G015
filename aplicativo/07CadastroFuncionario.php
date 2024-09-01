@@ -1,7 +1,7 @@
 <?php
 // inclusão do banco de dados e estrutura base da página web
-include_once 'ConnectDB.php';
-include_once 'EstruturaPrincipal.php';
+include_once 'aplicativo/ConnectDB.php';
+include_once 'aplicativo/EstruturaPrincipal.php';
 
 // verifica o identificador do último registro
 $queryLast = $connDB->prepare("SELECT MAX(ID_FUNCIONARIO) AS ID_FUNCIONARIO FROM quadro_funcionarios");
@@ -90,7 +90,7 @@ if(!empty($dados['submit'])){
 
     $registra->execute();
     
-    header('Location: 07CadastroFuncionario.php');
+    header('Location: aplicativo/07CadastroFuncionario.php');
   }
 }
 //se houver erro de entrada mostra erro na página

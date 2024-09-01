@@ -12,7 +12,7 @@
     date_default_timezone_set('America/Sao_Paulo');
       
   //Chama conexão com banco de dados que está em outro programa
-    include_once './ConnectDB.php';  
+    include_once 'aplicativo/ConnectDB.php';  
 ?>
 <!doctype html>
 <html lang="pt-br" data-bs-theme="dark">
@@ -62,7 +62,7 @@
               $register->execute();
 
               //direciona fluxo
-              header("Location: dashboard.php");
+              header("Location: aplicativo/dashboard.php");
             }else{
 
               //mensagem de erro de entrada
@@ -117,7 +117,7 @@
 
           <!-- Botão para recarregar e começar nova entrada caso ocorra algum erro -->
           <div class="d-grid gap-2">
-            <input class="btn btn-secondary" type="reset" id="reset" name="reset" value="Recarregar" onclick="location.href='index.php'">
+            <input class="btn btn-secondary" type="reset" id="reset" name="reset" value="Recarregar" onclick="location.href='aplicativo/index.php'">
           </div>
         </div>
       </div>

@@ -6,8 +6,8 @@
 date_default_timezone_set('America/Sao_Paulo');
 
 // inclusão de códigos da estrutura principal do sistema
-  include_once 'EstruturaPrincipal.php';
-  include_once 'ConnectDB.php';
+  include_once 'aplicativo/EstruturaPrincipal.php';
+  include_once 'aplicativo/ConnectDB.php';
 
   $altera = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
@@ -30,7 +30,7 @@ date_default_timezone_set('America/Sao_Paulo');
        
     $registraAlteracao->execute();
 
-    header('Location: LogOut.php');
+    header('Location: aplicativo/LogOut.php');
   }
 
 ?>
@@ -75,7 +75,7 @@ date_default_timezone_set('America/Sao_Paulo');
 
         <!-- Botão para recarregar e começar nova entrada caso ocorra algum erro -->
         <div class="d-grid gap-2">
-          <input class="btn btn-secondary" type="reset" id="reset" name="reset" value="Descartar e Sair" onclick="location.href='LogOut.php'">
+          <input class="btn btn-secondary" type="reset" id="reset" name="reset" value="Descartar e Sair" onclick="location.href='aplicativo/LogOut.php'">
         </div>
       </div>
     </div>
