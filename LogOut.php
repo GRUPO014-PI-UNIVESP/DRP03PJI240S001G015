@@ -9,7 +9,7 @@
   date_default_timezone_set('America/Sao_Paulo');
 
   //Chama conexão com banco de dados que está em outro programa
-  include_once 'aplicativo//ConnectDB.php';
+  include_once 'ConnectDB.php';
 
   //atribui valores de login e logout para variáveis
   $dataOut = date('Y-m-d');
@@ -33,4 +33,4 @@
   session_destroy();
 
   // redireciona fluxo para index.php
-  header("Location: aplicativo/index.php");
+  header("Location: index.php");
