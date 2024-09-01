@@ -62,7 +62,7 @@
               $register->execute();
 
               //direciona fluxo
-              header("Location: /aplicativo/dashboard.php");
+              header("Location: ./aplicativo/dashboard.php");
             }else{
 
               //mensagem de erro de entrada
