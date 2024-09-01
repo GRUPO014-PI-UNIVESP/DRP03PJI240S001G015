@@ -1,7 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: 
+  - source: app/
     destination: /var/www/html/
     owner: apache
 hooks:
