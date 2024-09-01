@@ -12,7 +12,7 @@
     date_default_timezone_set('America/Sao_Paulo');
       
   //Chama conexão com banco de dados que está em outro programa
-    include_once '/aplicativo/ConnectDB.php';  
+    include_once './aplicativo/ConnectDB.php';  
 ?>
 <!doctype html>
 <html lang="pt-br" data-bs-theme="dark">
