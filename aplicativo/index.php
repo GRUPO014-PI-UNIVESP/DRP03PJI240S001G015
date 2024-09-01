@@ -1,5 +1,5 @@
 <?php
-  // index.php aprendendo vscode
+  // index.php
   // Programa de abertura do sistema pedindo usuário e senha
 
   // inicia sessão de trabalho

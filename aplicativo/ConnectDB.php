@@ -26,5 +26,5 @@
     //echo "Conexão realizada com sucesso!";
 
   } catch(PDOException $err){
-    die('Erro de conexão!' . $err->getMessage());
+    die('Erro de conexão!Verifique!!' . $err->getMessage());
   }
