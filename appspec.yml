@@ -7,9 +7,9 @@ files:
 hooks:
     BeforeInstall:
     - location: scripts/antes.sh
-      timeout: 30
+      timeout: 60
       runas: root
     AfterInstall:
     - location: scripts/depois.sh
-      timeout: 30
+      timeout: 60
       runas: root
