@@ -1,7 +1,7 @@
 <?php
 // inclusão do banco de dados e estrutura base da página web
-include_once 'app/ConnectDB.php';
-include_once 'app/EstruturaPrincipal.php';
+include_once './ConnectDB.php';
+include_once './EstruturaPrincipal.php';
 
 $listar = $connDB->prepare("SELECT * FROM historico_login ORDER BY ID_LOGIN DESC");
 $listar->execute();

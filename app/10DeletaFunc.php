@@ -1,7 +1,7 @@
 <?php
 // inclusão do banco de dados e estrutura base da página web
-include_once 'app/ConnectDB.php';
-include_once 'app/EstruturaPrincipal.php';
+include_once './ConnectDB.php';
+include_once './EstruturaPrincipal.php';
 
 //verifica identificador do registro para busca no banco de dados
 if(!empty($_GET['id'])){
@@ -20,7 +20,7 @@ if(!empty($_GET['id'])){
     $queryMsg->bindParam(':id', $id_del, PDO::PARAM_INT);
     $queryMsg->execute();
 
-    header('Location: app/06QuadroFuncionarios.php');
+    header('Location: ./06QuadroFuncionarios.php');
   }
 }
 ?>
@@ -29,7 +29,7 @@ if(!empty($_GET['id'])){
     <form method="POST" action="">
       <p style="margin-left: 5%; margin-top: 5%; font-size: 16px">Deseja deletar o registro de <?php echo '[ ' . $rowID['NOME_FUNCIONARIO'] . ' ]' ?> </p>
       <input class="btn btn-primary" style="width: 100px;margin-left: 20%" type="submit" id="submit" name="submit" value="Confirmar">
-      <input class="btn btn-danger"  style="width: 100px" type="reset" id="reset" name="reset" value="Cancelar" onclick="location.href='app/06QuadroFuncionarios.php'">
+      <input class="btn btn-danger"  style="width: 100px" type="reset" id="reset" name="reset" value="Cancelar" onclick="location.href='./06QuadroFuncionarios.php'">
     </form>
   </div>
 </div>

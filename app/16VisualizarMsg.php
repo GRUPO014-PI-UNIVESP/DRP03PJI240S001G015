@@ -1,7 +1,7 @@
 <?php
 //
-include_once 'app/ConnectDB.php';
-include_once 'app/EstruturaPrincipal.php';
+include_once './ConnectDB.php';
+include_once './EstruturaPrincipal.php';
 
 if(!empty($_GET['id'])){
 
@@ -35,7 +35,7 @@ if(!empty($_GET['id'])){
     $enviar->bindParam(':confirma'     , $confirma        , PDO::PARAM_STR);
     $enviar->execute();
 
-    header('Location: app/15Mensagens.php');
+    header('Location: ./15Mensagens.php');
   }
 
 }
@@ -96,7 +96,7 @@ if(!empty($_GET['id'])){
                 </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="width: 200px" onclick="location.href='app/15Mensagens.php'">Descartar</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="width: 200px" onclick="location.href='./15Mensagens.php'">Descartar</button>
               <input class="btn btn-primary" type="submit" id="submit" name="submit" value="Enviar" style="width: 200px">
             </div>
           </div>

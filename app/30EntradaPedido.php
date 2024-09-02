@@ -1,7 +1,7 @@
 <?php
 // inclusão do banco de dados e estrutura base da página web
-include_once 'app/ConnectDB.php';
-include_once 'app/EstruturaPrincipal.php';
+include_once './ConnectDB.php';
+include_once './EstruturaPrincipal.php';
 
 //atribui usuário como responsável por registro de entrada do material ou cadastramento
 $responsavel = $_SESSION['nome_func'];
@@ -49,7 +49,7 @@ if(!empty($confirma['salvar1'])){
   $salvar1->execute();
 
   //redireciona para início 
-  header('Location: app/30EntradaPedido.php');
+  header('Location: ./30EntradaPedido.php');
 
   //verifica se foi feito o cadastramento de novo material
 } else if(!empty($confirma['salvar2'])){
@@ -84,7 +84,7 @@ if(!empty($confirma['salvar1'])){
   $saveMP->bindParam(':descrProduto', $descrProduto2, PDO::PARAM_STR);
   $saveMP->execute();
 
-  header('Location: app/30EntradaPedido.php');
+  header('Location: ./30EntradaPedido.php');
 }
 ?>
 <!-- Área Principal -->
@@ -175,7 +175,7 @@ if(!empty($confirma['salvar1'])){
             </div>
             
             <div class="col-md-3" style="padding: 3px;">
-              <input style="width: 140px; text-align:center" class="btn btn-secondary" type="reset" id="reset1" name="reset1" value="Descartar" onclick="location.href='app/30EntradaPedido.php'">
+              <input style="width: 140px; text-align:center" class="btn btn-secondary" type="reset" id="reset1" name="reset1" value="Descartar" onclick="location.href='./30EntradaPedido.php'">
             </div>
           </form>
         </div>
@@ -243,7 +243,7 @@ if(!empty($confirma['salvar1'])){
               </div>
 
               <div class="col-md-3" style="padding: 3px">
-                <input style="width: 140px;" class="btn btn-secondary" type="reset" id="reset2" name="reset2" value="Descartar" onclick="location.href='app/20EntradaMaterial.php'">
+                <input style="width: 140px;" class="btn btn-secondary" type="reset" id="reset2" name="reset2" value="Descartar" onclick="location.href='./20EntradaMaterial.php'">
               </div>
             </form>
         </div>
