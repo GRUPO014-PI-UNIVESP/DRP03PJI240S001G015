@@ -1,7 +1,7 @@
 <?php
 // inclusão de banco de dados e estrutura base da página web
-include_once 'aplicativo/ConnectDB.php';
-include_once 'aplicativo/EstruturaPrincipal.php';
+include_once 'app/ConnectDB.php';
+include_once 'app/EstruturaPrincipal.php';
 
 // verifica dados do usuário para edição dos dados pessoais
 $idUser    = $_SESSION['idFunc'];
@@ -47,7 +47,7 @@ if(!empty($atualizado['submit'])){
 
   $registra->execute();
   
-  header('Location: aplicativo/00SeletorAdministrativo.php');
+  header('Location: app/00SeletorAdministrativo.php');
 }
 //se houver erro de entrada mostra erro na página
 if(isset($_SESSION['msg'])){
@@ -141,7 +141,7 @@ if(isset($_SESSION['msg'])){
 
       <!-- Botão para recarregar e começar nova entrada caso ocorra algum erro -->
       <div class="col-md-4"><br>
-        <input class="btn btn-secondary" type="reset" id="reset" name="reset" value="Descartar e Sair" style="width: 280px" onclick="location.href='Dashboard.php'">
+        <input class="btn btn-secondary" type="reset" id="reset" name="reset" value="Descartar e Sair" style="width: 280px" onclick="location.href='app/Dashboard.php'">
       </div>
     </form>
   </div>

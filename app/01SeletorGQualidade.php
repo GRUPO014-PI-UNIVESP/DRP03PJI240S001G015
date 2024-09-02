@@ -1,7 +1,7 @@
 <?php
   // inclusão do banco de dados e estrutura base da página web
-  include_once 'aplicativo/ConnectDB.php';
-  include_once 'aplicativo/EstruturaPrincipal.php';
+  include_once 'app/ConnectDB.php';
+  include_once 'app/EstruturaPrincipal.php';
 
   // pesquisa de MP para serem analisadas
   $query_MP = $connDB->prepare("SELECT ID_ESTOQUE_MP, FORNECEDOR, DESCRICAO_MP FROM mp_estoque WHERE SITUACAO_QUALI = 'AGUARDANDO'");

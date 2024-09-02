@@ -1,6 +1,6 @@
 <?php
   // faz requisição da estrutura base da págima do sistema
-  include_once 'EstruturaPrincipal.php';
+  include_once 'app/EstruturaPrincipal.php';
 
 ?>
 <div class="main">

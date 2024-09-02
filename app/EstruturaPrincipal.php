@@ -10,7 +10,7 @@
   date_default_timezone_set('America/Sao_Paulo');
 
   //Chama conexão com banco de dados
-  include_once 'ConnectDB.php';
+  include_once 'app/ConnectDB.php';
 
   $msg = $connDB->prepare("SELECT * FROM mensagens WHERE RECEPTOR_MSG = :receptor AND CONFIRMA = 'UNRE'");
   $msg->bindParam(':receptor', $_SESSION['nome_func'], PDO::PARAM_STR);
@@ -18,26 +18,26 @@
   $numMsg = $msg->rowCount();
 
   if($_SESSION['departamento'] === 'ADMINISTRATIVO' || $_SESSION['credencial'] >= 4){
-     $acesso1  = '00SeletorAdministrativo.php'   ;     $_SESSION['ordena'] = 'NOME_FUNCIONARIO';
-     $acesso5  = '06QuadroFuncionarios.php'      ;     $acesso7  = '07CadastroFuncionario.php' ;
-     $acesso8  = '08EditaRegistroFuncionario.php';     $acesso9  = '10DeletaFunc.php'          ;
-     $acesso10 = '11CadastroFuncionario.php'     ;     $acesso11 = '30EntradaPedido.php'       ;
+     $acesso1  = 'app/00SeletorAdministrativo.php'   ;     $_SESSION['ordena'] = 'NOME_FUNCIONARIO';
+     $acesso5  = 'app/06QuadroFuncionarios.php'      ;     $acesso7  = 'app/07CadastroFuncionario.php' ;
+     $acesso8  = 'app/08EditaRegistroFuncionario.php';     $acesso9  = 'app/10DeletaFunc.php'          ;
+     $acesso10 = 'app/11CadastroFuncionario.php'     ;     $acesso11 = 'app/30EntradaPedido.php'       ;
 
   }else{ $acesso1 = ''; $acesso5 = ''; $acesso7 = ''; $acesso8 = ''; $acesso9 = ''; $acesso10 = ''; $acesso11 = '';}
 
   if($_SESSION['departamento'] === 'GARANTIA DA QUALIDADE'|| $_SESSION['credencial'] >= 4){
-    $acesso2  = '01SeletorGQualidade.php';
-    $acesso12 = '40RegistroAnalise.php'  ;  
+    $acesso2  = 'app/01SeletorGQualidade.php';
+    $acesso12 = 'app/40RegistroAnalise.php'  ;  
   }else{ $acesso2 = ''; $acesso12 = ''; }
 
   if($_SESSION['departamento'] === 'LOGÍSTICA'      || $_SESSION['credencial'] >= 4){
-    $acesso3 = '02SeletorLogistica.php';     
+    $acesso3 = 'app/02SeletorLogistica.php';     
   }else{ $acesso3 = ''; }
 
   if($_SESSION['departamento'] === 'PRODUÇÃO'       || $_SESSION['credencial'] >= 4){
-    $acesso4 = '03SeletorProducao.php';      
+    $acesso4 = 'app/03SeletorProducao.php';      
   }else{ $acesso4 = ''; }
-  if($_SESSION['credencial'] >= 2){ $acesso6 = '05MonitorLogin.php'; } else{ $acesso6 = ''; }
+  if($_SESSION['credencial'] >= 2){ $acesso6 = 'app/05MonitorLogin.php'; } else{ $acesso6 = ''; }
 
 function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
   if($tamanho <= $limite){ $novo_texto = $texto; }else{
@@ -223,7 +223,7 @@ function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
           <path d="M4.5 2a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.386 1.46c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"/>
         </svg> Produção</a>
 
-      <a href="LogOut.php">
+      <a href="app/LogOut.php">
         <!-- ícone da saída do sistema  -->
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
           <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
@@ -255,16 +255,16 @@ function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
                 $hLog = strtotime($_SESSION['horaLog']);
                 echo '  '.date('H:i:s', $hLog);  ?>
       </p><br><br><br>
-        <a href="14AlterarSenhaAcesso.php">
+        <a href="app/14AlterarSenhaAcesso.php">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-key" viewBox="0 0 16 16">
             <path d="M0 8a4 4 0 0 1 7.465-2H14a.5.5 0 0 1 .354.146l1.5 1.5a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0L13 9.207l-.646.647a.5.5 0 0 1-.708 0L11 9.207l-.646.647a.5.5 0 0 1-.708 0L9 9.207l-.646.647A.5.5 0 0 1 8 10h-.535A4 4 0 0 1 0 8m4-3a3 3 0 1 0 2.712 4.285A.5.5 0 0 1 7.163 9h.63l.853-.854a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.793-.793-1-1h-6.63a.5.5 0 0 1-.451-.285A3 3 0 0 0 4 5"/>
             <path d="M4 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
           </svg> Alterar Senha</a>
-        <a href="09EditaDadosPessoais.php">
+        <a href="app/09EditaDadosPessoais.php">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
             <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
           </svg> Atualizar Dados Pessoais</a>
-        <a href="15Mensagens.php">
+        <a href="app/15Mensagens.php">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
             <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
           </svg> Mensagens</a>

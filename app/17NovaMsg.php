@@ -1,7 +1,7 @@
 <?php
 
-include_once 'aplicativo/ConnectDB.php';
-include_once 'aplicativo/EstruturaPrincipal.php';
+include_once 'app/ConnectDB.php';
+include_once 'app/EstruturaPrincipal.php';
 
 $depto_query = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 $setDepto = 'Selecione o depto e clique Pesquisar';
@@ -48,7 +48,7 @@ if(!empty($msg_query['enviar'])){
 
   $envia->execute();
 
-  header('Location: aplicativo/15Mensagens.php');
+  header('Location: app/15Mensagens.php');
 }
 ?>
 <div class="main">
@@ -92,7 +92,7 @@ if(!empty($msg_query['enviar'])){
         <input style="width: 140px" class="btn btn-primary" type="submit" id="enviar" name="enviar" value="Enviar">
       </div><br>
       <div class="col-md-3">
-        <input style="width: 150px" class="btn btn-secondary" type="reset" id="reset" name="reset" value="Descartar e Sair" onclick="location.href='aplicativo/15Mensagens.php'">
+        <input style="width: 150px" class="btn btn-secondary" type="reset" id="reset" name="reset" value="Descartar e Sair" onclick="location.href='app/15Mensagens.php'">
       </div><br>   
     </form>
   </div>
