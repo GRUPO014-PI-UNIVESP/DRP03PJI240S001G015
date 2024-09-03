@@ -33,7 +33,7 @@ include_once './EstruturaPrincipal.php';
           <button type="button" class="btn btn-outline-info" style="width:400px" 
             onclick="location.href='./20EntradaMaterial.php'">Entrada de Material</button><br><br>
           <button type="button" class="btn btn-outline-info" style="width:400px" 
-            onclick="">Saída de Produto Final</button><br><br>
+            onclick="location.href='./50SaidaProdutoFinal.php'">Saída de Produto Final</button><br><br>
         </div>
           
         <div class="tab-pane fade" id="lab-tab-pane" role="tabpanel" aria-labelledby="lab-tab" tabindex="0"><br><br>
