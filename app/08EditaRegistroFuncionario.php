@@ -90,7 +90,7 @@ if(isset($_SESSION['msg'])){
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 60000);
+       time = setTimeout(deslogar, 300000);
      }
   };
   inactivityTime();

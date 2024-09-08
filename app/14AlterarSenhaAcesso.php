@@ -52,7 +52,7 @@ date_default_timezone_set('America/Sao_Paulo');
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 60000);
+       time = setTimeout(deslogar, 300000);
      }
   };
   inactivityTime();
