@@ -2,6 +2,8 @@
 // inclusão de banco de dados e estrutura base da página web
 include_once './ConnectDB.php';
 include_once './EstruturaPrincipal.php';
+$_SESSION['posicao'] = 'Atualiza Dados Pessoais';
+include_once './RastreadorAtividades.php';
 
 // verifica dados do usuário para edição dos dados pessoais
 $idUser    = $_SESSION['idFunc'];
@@ -55,6 +57,27 @@ if(isset($_SESSION['msg'])){
   unset($_SESSION['msg']);
 }
 ?>
+<script>
+  // verifica inatividade da página e fecha sessão
+  let inactivityTime = function () {
+    let time;
+    window.onload        = resetTimer;
+    document.onmousemove = resetTimer;
+    document.onkeypress  = resetTimer;
+    function deslogar() {
+      <?php
+        $_SESSION['posicao'] = 'Encerrado por inatividade';
+        include_once './RastreadorAtividades.php';
+      ?>
+      window.location.href = 'LogOut.php';
+     }
+    function resetTimer() {
+      clearTimeout(time);
+       time = setTimeout(deslogar, 60000);
+     }
+  };
+  inactivityTime();
+</script>
 <!-- Área Principal -->
 <div class="main">
   <div class="container">

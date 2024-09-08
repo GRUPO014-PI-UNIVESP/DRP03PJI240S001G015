@@ -2,6 +2,8 @@
 // inclusão do banco de dados e estrutura base da página web
 include_once './ConnectDB.php';
 include_once './EstruturaPrincipal.php';
+$_SESSION['posicao'] = 'Deleção de Dados de Funcionário';
+include_once './RastreadorAtividades.php';
 
 //verifica identificador do registro para busca no banco de dados
 if(!empty($_GET['id'])){

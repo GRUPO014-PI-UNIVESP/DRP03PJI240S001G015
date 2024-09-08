@@ -61,6 +61,14 @@
                                                     '" . $dataLog . "', '" . $horaLog . "')");
               $register->execute();
 
+              $query_track = $connDB->prepare("SELECT ID_LOGIN FROM historico_login WHERE DATA_LOGIN = :dataLog AND HORA_LOGIN = :horaLog AND NOME_FUNCIONARIO = :nomeFunc");
+              $query_track->bindParam(':dataLog' , $dataLog              , PDO::PARAM_STR);
+              $query_track->bindParam(':horaLog' , $horaLog              , PDO::PARAM_STR);
+              $query_track->bindParam(':nomeFunc', $_SESSION['nome_func'], PDO::PARAM_STR);
+              $query_track->execute();
+              $tracking = $query_track->fetch(PDO::FETCH_ASSOC);
+
+              $_SESSION['idLogin'] = $tracking['ID_LOGIN'];
               //direciona fluxo
               header("Location: ./dashboard.php");
             }else{

@@ -2,12 +2,35 @@
 //inclusão do banco de dados e estrutura base da página web
 include_once './ConnectDB.php';
 include_once './EstruturaPrincipal.php';
+$_SESSION['posicao'] = 'Verificando Mensagens Enviadas';
+include_once './RastreadorAtividades.php';
 
 $busca_msg1 = $connDB->prepare("SELECT * FROM mensagens WHERE EMISSOR_MSG = :user ORDER BY CONFIRMA DESC, DATA_MSG DESC ");
 $busca_msg1->bindParam(':user', $_SESSION['nome_func'], PDO::PARAM_STR);
 $busca_msg1->execute();
 
 ?>
+<script>
+  // verifica inatividade da página e fecha sessão
+  let inactivityTime = function () {
+    let time;
+    window.onload        = resetTimer;
+    document.onmousemove = resetTimer;
+    document.onkeypress  = resetTimer;
+    function deslogar() {
+      <?php
+        $_SESSION['posicao'] = 'Encerrado por inatividade';
+        include_once './RastreadorAtividades.php';
+      ?>
+      window.location.href = 'LogOut.php';
+     }
+    function resetTimer() {
+      clearTimeout(time);
+       time = setTimeout(deslogar, 60000);
+     }
+  };
+  inactivityTime();
+</script>
 <div class="main">
   <div class="container">
     <h1 style="font-size: 18px">Histórico de mensagens enviadas</h1><br><br>

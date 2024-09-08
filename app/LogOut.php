@@ -17,16 +17,20 @@
   $dataLog = $_SESSION['dataLog'];
   $horaLog = $_SESSION['horaLog'];
   $nomeLog = $_SESSION['nome_func'];
+  $_SESSION['posicao'] = 'Encerrado corretamente';
 
   //registra data e hora de logout de usuário antes de desconectar e finalizar sessão 
-  $closeLog = $connDB->prepare("UPDATE historico_login SET DATA_LOGOUT = :dout, HORA_LOGOUT = :hout
+  $closeLog = $connDB->prepare("UPDATE historico_login SET DATA_LOGOUT = :dout, HORA_LOGOUT = :hout, ULTIMA_POSICAO = :posi
                                  WHERE NOME_FUNCIONARIO = :nomeFunc AND DATA_LOGIN = :din AND HORA_LOGIN = :hin");
-  $closeLog->bindParam(':dout', $dataOut);
-  $closeLog->bindParam(':hout', $horaOut);
+  $closeLog->bindParam(':dout'    , $dataOut);
+  $closeLog->bindParam(':hout'    , $horaOut);
   $closeLog->bindParam(':nomeFunc', $nomeLog);
-  $closeLog->bindParam(':din', $dataLog);
-  $closeLog->bindParam(':hin', $horaLog);
+  $closeLog->bindParam(':din'     , $dataLog);
+  $closeLog->bindParam(':hin'     , $horaLog);
+  $closeLog->bindParam(':posi'    , $_SESSION['posicao']);
   $closeLog->execute();
+
+  $connDB = null;
 
   // destroi dados de variáveis da sessão e finaliza sessão
   session_unset();

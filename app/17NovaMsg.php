@@ -2,6 +2,8 @@
 
 include_once './ConnectDB.php';
 include_once './EstruturaPrincipal.php';
+$_SESSION['posicao'] = 'Enviar Mensagens';
+include_once './RastreadorAtividades.php';
 
 $depto_query = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 $setDepto = 'Selecione o depto e clique Pesquisar';
@@ -51,6 +53,27 @@ if(!empty($msg_query['enviar'])){
   header('Location: ./15Mensagens.php');
 }
 ?>
+<script>
+  // verifica inatividade da página e fecha sessão
+  let inactivityTime = function () {
+    let time;
+    window.onload        = resetTimer;
+    document.onmousemove = resetTimer;
+    document.onkeypress  = resetTimer;
+    function deslogar() {
+      <?php
+        $_SESSION['posicao'] = 'Encerrado por inatividade';
+        include_once './RastreadorAtividades.php';
+      ?>
+      window.location.href = 'LogOut.php';
+     }
+    function resetTimer() {
+      clearTimeout(time);
+       time = setTimeout(deslogar, 60000);
+     }
+  };
+  inactivityTime();
+</script>
 <div class="main">
   <div class="contain">
     <p style="font-size: 20px">Nova Mensagem</p><br>

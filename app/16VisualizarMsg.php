@@ -2,6 +2,8 @@
 //
 include_once './ConnectDB.php';
 include_once './EstruturaPrincipal.php';
+$_SESSION['posicao'] = 'Leitura de Mensagens';
+include_once './RastreadorAtividades.php';
 
 if(!empty($_GET['id'])){
 
@@ -40,6 +42,27 @@ if(!empty($_GET['id'])){
 
 }
 ?>
+<script>
+  // verifica inatividade da página e fecha sessão
+  let inactivityTime = function () {
+    let time;
+    window.onload        = resetTimer;
+    document.onmousemove = resetTimer;
+    document.onkeypress  = resetTimer;
+    function deslogar() {
+      <?php
+        $_SESSION['posicao'] = 'Encerrado por inatividade';
+        include_once './RastreadorAtividades.php';
+      ?>
+      window.location.href = 'LogOut.php';
+     }
+    function resetTimer() {
+      clearTimeout(time);
+       time = setTimeout(deslogar, 60000);
+     }
+  };
+  inactivityTime();
+</script>
 <div class="main">
   <div class="container">
     <br>

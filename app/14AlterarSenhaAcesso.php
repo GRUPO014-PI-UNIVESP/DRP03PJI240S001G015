@@ -8,6 +8,8 @@ date_default_timezone_set('America/Sao_Paulo');
 // inclusão de códigos da estrutura principal do sistema
   include_once './EstruturaPrincipal.php';
   include_once './ConnectDB.php';
+  $_SESSION['posicao'] = 'Alterar Senha';
+  include_once './RastreadorAtividades.php';
 
   $altera = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
@@ -34,6 +36,27 @@ date_default_timezone_set('America/Sao_Paulo');
   }
 
 ?>
+<script>
+  // verifica inatividade da página e fecha sessão
+  let inactivityTime = function () {
+    let time;
+    window.onload        = resetTimer;
+    document.onmousemove = resetTimer;
+    document.onkeypress  = resetTimer;
+    function deslogar() {
+      <?php
+        $_SESSION['posicao'] = 'Encerrado por inatividade';
+        include_once './RastreadorAtividades.php';
+      ?>
+      window.location.href = 'LogOut.php';
+     }
+    function resetTimer() {
+      clearTimeout(time);
+       time = setTimeout(deslogar, 60000);
+     }
+  };
+  inactivityTime();
+</script>
 <div class="main">
   <!-- Formulário de entrada de dados para Login -->
   <form method="POST" action="">
