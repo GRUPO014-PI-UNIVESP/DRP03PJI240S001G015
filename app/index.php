@@ -2,7 +2,7 @@
   // index.php
   // Programa de abertura do sistema pedindo usuário e senha
 
-  // inicia sessão de trabalho
+  // inicia sessão de trabalho.
     session_start();
 
   // limpa buffer de saída
