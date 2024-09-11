@@ -36,7 +36,7 @@
           </li>
           <li class="nav-item" role="presentation">
             <button class="nav-link" id="prod-tab" data-bs-toggle="tab" data-bs-target="#prod-tab-pane" type="button" 
-              role="tab" aria-controls="prod-tab-pane" aria-selected="false">Fábrica</button>
+              role="tab" aria-controls="prod-tab-pane" aria-selected="false">Operacional</button>
           </li>
           <li class="nav-item" role="presentation">
             <button class="nav-link" id="comercial-tab" data-bs-toggle="tab" data-bs-target="#comercial-tab-pane" type="button" 
@@ -63,7 +63,7 @@
           
           <div class="tab-pane fade" id="prod-tab-pane" role="tabpanel" aria-labelledby="prod-tab" tabindex="0"><br><br>
             <button type="button" class="btn btn-outline-info" style="width:300px" 
-              onclick="<?php echo $acesso11 ?>">Ordem de Produção</button><br><br>          
+              onclick="location.href='<?php echo $acesso11 ?>'">Pedido de Produto</button><br><br>          
           </div>
 
           <div class="tab-pane fade" id="comercial-tab-pane" role="tabpanel" aria-labelledby="comercial-tab" tabindex="0"><br><br>

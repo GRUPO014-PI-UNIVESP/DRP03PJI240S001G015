@@ -18,7 +18,7 @@
   $numMsg = $msg->rowCount();
 
   if($_SESSION['departamento'] === 'ADMINISTRATIVO' || $_SESSION['credencial'] >= 4){
-     $acesso1  = './00SeletorAdministrativo.php'   ;     $_SESSION['ordena'] = 'NOME_FUNCIONARIO';
+     $acesso1  = './00SeletorAdministrativo.php'   ;     //$_SESSION['ordena'] = 'NOME_FUNCIONARIO';
      $acesso5  = './06QuadroFuncionarios.php'      ;     $acesso7  = './07CadastroFuncionario.php' ;
      $acesso8  = './08EditaRegistroFuncionario.php';     $acesso9  = './10DeletaFunc.php'          ;
      $acesso10 = './11CadastroFuncionario.php'     ;     $acesso11 = './30EntradaPedido.php'       ;
@@ -53,6 +53,7 @@ function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
     <title>Sistema | Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
           rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </head>
   <style>
 /* Configuração da barra laterial superior */
@@ -160,40 +161,25 @@ function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
       valorInput.length === maximoInput ? document.getElementById(`${mascaraInput}Input`).value = mascaras[mascaraInput]
       : document.getElementById(`${mascaraInput}Input`).value = valorSemPonto;
     };
-    function forMilhar1() {
-      var elemento = document.getElementById('valor1');
-      var valor1 = elemento.value;
 
-      valor1 = valor1 + '';
-      valor1 = parseInt(valor1.replace(/[\D]+/g, ''));
-      valor1 = valor1 + '';
-      valor1 = valor1.replace(/([0-9]{2})$/g, ",$1");
-
-      if (valor1.length > 6) {
-          valor1 = valor1.replace(/([0-9]{3}).([0-9]{2}$)/g, ".$1,$2");
-      }
-
-      elemento.value = valor1;
-      if(valor1 == 'NaN') elemento.value = '';
-    };
-    function forMilhar2() {
-      var elemento = document.getElementById('valor2');
-      var valor2 = elemento.value;
-
-      valor2 = valor2 + '';
-      valor2 = parseInt(valor2.replace(/[\D]+/g, ''));
-      valor2 = valor2 + '';
-      valor2 = valor2.replace(/([0-9]{2})$/g, ",$1");
-
-      if (valor2.length > 6) {
-          valor2 = valor2.replace(/([0-9]{3}).([0-9]{2}$)/g, ".$1,$2");
-      }
-
-      elemento.value = valor2;
-      if(valor2 == 'NaN') elemento.value = '';
-    };
+    // persistir valor de campo mesmo submetendo formulário
+    function PersistirValor(){
+          document.getElementById("descrProd").value = localStorage.getItem("descrProd");
+          document.getElementById("qtdeLote").value = localStorage.getItem("qtdeLote");
+          var produto = document.getElementById("descrProd");
+    }
+    function submeter(){
+          localStorage.setItem("descrProd", document.getElementById("descrProd").value);
+          localStorage.setItem("qtdeLote", document.getElementById("qtdeLote").value);
+    }
+    function exibir(){
+      document.write(produto);
+    }
+    function limpaTela() {
+            $('#buscaProduto div').empty()
+        }
   </script>
-  <body>
+  <body onload="PersistirValor();">
     <!-- Barra lateral Superior-->
     <div class="sidebarTop">
       <p style="text-align: center; font-size: 15px">Departamentos</p>
