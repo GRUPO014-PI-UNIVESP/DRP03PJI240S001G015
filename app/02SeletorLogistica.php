@@ -65,7 +65,7 @@ include_once './RastreadorAtividades.php';
 
         <div class="tab-pane fade" id="warehouse-tab-pane" role="tabpanel" aria-labelledby="warehouse-tab" tabindex="0"><br><br>
           <button type="button" class="btn btn-outline-info" style="width:400px" 
-            onclick="">Rastreamento de Entrega</button><br><br>
+            onclick="location.href='./60RastreamentoEntrega.php'">Rastreamento de Entrega</button><br><br>
         </div>
 
         <div class="tab-pane fade" id="other-tab-pane" role="tabpanel" aria-labelledby="other-tab" tabindex="0" style="color: whitesmoke"><br><br>
