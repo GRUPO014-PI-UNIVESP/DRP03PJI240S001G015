@@ -161,25 +161,11 @@ function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
       valorInput.length === maximoInput ? document.getElementById(`${mascaraInput}Input`).value = mascaras[mascaraInput]
       : document.getElementById(`${mascaraInput}Input`).value = valorSemPonto;
     };
-
-    // persistir valor de campo mesmo submetendo formulário
-    function PersistirValor(){
-          document.getElementById("descrProd").value = localStorage.getItem("descrProd");
-          document.getElementById("qtdeLote").value = localStorage.getItem("qtdeLote");
-          var produto = document.getElementById("descrProd");
-    }
-    function submeter(){
-          localStorage.setItem("descrProd", document.getElementById("descrProd").value);
-          localStorage.setItem("qtdeLote", document.getElementById("qtdeLote").value);
-    }
-    function exibir(){
-      document.write(produto);
-    }
     function limpaTela() {
             $('#buscaProduto div').empty()
         }
   </script>
-  <body onload="PersistirValor();">
+  <body>
     <!-- Barra lateral Superior-->
     <div class="sidebarTop">
       <p style="text-align: center; font-size: 15px">Departamentos</p>

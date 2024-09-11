@@ -100,7 +100,7 @@ if(!empty($confirma['descrProd'])){
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 1800000);
+       time = setTimeout(deslogar, 3600000);
      }
   };
   inactivityTime();
@@ -122,17 +122,17 @@ if(!empty($confirma['descrProd'])){
       </li>
     </ul>
     <div class="tab-content" id="myTabContent"><br>
-
       <!-- Entrada de Material -->
         <div class="tab-pane fade show active" id="manage-tab-pane" role="tabpanel" aria-labelledby="manage-tab" tabindex="0" >
           <div class="buscaProduto" id="buscaProduto">
-            <form class="row g-4" method="POST" action="#" onsubmit="submeter();">
+            <?php $descrProd = ''; $qtdeLote = ''; ?>
+            <form class="row g-4" method="POST" action="#">
               <div class="col-md-9">
                 <label for="descrProd" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
-                <select style="font-size: 16px;" class="form-select" id="descrProd" name="descrProd" value="" autofocus>
+                <select style="font-size: 16px;" class="form-select" id="descrProd" name="descrProd" autofocus>
                   <option style="font-size: 16px" selected>Selecione o Produto</option>
                   <?php
-                    // 
+                    // inclui nome dos produtos como opções de seleção da tag <select>
                     while($produto = $query_produto->fetch(PDO::FETCH_ASSOC)){?>
                       <option style="font-size: 16px"><?php echo $produto['DESCRICAO_PF']; ?></option> <?php
                     }?>
@@ -141,174 +141,86 @@ if(!empty($confirma['descrProd'])){
 
               <div class="col-md-3">
                 <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Quantidade do Pedido</label>
-                <input style="font-size: 16px; text-align:right" type="text" class="form-control" id="valor1" name="qtdeLote" value="" required>
+                <input style="font-size: 16px; text-align:right" type="text" class="form-control" id="qtdeLote" name="qtdeLote" required>
               </div>
 
               <div class="col-md-2" style="padding: 3px;">
                 <input style="width: 140px; text-align:center" class="btn btn-primary" type="submit" id="pesquisar" name="pesquisar" 
-                  value="Pesquisar" onclick="<script> </script>">
+                       value="Pesquisar">
               </div>
             </form>
+
+            <form class="row g-4" action="" method="POST">
+              <?php
+                $busca = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+                if(!empty($busca['pesquisar'])){
+                  $descrProd = $busca['descrProd']; $qtdeLote = $busca['qtdeLote'];?>
+                  <div class="col-md-9">
+                    <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
+                    <input style="font-size: 14px;" type="text" class="form-control" id="descrProd" name="descrProd" value="<?php echo $descrProd ?>" readonly>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Quantidade do Pedido</label>
+                    <input style="font-size: 14px; text-align:right" type="text" class="form-control" id="valor1" name="qtdeLote" value="<?php echo $qtdeLote ?>" readonly>
+                  </div><?php } ?>
+              <?php
+                if(isset($busca['pesquisar'])){
+                  $prod = $busca['descrProd'];
+                  $componente = $connDB->prepare("SELECT * FROM composicao_produto WHERE DESCRICAO_PRODUTO = :prod");
+                  $componente->bindParam(':prod', $prod, PDO::PARAM_STR);
+                  $componente->execute();
+                }
+                if(!empty($busca['pesquisar'])){ ?>
+                  <div class="overflow-auto">
+                    <p style="color: aqua">Componentes do Produto</p>
+
+                    <table class="table table-dark table-hover">
+                      <thead style="font-size: 12px">
+                        <tr>
+                          <th scope="col" style="width: 30%; color: gray">Descrição do Material</th>
+                          <th scope="col" style="width: 15%; color: gray; text-align: center;">Quantidade Necessária</th>
+                          <th scope="col" style="width: 15%; color: gray; text-align: center;">Quantidade Disponível</th>
+                          <th scope="col" style="width: 15%; color: gray; text-align: center;">Observações</th>
+                        </tr>
+                      </thead>
+                    <tbody style="height: 30%; font-size: 11px;">
+                      <?php while($rowCpt = $componente->fetch(PDO::FETCH_ASSOC)){?>
+                        <tr>
+                          <th style="width: 30%;"> 
+                            <?php echo $rowCpt['COMPONENTE'] . '<br>'; ?>
+                            <?php echo 'Proporção: ' . $rowCpt['PROPORCAO']  . ' %'; ?>  </th>
+                          <td style="width: 15%; text-align: center; font-size: 14px"> 
+                            <?php $proporcao = ($busca['qtdeLote']) * ($rowCpt['PROPORCAO'] / 100); echo $proporcao . ' ' . $rowCpt['UNIDADE_MEDIDA']; ?> </td>
+                          <td style="width: 10%; text-align: center; font-size: 14px"> 
+                            <?php echo '2.500,00 ' . $rowCpt['UNIDADE_MEDIDA']; ?> </td>
+                          <td style="width: 15%">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal"></button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Observações sobre o material</h1>
+                                  </div>
+                                  <div class="modal-body">
+                                    <?php echo $rowCpt['OBSERVACOES'] ?>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-info" data-bs-dismiss="modal">Fechar</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>              
+                          </td>
+                        </tr><?php } ?>
+                      </tbody>
+                    </table>
+                  </div>
+                <?php } ?>           
+              <div class="col-md-9" style="padding: 3px;"></div>
+            </form>
           </div>
-            <br>
-            <?php
-              $busca = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-              if(isset($busca['pesquisar'])){
-                $prod = $busca['descrProd'];
-                $componente = $connDB->prepare("SELECT * FROM composicao_produto WHERE DESCRICAO_PRODUTO = :prod");
-                $componente->bindParam(':prod', $prod, PDO::PARAM_STR);
-                $componente->execute();
-              }
-              if(!empty($busca['pesquisar'])){ ?>
-              <div class="overflow-auto">
-                <p style="color: aqua">Componentes do Produto</p>
-                <table class="table table-dark table-hover">
-                  <thead style="font-size: 12px">
-                    <tr>
-                      <th scope="col" style="width: 30%; color: gray">Descrição do Material</th>
-                      <th scope="col" style="width: 15%; color: gray; text-align: center;">Quantidade Necessária</th>
-                      <th scope="col" style="width: 15%; color: gray; text-align: center;">Quantidade Disponível</th>
-                      <th scope="col" style="width: 10%; color: gray; text-align: center;">Unidade</th>
-                      <th scope="col" style="width: 15%; color: gray; text-align: center;">Observações</th>
-                    </tr>
-                  </thead>
-                  <tbody style="height: 30%; font-size: 11px;">
-                    <?php while($rowCpt = $componente->fetch(PDO::FETCH_ASSOC)){?>
-                    <tr>
-                      <th style="width: 30%;"> 
-                        <?php echo $rowCpt['COMPONENTE'] . '<br>'; ?>
-                        <?php echo 'Proporção: ' . $rowCpt['PROPORCAO']  . ' %'; ?>  </th>
-                      <td style="width: 15%; text-align: right; font-size: 14px"> 
-                        <?php $proporcao = ($busca['qtdeLote']) * ($rowCpt['PROPORCAO'] / 100); echo $proporcao; ?> </td>
-                      <td style="width: 10%; text-align: center; font-size: 14px"> 
-                        <?php echo '2.500,00'; ?> </td>
-                      <td style="width: 10%; text-align: center; font-size: 14px"> 
-                        <?php echo $rowCpt['UNIDADE_MEDIDA']; ?> </td>
-                      <td style="width: 15%">
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                          Observações
-                        </button>
-                        <!-- Modal -->
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel">Observações sobre o material</h1>
-                              </div>
-                              <div class="modal-body">
-                                <?php echo $rowCpt['OBSERVACOES'] ?>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-info" data-bs-dismiss="modal">Fechar</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>              
-                      </td>
-                    </tr><?php } ?>
-                  </tbody>
-                </table>
-              </div>
-            <?php } ?>
-          <div>
-          <form action="" method="POST">
-            <div class="col-md-8">
-              <label for="cliente" class="form-label" style="font-size: 10px; color:aqua">Cliente</label>
-              <select style="font-size: 12px;" class="form-select" id="cliente" name="cliente" value="">
-                <option style="font-size: 12px" selected>Selecione o cliente</option>
-                <?php
-                  while($customer = $query_customer->fetch(PDO::FETCH_ASSOC)){?>
-                    <option style="font-size: 12px"><?php echo $customer['RAZAO_SOCIAL']; ?></option> <?php
-                  }?>
-              </select>
-            </div>
-           
-            <div class="col-md-2">
-              <label for="dataPedido" class="form-label" style="font-size: 10px; color:aqua">Data do Pedido</label>
-              <input style="font-size: 12px;" type="date" class="form-control" id="dataPedido" name="dataPedido" value="" required autofocus>
-            </div>
-
-            <div class="col-md-2">
-              <label for="uniMed" class="form-label" style="font-size: 10px; color:aqua">Unidade de Medida</label>
-              <select style="font-size: 12px;" class="form-select" id="uniMed" name="uniMed" value="<?php echo $uniMed ?>" >
-                <option selected>Selecione</option>
-                <option value="KG">KG</option>
-                <option value="LT">LT</option>
-                <option value="UN">UNIDADE</option>
-              </select>
-            </div>
-
-            <div class="col-md-2" style="padding: 3px;"><br>
-              <input style="width: 140px; text-align:center" class="btn btn-primary" type="submit" id="salvar1" name="salvar1" value="Verificar">
-            </div>
-
-            <div class="col-md-3" style="padding: 3px;"><br>
-              <input style="width: 140px; text-align:center" class="btn btn-secondary" type="reset" id="reset1" name="reset1" value="Descartar" onclick="location.href='./30EntradaPedido.php'">
-            </div>
-          </form>
-          <?php
-            $busca = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-            if(isset($busca['salvar1'])){
-              $prod = $busca['descrProd'];
-              $componente = $connDB->prepare("SELECT * FROM composicao_produto WHERE DESCRICAO_PRODUTO = :prod");
-              $componente->bindParam(':prod', $prod, PDO::PARAM_STR);
-              $componente->execute();
-            }
-          ?>
-          <br>
-          <?php if(!empty($busca['salvar1'])){ ?>
-            <div class="overflow-auto">
-              <p style="color: aqua">Componentes do Produto</p>
-              <table class="table table-dark table-hover">
-                <thead style="font-size: 12px">
-                  <tr>
-                    <th scope="col" style="width: 40%; color: gray">Descrição do Material</th>
-                    <th scope="col" style="width: 10%; color: gray; text-align: center;">Proporção (%)</th>
-                    <th scope="col" style="width: 15%; color: gray; text-align: center;">Quantidade Necessária</th>
-                    <th scope="col" style="width: 10%; color: gray; text-align: center;">Unidade</th>
-                    <th scope="col" style="width: 15%; color: gray; text-align: center;">Observações</th>
-                  </tr>
-                </thead>
-                <tbody style="height: 30%; font-size: 11px;">
-                  <?php while($rowCpt = $componente->fetch(PDO::FETCH_ASSOC)){?>
-                  <tr>
-                    <th style="width: 40%;"> 
-                      <?php echo $rowCpt['COMPONENTE']; ?> </th>
-                    <td style="width: 10%; text-align: center; font-size: 14px"> 
-                      <?php echo $rowCpt['PROPORCAO']  . ' %'; ?> </td>
-                    <td style="width: 15%; text-align: right; font-size: 14px"> 
-                      <?php $proporcao = ($busca['qtdeLote']) * ($rowCpt['PROPORCAO'] / 100); echo $proporcao; ?> </td>
-                    <td style="width: 10%; text-align: center; font-size: 14px"> 
-                      <?php echo $rowCpt['UNIDADE_MEDIDA']; ?> </td>
-                    <td style="width: 15%">
-                      <!-- Button trigger modal -->
-                      <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Observações
-                      </button>
-                      <!-- Modal -->
-                      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="exampleModalLabel">Observações sobre o material</h1>
-                            </div>
-                            <div class="modal-body">
-                              <?php echo $rowCpt['OBSERVACOES'] ?>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-info" data-bs-dismiss="modal">Fechar</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>              
-                    </td>
-                  </tr><?php } ?>
-                </tbody>
-              </table>
-            </div>
-          <?php } ?>
-          <div class="col-md-9" style="padding: 3px;"></div>
         </div>
       </div>
       <!-- Novo Cliente -->  
