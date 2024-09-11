@@ -52,6 +52,7 @@ if(!empty($atualizado['submit'])){
   header('Location: ./Dashboard.php');
 }
 // ./00SeletorAdministrativo.php
+
 //se houver erro de entrada mostra erro na página
 if(isset($_SESSION['msg'])){
   echo  $_SESSION['msg'];

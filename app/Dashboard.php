@@ -4,6 +4,17 @@
   $_SESSION['posicao'] = 'Dashboard';
   include_once './RastreadorAtividades.php';
 
+  $CurrentHour = date('H');
+
+  if ($CurrentHour >= 6 && $CurrentHour < 12) {
+    $Greeting = 'Tenha um Bom Dia.';
+  }
+  elseif ($CurrentHour >= 12 && $CurrentHour < 18) {
+    $Greeting = 'Tenha uma Boa Tarde.';
+  }
+  else {
+    $Greeting = 'Tenha uma Boa Noite.';
+  }
 ?>
 <script>
   // verifica inatividade da página e fecha sessão
@@ -32,5 +43,5 @@
       <br><br>
         <img style="margin-left: 20%;" src="./Abertura.jpg" width="600" height="400"/>
         <br><br><br>
-      <p style="margin-left: 20%; font-size: 30px; color: yellow">Tenha um bom dia.</p>
+      <p style="margin-left: 20%; font-size: 30px; color: yellow"><?php echo $Greeting; ?></p>
 </div>
