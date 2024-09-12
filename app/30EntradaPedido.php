@@ -134,7 +134,7 @@ if(!empty($confirma['descrProd'])){
               <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" 
                   aria-expanded="true" aria-controls="flush-collapseOne">
-                  Selecionar produto e inserir a quantidade
+                  Clique aqui para selecionar produto e inserir a quantidade
                 </button>
               </h2>
               <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
@@ -164,9 +164,10 @@ if(!empty($confirma['descrProd'])){
               <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" 
                   aria-expanded="false" aria-controls="flush-collapseTwo">
-                  Visualizar dados dos materiais ingredientes
+                  Clique aqui para visualizar dados dos materiais ingredientes e inserir dados do pedido
                 </button>
               </h2>
+        </form>
               <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                 <div class="accordion-body">
                   <div class="row g-4">
@@ -181,7 +182,7 @@ if(!empty($confirma['descrProd'])){
                       <div class="col-md-3">
                         <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Quantidade do Pedido</label>
                         <input style="font-size: 14px; text-align:right" type="text" class="form-control" id="valor1" name="qtdeLote" 
-                               value="<?php echo $qtdeLote ?>" readonly>
+                               value="<?php echo $qtdeLote . ' Kg' ?>" readonly>
                       </div><?php } ?>
                     <?php
                       if(isset($busca['carregar'])){
@@ -220,23 +221,17 @@ if(!empty($confirma['descrProd'])){
                     ?>
                   </div>
                 </div>
+                <form action="" method="POST">
+                  <div class="col-md-12">
+                    <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">Cliente</label>
+                    <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
+                     placeholder="" required autofocus>
+                  </div>
+                </form> 
               </div>
             </div>
-          </form>
-            <div class="accordion-item">
-              <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" 
-                  aria-expanded="false" aria-controls="flush-collapseThree">
-                  Inserir dados do pedido
-                </button>
-              </h2>
-              <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                <div class="accordion-body">
-                  algoritmo aqui
-                </div>
-              </div>
-            </div>
-          </div>
+           
+        </div>
 
       </div>     
 
