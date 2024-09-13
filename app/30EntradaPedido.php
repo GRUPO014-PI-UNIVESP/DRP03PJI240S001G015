@@ -155,14 +155,14 @@ if(!empty($confirma['descrProd'])){
                       <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Quantidade do Pedido</label>
                       <input style="font-size: 14px; text-align:right" type="text" class="form-control" id="qtdeLote" name="qtdeLote" required>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                       <input class="btn btn-success" type="submit" class="form-control" id="carregar" name="carregar"
                              value="Carregue os dados e verifique na seção abaixo" style="width:400px">
                     </div>
                     <?php
                       if(!empty($_POST['carregar'])){ ?>
-                        <div class="col-md-5">
-                          <span style="margin-left: 150px; color: yellow; border-radius: 4px;">Carregado com sucesso!</span>
+                        <div class="col-md-8">
+                          <span style="margin-left: 25%; color: yellow; border-radius: 4px;">Carregado com sucesso!</span>
                         </div>
                     <?php } ?>
                 </div>
@@ -263,15 +263,7 @@ if(!empty($confirma['descrProd'])){
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body" style="height: 600px">
-                              <?php
-                                $hoje = date('Y-m-d');
-                                $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA > :hoje");
-                                $fila->bindParam(':hoje', $hoje, PDO::PARAM_STR);
-                                $fila->execute();
-                                $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
-                                $nDias = 30;
-                              ?>
-                              <h6><?php echo 'Cronograma: de ' . date('d/m/Y') . ' até dia ' .  date('d/m/Y', strtotime("+$nDias days")); ?></h6>
+                              <h6><?php $nDias = 30;echo 'Cronograma: de ' . date('d/m/Y') . ' até dia ' .  date('d/m/Y', strtotime("+$nDias days")); ?></h6>
                               <div class="row g-4">
                                 <div class="overflow-auto">
                                   <table class="table table-dark table-hover">
@@ -286,13 +278,24 @@ if(!empty($confirma['descrProd'])){
                                     <tbody style="height: 30%; font-size: 11px;">
                                       <?php $semana = array("Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab");
                                         for($i = 0; $i <= 30; $i++ ){
-                                          $dia = date('d/m', strtotime("+$i days"));
+                                          $verif = date('Y-m-d', strtotime("+$i days"));
+                                          $dia   = date('d/m', strtotime("+$i days"));
                                       ?>
                                       <tr>
                                         <th style="width: 12%; text-align: center">
                                           <?php echo $dia . ' [ ' . $semana[date('w', strtotime("+$i days"))] . ' ]' ?></th>
-                                        <td style="width: 10%;"></td>
-                                        <td style="width: 20%;"></td>
+                                        <td style="width: 10%;">
+                                          <?php
+                                            $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA = :hoje");
+                                            $fila->bindParam(':hoje', $verif, PDO::PARAM_STR);
+                                            $fila->execute();
+                                            $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
+                                            if(!empty($rowFila['DATA_AGENDA'])){
+                                              if($verif == $rowFila['DATA_AGENDA']){ echo 'OCUPADO';}else{ echo '';}
+                                            }
+                                          ?>
+                                        </td>
+                                        <td style="width: 20%;"><?php var_dump($verif) ?></td>
                                         <td style="width: 60%;"></td>                                    
                                       </tr><?php } ?>
                                     </tbody>
