@@ -159,6 +159,12 @@ if(!empty($confirma['descrProd'])){
                       <input class="btn btn-success" type="submit" class="form-control" id="carregar" name="carregar"
                              value="Carregue os dados e verifique na seção abaixo" style="width:400px">
                     </div>
+                    <?php
+                      if(!empty($_POST['carregar'])){ ?>
+                        <div class="col-md-5">
+                          <span style="margin-left: 150px; color: yellow; border-radius: 4px;">Carregado com sucesso!</span>
+                        </div>
+                    <?php } ?>
                 </div>
               </div>
             </div>
@@ -219,7 +225,7 @@ if(!empty($confirma['descrProd'])){
                                 $result2 = $reservado->fetch(PDO::FETCH_ASSOC);
                                 $disponivel = $result1['estoque'] - $result2['reservado'];
                                 if($disponivel > $busca['qtdeLote']){
-                                  $barra = 'background-color: green; color: black;'; $disp = 'Disponível';
+                                  $barra = 'background-color: green; color: yellow;'; $disp = 'Disponível';
                                 } else if($disponivel < $busca['qtdeLote']){
                                   $barra = 'background-color: orange; color: red;'; $disp = 'Insuficiente';        
                                 }
@@ -257,16 +263,17 @@ if(!empty($confirma['descrProd'])){
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body" style="height: 600px">
-                              <h6>Cronograma de 12 de Setembro a 11 de outubro de 2024</h6>
                               <?php
                                 $hoje = date('Y-m-d');
                                 $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA > :hoje");
                                 $fila->bindParam(':hoje', $hoje, PDO::PARAM_STR);
                                 $fila->execute();
+                                $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
+                                $nDias = 30;
                               ?>
+                              <h6><?php echo 'Cronograma: de ' . date('d/m/Y') . ' até dia ' .  date('d/m/Y', strtotime("+$nDias days")); ?></h6>
                               <div class="row g-4">
                                 <div class="overflow-auto">
-                                  <p style="color: aqua">Componentes do Produto</p>
                                   <table class="table table-dark table-hover">
                                     <thead style="font-size: 12px">
                                       <tr>
@@ -277,13 +284,17 @@ if(!empty($confirma['descrProd'])){
                                       </tr>
                                     </thead>
                                     <tbody style="height: 30%; font-size: 11px;">
-                                      <?php //while($rowFila = $fila->fetch(PDO::FETCH_ASSOC)){ ?>
+                                      <?php $semana = array("Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab");
+                                        for($i = 0; $i <= 30; $i++ ){
+                                          $dia = date('d/m', strtotime("+$i days"));
+                                      ?>
                                       <tr>
-                                        <th style="width: 10%;"></th>
+                                        <th style="width: 12%; text-align: center">
+                                          <?php echo $dia . ' [ ' . $semana[date('w', strtotime("+$i days"))] . ' ]' ?></th>
                                         <td style="width: 10%;"></td>
                                         <td style="width: 20%;"></td>
                                         <td style="width: 60%;"></td>                                    
-                                      </tr><?php  ?>
+                                      </tr><?php } ?>
                                     </tbody>
                                   </table>
                                 </div>
