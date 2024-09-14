@@ -358,56 +358,56 @@ if(!empty($confirma['descrProd'])){
       </div>    
 <!---- Novo Cliente ----------------------------------------------------------------------------------------------------------------------------------------------------->  
       <div class="tab-pane fade" id="newClient-tab-pane" role="tabpanel" aria-labelledby="newClient-tab" tabindex="0">
-        <form class="row g-4" method="POST" action="#">
+        <form class="row g-4" method="POST" action="#" id="cadastroCliente">
           <div class="col-md-4">
             <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">Nome Fantasia da Empresa</label>
             <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
                    placeholder="" required>
           </div>
           <div class="col-md-8">
-            <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">Razão Social</label>
-            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
+            <label for="razaoSocial" class="form-label" style="font-size: 10px; color:aqua">Razão Social</label>
+            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="razaoSocial" name="razaoSocial" 
                    placeholder="" required>
           </div>
 
           <div class="col-md-2">
-            <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">CNPJ</label>
-            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
+            <label for="cnpj" class="form-label" style="font-size: 10px; color:aqua">CNPJ</label>
+            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cnpj" name="cnpj" 
                    placeholder="" required>
           </div>
           <div class="col-md-2">
-            <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">I.E.</label>
-            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
+            <label for="inscrEstadual" class="form-label" style="font-size: 10px; color:aqua">I.E.</label>
+            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="inscrEstadual" name="inscrEstadual" 
                    placeholder="" required>
           </div>
           <div class="col-md-6">
-            <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">Cidade</label>
-            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
+            <label for="cidade" class="form-label" style="font-size: 10px; color:aqua">Cidade</label>
+            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cidade" name="cidade" 
                    placeholder="" required>
           </div>
           <div class="col-md-2">
-            <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">Estado (U.F.)</label>
-            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
+            <label for="estado" class="form-label" style="font-size: 10px; color:aqua">Estado (U.F.)</label>
+            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="estado" name="estado" 
                    placeholder="" required>
           </div>
           <div class="col-md-12">
-            <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">Endereço Completo</label>
-            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
+            <label for="endereco" class="form-label" style="font-size: 10px; color:aqua">Endereço Completo</label>
+            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="endereco" name="endereco" 
                    placeholder="" required>
           </div>
           <div class="col-md-3">
-            <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">Telefone de Contato</label>
-            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
+            <label for="telefone" class="form-label" style="font-size: 10px; color:aqua">Telefone de Contato</label>
+            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="telefone" name="telefone" 
                    placeholder="" required>
           </div>
           <div class="col-md-9">
-            <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">E-Mail</label>
-            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
+            <label for="email" class="form-label" style="font-size: 10px; color:aqua">E-Mail</label>
+            <input style="font-size: 12px;" type="text" class="form-control" id="email" name="email" 
                    placeholder="" required>
           </div>
           <div class="col-md-12">
-            <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">Nome do Representante</label>
-            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
+            <label for="nomeRepresentante" class="form-label" style="font-size: 10px; color:aqua">Nome do Representante</label>
+            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="nomeRepresentante" name="nomeRepresentante" 
                    placeholder="" required>
           </div>
           <div class="col-md-2" style="padding: 3px">
@@ -426,51 +426,35 @@ if(!empty($confirma['descrProd'])){
           <form class="row g-4" method="POST" action="#">
 
               <div class="col-md-4">
-                <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">Nome Fantasia do Produto</label>
-                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
+                <label for="nomeProduto" class="form-label" style="font-size: 10px; color:aqua">Nome Fantasia do Produto</label>
+                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="nomeProduto" name="nomeProduto" 
                        placeholder="" autofocus>
               </div>
               <div class="col-md-8">
-                <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
-                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
+                <label for="descrProduto" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
+                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="descrProduto" name="descrProduto" 
                        placeholder="" required>
               </div>
 
               <div class="col-md-8">
-                <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">Material de Composição 1</label>
-                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
+                <label for="matComp" class="form-label" style="font-size: 10px; color:aqua">Material de Composição 1</label>
+                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="matComp" name="matComp" 
                        placeholder="" required>
               </div>
               <div class="col-md-2">
-                <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">Proporção na Composição [ % ]</label>
-                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
+                <label for="proporcao" class="form-label" style="font-size: 10px; color:aqua">Proporção na Composição [ % ]</label>
+                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="proporcao" name="proporcao" 
                        placeholder="" required>
               </div>
               <div class="col-md-2">
-                <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">Unidade de Media</label>
-                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
-                       placeholder="" required>
-              </div>
-
-              <div class="col-md-8">
-                <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">Material de Composição n</label>
-                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
-                       placeholder="" required>
-              </div>
-              <div class="col-md-2">
-                <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">Proporção na Composição [ % ]</label>
-                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
-                       placeholder="" required>
-              </div>
-              <div class="col-md-2">
-                <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">Unidade de Media</label>
-                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
+                <label for="uniMed" class="form-label" style="font-size: 10px; color:aqua">Unidade de Media</label>
+                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="uniMed" name="uniMed" 
                        placeholder="" required>
               </div>
 
               <div class="col-md-2">
-                <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">Capacidade de Processamento</label>
-                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
+                <label for="capProcess" class="form-label" style="font-size: 10px; color:aqua">Capacidade de Processamento</label>
+                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="capProcess" name="capProcess" 
                        placeholder="" required>
               </div>
 
