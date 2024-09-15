@@ -276,13 +276,16 @@ if(!empty($confirma['descrProd'])){
                   <?php
                     $nDias = 31; $diaHoje = date('d/m/Y'); $diaMaxi = date('d/m/Y', strtotime("+$nDias days"));?>
                     <table class="table table-dark table-bordered table caption-top">
-                      <caption style="color: aqua">Calendário de Ocupação da Planta de Fabricação <?php echo ' - Cronograma: de ' . $diaHoje . ' até dia ' . $diaMaxi;  ?></caption>
+                      <caption style="color: aqua">Ocupação da Planta <?php echo ' - Cronograma: de ' . $diaHoje . ' até dia ' . $diaMaxi;  ?></caption>
                       <thead>
                         <tr>
-                          <th scope="col" style="width: 10%; text-align: center;">Domingo</th>  <th scope="col" style="width: 10%; text-align: center;">Segunda</th>
-                          <th scope="col" style="width: 10%; text-align: center;">Terça  </th>  <th scope="col" style="width: 10%; text-align: center;">Quarta </th>
-                          <th scope="col" style="width: 10%; text-align: center;">Quinta </th>  <th scope="col" style="width: 10%; text-align: center;">Sexta  </th>
-                          <th scope="col" style="width: 10%; text-align: center;">Sabado </th>
+                          <th scope="col" style="width: 10%; text-align: center; color: darkgrey">Domingo</th>
+                          <th scope="col" style="width: 10%; text-align: center; color: darkgrey">Segunda</th>
+                          <th scope="col" style="width: 10%; text-align: center; color: darkgrey">Terça  </th>
+                          <th scope="col" style="width: 10%; text-align: center; color: darkgrey">Quarta </th>
+                          <th scope="col" style="width: 10%; text-align: center; color: darkgrey">Quinta </th>
+                          <th scope="col" style="width: 10%; text-align: center; color: darkgrey">Sexta  </th>
+                          <th scope="col" style="width: 10%; text-align: center; color: darkgrey">Sabado </th>
                         </tr>
                       </thead>
 
@@ -290,141 +293,142 @@ if(!empty($confirma['descrProd'])){
                         <style>td:hover{background-color: rgba(0, 0, 0, 0.5);}</style>
                         <form id="calendario" method="GET" action="#">
                           <?php $verif = date('Y-m-d'); $semana = 0; $nDias = 0; $diaCont = date('d');
-                            for($i = 1; $i <= 5; $i++){ ?>
+                            for($a = 0; $a <= 35; $a++){ $matriz[$a] = ''; }
+                            for($i = 1; $i <=  5; $i++){ ?>
                               <tr>
                                 <td style="width: 10%; "> <?php if($i != 1){ $semana  = 0;
                                     $diaCont = date('d'    , strtotime("+$nDias days"));
                                     $verif   = date('Y-m-d', strtotime("+$nDias days")); }?>
-                                  <p style="font-size: 24px"><?php if($semana == 0){ echo $diaCont; $nDias = $nDias + 1;} ?> </p>
+                                  <p style="font-size: 24px"><?php if($semana == 0){ $matriz[$nDias] = 'agendar'. strval($nDias); echo $diaCont; $nDias = $nDias + 1;} ?> </p>
                                   <p style="font-size: 12px; text-align: center"> <?php  
                                     $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA = :hoje");
                                     $fila->bindParam(':hoje', $verif, PDO::PARAM_STR); $fila->execute();
                                     $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
                                     if(!empty($rowFila['DATA_AGENDA'])){
                                       if($verif == $rowFila['DATA_AGENDA']){ ?>
-                                        <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" chacked autocomplete="off">
-                                        <label class="btn btn-outline-secondary" for="agendar">OCUPADO</label><?php }
+                                        <input type="checkbox" class="btn-check">
+                                        <label class="btn btn-outline-warning" for="">OCUPADO</label><?php }
                                         else if($verif != $rowFila['DATA_AGENDA']){ ?>
-                                          <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" autocomplete="on">
-                                          <label class="btn btn-outline-success" for="agendar">AGENDAR</label><?php }
-                                      } else { ?> <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" autocomplete="on">
-                                                  <label class="btn btn-outline-success" for="agendar">AGENDAR</label><?php } ?>  
+                                          <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                          <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php }
+                                      } else { ?> <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                                  <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php } ?>  
                                   </p>
                                 </td>
                                 <td style="width: 10%; "><?php $semana  = 1;
                                     $diaCont = date('d'    , strtotime("+$nDias days"));
                                     $verif   = date('Y-m-d', strtotime("+$nDias days"));?>
-                                  <p style="font-size: 24px"><?php if($semana == 1){ echo $diaCont; $nDias = $nDias + 1; } ?></p>
+                                  <p style="font-size: 24px"><?php if($semana == 1){ $matriz[$nDias] = 'agendar'. strval($nDias); echo $diaCont; $nDias = $nDias + 1; } ?></p>
                                   <p style="font-size: 12px; text-align: center"> <?php  
                                     $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA = :hoje");
                                     $fila->bindParam(':hoje', $verif, PDO::PARAM_STR); $fila->execute();
                                     $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
                                     if(!empty($rowFila['DATA_AGENDA'])){
                                       if($verif == $rowFila['DATA_AGENDA']){ ?>
-                                        <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" chacked autocomplete="off">
-                                        <label class="btn btn-outline-secondary" for="agendar">OCUPADO</label><?php }
+                                        <input type="checkbox" class="btn-check">
+                                        <label class="btn btn-outline-warning" for="">OCUPADO</label><?php }
                                         else if($verif != $rowFila['DATA_AGENDA']){ ?>
-                                          <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" autocomplete="on">
-                                          <label class="btn btn-outline-success" for="agendar">AGENDAR</label><?php
+                                          <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                          <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php
                                         }
-                                      } else { ?> <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" autocomplete="on">
-                                                  <label class="btn btn-outline-success" for="agendar">AGENDAR</label><?php }  ?>  
+                                      } else { ?> <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                                  <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php }  ?>  
                                   </p>
                                 </td>
                                 <td style="width: 10%; "> <?php $semana  = 2;
                                     $diaCont = date('d'    , strtotime("+$nDias days"));
                                     $verif   = date('Y-m-d', strtotime("+$nDias days")); ?>
-                                  <p style="font-size: 24px"><?php  if($semana == 2){ echo $diaCont; $nDias = $nDias + 1; } ?></p>
+                                  <p style="font-size: 24px"><?php  if($semana == 2){ $matriz[$nDias] = 'agendar'. strval($nDias); echo $diaCont; $nDias = $nDias + 1; } ?></p>
                                   <p style="font-size: 12px; text-align: center"> <?php  
                                     $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA = :hoje");
                                     $fila->bindParam(':hoje', $verif, PDO::PARAM_STR); $fila->execute();
                                     $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
                                     if(!empty($rowFila['DATA_AGENDA'])){
                                       if($verif == $rowFila['DATA_AGENDA']){ ?>
-                                        <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" chacked autocomplete="off">
-                                        <label class="btn btn-outline-secondary" for="agendar">OCUPADO</label><?php }
+                                        <input type="checkbox" class="btn-check">
+                                        <label class="btn btn-outline-warning" for="">OCUPADO</label><?php }
                                         else if($verif != $rowFila['DATA_AGENDA']){ ?>
-                                          <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" autocomplete="on">
-                                          <label class="btn btn-outline-success" for="agendar">AGENDAR</label><?php
+                                          <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                          <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php
                                         }
-                                      } else { ?> <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" autocomplete="on">
-                                                  <label class="btn btn-outline-success" for="agendar">AGENDAR</label><?php } ?>  
+                                      } else { ?> <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                                  <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php } ?>  
                                   </p>
                                 </td>
                                 <td style="width: 10%; "> <?php $semana  = 3;
                                     $diaCont = date('d'    , strtotime("+$nDias days"));
                                     $verif   = date('Y-m-d', strtotime("+$nDias days")); ?>
-                                  <p style="font-size: 24px"><?php if($semana == 3){ echo $diaCont; $nDias = $nDias + 1; } ?></p>
+                                  <p style="font-size: 24px"><?php if($semana == 3){ $matriz[$nDias] = 'agendar'. strval($nDias); echo $diaCont; $nDias = $nDias + 1; } ?></p>
                                   <p style="font-size: 12px; text-align: center"> <?php  
                                     $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA = :hoje");
                                     $fila->bindParam(':hoje', $verif, PDO::PARAM_STR); $fila->execute();
                                     $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
                                     if(!empty($rowFila['DATA_AGENDA'])){
                                       if($verif == $rowFila['DATA_AGENDA']){ ?>
-                                        <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" chacked autocomplete="off">
-                                        <label class="btn btn-outline-secondary" for="agendar">OCUPADO</label><?php }
+                                        <input type="checkbox" class="btn-check">
+                                        <label class="btn btn-outline-warning" for="">OCUPADO</label><?php }
                                         else if($verif != $rowFila['DATA_AGENDA']){ ?>
-                                          <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" autocomplete="on">
-                                          <label class="btn btn-outline-success" for="agendar">AGENDAR</label><?php }
-                                      } else { ?> <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" autocomplete="on">
-                                                  <label class="btn btn-outline-success" for="agendar">AGENDAR</label><?php }  ?>  
+                                          <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                          <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php }
+                                      } else { ?> <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                                  <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php }  ?>  
                                   </p>
                                 </td>
                                 <td style="width: 10%; "> <?php $semana  = 4; 
                                     $diaCont = date('d'    , strtotime("+$nDias days"));
                                     $verif   = date('Y-m-d', strtotime("+$nDias days")); ?>
-                                  <p style="font-size: 24px"><?php if($semana == 4){ echo $diaCont; $nDias = $nDias + 1; } ?></p>
+                                  <p style="font-size: 24px"><?php if($semana == 4){ $matriz[$nDias] = 'agendar'. strval($nDias); echo $diaCont; $nDias = $nDias + 1; } ?></p>
                                   <p style="font-size: 12px; text-align: center"> <?php  
                                     $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA = :hoje");
                                     $fila->bindParam(':hoje', $verif, PDO::PARAM_STR); $fila->execute();
                                     $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
                                     if(!empty($rowFila['DATA_AGENDA'])){
                                       if($verif == $rowFila['DATA_AGENDA']){ ?>
-                                        <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" chacked autocomplete="off">
-                                        <label class="btn btn-outline-secondary" for="agendar">OCUPADO</label><?php }
+                                        <input type="checkbox" class="btn-check">
+                                        <label class="btn btn-outline-warning" for="">OCUPADO</label><?php }
                                         else if($verif != $rowFila['DATA_AGENDA']){ ?>
-                                          <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" autocomplete="on">
-                                          <label class="btn btn-outline-success" for="agendar">AGENDAR</label><?php  }
-                                      } else { ?> <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" autocomplete="on">
-                                                  <label class="btn btn-outline-success" for="agendar">AGENDAR</label><?php } ?>  
+                                          <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                          <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php  }
+                                      } else { ?> <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                                  <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php } ?>  
                                   </p>
                                 </td>
                                 <td style="width: 10%; "> <?php $semana  = 5;
                                     $diaCont = date('d'    , strtotime("+$nDias days"));
                                     $verif   = date('Y-m-d', strtotime("+$nDias days")); ?>
-                                  <p style="font-size: 24px"><?php if($semana == 5){ echo $diaCont; $nDias = $nDias + 1; } ?></p>
+                                  <p style="font-size: 24px"><?php if($semana == 5){ $matriz[$nDias] = 'agendar'. strval($nDias); echo $diaCont; $nDias = $nDias + 1; } ?></p>
                                   <p style="font-size: 12px; text-align: center"> <?php  
                                     $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA = :hoje");
                                     $fila->bindParam(':hoje', $verif, PDO::PARAM_STR); $fila->execute();
                                     $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
                                     if(!empty($rowFila['DATA_AGENDA'])){
                                       if($verif == $rowFila['DATA_AGENDA']){ ?>
-                                        <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" chacked autocomplete="off">
-                                        <label class="btn btn-outline-secondary" for="agendar">OCUPADO</label><?php }
+                                        <input type="checkbox" class="btn-check">
+                                        <label class="btn btn-outline-warning" for="">OCUPADO</label><?php }
                                         else if($verif != $rowFila['DATA_AGENDA']){ ?>
-                                          <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" autocomplete="on">
-                                          <label class="btn btn-outline-success" for="agendar">AGENDAR</label><?php }
-                                      } else { ?> <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" autocomplete="on">
-                                                  <label class="btn btn-outline-success" for="agendar">AGENDAR</label><?php } ?>  
+                                          <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                          <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php }
+                                      } else { ?> <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                                  <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php } ?>  
                                   </p>
                                 </td>
                                 <td style="width: 10%; "> <?php $semana  = 6;
                                     $diaCont = date('d'    , strtotime("+$nDias days"));
                                     $verif   = date('Y-m-d', strtotime("+$nDias days")); ?>
-                                  <p style="font-size: 24px"><?php if($semana == 6){ echo $diaCont; $nDias = $nDias + 1; } ?></p>
+                                  <p style="font-size: 24px"><?php if($semana == 6){ $matriz[$nDias] = 'agendar'. strval($nDias); echo $diaCont; $nDias = $nDias + 1; } ?></p>
                                   <p style="font-size: 12px; text-align: center"> <?php  
                                     $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA = :hoje");
                                     $fila->bindParam(':hoje', $verif, PDO::PARAM_STR); $fila->execute();
                                     $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
                                     if(!empty($rowFila['DATA_AGENDA'])){
                                       if($verif == $rowFila['DATA_AGENDA']){ ?>
-                                        <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" chacked autocomplete="off">
-                                        <label class="btn btn-outline-secondary" for="agendar">OCUPADO</label><?php }
+                                        <input type="checkbox" class="btn-check">
+                                        <label class="btn btn-outline-warning" for="">OCUPADO</label><?php }
                                         else if($verif != $rowFila['DATA_AGENDA']){ ?>
-                                          <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" autocomplete="on">
-                                          <label class="btn btn-outline-success" for="agendar">AGENDAR</label><?php  }
-                                      } else { ?> <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" autocomplete="on">
-                                                  <label class="btn btn-outline-success" for="agendar">AGENDAR</label><?php }  ?>  
+                                          <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                          <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php  }
+                                      } else { ?> <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                                  <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php }  ?>  
                                   </p>
                                 </td>                                     
                               </tr><?php
@@ -443,7 +447,7 @@ if(!empty($confirma['descrProd'])){
             <h2 class="accordion-header">
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" 
                       aria-expanded="false" aria-controls="collapseFour">
-                Passo 4: Concluir a inserção de dados do pedido
+                Passo 4: Concluir pedido, confirmar e Salvar
               </button>
             </h2>
             <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#FasesPedido">
@@ -473,19 +477,6 @@ if(!empty($confirma['descrProd'])){
                           </select>
                       </div>
                 </div> 
-              </div>
-            </div>
-          </div>
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFifth" 
-                      aria-expanded="false" aria-controls="collapseFifth">
-                Passo 5: Verificar informações do pedido e confirmar
-              </button>
-            </h2>
-            <div id="collapseFifth" class="accordion-collapse collapse" data-bs-parent="#FasesPedido">
-              <div class="accordion-body">
-              algoritmo aqui 
               </div>
             </div>
           </div>

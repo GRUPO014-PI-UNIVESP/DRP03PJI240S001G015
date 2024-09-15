@@ -7,59 +7,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   </head>
   <body>
-
+    <?php
+        for($i = 0; $i <= 31; $i++){
+            $arr[$i] = $i;
+        }
+        for($i = 0; $i <= 31; $i++){
+            echo $arr[$i] . ' ';
+        }
+    ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   </body>
-</html>
-<div class="main">
-    <div class="container">
-        <div class="row g-4">
-            <div class="col-md-1">
-                Segunda
-            </div>
-            <div class="col-md-1">
-                Terça
-            </div>
-            <div class="col-md-1">
-                Quarta
-            </div>
-            <div class="col-md-1">
-                Quinta
-            </div>
-            <div class="col-md-1">
-                Sexta
-            </div>
-            <div class="col-md-1">
-                Sabado
-            </div>
-            < class="col-md-1">
-                Domingo
-            </div>
-            
-            <div class="row g-4">
-            <div class="col-md-1">
-                Segunda
-            </div>
-            <div class="col-md-1">
-                Terça
-            </div>
-            <div class="col-md-1">
-                Quarta
-            </div>
-            <div class="col-md-1">
-                Quinta
-            </div>
-            <div class="col-md-1">
-                Sexta
-            </div>
-            <div class="col-md-1">
-                Sabado
-            </div>
-            < class="col-md-1">
-                Domingo
-            </div>
-        </div>
-    </div>
-</div>    
-</body>
 </html>
