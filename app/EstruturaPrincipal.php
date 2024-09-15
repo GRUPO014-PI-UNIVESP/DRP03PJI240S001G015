@@ -150,21 +150,78 @@ function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
     //script Java Script para criar mascaras de inserção de dados formatados como RG, CPF, Telefone, CEP
     function criaMascara(mascaraInput) {
       const maximoInput = document.getElementById(`${mascaraInput}Input`).maxLength;
-      let valorInput = document.getElementById(`${mascaraInput}Input`).value;
+      let valorInput    = document.getElementById(`${mascaraInput}Input`).value;
       let valorSemPonto = document.getElementById(`${mascaraInput}Input`).value.replace(/([^0-9])+/g, "");
-      const mascaras = {
-                        CPF:     valorInput.replace(/[^\d]/g, "").replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4"),
-                        CNPJ:    valorInput.replace(/[^\d]/g, "").replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5"),
-                        Celular: valorInput.replace(/[^\d]/g, "").replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3"),
-                        CEP:     valorInput.replace(/[^\d]/g, "").replace(/(\d{5})(\d{3})/, "$1-$2"),
-                        RG:      valorInput.replace(/[^\d]/g, "").replace(/(\d{2})(\d{3})(\d{3})(\d{1})/, "$1.$2.$3-$4"),
-                        };
+      const mascaras    = {
+                            CPF:     valorInput.replace(/[^\d]/g, "").replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4"),
+                            CNPJ:    valorInput.replace(/[^\d]/g, "").replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5"),
+                            Celular: valorInput.replace(/[^\d]/g, "").replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3"),
+                            CEP:     valorInput.replace(/[^\d]/g, "").replace(/(\d{5})(\d{3})/, "$1-$2"),
+                            RG:      valorInput.replace(/[^\d]/g, "").replace(/(\d{2})(\d{3})(\d{3})(\d{1})/, "$1.$2.$3-$4"),
+                            };
       valorInput.length === maximoInput ? document.getElementById(`${mascaraInput}Input`).value = mascaras[mascaraInput]
       : document.getElementById(`${mascaraInput}Input`).value = valorSemPonto;
     };
     function limpaTela() {
             $('#buscaProduto div').empty()
         }
+    const input = document.getElementById("campo");
+    //para valores numéricos
+    input.addEventListener("keypress", somenteNumeros);
+    function somenteNumeros(e) {
+      var charCode = (e.which) ? e.which : e.keyCode
+      if (charCode > 31 && (charCode < 48 || charCode > 57))
+        e.preventDefault();
+    }
+    // para valores monetários
+    input.addEventListener("keypress", formatarMoeda); 
+    function formatarMilhar(e) {
+      var v = e.target.value.replace(/\D/g,"");
+      v = (v/100).toFixed(2) + "";
+      v = v.replace(".", ",");
+      v = v.replace(/(\d)(\d{3})(\d{3}),/g, "$1.$2.$3,");
+      v = v.replace(/(\d)(\d{3}),/g, "$1.$2,");
+      e.target.value = v;
+    }
+    // para formatar cpf
+    input.addEventListener("keyup", formatarCPF);
+    function formatarCPF(e){
+      var v=e.target.value.replace(/\D/g,"");
+      v=v.replace(/(\d{3})(\d)/,"$1.$2");
+      v=v.replace(/(\d{3})(\d)/,"$1.$2");
+      v=v.replace(/(\d{3})(\d{1,2})$/,"$1-$2");
+      e.target.value = v;
+    }
+
+    input.addEventListener("keyup", formatarCNPJ);
+    function formatarCNPJ(e){
+      var v= e.target.value.replace(/\D/g,"");
+      v=v.replace(/^(\d{2})(\d)/,"$1.$2");
+      v=v.replace(/^(\d{2})\.(\d{3})(\d)/,"$1.$2.$3");
+      v=v.replace(/\.(\d{3})(\d)/,".$1/$2");
+      v=v.replace(/(\d{4})(\d)/,"$1-$2");  
+      e.target.value = v;
+    }
+    // verificar dados digitados ex:telefone
+    input.addEventListener("keyup", formatarTelefone);
+    input.addEventListener("blur", validarTelefone); 
+    function formatarTelefone(e){
+      var v=e.target.value.replace(/\D/g,"");
+      v=v.replace(/^(\d\d)(\d)/g,"($1)$2"); 
+      v=v.replace(/(\d{5})(\d)/,"$1-$2");    
+      e.target.value = v;
+    }
+
+    function validarTelefone(e){
+      var texto = e.target.value;
+      var RegExp = /^\(\d{2}\)\d{5}-\d{4}/;
+      if (texto.match(RegExp) != null) {
+      alert("telefone válido");
+      } else {
+      alert("telefone inválido");
+      e.target.value = "";
+      }
+    }
   </script>
   <body>
     <!-- Barra lateral Superior-->
@@ -205,7 +262,7 @@ function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
     </div>
 
     <!-- Barra lateral Inferior-->
-    <div class="sidebarBottom"><br>
+    <div class="sidebarBottom">
       <p style="text-align: center; font-size: 15px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; color: rgba(0,0,0,0.7)">Informações do Usuário</p>
       <p style="padding: 3px; color: rgba(0,0,0,0.7)" class="text-break">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill-check" viewBox="0 0 16 16">
@@ -227,7 +284,7 @@ function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
         </svg> <?php 
                 $hLog = strtotime($_SESSION['horaLog']);
                 echo '  '.date('H:i:s', $hLog);  ?>
-      </p><br><br><br>
+      </p>
         <a href="./14AlterarSenhaAcesso.php">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-key" viewBox="0 0 16 16">
             <path d="M0 8a4 4 0 0 1 7.465-2H14a.5.5 0 0 1 .354.146l1.5 1.5a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0L13 9.207l-.646.647a.5.5 0 0 1-.708 0L11 9.207l-.646.647a.5.5 0 0 1-.708 0L9 9.207l-.646.647A.5.5 0 0 1 8 10h-.535A4 4 0 0 1 0 8m4-3a3 3 0 1 0 2.712 4.285A.5.5 0 0 1 7.163 9h.63l.853-.854a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.793-.793-1-1h-6.63a.5.5 0 0 1-.451-.285A3 3 0 0 0 4 5"/>
@@ -244,8 +301,13 @@ function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
       <P style="padding: 5px; color: greenyellow; float: right"><?php echo ' Você tem ' .$numMsg. ' mensagens não lidas' ?></P><br><br><br>
       <div class="container text-center">
         <div class="row">
-          <div class="col" style="margin-left: 10%">
-          <a class="btn btn-outline-light" href="anexos/Cenário do Projeto.pdf" target="_blank" role="button" style="width: 125px; text-align: center">Documentação do Sistema</a>    
+          <div class="col" style="margin-left: 0%">
+          <a class="btn btn" href="./Cenário do Projeto.pdf" target="_blank" role="button" style="border-style: none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-book-half" viewBox="0 0 16 16">
+              <path d="M8.5 2.687c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/>
+            </svg>
+            <p>Documentação do Sistema</p>
+          </a>    
           </div>
         </div>
       </div> 
