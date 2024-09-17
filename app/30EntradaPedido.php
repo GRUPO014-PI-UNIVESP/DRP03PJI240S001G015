@@ -155,7 +155,6 @@ if(!empty($confirma['descrProd'])){
                             }?>
                       </select>
                     </div>
-
                     <div class="col-md-4">
                       <input class="btn btn-success" type="submit" class="form-control" id="carregar" name="carregar" value="Carregue os dados e verifique na seção abaixo" style="width:400px">
                     </div> <?php
@@ -164,10 +163,10 @@ if(!empty($confirma['descrProd'])){
                           <span style="margin-left: 25%; color: yellow; border-radius: 4px;">Carregado com sucesso! Siga para o próximo passo</span>
                         </div><?php 
                       } ?>
-                  </div>
+                  </div><!-- fim da div class = row g-4 -->
                 </form>
-              </div>
-            </div>
+              </div><!-- fim da div class = accordion body -->
+            </div><!-- fim da div class = collapseOne -->
           </div><!-- fim da div class = accordion item 1 -->
           <div class="accordion-item">
             <h2 class="accordion-header">
@@ -227,9 +226,9 @@ if(!empty($confirma['descrProd'])){
                   } 
                   if($insuficiente == 1){ ?><div class="alert alert-warning" role="alert">Há componentes insuficientes para cobrir a quantidade necessária para produção! Faça a compra também.</div><?php
                   } else { ?><div class="alert alert-success" role="alert">Tudo OK! Sem problemas com os materiais. </div><?php } ?> 
-                </div>  
-              </div>
-            </div>
+                </div><!-- fim da div class = row g-4 --> 
+              </div><!-- fim da div class = accordion body -->
+            </div><!-- fim da div class = collapse Two -->
           </div><!-- fim da div class = accordion item 2 -->
           <div class="accordion-item">
             <h2 class="accordion-header">
@@ -260,7 +259,7 @@ if(!empty($confirma['descrProd'])){
 
                       <tbody><!-- início do corpo da tabela calendario -->
                         <style>td:hover{background-color: rgba(0, 0, 0, 0.5);}</style>
-                        <form id="calendario" method="#" action="#"> <?php  $diaSemana = date('w'); 
+                        <form id="calendario" method="POST" action="#"> <?php  $diaSemana = date('w'); 
                                                                             $nDias = 1; $vDias = 0;
                                                                             $verificaDataOcupada = date('Y-m-d');
                                                                             $diaCal = date('d');
@@ -285,12 +284,12 @@ if(!empty($confirma['descrProd'])){
                                       if(!empty($rowFila['DATA_AGENDA'])){
                                         if($verificaDataOcupada == $rowFila['DATA_AGENDA']){ ?>
                                           <input type="checkbox" class="btn-check">
-                                          <label class="btn btn-outline-warning" for="">OCUPADO</label><?php }
+                                          <label class="btn btn-outline-warning" for="ocupado">OCUPADO</label><?php }
                                         else if($verificaDataOcupada != $rowFila['DATA_AGENDA']){ ?>
-                                          <input type="checkbox" class="btn-check" id="" name="" onchange="this.form.submit()" autocomplete="on">
-                                          <label class="btn btn-outline-success" for="">AGENDAR</label><?php }
-                                      } else { ?> <input type="checkbox" class="btn-check" id="" name="" onchange="this.form.submit()" autocomplete="on">
-                                                  <label class="btn btn-outline-success" for="">AGENDAR</label><?php }  ?>  
+                                          <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" autocomplete="on">
+                                          <label class="btn btn-outline-success" for="agendar">AGENDAR</label><?php }
+                                      } else { ?> <input type="checkbox" class="btn-check" id="agendar" name="agendar" onchange="this.form.submit()" autocomplete="on">
+                                                  <label class="btn btn-outline-success" for="agendar">AGENDAR</label><?php }  ?>  
                                     </p> <?php  
                                   } ?>
                                 </td> <?php 

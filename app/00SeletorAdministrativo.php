@@ -68,12 +68,12 @@
 
           <div class="tab-pane fade" id="comercial-tab-pane" role="tabpanel" aria-labelledby="comercial-tab" tabindex="0"><br><br>
             <button type="button" class="btn btn-outline-info" style="width:300px" 
-              onclick="">Vendas</button><br><br>
+              onclick=""></button><br><br>
           </div>
 
           <div class="tab-pane fade" id="finance-tab-pane" role="tabpanel" aria-labelledby="finance-tab" tabindex="0" style="color: whitesmoke"><br><br>
             <button type="button" class="btn btn-outline-info" style="width:300px" 
-              onclick="">Folha de Pagamento</button><br><br>
+              onclick=""></button><br><br>
           </div>
         </div> 
       </div>
