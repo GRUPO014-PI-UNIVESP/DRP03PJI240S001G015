@@ -142,7 +142,7 @@ if(!empty($confirma['descrProd'])){
                   <div class="row g-4">
                     <div class="col-md-3">
                       <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Quantidade do Pedido</label>
-                      <input style="font-size: 14px; text-align:right" type="text" class="form-control" id="qtdeLote" name="qtdeLote" onkeypress="formatarMilhar(e)" pattern="[0-9]{4,8}" required autofocus>
+                      <input style="font-size: 14px; text-align:right" type="number" class="form-control" id="qtdeLote" name="qtdeLote" required autofocus>
                     </div>
                     <div class="col-md-9">
                       <label for="descrProd" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
@@ -260,18 +260,42 @@ if(!empty($confirma['descrProd'])){
 
                       <tbody><!-- início do corpo da tabela calendario -->
                         <style>td:hover{background-color: rgba(0, 0, 0, 0.5);}</style>
-                        <form id="calendario" method="#" action="#"> <?php $diaSemana = date('w'); $nDias = 1; $verificaDataOcupada = date('Y-m-d');  $a = date('d');
+                        <form id="calendario" method="#" action="#"> <?php  $diaSemana = date('w'); 
+                                                                            $nDias = 1; $vDias = 0;
+                                                                            $verificaDataOcupada = date('Y-m-d');
+                                                                            $diaCal = date('d');
                           for($i = 1; $i <= 5; $i++){ ?><!-- Recursão para => 1: Sem-1, 2: Sem-2, 3: Sem-3, 4: Sem-4, 5: Sem-5.-->
                             <tr> <?php
                               for($j = 0; $j <=6; $j++){ ?><!-- Recursão para => 0: domingo, 1: segunda, 2: terça, 3: quarta, 4: quinta, 5: sexta, 6: sabado. -->
                                 <td> <?php
-                                    if($diaSemana == $j){ 
-                                      echo $a ; $diaSemana = date('w', strtotime("+$nDias days"));
-                                      $a = date('d', strtotime("+$nDias days")); $nDias = $nDias + 1;
-                                    } ?>
+                                  if($j < $diaSemana){ ?>
+                                  <p style="font-size: 24px; "></p><br>
+                                  <p style="font-size: 18px; color: grey; text-align: center">INDISPONÍVEL</p> <?php
+                                  }
+                                  if($diaSemana == $j){ ?>
+                                    <p style="font-size: 24px; "><?php echo $diaCal; ?> </p><?php
+                                      $diaSemana           = date('w'    , strtotime("+$nDias days"));
+                                      $verificaDataOcupada = date('Y-m-d', strtotime("+$vDias days"));
+                                      $diaCal              = date('d'    , strtotime("+$nDias days"));
+                                      $nDias               = $nDias + 1; $vDias = $vDias +1; ?>
+                                    <p style="font-size: 12px; text-align: center"> <?php  
+                                      $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA = :hoje");
+                                      $fila->bindParam(':hoje', $verificaDataOcupada, PDO::PARAM_STR); $fila->execute();
+                                      $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
+                                      if(!empty($rowFila['DATA_AGENDA'])){
+                                        if($verificaDataOcupada == $rowFila['DATA_AGENDA']){ ?>
+                                          <input type="checkbox" class="btn-check">
+                                          <label class="btn btn-outline-warning" for="">OCUPADO</label><?php }
+                                        else if($verificaDataOcupada != $rowFila['DATA_AGENDA']){ ?>
+                                          <input type="checkbox" class="btn-check" id="" name="" onchange="this.form.submit()" autocomplete="on">
+                                          <label class="btn btn-outline-success" for="">AGENDAR</label><?php }
+                                      } else { ?> <input type="checkbox" class="btn-check" id="" name="" onchange="this.form.submit()" autocomplete="on">
+                                                  <label class="btn btn-outline-success" for="">AGENDAR</label><?php }  ?>  
+                                    </p> <?php  
+                                  } ?>
                                 </td> <?php 
                               } ?>    
-                            </tr> <?php
+                            </tr> <?php 
                           } ?>
                         </form><!-- fim do form calendario -->
                       </tbody><!-- fim do corpo da tabela calendario -->
