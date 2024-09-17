@@ -264,12 +264,12 @@ if(!empty($confirma['descrProd'])){
                           for($i = 1; $i <= 5; $i++){ ?><!-- Recursão para => 1: Sem-1, 2: Sem-2, 3: Sem-3, 4: Sem-4, 5: Sem-5.-->
                             <tr> <?php
                               for($j = 0; $j <=6; $j++){ ?><!-- Recursão para => 0: domingo, 1: segunda, 2: terça, 3: quarta, 4: quinta, 5: sexta, 6: sabado. -->
-                                <td>
-                                  <?php
-                                    if($semana == $j){}
-                                    echo $a;
-                                  ?>
-                                </td> <?php $a = date('d', strtotime("+$nDias days")); $nDias = $nDias + 1;
+                                <td> <?php
+                                    if($diaSemana == $j){ 
+                                      echo $a ; $diaSemana = date('w', strtotime("+$nDias days"));
+                                      $a = date('d', strtotime("+$nDias days")); $nDias = $nDias + 1;
+                                    } ?>
+                                </td> <?php 
                               } ?>    
                             </tr> <?php
                           } ?>
