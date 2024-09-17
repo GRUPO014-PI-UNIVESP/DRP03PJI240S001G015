@@ -16,7 +16,7 @@ $query_customer->execute();
 $query_produto = $connDB->prepare("SELECT DESCRICAO_PF FROM pf_tabela");
 $query_produto->execute();
 
-$descrProd = ''; $qtdeLote = '';
+$descrProd = ''; $qtdeLote = ''; $verify1 = '';
 
 
 /* capta dados do formulário
@@ -129,71 +129,73 @@ if(!empty($confirma['descrProd'])){
 <!-- Registra Pedido ---------------------------------------------------------------------------------------------------------------------------------------------------->    
     <div class="tab-content" id="myTabContent"><br>
       <div class="tab-pane fade show active" id="manage-tab-pane" role="tabpanel" aria-labelledby="manage-tab" tabindex="0" >
-        <form action="" method="POST" id="carregar">
-          <div class="accordion" id="Fases">
+        <div class="accordion" id="FasesPedido">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" 
+                      aria-expanded="true" aria-controls="collapseOne" >
+                Passo 1: Digite a quantidade e selecione o produto desejado
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#FasesPedido">
+              <div class="accordion-body">
+                <form action="" method="POST" id="carregar">
+                  <div class="row g-4">
+                    <div class="col-md-3">
+                      <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Quantidade do Pedido</label>
+                      <input style="font-size: 14px; text-align:right" type="text" class="form-control" id="qtdeLote" name="qtdeLote" 
+                             onkeypress="formatarMilhar(e)" pattern="[0-9]{4,8}" required autofocus>
+                    </div>
+                    <div class="col-md-9">
+                      <label for="descrProd" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
+                      <select style="font-size: 14px;" class="form-select" id="descrProd" name="descrProd" autofocus>
+                        <option style="font-size: 14px" selected>Selecione o Produto</option>
+                          <?php
+                          // inclui nome dos produtos como opções de seleção da tag <select>
+                            while($produto = $query_produto->fetch(PDO::FETCH_ASSOC)){?>
+                              <option style="font-size: 14px"><?php echo $produto['DESCRICAO_PF']; ?></option> <?php
+                            }?>
+                      </select>
+                    </div>
 
-            <!-- Primeira seção para selecionar produto -->
-            <div class="accordion-item">
-              <h2 class="accordion-header">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  Selecione o produto e digite a quantidade desejada
-                </button>
-              </h2>
-              <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#Fases">
-                <div class="accordion-body row g-4">
-                  <div class="col-md-9">
-                    <label for="descrProd" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
-                    <select style="font-size: 14px;" class="form-select" id="descrProd" name="descrProd" autofocus>
-                      <option style="font-size: 14px" selected>Selecione o Produto</option>
-                        <?php
-                        // inclui nome dos produtos como opções de seleção da tag <select>
-                          while($produto = $query_produto->fetch(PDO::FETCH_ASSOC)){?>
-                            <option style="font-size: 14px"><?php echo $produto['DESCRICAO_PF']; ?></option> <?php
-                          }?>
-                    </select>
+                    <div class="col-md-4">
+                      <input class="btn btn-success" type="submit" class="form-control" id="carregar" name="carregar"
+                              value="Carregue os dados e verifique na seção abaixo" style="width:400px">
+                    </div>
+                    <?php
+                      if(!empty($_POST['carregar'])){?>
+                        <div class="col-md-8">
+                          <span style="margin-left: 25%; color: yellow; border-radius: 4px;">Carregado com sucesso! Siga para o próximo passo</span>
+                        </div>
+                    <?php } ?>
                   </div>
-                  <div class="col-md-3">
-                    <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Quantidade do Pedido</label>
-                    <input style="font-size: 14px; text-align:right" type="text" class="form-control" id="qtdeLote" name="qtdeLote" required>
-                  </div>
-                  <div class="col-md-4">
-                    <input class="btn btn-success" type="submit" class="form-control" id="carregar" name="carregar"
-                            value="Carregue os dados e verifique na seção abaixo" style="width:400px">
-                  </div>
-                  <?php
-                    if(!empty($_POST['carregar'])){ ?>
-                      <div class="col-md-8">
-                        <span style="margin-left: 25%; color: yellow; border-radius: 4px;">Carregado com sucesso!</span>
-                      </div>
-                  <?php } ?>
-                </div>
+                </form>
               </div>
             </div>
-
-            <!-- Segunda seção para visualizar materiais e inserir dados do pedido -->
-            <div class="accordion-item">
-              <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                  Verificar disponibilidade dos materiais ingredientes do produto
-                </button>
-              </h2>
-        </form>
-              <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#Fases">
-                <div class="accordion-body">
-                  <div class="row g-4">
-                    <?php
-                    $busca = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-                    if(!empty($busca['carregar'])){
-                      $descrProd = $busca['descrProd']; $qtdeLote = $busca['qtdeLote'];?>
-                      <div class="col-md-9">
-                        <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
-                        <input style="font-size: 14px;" type="text" class="form-control" id="descrProd" name="descrProd" value="<?php echo $descrProd ?>" readonly>
-                      </div>
-                      <div class="col-md-3">
-                        <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Quantidade do Pedido</label>
-                        <input style="font-size: 14px; text-align:right" type="text" class="form-control" id="valor1" name="qtdeLote" 
-                               value="<?php echo $qtdeLote . ' Kg' ?>" readonly>
-                      </div><?php } ?>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" 
+                      aria-expanded="false" aria-controls="collapseTwo">
+                Passo 2: Verificar a disponibilidade dos materiais necessários
+              </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#FasesPedido">
+              <div class="accordion-body">
+                <div class="row g-4">
+                  <?php
+                  $busca = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+                  if(!empty($busca['carregar'])){
+                    $descrProd = $busca['descrProd']; $qtdeLote = $busca['qtdeLote'];?>
+                    <div class="col-md-9">
+                      <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
+                      <input style="font-size: 14px;" type="text" class="form-control" id="descrProd" name="descrProd" value="<?php echo $descrProd ?>" readonly>
+                    </div>
+                    <div class="col-md-3">
+                      <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Quantidade do Pedido</label>
+                      <input style="font-size: 14px; text-align:right" type="text" class="form-control" id="valor1" name="qtdeLote" 
+                            value="<?php echo $qtdeLote . ' Kg' ?>" readonly>
+                    </div><?php } ?>
                     <?php
                       if(isset($busca['carregar'])){
                         $prod = $busca['descrProd'];
@@ -228,8 +230,10 @@ if(!empty($confirma['descrProd'])){
                                 $disponivel = $result1['estoque'] - $result2['reservado'];
                                 if($disponivel > $busca['qtdeLote']){
                                   $barra = 'background-color: green; color: yellow;'; $disp = 'Disponível';
+                                  $insuficiente = 0;
                                 } else if($disponivel < $busca['qtdeLote']){
-                                  $barra = 'background-color: orange; color: red;'; $disp = 'Insuficiente';        
+                                  $barra = 'background-color: orange; color: red;'; $disp = 'Insuficiente';
+                                  $insuficiente = 1;        
                                 }
                               ?>
                                 <tr>
@@ -247,117 +251,263 @@ if(!empty($confirma['descrProd'])){
                           </table>
                         </div>
                       <?php }
+                      if($insuficiente == 1){?>
+                        <div class="alert alert-warning" role="alert">
+                          Há componentes insuficientes para cobrir a quantidade necessária para produção! Faça a compra também.
+                        </div><?php
+                      } else { ?><div class="alert alert-success" role="alert">
+                        Tudo OK! Sem problemas com os materiais. <?php }
                     ?> 
+                  </div>  
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" 
+                      aria-expanded="false" aria-controls="collapseThree">
+                Passo 3: Verificar a fila de ocupação e agendar uma data de produção
+              </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#FasesPedido">
+              <div class="accordion-body">
+                <div class="row g-4">
+                  <div class="overflow-auto">
+                  <?php
+                    $nDias = 31; $diaHoje = date('d/m/Y'); $diaMaxi = date('d/m/Y', strtotime("+$nDias days"));?>
+                    <table class="table table-dark table-bordered table caption-top">
+                      <caption style="color: aqua">Ocupação da Planta <?php echo ' - Cronograma: de ' . $diaHoje . ' até dia ' . $diaMaxi;  ?></caption>
+                      <thead>
+                        <tr>
+                          <th scope="col" style="width: 10%; text-align: center; color: darkgrey">Domingo</th>
+                          <th scope="col" style="width: 10%; text-align: center; color: darkgrey">Segunda</th>
+                          <th scope="col" style="width: 10%; text-align: center; color: darkgrey">Terça  </th>
+                          <th scope="col" style="width: 10%; text-align: center; color: darkgrey">Quarta </th>
+                          <th scope="col" style="width: 10%; text-align: center; color: darkgrey">Quinta </th>
+                          <th scope="col" style="width: 10%; text-align: center; color: darkgrey">Sexta  </th>
+                          <th scope="col" style="width: 10%; text-align: center; color: darkgrey">Sabado </th>
+                        </tr>
+                      </thead>
+                      <?php
+                        
+                      ?>
+                      <tbody>
+                        <style>td:hover{background-color: rgba(0, 0, 0, 0.5);}</style>
+                        <form id="calendario" method="GET" action="#">
+                          <?php $verif = date('Y-m-d'); $semana = 0; $nDias = 0; $diaCont = date('d');
+                            for($i = 1; $i <=  5; $i++){ ?>
+                              <tr>
+                                <td style="width: 10%; "> <?php 
+                                  if($i != 1){ $semana  = 0;
+                                    $diaCont = date('d'    , strtotime("+$nDias days"));
+                                    $verif   = date('Y-m-d', strtotime("+$nDias days")); ?>
+                                    <p style="font-size: 24px"><?php 
+                                    if($semana == 0){ echo $diaCont; $nDias = $nDias + 1;} ?> </p><?php 
+                                    }
+                                  if($i == 1){ $semana = date('w');
+                                    $diaCont = date('d'    , strtotime("+$nDias days"));
+                                    $verif   = date('Y-m-d', strtotime("+$nDias days"));?>
+                                    <p style="font-size: 24px"><?php 
+                                    if($semana == 0){ echo $diaCont; $nDias = $nDias + 1;
+                                    } else { ?>
+                                      <input type="checkbox" class="btn-check" style="vertical-align: auto">
+                                      <label class="btn btn-outline-secondary" for="">INDISPONÍVEL</label><?php } ?> </p><?php
+                                  } ?>
+                                  <p style="font-size: 12px; text-align: center"> <?php  
+                                    $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA = :hoje");
+                                    $fila->bindParam(':hoje', $verif, PDO::PARAM_STR); $fila->execute();
+                                    $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
+                                    if(!empty($rowFila['DATA_AGENDA'])){
+                                      if($verif == $rowFila['DATA_AGENDA']){ ?>
+                                        <input type="checkbox" class="btn-check">
+                                        <label class="btn btn-outline-warning" for="">OCUPADO</label><?php }
+                                      else if($verif != $rowFila['DATA_AGENDA']){ ?>
+                                          <input type="checkbox" class="btn-check" id="" name="" onchange="this.form.submit()" autocomplete="on">
+                                          <label class="btn btn-outline-success" for="">AGENDAR</label><?php }
+                                      }?>  
+                                  </p>
+                                </td>
+                                <td style="width: 10%; "><?php
+                                  if($i != 1){ $semana  = 1;
+                                    $diaCont = date('d'    , strtotime("+$nDias days"));
+                                    $verif   = date('Y-m-d', strtotime("+$nDias days")); ?>
+                                    <p style="font-size: 24px"><?php 
+                                    if($semana == 0){ $matriz[$nDias] = 'agendar'. strval($nDias); echo $diaCont; $nDias = $nDias + 1;} ?> </p><?php 
+                                    }
+                                  if($i == 1){ $semana = date('w');
+                                    $diaCont = date('d'    , strtotime("+$nDias days"));
+                                    $verif   = date('Y-m-d', strtotime("+$nDias days"));?>
+                                    <p style="font-size: 24px"><?php 
+                                    if($semana == 0){ $matriz[$nDias] = 'agendar'. strval($nDias); echo $diaCont; $nDias = $nDias + 1;
+                                    } else { ?>
+                                      <input type="checkbox" class="btn-check">
+                                      <label class="btn btn-outline-secondary" for="">INDISPONÍVEL</label><?php } ?> </p><?php
+                                  } ?>
+                                  <p style="font-size: 24px"><?php if($semana == 1){ $matriz[$nDias] = 'agendar'. strval($nDias); echo $diaCont; $nDias = $nDias + 1; } ?></p>
+                                  <p style="font-size: 12px; text-align: center"> <?php  
+                                    $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA = :hoje");
+                                    $fila->bindParam(':hoje', $verif, PDO::PARAM_STR); $fila->execute();
+                                    $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
+                                    if(!empty($rowFila['DATA_AGENDA'])){
+                                      if($verif == $rowFila['DATA_AGENDA']){ ?>
+                                        <input type="checkbox" class="btn-check">
+                                        <label class="btn btn-outline-warning" for="">OCUPADO</label><?php }
+                                        else if($verif != $rowFila['DATA_AGENDA']){ ?>
+                                          <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                          <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php
+                                        }
+                                      } else { ?> <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                                  <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php }  ?>  
+                                  </p>
+                                </td>
+                                <td style="width: 10%; "> <?php $semana  = 2;
+                                    $diaCont = date('d'    , strtotime("+$nDias days"));
+                                    $verif   = date('Y-m-d', strtotime("+$nDias days")); ?>
+                                  <p style="font-size: 24px"><?php  if($semana == 2){ $matriz[$nDias] = 'agendar'. strval($nDias); echo $diaCont; $nDias = $nDias + 1; } ?></p>
+                                  <p style="font-size: 12px; text-align: center"> <?php  
+                                    $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA = :hoje");
+                                    $fila->bindParam(':hoje', $verif, PDO::PARAM_STR); $fila->execute();
+                                    $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
+                                    if(!empty($rowFila['DATA_AGENDA'])){
+                                      if($verif == $rowFila['DATA_AGENDA']){ ?>
+                                        <input type="checkbox" class="btn-check">
+                                        <label class="btn btn-outline-warning" for="">OCUPADO</label><?php }
+                                        else if($verif != $rowFila['DATA_AGENDA']){ ?>
+                                          <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                          <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php
+                                        }
+                                      } else { ?> <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                                  <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php } ?>  
+                                  </p>
+                                </td>
+                                <td style="width: 10%; "> <?php $semana  = 3;
+                                    $diaCont = date('d'    , strtotime("+$nDias days"));
+                                    $verif   = date('Y-m-d', strtotime("+$nDias days")); ?>
+                                  <p style="font-size: 24px"><?php if($semana == 3){ $matriz[$nDias] = 'agendar'. strval($nDias); echo $diaCont; $nDias = $nDias + 1; } ?></p>
+                                  <p style="font-size: 12px; text-align: center"> <?php  
+                                    $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA = :hoje");
+                                    $fila->bindParam(':hoje', $verif, PDO::PARAM_STR); $fila->execute();
+                                    $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
+                                    if(!empty($rowFila['DATA_AGENDA'])){
+                                      if($verif == $rowFila['DATA_AGENDA']){ ?>
+                                        <input type="checkbox" class="btn-check">
+                                        <label class="btn btn-outline-warning" for="">OCUPADO</label><?php }
+                                        else if($verif != $rowFila['DATA_AGENDA']){ ?>
+                                          <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                          <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php }
+                                      } else { ?> <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                                  <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php }  ?>  
+                                  </p>
+                                </td>
+                                <td style="width: 10%; "> <?php $semana  = 4; 
+                                    $diaCont = date('d'    , strtotime("+$nDias days"));
+                                    $verif   = date('Y-m-d', strtotime("+$nDias days")); ?>
+                                  <p style="font-size: 24px"><?php if($semana == 4){ $matriz[$nDias] = 'agendar'. strval($nDias); echo $diaCont; $nDias = $nDias + 1; } ?></p>
+                                  <p style="font-size: 12px; text-align: center"> <?php  
+                                    $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA = :hoje");
+                                    $fila->bindParam(':hoje', $verif, PDO::PARAM_STR); $fila->execute();
+                                    $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
+                                    if(!empty($rowFila['DATA_AGENDA'])){
+                                      if($verif == $rowFila['DATA_AGENDA']){ ?>
+                                        <input type="checkbox" class="btn-check">
+                                        <label class="btn btn-outline-warning" for="">OCUPADO</label><?php }
+                                        else if($verif != $rowFila['DATA_AGENDA']){ ?>
+                                          <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                          <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php  }
+                                      } else { ?> <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                                  <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php } ?>  
+                                  </p>
+                                </td>
+                                <td style="width: 10%; "> <?php $semana  = 5;
+                                    $diaCont = date('d'    , strtotime("+$nDias days"));
+                                    $verif   = date('Y-m-d', strtotime("+$nDias days")); ?>
+                                  <p style="font-size: 24px"><?php if($semana == 5){ $matriz[$nDias] = 'agendar'. strval($nDias); echo $diaCont; $nDias = $nDias + 1; } ?></p>
+                                  <p style="font-size: 12px; text-align: center"> <?php  
+                                    $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA = :hoje");
+                                    $fila->bindParam(':hoje', $verif, PDO::PARAM_STR); $fila->execute();
+                                    $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
+                                    if(!empty($rowFila['DATA_AGENDA'])){
+                                      if($verif == $rowFila['DATA_AGENDA']){ ?>
+                                        <input type="checkbox" class="btn-check">
+                                        <label class="btn btn-outline-warning" for="">OCUPADO</label><?php }
+                                        else if($verif != $rowFila['DATA_AGENDA']){ ?>
+                                          <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                          <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php }
+                                      } else { ?> <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                                  <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php } ?>  
+                                  </p>
+                                </td>
+                                <td style="width: 10%; "> <?php $semana  = 6;
+                                    $diaCont = date('d'    , strtotime("+$nDias days"));
+                                    $verif   = date('Y-m-d', strtotime("+$nDias days")); ?>
+                                  <p style="font-size: 24px"><?php if($semana == 6){ $matriz[$nDias] = 'agendar'. strval($nDias); echo $diaCont; $nDias = $nDias + 1; } ?></p>
+                                  <p style="font-size: 12px; text-align: center"> <?php  
+                                    $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA = :hoje");
+                                    $fila->bindParam(':hoje', $verif, PDO::PARAM_STR); $fila->execute();
+                                    $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
+                                    if(!empty($rowFila['DATA_AGENDA'])){
+                                      if($verif == $rowFila['DATA_AGENDA']){ ?>
+                                        <input type="checkbox" class="btn-check">
+                                        <label class="btn btn-outline-warning" for="">OCUPADO</label><?php }
+                                        else if($verif != $rowFila['DATA_AGENDA']){ ?>
+                                          <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                          <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php  }
+                                      } else { ?> <input type="checkbox" class="btn-check" id="<?php echo $matriz[$nDias];?>" name="<?php echo $matriz[$nDias];?>" onchange="this.form.submit()" autocomplete="on">
+                                                  <label class="btn btn-outline-success" for="<?php echo $matriz[$nDias];?>">AGENDAR</label><?php }  ?>  
+                                  </p>
+                                </td>                                     
+                              </tr><?php
+                            }
+                          ?>
+                        </form>
+                      </tbody>
+                    </table>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-                  <form action="" method="POST">
-                    <div class="row g-4">
-                      <div class="col-md-3">
-                      <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#fila" style="width: 180px; height: 80px">Fila de Produção</button>
-                      </div>
-                      <!-- Modal -->
-                      <div class="modal fade" id="fila" tabindex="-1" aria-labelledby="filaLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="filaLabel">Fila de ocupação da planta de fabricação</h1><br>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body" style="height: 575px">
-                              <h6><?php $nDias = 30; echo 'Cronograma: de ' . date('d/m/Y') . ' até dia ' .
-                                                     date('d/m/Y', strtotime("+$nDias days")); ?>
-                              </h6>
-                              <div class="row g-4">
-                                <div class="overflow-auto">
-                                  <table class="table table-dark table-hover">
-                                    <thead style="font-size: 14px">
-                                      <tr>
-                                        <th scope="col" style="width: 10%; color: gray; text-align: center;">Data</th>
-                                        <th scope="col" style="width: 10%; color: gray; text-align: center;">Situação</th>
-                                        <th scope="col" style="width: 20%; color: gray; text-align: center;">No.Lote</th>
-                                        <th scope="col" style="width: 60%; color: gray;">Produto / Cliente</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody style="height: 30%; font-size: 14px;">
-                                      <?php $semana = array("Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab");
-                                        for($i = 0; $i <= 30; $i++ ){
-                                          $verif = date('Y-m-d', strtotime("+$i days"));
-                                          $dia   = date('d/m', strtotime("+$i days"));
-                                      ?>
-                                      <tr>
-                                        <th style="width: 12%; text-align: center">
-                                          <?php echo $dia . ' [ ' . $semana[date('w', strtotime("+$i days"))] . ' ]' ?></th>
-                                        <td style="width: 12%; text-align: center;">
-                                          <?php
-                                            $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA = :hoje");
-                                            $fila->bindParam(':hoje', $verif, PDO::PARAM_STR);
-                                            $fila->execute();
-                                            $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
-                                            if(!empty($rowFila['DATA_AGENDA'])){
-                                              if($verif == $rowFila['DATA_AGENDA']){ echo 'OCUPADO';}else{ echo '';}
-                                            }
-                                          ?>
-                                        </td>
-                                        <td style="width: 16%; text-align: center;">
-                                          <?php
-                                            if(!empty($rowFila['DATA_AGENDA'])){
-                                              if($verif == $rowFila['DATA_AGENDA']){ echo 'No.Lote';}else{ echo '';}
-                                            }
-                                          ?>
-                                        </td>
-                                        <td style="width: 60%;"></td>                                    
-                                      </tr><?php } ?>
-                                    </tbody>
-                                  </table>
-                                </div>
-                              </div>                            
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                              <button type="button" class="btn btn-primary">Agendar</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-3">
-                        <label for="dataEntrega" class="form-label" style="font-size: 10px; color:aqua">Data Reservada na Fila</label>
-                        <input style="font-size: 17px; width: 150px" type="date" class="form-control" id="dataEntrega" name="dataEntrega">
-                      </div>
-                      <div class="col-md-3">
-                        <label for="dataEntrega" class="form-label" style="font-size: 10px; color:aqua">Data Estimada para Entrega</label>
-                        <input style="font-size: 17px; width: 150px" type="date" class="form-control" id="dataEntrega" name="dataEntrega">
-                      </div>
-                      <div class="col-md-3">
-                        <label for="dataPedido" class="form-label" style="font-size: 10px; color:aqua">Data do Pedido</label>
-                        <input style="font-size: 17px; width: 150px" type="date" class="form-control" id="dataPedido" name="dataPedido">
-                      </div>
-                      <div class="col-md-12">
-                        <label for="cliente" class="form-label" style="font-size: 10px; color:aqua">Cliente</label>
-                        <select style="font-size: 14px;" class="form-select" id="cliente" name="cliente" autofocus>
-                          <option style="font-size: 14px" selected>Selecione o Cliente</option>
-                            <?php
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" 
+                      aria-expanded="false" aria-controls="collapseFour">
+                Passo 4: Concluir pedido, confirmar e Salvar
+              </button>
+            </h2>
+            <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#FasesPedido">
+              <div class="accordion-body">
+                <div class="row g-4">
+                  <div class="col-md-3">
+                    <label for="dataEntrega" class="form-label" style="font-size: 10px; color:aqua">Data Reservada na Fila</label>
+                    <input style="font-size: 17px; width: 150px" type="date" class="form-control" id="dataEntrega" name="dataEntrega">
+                  </div>
+                  <div class="col-md-3">
+                    <label for="dataEntrega" class="form-label" style="font-size: 10px; color:aqua">Data Estimada para Entrega</label>
+                    <input style="font-size: 17px; width: 150px" type="date" class="form-control" id="dataEntrega" name="dataEntrega">
+                  </div>
+                  <div class="col-md-3">
+                    <label for="dataPedido" class="form-label" style="font-size: 10px; color:aqua">Data do Pedido</label>
+                    <input style="font-size: 17px; width: 150px" type="date" class="form-control" id="dataPedido" name="dataPedido">
+                  </div>
+                  <div class="col-md-12">
+                    <label for="cliente" class="form-label" style="font-size: 10px; color:aqua">Cliente</label>
+                    <select style="font-size: 14px;" class="form-select" id="cliente" name="cliente" autofocus>
+                      <option style="font-size: 14px" selected>Selecione o Cliente</option>
+                        <?php
                             // inclui nome dos produtos como opções de seleção da tag <select>
                               while($cliente = $query_customer->fetch(PDO::FETCH_ASSOC)){?>
                                 <option style="font-size: 14px"><?php echo $cliente['RAZAO_SOCIAL']; ?></option> <?php
                               }?>
                           </select>
                       </div>
-
-                      <div class="col-md-2" style="padding: 3px">
-                        <input style="width: 140px;" class="btn btn-primary" type="submit" id="salvar2" name="salvar2" value="Salvar">
-                      </div>
-                      <div class="col-md-3" style="padding: 3px">
-                        <input style="width: 140px;" class="btn btn-secondary" type="reset" id="reset2" name="reset2" value="Descartar"
-                               onclick="location.href='./20EntradaMaterial.php'">
-                      </div>
-                    </div> 
-                  </form>
-                </div>
+                </div> 
               </div>
             </div>
-          </div>          
-      </div>    
+          </div>
+        </div>
+      </div>
+ 
 <!---- Novo Cliente ----------------------------------------------------------------------------------------------------------------------------------------------------->  
       <div class="tab-pane fade" id="newClient-tab-pane" role="tabpanel" aria-labelledby="newClient-tab" tabindex="0">
         <form class="row g-4" method="POST" action="#" id="cadastroCliente">
@@ -424,59 +574,59 @@ if(!empty($confirma['descrProd'])){
       </div>
 
 <!----- Novo Produto ---------------------------------------------------------------------------------------------------------------------------------------------------->  
-        <div class="tab-pane fade" id="newProd-tab-pane" role="tabpanel" aria-labelledby="newProd-tab" tabindex="0">
-          <form class="row g-4" method="POST" action="#">
+      <div class="tab-pane fade" id="newProd-tab-pane" role="tabpanel" aria-labelledby="newProd-tab" tabindex="0">
+        <form class="row g-4" method="POST" action="#">
 
-              <div class="col-md-4">
-                <label for="nomeProduto" class="form-label" style="font-size: 10px; color:aqua">Nome Fantasia do Produto</label>
-                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="nomeProduto" name="nomeProduto" 
-                       placeholder="" autofocus>
-              </div>
-              <div class="col-md-8">
-                <label for="descrProduto" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
-                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="descrProduto" name="descrProduto" 
-                       placeholder="" required>
-              </div>
+          <div class="col-md-4">
+            <label for="nomeProduto" class="form-label" style="font-size: 10px; color:aqua">Nome Fantasia do Produto</label>
+            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="nomeProduto" name="nomeProduto" 
+                  placeholder="" autofocus>
+          </div>
+          <div class="col-md-8">
+            <label for="descrProduto" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
+            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="descrProduto" name="descrProduto" 
+                  placeholder="" required>
+          </div>
 
-              <div class="col-md-8">
-                <label for="matComp" class="form-label" style="font-size: 10px; color:aqua">Material de Composição 1</label>
-                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="matComp" name="matComp" 
-                       placeholder="" required>
-              </div>
-              <div class="col-md-2">
-                <label for="proporcao" class="form-label" style="font-size: 10px; color:aqua">Proporção na Composição [ % ]</label>
-                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="proporcao" name="proporcao" 
-                       placeholder="" required>
-              </div>
-              <div class="col-md-2">
-                <label for="uniMed" class="form-label" style="font-size: 10px; color:aqua">Unidade de Media</label>
-                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="uniMed" name="uniMed" 
-                       placeholder="" required>
-              </div>
+          <div class="col-md-8">
+            <label for="matComp" class="form-label" style="font-size: 10px; color:aqua">Material de Composição 1</label>
+            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="matComp" name="matComp" 
+                  placeholder="" required>
+          </div>
+          <div class="col-md-2">
+            <label for="proporcao" class="form-label" style="font-size: 10px; color:aqua">Proporção na Composição [ % ]</label>
+            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="proporcao" name="proporcao" 
+                  placeholder="" required>
+          </div>
+          <div class="col-md-2">
+            <label for="uniMed" class="form-label" style="font-size: 10px; color:aqua">Unidade de Media</label>
+            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="uniMed" name="uniMed" 
+                  placeholder="" required>
+          </div>
 
-              <div class="col-md-2">
-                <label for="capProcess" class="form-label" style="font-size: 10px; color:aqua">Capacidade de Processamento</label>
-                <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="capProcess" name="capProcess" 
-                       placeholder="" required>
-              </div>
+          <div class="col-md-2">
+            <label for="capProcess" class="form-label" style="font-size: 10px; color:aqua">Capacidade de Processamento</label>
+            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="capProcess" name="capProcess" 
+                  placeholder="" required>
+          </div>
 
-              <div class="col-md-1">
-              </div>
-              <div class="col-md-9">
-                <textarea name="observacoes" id="observacoes" style="width: 100%; height: 100px">Observações</textarea>
-              </div>
+          <div class="col-md-1">
+          </div>
+          <div class="col-md-9">
+            <textarea name="observacoes" id="observacoes" style="width: 100%; height: 100px">Observações</textarea>
+          </div>
 
-              <br>
-              <div class="col-md-2" style="padding: 3px; text-align: center">
-                <input style="width: 140px;" class="btn btn-primary" type="submit" id="salvar3" name="salvar3" value="Salvar">
-              </div>
-              <br>
-              <div class="col-md-2" style="padding: 3px; text-align: center">
-                <input style="width: 140px;" class="btn btn-secondary" type="reset" id="reset3" name="reset3" value="Descartar"
-                       onclick="location.href='./30EntradaPedido.php'">
-              </div>
-            </form>
-        </div>
+          <br>
+          <div class="col-md-2" style="padding: 3px; text-align: center">
+            <input style="width: 140px;" class="btn btn-primary" type="submit" id="salvar3" name="salvar3" value="Salvar">
+          </div>
+          <br>
+          <div class="col-md-2" style="padding: 3px; text-align: center">
+            <input style="width: 140px;" class="btn btn-secondary" type="reset" id="reset3" name="reset3" value="Descartar"
+                  onclick="location.href='./30EntradaPedido.php'">
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>
