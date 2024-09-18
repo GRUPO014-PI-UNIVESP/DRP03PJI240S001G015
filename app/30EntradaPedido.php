@@ -9,83 +9,16 @@ include_once './RastreadorAtividades.php';
 $responsavel = $_SESSION['nome_func'];
 
 //Pesquisa por CLIENTES para seleção
-$query_customer = $connDB->prepare("SELECT RAZAO_SOCIAL FROM pf_cliente");
+$query_customer = $connDB->prepare("SELECT NOME_FANTASIA FROM pf_cliente");
 $query_customer->execute();
 
 //Pesquisa de descrição do PRODUTO para seleção
-$query_produto = $connDB->prepare("SELECT DESCRICAO_PF FROM pf_tabela");
+$query_produto = $connDB->prepare("SELECT NOME_FANTASIA FROM pf_tabela");
 $query_produto->execute();
 
 $descrProd = ''; $qtdeLote = ''; $verify1 = '';
 
-/* capta dados do formulário
-$confirma = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
-//verifica se foi preenchido formulário de entrada de material já existente no banco de dados
-
-if(!empty($confirma['descrProd'])){
-
-  // atribui valores em conformidade com banco de dados
-  $dataPedido = date('Y-m-d', strtotime($confirma['dataPedido']));
-  $dataFabr   = date('Y-m-d', strtotime($confirma['dataFabr']));
-  $dataVali   = date('Y-m-d', strtotime($confirma['dataVali']));
-  $lote = strtoupper($confirma['numLote']);
-  
-  // ordem de inserção de dados
-  $salvar1 = $connDB->prepare("INSERT INTO pf_pedido (DATA_PEDIDO, CLIENTE, DESCRICAO_PF, NUMERO_LOTE_PF, DATA_FABRICACAO, DATA_VALIDADE,
-                                                      QTDE_LOTE_PF, UNIDADE_MEDIDA, NOTA_FISCAL_PF, RESPONSAVEL_REGISTRO)
-                               VALUES (:dataPedido, :cliente, :descrProduto, :numLote, :dataFabr, :dataVali, :qtdeLote, :uniMed, :notaF, :responsavel)");
-  $salvar1->bindParam(':dataPedido'  , $dataPedido              , PDO::PARAM_STR);
-  $salvar1->bindParam(':cliente'     , $confirma['cliente']     , PDO::PARAM_STR);
-  $salvar1->bindParam(':descrProduto', $confirma['descrProduto'], PDO::PARAM_STR);
-  $salvar1->bindParam(':numLote'     , $lote                    , PDO::PARAM_STR);
-  $salvar1->bindParam(':dataFabr'    , $dataFabr                , PDO::PARAM_STR);
-  $salvar1->bindParam(':dataVali'    , $dataVali                , PDO::PARAM_STR);
-  $salvar1->bindParam(':qtdeLote'    , $confirma['qtdeLote']    , PDO::PARAM_INT);
-  $salvar1->bindParam(':uniMed'      , $confirma['uniMed']      , PDO::PARAM_STR);
-  $salvar1->bindParam(':notaF'       , $confirma['notaFiscal']  , PDO::PARAM_STR);
-  $salvar1->bindParam(':responsavel' , $responsavel             , PDO::PARAM_STR);
-  $salvar1->execute();
-
-  //redireciona para início 
-  header('Location: ./30EntradaPedido.php');
-
-  //verifica se foi feito o cadastramento de novo material
-} else if(!empty($confirma['salvar2'])){
-
-  $dataPedido    = date('Y-m-d', strtotime($confirma['dataEntr2']));
-  $dataFabr2     = date('Y-m-d', strtotime($confirma['dataFabr2']));
-  $dataVali2     = date('Y-m-d', strtotime($confirma['dataVali2']));
-  $lote2         = strtoupper($confirma['numLote2']);
-  $cliente2      = strtoupper($confirma['cliente2']);
-  $descrProduto2 = strtoupper($confirma['descrProduto2']);
-  
-  $salvar2      = $connDB->prepare("INSERT INTO pf_pedido (DATA_PEDIDO, CLIENTE, DESCRICAO_PF, NUMERO_LOTE_PF, DATA_FABRICACAO,
-                                                           DATA_VALIDADE, QTDE_LOTE_PF, UNIDADE_MEDIDA, NOTA_FISCAL_PF, RESPONSAVEL_REGISTRO)
-                                    VALUES (:dataPedido, :cliente, :descrProduto, :numLote, :dataFabr, :dataVali, :qtdeLote, :uniMed, :notaF, :responsavel)");
-  $salvar2->bindParam(':dataPedido'  , $dataPedido             , PDO::PARAM_STR);
-  $salvar2->bindParam(':cliente'     , $cliente2               , PDO::PARAM_STR);
-  $salvar2->bindParam(':descrProduto', $descrProduto2          , PDO::PARAM_STR);
-  $salvar2->bindParam(':numLote'     , $confirma['numLote2']   , PDO::PARAM_STR);
-  $salvar2->bindParam(':dataFabr'    , $dataFabr2              , PDO::PARAM_STR);
-  $salvar2->bindParam(':dataVali'    , $dataVali2              , PDO::PARAM_STR);
-  $salvar2->bindParam(':qtdeLote'    , $confirma['qtdeLote2']  , PDO::PARAM_STR);
-  $salvar2->bindParam(':uniMed'      , $confirma['uniMed2']    , PDO::PARAM_STR);
-  $salvar2->bindParam(':notaF'       , $confirma['notaFiscal2'], PDO::PARAM_STR);
-  $salvar2->bindParam(':responsavel' , $responsavel            , PDO::PARAM_STR);
-  $salvar2->execute();
-
-  $saveFornecedor = $connDB->prepare("INSERT INTO pf_cliente (RAZAO_SOCIAL) VALUES (:cliente)");
-  $saveFornecedor->bindParam(':cliente', $cliente2, PDO::PARAM_STR);
-  $saveFornecedor->execute();
-
-  $saveMP = $connDB->prepare("INSERT INTO pf_tabela (CLIENTE, DESCRICAO_PF) VALUES (:cliente, :descrProduto)");
-  $saveMP->bindParam(':cliente'     , $cliente2     , PDO::PARAM_STR);
-  $saveMP->bindParam(':descrProduto', $descrProduto2, PDO::PARAM_STR);
-  $saveMP->execute();
-
-  header('Location: ./30EntradaPedido.php');
-}*/
 ?>
 <script>
 // verifica inatividade da página e fecha sessão
@@ -144,13 +77,13 @@ if(!empty($confirma['descrProd'])){
                       <input style="font-size: 14px; text-align:right" type="number" class="form-control" id="qtdeLote" name="qtdeLote" required autofocus>
                     </div>
                     <div class="col-md-9">
-                      <label for="descrProd" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
-                      <select style="font-size: 14px;" class="form-select" id="descrProd" name="descrProd" autofocus>
+                      <label for="nomeFantasia" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
+                      <select style="font-size: 14px;" class="form-select" id="nomeFantasia" name="nomeFantasia" autofocus>
                         <option style="font-size: 14px" selected>Selecione o Produto</option>
                           <?php
                             // inclui nome dos produtos como opções de seleção da tag <select>
                             while($produto = $query_produto->fetch(PDO::FETCH_ASSOC)){?>
-                              <option style="font-size: 14px"><?php echo $produto['DESCRICAO_PF']; ?></option> <?php
+                              <option style="font-size: 14px"><?php echo $produto['NOME_FANTASIA']; ?></option> <?php
                             }?>
                       </select>
                     </div>
@@ -177,17 +110,17 @@ if(!empty($confirma['descrProd'])){
               <div class="accordion-body">
                 <div class="row g-4"> <?php $busca = filter_input_array(INPUT_POST, FILTER_DEFAULT);
                   if(!empty($busca['carregar'])){
-                    $descrProd = $busca['descrProd']; $qtdeLote = $busca['qtdeLote'];?>
+                    $nomeFantasia = $busca['nomeFantasia']; $qtdeLote = $busca['qtdeLote'];?>
                     <div class="col-md-9">
-                      <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
-                      <input style="font-size: 14px;" type="text" class="form-control" id="descrProd" name="descrProd" value="<?php echo $descrProd ?>" readonly>
+                      <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Nome do Produto</label>
+                      <input style="font-size: 14px;" type="text" class="form-control" id="nomeFantasia" name="nomeFantasia" value="<?php echo $nomeFantasia ?>" readonly>
                     </div>
                     <div class="col-md-3">
                       <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Quantidade do Pedido</label>
                       <input style="font-size: 14px; text-align:right" type="text" class="form-control" id="qtdeLote" name="qtdeLote" value="<?php echo $qtdeLote . ' Kg' ?>" readonly>
                     </div><?php
                   }
-                  if(isset($busca['carregar'])){ $prod = $busca['descrProd'];
+                  if(isset($busca['carregar'])){ $prod = $busca['nomeFantasia'];
                     $componente = $connDB->prepare("SELECT * FROM composicao_produto WHERE DESCRICAO_PRODUTO = :prod");
                     $componente->bindParam(':prod', $prod, PDO::PARAM_STR); $componente->execute();
                   }
@@ -302,7 +235,7 @@ if(!empty($confirma['descrProd'])){
                         <form id="calendario" method="POST" action="#"> <?php  $diaSemana = date('w'); 
                                                                             $nDias = 1; $vDias = 0;
                                                                             $verificaDataOcupada = date('Y-m-d');
-                                                                            $diaCal = date('d');
+                                                                            $diaCal = date('d/m');
                           for($i = 1; $i <= 5; $i++){ ?><!-- Recursão para => 1: Sem-1, 2: Sem-2, 3: Sem-3, 4: Sem-4, 5: Sem-5.-->
                             <tr> <?php
                               for($j = 0; $j <=6; $j++){ ?><!-- Recursão para => 0: domingo, 1: segunda, 2: terça, 3: quarta, 4: quinta, 5: sexta, 6: sabado. -->
@@ -315,7 +248,7 @@ if(!empty($confirma['descrProd'])){
                                     <p style="font-size: 24px; "><?php echo $diaCal; ?> </p><?php
                                       $diaSemana           = date('w'    , strtotime("+$nDias days"));
                                       $verificaDataOcupada = date('Y-m-d', strtotime("+$vDias days"));
-                                      $diaCal              = date('d'    , strtotime("+$nDias days"));
+                                      $diaCal              = date('d/m'    , strtotime("+$nDias days"));
                                       $nDias               = $nDias + 1; $vDias = $vDias +1; ?>
                                     <p style="font-size: 12px; text-align: center"> <?php  
                                       $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA = :hoje");
@@ -372,7 +305,7 @@ if(!empty($confirma['descrProd'])){
                       <option style="font-size: 14px" selected>Selecione o Cliente</option><?php
                         // inclui nome dos produtos como opções de seleção da tag <select>
                         while($cliente = $query_customer->fetch(PDO::FETCH_ASSOC)){?>
-                          <option style="font-size: 14px"> <?php echo $cliente['RAZAO_SOCIAL']; ?></option> <?php
+                          <option style="font-size: 14px"> <?php echo $cliente['NOME_FANTASIA']; ?></option> <?php
                         }?>
                     </select>
                   </div>
@@ -387,8 +320,8 @@ if(!empty($confirma['descrProd'])){
       <div class="tab-pane fade" id="newClient-tab-pane" role="tabpanel" aria-labelledby="newClient-tab" tabindex="0">
         <form class="row g-4" method="POST" action="#" id="cadastroCliente">
           <div class="col-md-4">
-            <label for="cliente2" class="form-label" style="font-size: 10px; color:aqua">Nome Fantasia da Empresa</label>
-            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cliente2" name="cliente2" 
+            <label for="fantasia" class="form-label" style="font-size: 10px; color:aqua">Nome Fantasia da Empresa</label>
+            <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="fantasia" name="fantasia" 
                    placeholder="" required>
           </div>
           <div class="col-md-8">
@@ -403,7 +336,7 @@ if(!empty($confirma['descrProd'])){
                    placeholder="" required>
           </div>
           <div class="col-md-2">
-            <label for="inscrEstadual" class="form-label" style="font-size: 10px; color:aqua">I.E.</label>
+            <label for="inscrEstadual" class="form-label" style="font-size: 10px; color:aqua">Inscrição Estadual</label>
             <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="inscrEstadual" name="inscrEstadual" 
                    placeholder="" required>
           </div>
@@ -447,10 +380,30 @@ if(!empty($confirma['descrProd'])){
           </div>
         </form>
       </div>
-
+<?php
+$cadCliente = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+if(!empty($cadCliente['salvar2'])){
+  $query_clienteNovo = $connDB->prepare("INSERT INTO pf_cliente (NOME_FANTASIA, RAZAO_SOCIAL, CNPJ, INSCR_ESTADUAL, CIDADE, ESTADO,
+                                                                        ENDERECO, TELEFONE, EMAIL, REPRESENTANTE) 
+                                                       VALUES (:fantasia, :razaoSocial, :cnpj, :inscrEstadual, :cidade, :estado,
+                                                               :endereco, :telefone, :email, :representante)");
+  $query_clienteNovo->bindParam(':fantasia'     , $cadCliente['fantasia']         , PDO::PARAM_STR);
+  $query_clienteNovo->bindParam(':razaoSocial'  , $cadCliente['razaoSocial']      , PDO::PARAM_STR);
+  $query_clienteNovo->bindParam(':cnpj'         , $cadCliente['cnpj']             , PDO::PARAM_STR);
+  $query_clienteNovo->bindParam(':inscrEstadual', $cadCliente['inscrEstadual']    , PDO::PARAM_STR);
+  $query_clienteNovo->bindParam(':cidade'       , $cadCliente['cidade']           , PDO::PARAM_STR);
+  $query_clienteNovo->bindParam(':estado'       , $cadCliente['estado']           , PDO::PARAM_STR);
+  $query_clienteNovo->bindParam(':endereco'     , $cadCliente['endereco']         , PDO::PARAM_STR);
+  $query_clienteNovo->bindParam(':telefone'     , $cadCliente['telefone']         , PDO::PARAM_STR);
+  $query_clienteNovo->bindParam(':email'        , $cadCliente['email']            , PDO::PARAM_STR);
+  $query_clienteNovo->bindParam(':representante', $cadCliente['nomeRepresentante'], PDO::PARAM_STR);
+  $query_ClienteNovo->execute();
+  header('Location: ./30EntradaPedido.php');                                          
+}
+?>
 <!----- Novo Produto ---------------------------------------------------------------------------------------------------------------------------------------------------->  
       <div class="tab-pane fade" id="newProd-tab-pane" role="tabpanel" aria-labelledby="newProd-tab" tabindex="0">
-        <form class="row g-4" method="POST" action="#">
+        <form class="row g-4" method="POST" action="#" id="cadastroProduto">
 
           <div class="col-md-4">
             <label for="nomeProduto" class="form-label" style="font-size: 10px; color:aqua">Nome Fantasia do Produto</label>
@@ -501,6 +454,24 @@ if(!empty($confirma['descrProd'])){
                   onclick="location.href='./30EntradaPedido.php'">
           </div>
         </form>
+<?php
+$cadProdutoNovo = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+if(!empty($cadProdutoNovo['salvar3'])){
+  $query_produtoNovo = $connDB->prepare("INSERT INTO pf_tabela (NOME_PRODUTO, DESCRICAO_PRODUTO, MATERIAL_COMPONENTE,
+                                                                       PROPORCAO_MATERIAL, UNIDADE_MEDIDA, CAPACIDADE_PROCESS, OBSERVACOES) 
+                                                       VALUES (:nomeProduto, :descrProduto, :materialComponente, :proporcao, :unidade,
+                                                               :capacidade, :observacoes)");
+  $query_clienteNovo->bindParam(':nomeProduto'       , $cadProdutoNovo['nomeProduto'] , PDO::PARAM_STR);
+  $query_clienteNovo->bindParam(':descrProduto'      , $cadProdutoNovo['descrProduto'], PDO::PARAM_STR);
+  $query_clienteNovo->bindParam(':materialComponente', $cadProdutoNovo['matComp']     , PDO::PARAM_STR);
+  $query_clienteNovo->bindParam(':proporcao'         , $cadProdutoNovo['proporcao']   , PDO::PARAM_STR);
+  $query_clienteNovo->bindParam(':unidade'           , $cadProdutoNovo['uniMed']      , PDO::PARAM_STR);
+  $query_clienteNovo->bindParam(':capacidade'        , $cadProdutoNovo['capProcess']  , PDO::PARAM_STR);
+  $query_clienteNovo->bindParam(':observacoes'       , $cadProdutoNovo['observacoes']  , PDO::PARAM_STR);
+  $query_ClienteNovo->execute();
+  header('Location: ./30EntradaPedido.php');                                          
+}
+?>
       </div>
     </div>
   </div>
