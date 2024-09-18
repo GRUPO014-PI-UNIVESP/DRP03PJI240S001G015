@@ -18,7 +18,6 @@ $query_produto->execute();
 
 $descrProd = ''; $qtdeLote = ''; $verify1 = '';
 
-
 /* capta dados do formulário
 $confirma = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
@@ -200,24 +199,65 @@ if(!empty($confirma['descrProd'])){
                             <th scope="col" style="width: 30%; color: gray">Descrição do Material</th>
                             <th scope="col" style="width: 10%; color: gray; text-align: center;">Qtde Necessária</th>
                             <th scope="col" style="width: 10%; color: gray; text-align: center;">Qtde Disponível</th>
-                            <th scope="col" style="width: 15%; color: gray; text-align: center;">Condição do Estoque</th>
+                            <th scope="col" style="width: 10%; color: gray; text-align: center;">Condição do Estoque</th>
+                            <th scope="col" style="width: 10%; color: gray; text-align: center;">Ação</th>
                           </tr>
                         </thead>
                         <tbody style="height: 30%; font-size: 11px;"><?php 
                           while($rowCpt = $componente->fetch(PDO::FETCH_ASSOC)){
                             // verifica o total em estoque do material e quantidade reservada por outros pedidos para calcular a disponibilidade
                             $estoque = $connDB->prepare("SELECT SUM(QTDE_ESTOQUE) AS estoque FROM mp_estoque WHERE DESCRICAO_MP = :material");
-                            $estoque->bindParam(':material', $rowCpt['COMPONENTE'], PDO::PARAM_STR); $estoque->execute(); $result1 = $estoque->fetch(PDO::FETCH_ASSOC);
+                            $estoque->bindParam(':material', $rowCpt['COMPONENTE'], PDO::PARAM_STR); $estoque->execute(); 
+                            $result1 = $estoque->fetch(PDO::FETCH_ASSOC);
+
                             $reservado = $connDB->prepare("SELECT SUM(QTDE_RESERVADA) AS reservado FROM mp_estoque WHERE DESCRICAO_MP = :material");
-                            $reservado->bindParam(':material', $rowCpt['COMPONENTE'], PDO::PARAM_STR); $reservado->execute(); $result2 = $reservado->fetch(PDO::FETCH_ASSOC);
+                            $reservado->bindParam(':material', $rowCpt['COMPONENTE'], PDO::PARAM_STR); $reservado->execute(); 
+                            $result2 = $reservado->fetch(PDO::FETCH_ASSOC);
+
+                            $matNecessario = $busca['qtdeLote'] * ($rowCpt['PROPORCAO'] / 100);
+
                             $disponivel = $result1['estoque'] - $result2['reservado'];
-                            if($disponivel > $busca['qtdeLote']){ $barra = 'background-color: green; color: yellow;'; $disp = 'Disponível'; $insuficiente = 0;
-                            } else if($disponivel < $busca['qtdeLote']){ $barra = 'background-color: orange; color: red;'; $disp = 'Insuficiente'; $insuficiente = 1;}?>
+                            if($disponivel > $matNecessario){ 
+                              $barra = 'class="btn btn-success"'; 
+                              $disp = 'Disponível'; 
+                              $insuficiente = 0;
+                            } else if($disponivel < $matNecessario){ 
+                              $barra = 'class="btn btn-danger"'; 
+                              $disp = 'Insuficiente'; $id = $rowCpt['COMPONENTE'];
+                              $insuficiente = 1;}?>
                             <tr>
-                              <th style="width: 30%;"><?php echo $rowCpt['COMPONENTE'] . '<br>'; echo '[ Proporção: ' . $rowCpt['PROPORCAO']  . ' % ]'; ?></th>
-                              <td style="width: 10%; text-align: center; font-size: 16px; font-weight: bold;"><?php $proporcao = ($busca['qtdeLote']) * ($rowCpt['PROPORCAO'] / 100); echo $proporcao . ' ' . $rowCpt['UNIDADE_MEDIDA']; ?></td>
-                              <td style="width: 10%; text-align: center; font-size: 16px; font-weight: bold;"><?php echo $disponivel . ' ' . $rowCpt['UNIDADE_MEDIDA']; ?></td>
-                              <td style="width: 15%; text-align: center; font-size: 16px; vertical-align: middle"><p style="width: 100%; height: 30px; border-radius: 6px; font-weight: bold; <?php echo $barra ?>"><?php echo $disp ?></p></td>                                    
+                              <td style="width: 30%;"><?php 
+                                echo $rowCpt['COMPONENTE'] . '<br>'; 
+                                echo '[ Proporção: ' . $rowCpt['PROPORCAO']  . ' % ]'; ?>
+                              </td>
+                              <td style="width: 10%; text-align: center; font-size: 16px; font-weight: bold;"><?php 
+                                $proporcao = ($busca['qtdeLote']) * ($rowCpt['PROPORCAO'] / 100); 
+                                echo $proporcao . ' ' . $rowCpt['UNIDADE_MEDIDA']; ?>
+                              </td>
+                              <td style="width: 10%; text-align: center; font-size: 16px; font-weight: bold;"><?php 
+                                echo $disponivel . ' ' . $rowCpt['UNIDADE_MEDIDA']; ?>
+                              </td>
+                              <td style="text-align:center" >
+                                <button <?php echo $barra ?> style="color: yellow"  disabled><?php echo $disp ?></button>
+                              </td>
+                              <td style="text-align:center" > <?php
+                                if($disp == 'Disponível'){ ?>
+                                  <button class="btn btn-secondary" disabled>Comprar</button> <?php
+                                }
+                                if($disp == 'Insuficiente'){
+                                  //algoritmo provisório para estabelecer uma rotina de trabalho
+                                  $condCompra = 'COMPRADO';
+                                  $dHoje = date('Y-m-d', strtotime("+5 days"));
+                                  $query_buy = $connDB->prepare("INSERT INTO mp_estoque (DESCRICAO_MP, DATA_ENTRADA, SITUACAO_QUALI) 
+                                                                        VALUES (:descricao, :dataEntrada, :situacao)");
+                                  $query_buy->bindParam(':descricao'  , $rowCpt['COMPONENTE'], PDO::PARAM_STR);
+                                  $query_buy->bindParam(':dataEntrada', $dHoje               , PDO::PARAM_STR);
+                                  $query_buy->bindParam(':situacao'   , $condCompra          , PDO::PARAM_STR);
+                                  $query_buy->execute(); 
+                                  // fim do algoritmo provisório ?>
+                                  <button class="btn btn-warning" disabled>Comprar</button> <?php 
+                                } ?>
+                              </td>                                   
                             </tr><?php 
                           } ?>
                         </tbody>
