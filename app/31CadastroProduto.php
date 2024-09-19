@@ -32,7 +32,7 @@ $responsavel = $_SESSION['nome_func'];
 </script>
 <!-- Área Principal -->
 <div class="main">
-  < class="container-fluid"><br> 
+  <div class="container-fluid"><br> 
     <h5>Cadastro de Novo Produto</h5>         
     <form method="POST" action="#" id="cadastroProduto">
       <div class="row g-1">
@@ -55,24 +55,45 @@ $responsavel = $_SESSION['nome_func'];
           <table class="table table-dark table-hover">
             <thead style="font-size: 12px">
               <tr>
-                <th scope="col" style="width: 10%">Descrição do Material</th>
-                <th scope="col" style="width: 10%">Proporção (%)</th>
-                <th scope="col" style="width: 10%">Unidade</th>
-                <th scope="col" style="width: 10%">Capacidade de Processamento</th>
+                <th scope="col" style="width: 40%; text-align: center">Descrição do Material</th>
+                <th scope="col" style="width: 10%; text-align: center">Proporção (%)</th>
+                <th scope="col" style="width: 10%; text-align: center">Unidade</th>
+                <th scope="col" style="width: 10%; text-align: center">Capacidade de Processamento</th>
               </tr>
             </thead>
-            <tbody style="height: 80%; font-size: 11px;">
-              <?php for($i = 0; $i < 10; $i++){ ?>
+            <tbody style="height: 80%; font-size: 11px;"> <?php 
+              for($i = 0; $i < 5; $i++){ ?>
                 <tr>
-                  <td scope="col" style="width: 10%">
-                    <input type="text" id="material" name="material" style="text-transform:uppercase">
+                  <td scope="col" style="width: 40%">
+                    <select style="font-size: 14px;" class="form-select" id="material" name="material">
+                      <option style="font-size: 14px" selected>Selecione o Material</option>
+                      <?php
+                        $query_material = $connDB->prepare("SELECT DESCRICAO_MP FROM mp_estoque");
+                        $query_material->execute();
+                        // inclui nome dos materiais como opções de seleção da tag <select>
+                        while($rowMaterial = $query_material->fetch(PDO::FETCH_ASSOC)){?>
+                          <option style="font-size: 14px"><?php echo $rowMaterial['DESCRICAO_MP']; ?></option> <?php
+                        }  ?>
+                    </select>
                   </td>
-                  <td style="width: 10%"></td>
-                  <td style="width: 10%"></td>
-                  <td style="width: 10%"></td>
-                  <td style="width: 40%"></td>
-                  <td style="width: 20%"></td>
-                </tr><?php } ?>
+                  <td scope="col" style="width: 10%">
+                    <input style="font-size: 12px;" type="number" class="form-control" 
+                      id="proporcao" name="proporcao">
+                  </td>
+                  <td scope="col" style="width: 10%">
+                    <select style="font-size: 14px;" class="form-select" id="uniMed" name="uniMed">
+                      <option value="" selected>Selecione</option>
+                      <option value="KG">KG</option>
+                      <option value="LT">LT</option>
+                      <option value="UN">Unidade</option>
+                    </select>
+                  </td>
+                  <td scope="col" style="width: 10%">
+                    <input style="font-size: 12px;" type="number" class="form-control" 
+                      id="capacidade" name="capacidade">
+                  </td>
+                </tr><?php 
+              } ?>
             </tbody>
           </table>
         </div>
