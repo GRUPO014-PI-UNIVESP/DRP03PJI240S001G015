@@ -61,13 +61,13 @@
             <div class="accordion" id="FasesPedido">
               <div class="row g-4">
                 <div class="col-md-4">
-                  <p>Registro de Pedido de Produto</p>
+                  <p style="color:aqua">Registro de Pedido de Produto</p>
                 </div>
                 <div class="col-md-4">
-                  <button class="btn btn-primary">Cadastro de Novo Cliente</button>
+                  <button class="btn btn-primary" style="float:right" onclick="location.href='./30CadastroCliente.php'">Cadastro de Novo Cliente</button>
                 </div>
                 <div class="col-md-4">
-                  <button class="btn btn-primary">Cadastro de Novo Produto</button>
+                  <button class="btn btn-primary" onclick="location.href='./31CadastroProduto.php'">Cadastro de Novo Produto</button>
                 </div>
               </div>
             <br>
@@ -150,7 +150,7 @@
                           </tr>
                         </thead>
 
-                        <tbody style="height: 30%; font-size: 11px;"><?php 
+                        <tbody style="height: 30%; font-size: 11px;"><?php $insuficiente = '';
                           while($rowCpt = $componente->fetch(PDO::FETCH_ASSOC)){
                             // verifica o total em estoque do material e quantidade reservada por outros pedidos para calcular a disponibilidade
                             $estoque = $connDB->prepare("SELECT SUM(QTDE_ESTOQUE) AS estoque FROM mp_estoque WHERE DESCRICAO_MP = :material");
@@ -212,7 +212,7 @@
                     </div><?php
                   } 
                   if($insuficiente == 1){ ?><div class="alert alert-warning" role="alert">Há componentes insuficientes para cobrir a quantidade necessária para produção! Faça a compra também.</div><?php
-                  } else { ?><div class="alert alert-success" role="alert">Tudo OK! Sem problemas com os materiais. </div><?php } ?> 
+                  } else { ?><div class="alert alert-success" role="alert">Tudo OK! As quantidades são satisfatórias. </div><?php } ?> 
                 </div><!-- fim da div class = row g-4 --> 
               </div><!-- fim da div class = accordion body -->
             </div><!-- fim da div class = collapse Two -->
