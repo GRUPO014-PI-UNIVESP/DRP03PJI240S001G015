@@ -21,7 +21,7 @@
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 300000);
+       time = setTimeout(deslogar, 3000000);
      }
   };
   inactivityTime();
@@ -61,7 +61,7 @@
             <div class="accordion" id="FasesPedido">
               <div class="row g-4">
                 <div class="col-md-4">
-                  <p style="color:aqua">Registro de Pedido de Produto</p>
+                  <p style="color:aqua; font-size: 24px">Registro de Pedido de Produto</p>
                 </div>
                 <div class="col-md-4">
                   <button class="btn btn-primary" style="float:right" onclick="location.href='./30CadastroCliente.php'">Cadastro de Novo Cliente</button>
