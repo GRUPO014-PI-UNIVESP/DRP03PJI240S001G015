@@ -169,7 +169,7 @@ $responsavel = $_SESSION['nome_func'];
       $query_clienteNovo->bindParam(':fixo'         , $telFixo      , PDO::PARAM_STR);
       $query_clienteNovo->bindParam(':representante', $representante, PDO::PARAM_STR);
       $query_clienteNovo->bindParam(':celular'      , $telCelular   , PDO::PARAM_STR);
-      $query_ClienteNovo->execute();
-      header('Location: ./30EntradaPedido.php');                                          
+      $query_clienteNovo->execute();
+      header('Location: ./30CadastroCliente.php');                                          
     } ?>
 </div>

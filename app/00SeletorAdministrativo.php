@@ -21,7 +21,7 @@
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 3000000);
+       time = setTimeout(deslogar, 300000);
      }
   };
   inactivityTime();
@@ -56,12 +56,12 @@
             <button type="button" class="btn btn-outline-info" style="width:300px" 
               onclick="location.href=''">Estrutura da Organização</button><br><br>
           </div>
-<!------- Rotina para recebimento de pedidos de produtos -->
+          <!-- Rotina para recebimento de pedidos de produtos -->
           <div class="tab-pane fade show active" id="prod-tab-pane" role="tabpanel" aria-labelledby="prod-tab" tabindex="0"><br>
             <div class="accordion" id="FasesPedido">
-              <div class="row g-4">
+              <div class="row g-2">
                 <div class="col-md-4">
-                  <p style="color:aqua; font-size: 24px">Registro de Pedido de Produto</p>
+                  <p style="color:aqua; font-size: 20px">Registro de Pedido de Produto</p>
                 </div>
                 <div class="col-md-4">
                   <button class="btn btn-primary" style="float:right" onclick="location.href='./30CadastroCliente.php'">Cadastro de Novo Cliente</button>
@@ -80,7 +80,7 @@
               <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#FasesPedido">
                 <div class="accordion-body">
                   <form action="" method="POST" id="carregar">
-                    <div class="row g-4">
+                    <div class="row g-2">
                       <div class="col-md-3">
                         <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Quantidade do Pedido</label>
                         <input style="font-size: 14px; text-align:right" type="number" class="form-control" id="qtdeLote" name="qtdeLote" required autofocus>
@@ -120,7 +120,7 @@
             </h2>
             <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#FasesPedido">
               <div class="accordion-body">
-                <div class="row g-4"> <?php 
+                <div class="row g-2"> <?php 
                   $busca = filter_input_array(INPUT_POST, FILTER_DEFAULT);
                   if(!empty($busca['carregar'])){
                     $nomeFantasia = $busca['nomeFantasia']; $qtdeLote = $busca['qtdeLote'];?>
@@ -226,7 +226,7 @@
             </h2>
             <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#FasesPedido">
               <div class="accordion-body">
-                <div class="row g-4">
+                <div class="row g-2">
                   <div class="overflow-auto"> <?php
                     $nDias = 31; $diaHoje = date('d/m/Y'); $diaMaxi = date('d/m/Y', strtotime("+$nDias days"));?>
                     <table class="table table-dark table-bordered table caption-top">
@@ -251,11 +251,11 @@
                             <tr> <?php
                               for($j = 0; $j <=6; $j++){ ?><!-- Recursão para => 0: domingo, 1: segunda, 2: terça, 3: quarta, 4: quinta, 5: sexta, 6: sabado. -->
                                 <td> <?php
-                                  if($j < $diaSemana){ ?> <p style="font-size: 24px; "></p><br>
+                                  if($j < $diaSemana){ ?> <p style="font-size: 20px; "></p><br>
                                     <p style="font-size: 18px; color: grey; text-align: center">INDISPONÍVEL</p> <?php
                                   }
                                   if($diaSemana == $j){ ?>
-                                    <p style="font-size: 24px; "><?php echo $diaCal; ?> </p><?php
+                                    <p style="font-size: 20px; "><?php echo $diaCal; ?> </p><?php
                                       $diaSemana           = date('w'    , strtotime("+$nDias days"));
                                       $verificaDataOcupada = date('Y-m-d', strtotime("+$vDias days"));
                                       $diaCal              = date('d/m'    , strtotime("+$nDias days"));
@@ -296,7 +296,7 @@
             </h2>
             <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#FasesPedido">
               <div class="accordion-body">
-                <div class="row g-4">
+                <div class="row g-2">
                   <div class="col-md-3">
                     <label for="dataEntrega" class="form-label" style="font-size: 10px; color:aqua">Data Reservada na Fila</label>
                     <input style="font-size: 17px; width: 150px" type="date" class="form-control" id="dataEntrega" name="dataEntrega">
@@ -330,18 +330,14 @@
           </div><!-- fim da div class = accordion item 4 -->
         </div><!-- fim da div class = accordion id=FasesPedido -->
       </div><!-- fim da div class = tab-pane fade show... -->
-          
-          </div>
-
-          <div class="tab-pane fade" id="comercial-tab-pane" role="tabpanel" aria-labelledby="comercial-tab" tabindex="0"><br><br>
-            <button type="button" class="btn btn-outline-info" style="width:300px" 
-              onclick=""></button><br><br>
-          </div>
-
-          <div class="tab-pane fade" id="finance-tab-pane" role="tabpanel" aria-labelledby="finance-tab" tabindex="0" style="color: whitesmoke"><br><br>
-            <button type="button" class="btn btn-outline-info" style="width:300px" 
-              onclick=""></button><br><br>
-          </div>
-        </div> 
+      <div class="tab-pane fade" id="comercial-tab-pane" role="tabpanel" aria-labelledby="comercial-tab" tabindex="0"><br><br>
+        <button type="button" class="btn btn-outline-info" style="width:300px" 
+          onclick=""></button><br><br>
       </div>
-    </div>
+      <div class="tab-pane fade" id="finance-tab-pane" role="tabpanel" aria-labelledby="finance-tab" tabindex="0" style="color: whitesmoke"><br><br>
+        <button type="button" class="btn btn-outline-info" style="width:300px" 
+          onclick=""></button><br><br>
+      </div>
+    </div> 
+  </div>
+</div>
