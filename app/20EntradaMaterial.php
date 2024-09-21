@@ -149,6 +149,9 @@ if(!empty($confirma['salvar1'])){
               <select style="font-size: 12px;" class="form-select" id="fornecedor1" name="fornecedor1">
                 <option style="font-size: 12px" selected>Selecione o fornecedor</option>
                 <?php
+                  //Pesquisa por fornecedores para seleção
+                  $query_supplier = $connDB->prepare("SELECT RAZAO_SOCIAL FROM mp_fornecedor");
+                  $query_supplier->execute();
                   while($supplier = $query_supplier->fetch(PDO::FETCH_ASSOC)){?>
                     <option style="font-size: 12px"><?php echo $supplier['RAZAO_SOCIAL']; ?></option> <?php
                   }?>

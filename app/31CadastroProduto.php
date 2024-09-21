@@ -25,7 +25,7 @@ $responsavel = $_SESSION['nome_func'];
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 3000000);
+       time = setTimeout(deslogar, 300000);
      }
   };
   inactivityTime();
@@ -59,7 +59,7 @@ $responsavel = $_SESSION['nome_func'];
       $_SESSION['nomeProduto']  = strtoupper($verifica['nomeProduto']);
       $_SESSION['descrProduto'] = strtoupper($verifica['descrProduto']);
       $_SESSION['capacidade']   = $verifica['capacidade']; $_SESSION['ciclo'] = 1;
-      $buscaRegistro = $connDB->prepare("SELECT DISTINCT NOME_FANTASIA FROM pf_tabela WHERE NOME_FANTASIA = :fantasia LIMIT 1");
+      $buscaRegistro = $connDB->prepare("SELECT DISTINCT NOME_PRODUTO FROM pf_tabela WHERE NOME_PRODUTO = :fantasia LIMIT 1");
       $buscaRegistro->bindParam(':fantasia', $fantasia, PDO::PARAM_STR);
       $buscaRegistro->execute(); $resultado = $buscaRegistro->fetch(PDO::FETCH_ASSOC); $contReg = $buscaRegistro->rowCount();
       if($contReg != 0){ ?><br>

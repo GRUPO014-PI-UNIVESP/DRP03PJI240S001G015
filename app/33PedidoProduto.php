@@ -2,7 +2,7 @@
   // inclusão do banco de dados e estrutura base da página web
   include_once './ConnectDB.php';
   include_once './EstruturaPrincipal.php';
-  $_SESSION['posicao'] = 'Administrativo';
+  $_SESSION['posicao'] = 'Pedido de Produto';
   include_once './RastreadorAtividades.php';
 ?>
 <script>
@@ -21,7 +21,7 @@
     }
     function resetTimer() {
       clearTimeout(time);
-        time = setTimeout(deslogar, 3000000);
+        time = setTimeout(deslogar, 300000);
     }
   };
   inactivityTime();
@@ -39,11 +39,11 @@
           <select style="font-size: 14px;" class="form-select" id="nomeProduto" name="nomeProduto" autofocus>
             <option style="font-size: 14px" selected>Selecione o Produto</option><?php
               //Pesquisa de descrição do PRODUTO para seleção
-              $query_produto = $connDB->prepare("SELECT DISTINCT NOME_FANTASIA FROM pf_tabela");
+              $query_produto = $connDB->prepare("SELECT DISTINCT NOME_PRODUTO FROM pf_tabela");
               $query_produto->execute();
               // inclui nome dos produtos como opções de seleção da tag <select>
               while($produto = $query_produto->fetch(PDO::FETCH_ASSOC)){?>
-                <option style="font-size: 14px"><?php echo $produto['NOME_FANTASIA']; ?></option> <?php
+                <option style="font-size: 14px"><?php echo $produto['NOME_PRODUTO']; ?></option> <?php
               } ?>
           </select>
         </div>

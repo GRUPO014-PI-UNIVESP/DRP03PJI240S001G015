@@ -21,7 +21,7 @@
     }
     function resetTimer() {
       clearTimeout(time);
-        time = setTimeout(deslogar, 3000000);
+        time = setTimeout(deslogar, 300000);
     }
   };
   inactivityTime();
@@ -69,6 +69,8 @@
           <div class="tab-pane fade" id="compras-tab-pane" role="tabpanel" aria-labelledby="comercial-tab" tabindex="0"><br><br>
             <button type="button" class="btn btn-outline-warning" style="width:300px" 
                     onclick="location.href='<?php echo $acesso12 ?>'">Compra de Material</button><br><br>
+            <button type="button" class="btn btn-outline-warning" style="width:300px" 
+                    onclick="location.href='<?php echo $acesso15 ?>'">Cadastro de Novo Material</button><br><br>
           </div><!-- fim da div id = comercial-tab-pane -->
 
           <!-- Menu do Financeiro -->

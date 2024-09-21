@@ -2,7 +2,7 @@
   // inclusão do banco de dados e estrutura base da página web
   include_once './ConnectDB.php';
   include_once './EstruturaPrincipal.php';
-  $_SESSION['posicao'] = 'Administrativo';
+  $_SESSION['posicao'] = 'Compra de Material';
   include_once './RastreadorAtividades.php';
 ?>
 <script>

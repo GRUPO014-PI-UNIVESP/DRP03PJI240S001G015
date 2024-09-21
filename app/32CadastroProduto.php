@@ -2,7 +2,7 @@
 // inclusão do banco de dados e estrutura base da página web
 include_once './ConnectDB.php';
 include_once './EstruturaPrincipal.php';
-$_SESSION['posicao'] = 'Entrada de Pedido';
+$_SESSION['posicao'] = 'Cadastro de Produto';
 include_once './RastreadorAtividades.php';
 
 //atribui usuário como responsável por registro de entrada do material ou cadastramento
@@ -25,7 +25,7 @@ $responsavel = $_SESSION['nome_func'];
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 3000000);
+       time = setTimeout(deslogar, 300000);
      }
   };
   inactivityTime();
@@ -55,7 +55,7 @@ $responsavel = $_SESSION['nome_func'];
       <?php
         if($_SESSION['ciclo'] == 2){
           $nomeProduto = $_SESSION['nomeProduto'];
-          $mostraMat = $connDB->prepare("SELECT * FROM pf_tabela WHERE NOME_FANTASIA = :nomeProduto");
+          $mostraMat = $connDB->prepare("SELECT * FROM pf_tabela WHERE NOME_PRODUTO = :nomeProduto");
           $mostraMat->bindParam(':nomeProduto', $nomeProduto, PDO::PARAM_STR);
           $mostraMat->execute();
           while($rowMaterial = $mostraMat->fetch(PDO::FETCH_ASSOC)){ ?>
@@ -63,7 +63,7 @@ $responsavel = $_SESSION['nome_func'];
               <div class="col-md-5">
                 <label for="" class="form-label" style="font-size: 10px; color:aqua">Componente</label>
                 <input style="font-size: 12px; color: yellow" type="text" class="form-control" id="" name=""
-                  value="<?php echo $rowMaterial['MATERIAL_COMPONENTE']; ?>" readonly>
+                  value="<?php echo $rowMaterial['DESCRICAO_MP']; ?>" readonly>
               </div>
               <div class="col-md-2">
                 <label for="" class="form-label" style="font-size: 10px; color:aqua">Proporção</label>
@@ -113,7 +113,7 @@ $responsavel = $_SESSION['nome_func'];
         $material    = strtoupper($novoMaterial['material']); $nomeProduto  = $_SESSION['nomeProduto'] ;
         $proporcao   = $novoMaterial['proporcao']                   ; $descrProduto = $_SESSION['descrProduto'];
         $capacidade  = $_SESSION['capacidade']                      ;
-        $regMaterial = $connDB->prepare("INSERT INTO pf_tabela (NOME_FANTASIA, DESCRICAO_PRODUTO, MATERIAL_COMPONENTE, PROPORCAO_MATERIAL, CAPACIDADE_PROCESS)
+        $regMaterial = $connDB->prepare("INSERT INTO pf_tabela (NOME_PRODUTO, DESCRICAO_PRODUTO, DESCRICAO_MP, PROPORCAO_MATERIAL, CAPACIDADE_PROCESS)
                                                 VALUES (:nomeProduto, :descrProduto, :materialComp, :proporcao, :capacidade)");
         $regMaterial->bindParam(':nomeProduto' , $nomeProduto , PDO::PARAM_STR);
         $regMaterial->bindParam(':descrProduto', $descrProduto, PDO::PARAM_STR);

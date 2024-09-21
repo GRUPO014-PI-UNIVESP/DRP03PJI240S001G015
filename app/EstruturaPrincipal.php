@@ -23,7 +23,7 @@
      $acesso8  = './08EditaRegistroFuncionario.php'; $acesso9  = './10DeletaFunc.php'          ;
      $acesso10 = './11CadastroFuncionario.php'     ; $acesso11 = './33PedidoProduto.php'       ;
      $acesso12 = './21CompraMaterial.php'          ; $acesso13 = './30CadastroCliente.php'     ;
-     $acesso14 = './31CadastroProduto.php'         ; $acesso15 = '';
+     $acesso14 = './31CadastroProduto.php'         ; $acesso15 = './22CadastroMaterial.php'    ;
 
   }else{ $acesso1 = ''; $acesso5 = ''; $acesso7 = ''; $acesso8 = ''; $acesso9 = ''; $acesso10 = ''; $acesso11 = '';}
 
