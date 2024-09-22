@@ -84,7 +84,7 @@ $responsavel = $_SESSION['nome_func'];
             <select style="font-size: 13px;" class="form-select" id="material" name="material" autofocus>
               <option style="font-size: 13px" selected>Selecione o material a ser utilizado</option> <?php
                 //Pesquisa de material
-                $listaMateriais = $connDB->prepare("SELECT DISTINCT DESCRICAO_MP FROM mp_estoque");
+                $listaMateriais = $connDB->prepare("SELECT * FROM mp_tabela");
                 $listaMateriais->execute();
                 // inclui nome dos materiais disponíveis como opções de seleção da tag <select>
                 while($rowLista = $listaMateriais->fetch(PDO::FETCH_ASSOC)){?>
@@ -102,7 +102,7 @@ $responsavel = $_SESSION['nome_func'];
           <div class="col-md-3">
             <label for="adicionar" class="form-label" style="font-size: 10px; color:aqua;">Ação</label><br>
             <input type="submit" class="btn btn-success" id="adicionar" name="adicionar" value="ADICIONAR" style="font-size: 12px; width: 100px;">
-            <input type="reset" class="btn btn-warning" id="descartar" name="descartar" value="DESCARTAR" style="font-size: 12px; width: 100px;"
+            <input type="reset"  class="btn btn-warning" id="descartar" name="descartar" value="DESCARTAR" style="font-size: 12px; width: 100px;"
               onclick="location.href='./31CadastroProduto.php'">
           </div>
         </div>
@@ -110,15 +110,22 @@ $responsavel = $_SESSION['nome_func'];
       // salva dados inseridos como um registro a cada componente
       $novoMaterial = filter_input_array(INPUT_POST, FILTER_DEFAULT);
       if(!empty($novoMaterial['adicionar'])){
+
         $material    = strtoupper($novoMaterial['material']); $nomeProduto  = $_SESSION['nomeProduto'] ;
         $proporcao   = $novoMaterial['proporcao']                   ; $descrProduto = $_SESSION['descrProduto'];
         $capacidade  = $_SESSION['capacidade']                      ;
-        $regMaterial = $connDB->prepare("INSERT INTO pf_tabela (NOME_PRODUTO, DESCRICAO_PRODUTO, DESCRICAO_MP, PROPORCAO_MATERIAL, CAPACIDADE_PROCESS)
-                                                VALUES (:nomeProduto, :descrProduto, :materialComp, :proporcao, :capacidade)");
+
+        $uniMed = $connDB->prepare("SELECT UNIDADE_MEDIDA FROM mp_tabela WHERE DESCRICAO_MP = :material");
+        $uniMed->bindParam(':material', $material, PDO::PARAM_STR);
+        $uniMed->execute(); $rowMed = $uniMed->fetch(PDO::FETCH_ASSOC); $matMed = $rowMed['UNIDADE_MEDIDA'];
+
+        $regMaterial = $connDB->prepare("INSERT INTO pf_tabela (NOME_PRODUTO, DESCRICAO_PRODUTO, DESCRICAO_MP, PROPORCAO_MATERIAL, UNIDADE_MEDIDA, CAPACIDADE_PROCESS)
+                                                VALUES (:nomeProduto, :descrProduto, :materialComp, :proporcao, :matMed, :capacidade)");
         $regMaterial->bindParam(':nomeProduto' , $nomeProduto , PDO::PARAM_STR);
         $regMaterial->bindParam(':descrProduto', $descrProduto, PDO::PARAM_STR);
         $regMaterial->bindParam(':materialComp', $material    , PDO::PARAM_STR);
         $regMaterial->bindParam(':proporcao'   , $proporcao   , PDO::PARAM_STR);
+        $regMaterial->bindParam(':matMed'      , $matMed      , PDO::PARAM_STR);
         $regMaterial->bindParam(':capacidade'  , $capacidade  , PDO::PARAM_STR);
         $regMaterial->execute(); $_SESSION['ciclo'] = 2;?><br>
         <div class="row g-1">

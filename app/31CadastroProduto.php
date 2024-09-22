@@ -2,7 +2,7 @@
 // inclusão do banco de dados e estrutura base da página web
 include_once './ConnectDB.php';
 include_once './EstruturaPrincipal.php';
-$_SESSION['posicao'] = 'Entrada de Pedido';
+$_SESSION['posicao'] = 'Cadastro de Produto';
 include_once './RastreadorAtividades.php';
 
 //atribui usuário como responsável por registro de entrada do material ou cadastramento
