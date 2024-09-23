@@ -138,7 +138,11 @@
 
     <form method="POST" id="dataSelecionada">
       <div class="row g-2">
-        <div class="col-md-5"><br>
+        <div class="col-md-5" style="text-align: center"><br>
+          <!-- Descartar dados -->
+          <button class="btn btn-secondary" style="float:inline-end" onclick="location.href='./35DescartarPedido.php'">Descartar e Sair</button>
+        </div>
+        <div class="col-md-7"><br>
           <!-- Button trigger modal -->
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#calendario">
             Verificar Disponibilidade na fila da planta de fabricação
@@ -245,27 +249,23 @@
           </div><!-- fim do modal dialog -->
         </div><!-- fim do modal fade -->
       </div><!-- fim da div row do calendário -->       
-    </form><?php
+    </form><br><?php
     $dataLivre = filter_input_array(INPUT_POST, FILTER_DEFAULT);?>
-    <form action="">
+    <form method="POST">
       <div class="row g-2"><?php
         if(!empty($dataLivre['dataSelecionada'])){
           $dataAgendada = date('Y-m-d', strtotime($dataLivre['dataSelecionada']));
           $dataEntrega  = date('Y-m-d', strtotime($dataAgendada."+ 1 week"));?>
-          <div class="col-md-2"><br>
+          <div class="col-md-1"></div>
+          <div class="col-md-2">
             <label for="dataAgendada" class="form-label" style="font-size: 10px; color:aqua">Data Agendada</label>
             <input style="font-size: 16px; text-align: center; color:yellow" type="text" class="form-control" id="dataAgendada" name="dataAgendada"
-                   value="<?php echo date('d/m/Y', strtotime($dataAgendada)) ?>">
+                   value="<?php echo date('d/m/Y', strtotime($dataAgendada)) ?>" readonly>
           </div>
-          <div class="col-md-2"><br>
-            <label for="dataPrazo" class="form-label" style="font-size: 10px; color:aqua">Data Estimada de Entrega</label>
-            <input style="font-size: 16px; text-align: center; color: yellow" type="text" class="form-control" id="dataPrazo" name="dataPrazo"
-                   value="<?php echo date('d/m/Y', strtotime($dataEntrega)) ?>">
-          </div>
-          <div class="col-md-8"><br>
+          <div class="col-md-8">
             <label for="cliente" class="form-label" style="font-size: 10px; color:aqua">Nome do Cliente</label>
-            <select style="font-size: 16px;color:yellow" class="form-select" id="cliente" name="cliente">
-              <option style="font-size: 16px" selected>Selecione o Produto</option><?php
+            <select style="font-size: 16px;color:yellow" class="form-select" id="cliente" name="cliente" required>
+              <option style="font-size: 16px" selected>Selecione o Cliente, caso não esteja relacionado será necessário fazer o cadastramento</option><?php
                 //Pesquisa de descrição do PRODUTO para seleção
                 $query_cliente = $connDB->prepare("SELECT DISTINCT NOME_FANTASIA FROM pf_cliente");
                 $query_cliente->execute();
@@ -275,38 +275,68 @@
                 } ?>
             </select>
           </div>
-          <?php
-        }?>
-        <div class="col-md-5">
-          <input style="width: 140px; float: right" class="btn btn-secondary" type="reset" id="reset2" name="reset2" value="Descartar"
-            onclick="location.href='./33PedidoProduto.php'">
-        </div>
-        <div class="col-md-7">
-          <!-- Gatilho do Modal -->
-          <button style="width: 250px; float: left" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirma">
-            Confirmar Pedido
-          </button>
-          <!-- Modal -->
-          <div class="modal fade" id="confirma" tabindex="-1" aria-labelledby="confirmaLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="confirmaLabel">Pedido de Produto</h1>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  Caso as informações estejam corretas, salve o registro no banco de dados
-                </div>
-                <S class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                  <input class="btn btn-primary" type="submit" id="salvar3" name="salvar3" value="Salvar Registro"
-                    style="width: 250px">
+          <div class="col-md-1"></div><br>
+          <div class="col-md-1"></div>
+          <div class="col-md-2">
+            <label for="dataPrazo" class="form-label" style="font-size: 10px; color:aqua">Data Estimada de Entrega</label>
+            <input style="font-size: 16px; text-align: center; color: yellow" type="text" class="form-control" id="dataPrazo" name="dataPrazo"
+                   value="<?php echo date('d/m/Y', strtotime($dataEntrega)) ?>" readonly>
+          </div>
+
+          <div class="col-md-3"><br>
+            <input style="width: 140px; float:inline-end" class="btn btn-secondary" type="reset" id="reset2" name="reset2" value="Descartar"
+                   onclick="location.href='./35DescartarPedido.php'">
+          </div>
+          <div class="col-md-3"><br>
+            <!-- Gatilho do Modal -->
+            <button style="width: 250px;" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirma">
+                    Confirmar Pedido
+            </button>
+            <!-- Modal -->
+            <div class="modal fade" id="confirma" tabindex="-1" aria-labelledby="confirmaLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="confirmaLabel">Pedido de Produto</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                      Caso as informações estejam corretas, salve o registro no banco de dados
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <input class="btn btn-primary" type="submit" id="salvar3" name="salvar3" value="Salvar Registro"
+                           style="width: 250px">
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div><!---->
+          </div><!---->
+          <?php
+        }?>        
       </div>
-    </form>
+    </form><?php
+    $confirmaPedido = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+    if(!empty($confirmaPedido['salvar3'])){
+      $dataFabri = date('Y-m-d', strtotime($dataAgendada));
+      $dataSaida = date('Y-m-d', strtotime($dataEntrega));
+      $nomeCliente = $confirmaPedido['cliente']; $dataPedido = date('Y-m-d');
+      $uniMed = 'KG'; $situacao = 'PEDIDO REGISTRADO'; $responsavel = $_SESSION['nome_func'];
+      $registraPedido = $connDB->prepare("INSERT INTO pf_pedido (NUMERO_PEDIDO, DATA_PEDIDO, CLIENTE, NOME_PRODUTO, DATA_FABRICACAO, QTDE_LOTE_PF, UNIDADE_MEDIDA, SITUACAO_QUALI, DATA_SAIDA, REGISTRO_PEDIDO) 
+                                                 VALUES (:numPedido, :dataPedido, :nomeCliente, :nomeProduto, :dataFabri, :qtdeLote, :uniMed, :situacao, :dataEntrega, :responsavel)");
+      $registraPedido->bindParam(':numPedido'  , $numPedido   , PDO::PARAM_INT);
+      $registraPedido->bindParam(':dataPedido' , $dataPedido  , PDO::PARAM_STR);
+      $registraPedido->bindParam(':nomeCliente', $nomeCliente , PDO::PARAM_STR);
+      $registraPedido->bindParam(':nomeProduto', $nomeProduto , PDO::PARAM_STR);
+      $registraPedido->bindParam(':dataFabri'  , $dataFabri   , PDO::PARAM_STR);
+      $registraPedido->bindParam(':qtdeLote'   , $qtdeLote    , PDO::PARAM_STR);
+      $registraPedido->bindParam(':uniMed'     , $uniMed      , PDO::PARAM_STR);
+      $registraPedido->bindParam(':situacao'   , $situacao    , PDO::PARAM_STR);
+      $registraPedido->bindParam(':dataEntrega', $dataSaida   , PDO::PARAM_STR);
+      $registraPedido->bindParam(':responsavel', $responsavel , PDO::PARAM_STR);
+      $registraPedido->execute();
+
+      header('Location: ./33PedidoProduto.php');
+    } ?>
   </div><!-- Fim da div container-fluid -->
 </div><!-- Fim da div main -->

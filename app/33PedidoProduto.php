@@ -36,7 +36,7 @@
       <div class="row g-2">
         <div class="col-md-2"> <?php
           // verifica o identificador do último registro
-          $queryLast = $connDB->prepare("SELECT MAX(ID_PEDIDO) AS ULTIMO FROM pf_pedido");
+          $queryLast = $connDB->prepare("SELECT MAX(NUMERO_PEDIDO) AS ULTIMO FROM pf_pedido");
           $queryLast->execute();
           $rowID = $queryLast->fetch(PDO::FETCH_ASSOC); $novoID = $rowID['ULTIMO'] + 1;?>
           <label for="pedidoNum" class="form-label" style="font-size: 10px; color:aqua;">Pedido No.</label>
