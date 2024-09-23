@@ -57,12 +57,20 @@
 
           <!-- Menu do Setor Comercial -->
           <div class="tab-pane fade" id="comercial-tab-pane" role="tabpanel" aria-labelledby="prod-tab" tabindex="0"><br><br>
-            <button type="button" class="btn btn-outline-success" style="width:300px" 
-                    onclick="location.href='<?php echo $acesso11 ?>'">Pedido de Produto</button><br><br>
-            <button type="button" class="btn btn-outline-success" style="width:300px" 
-                    onclick="location.href='<?php echo $acesso13 ?>' ">Cadastro de Novo Cliente</button><br><br>             
-            <button type="button" class="btn btn-outline-success" style="width:300px" 
-                    onclick="location.href='<?php echo $acesso14 ?>'">Cadastro de Novo Produto</button><br><br>
+            <div class="row g-4">
+              <div class="col-md-4">
+                <button type="button" class="btn btn-outline-success" style="width:300px" 
+                        onclick="location.href='<?php echo $acesso11 ?>'">Pedido de Produto</button><br><br>
+              </div>
+              <div class="col-md-4">
+                <button type="button" class="btn btn-outline-success" style="width:300px" 
+                        onclick="location.href='<?php echo $acesso13 ?>' ">Cadastro de Novo Cliente</button><br><br>  
+              </div>
+              <div class="col-md-4">
+                <button type="button" class="btn btn-outline-success" style="width:300px" 
+                        onclick="location.href='<?php echo $acesso14 ?>'">Cadastro de Novo Produto</button><br><br>
+              </div>
+            </div>
           </div><!-- fim da div id = prod-tab-pane -->
 
           <!-- Menu do Setor de Compras -->

@@ -67,8 +67,8 @@
             $verificador = 0;
             $query_material = $connDB->prepare("SELECT * FROM pf_tabela WHERE NOME_PRODUTO = :nomeProduto");
             $query_material->bindParam(':nomeProduto', $nomeProduto, PDO::PARAM_STR); $query_material->execute(); ?>
-          <tbody> <?php
-            while($rowLista = $query_material->fetch(PDO::FETCH_ASSOC)){ ?>
+          <tbody> <?php            
+            while($rowLista = $query_material->fetch(PDO::FETCH_ASSOC)){ $contador = 1; $capacidadeProcess = $rowLista['CAPACIDADE_PROCESS'];?>
               <tr>
                 <td scope="col" style="width: 30%; font-size: 13px; color: yellow"> <?php
                   $descrMaterial = $rowLista['DESCRICAO_MP'];
@@ -88,16 +88,14 @@
                   $query_disponivel->execute(); $resultado = $query_disponivel->fetch(PDO::FETCH_ASSOC);
                   $qtdeDisponivel = $resultado['estoque'] - $resultado['reservado'];
                   echo $qtdeDisponivel . ' ' . $rowLista['UNIDADE_MEDIDA']; ?>
-                </td>
-                <?php
+                </td> <?php
                   if($qtdeDisponivel >= $qtdeMaterial){
                     $barra = 'alert alert-success';
                     $alerta = 'DISPONÍVEL';
                   } else if($qtdeDisponivel < $qtdeMaterial){
                     $barra = 'alert alert-danger';
                     $alerta = 'INSUFICIENTE';                    
-                  }
-                ?>
+                  } ?>
                 <td scope="col" style="width: 10%; text-align: center; font-size: 13px">
                   <div class="<?php echo $barra ?>" role="alert">
                     <?php echo $alerta ?>
@@ -109,7 +107,8 @@
                     <div class="alert alert-success" role="alert">
                       <?php echo 'Tudo OK!' ?>
                     </div> <?php
-                  } else if($alerta == 'INSUFICIENTE'){ ?>
+                  }
+                  if($alerta == 'INSUFICIENTE' && $contador <= 1){ ?>
                     <div class="alert alert-warning" role="alert">
                       <?php echo 'Compra Agendada!' ?>
                     </div> <?php
@@ -123,10 +122,10 @@
                     $compra->bindParam(':dataAgenda'   , $dataAgenda   , PDO::PARAM_STR);
                     $compra->bindParam(':qtdePedido'   , $qtdeMaterial , PDO::PARAM_STR);
                     $compra->bindParam(':situacao'     , $situacao     , PDO::PARAM_STR);
-                    $compra->execute();
+                    $compra->execute(); $contador = $contador + 1;
                   } ?>
                 </td>
-              </tr> <?php
+              </tr> <?php 
               if($alerta == 'INSUFICIENTE'){
                 $verificador = $verificador + 1;
               }
@@ -335,6 +334,16 @@
       $registraPedido->bindParam(':dataEntrega', $dataSaida   , PDO::PARAM_STR);
       $registraPedido->bindParam(':responsavel', $responsavel , PDO::PARAM_STR);
       $registraPedido->execute();
+
+      $alocaFila = $connDB->prepare("INSERT INTO fila_ocupacao (PEDIDO_NUM, DATA_AGENDA, NOME_PRODUTO, QTDE_LOTE, CAPACIDADE_PROCESS, SITUACAO_QUALI) 
+                                            VALUES (:numPedido, :dataFabri, :nomeProduto, :qtdeLote, :capaProcess, :situacao)");
+      $alocaFila->bindParam(':numPedido'  , $numPedido        , PDO::PARAM_INT);
+      $alocaFila->bindParam(':dataFabri'  , $dataFabri        , PDO::PARAM_STR);
+      $alocaFila->bindParam(':nomeProduto', $nomeProduto      , PDO::PARAM_STR);
+      $alocaFila->bindParam(':qtdeLote'   , $qtdeLote         , PDO::PARAM_STR);
+      $alocaFila->bindParam(':capaProcess', $capacidadeProcess, PDO::PARAM_STR);
+      $alocaFila->bindParam(':situacao'   , $situacao         , PDO::PARAM_STR);
+      $alocaFila->execute();
 
       header('Location: ./33PedidoProduto.php');
     } ?>
