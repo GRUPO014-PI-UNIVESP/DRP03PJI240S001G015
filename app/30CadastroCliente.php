@@ -137,7 +137,7 @@ $responsavel = $_SESSION['nome_func'];
               </div>
             </div>
           </div>
-        </div>
+        </div><!---->
       </div>
     </form>
   </div> <?php

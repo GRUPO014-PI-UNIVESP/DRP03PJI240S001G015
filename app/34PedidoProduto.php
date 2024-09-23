@@ -36,15 +36,15 @@
     <div class="row g-1" id="entradaProduto">
       <div class="col-md-2">
         <label for="pedidoNum" class="form-label" style="font-size: 10px; color:aqua">Pedido No.</label>
-        <input style="font-size: 14px; text-align: center; color:yellow" type="text" class="form-control" id="" name="" value="<?php echo $_SESSION['numPedido'] ?>" readonly>
+        <input style="font-size: 16px; text-align: center; color:yellow" type="text" class="form-control" id="" name="" value="<?php echo $_SESSION['numPedido'] ?>" readonly>
       </div>
       <div class="col-md-2">
         <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Quantidade do Pedido</label>
-        <input style="font-size: 14px; color:yellow; text-align:right" type="text" class="form-control" id="" name="" value="<?php echo $_SESSION['qtdeLote'] . ' Kg' ?>" readonly>
+        <input style="font-size: 16px; color:yellow; text-align:right" type="text" class="form-control" id="" name="" value="<?php echo $_SESSION['qtdeLote'] . ' Kg' ?>" readonly>
       </div>
       <div class="col-md-8">
         <label for="" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
-        <input style="font-size: 14px; color:yellow;" type="text" class="form-control" id="" name="" value="<?php echo $_SESSION['nomeProduto'] ?>" readonly>
+        <input style="font-size: 16px; color:yellow;" type="text" class="form-control" id="" name="" value="<?php echo $_SESSION['nomeProduto'] ?>" readonly>
       </div>
     </div><!-- Fim da div row entradaProduto --><br>
 
@@ -140,20 +140,20 @@
       <div class="row g-2">
         <div class="col-md-5"><br>
           <!-- Button trigger modal -->
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#calendario">
             Verificar Disponibilidade na fila da planta de fabricação
           </button>
         </div>
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="calendario" tabindex="-1" aria-labelledby="calendarioLabel" aria-hidden="true">
           <div class="modal-dialog modal-xl modal-dialog-scrollable">
             <div class="modal-content">
               <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Calendário de disponibilidade da planta de fabricação</h1>
+                <h1 class="modal-title fs-5" id="calendarioLabel">Calendário de disponibilidade da planta de fabricação</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
 
-              <div class="modal-body">
+              <div class="modal-body" style="height: 400px">
                 <!-- Calendário da Fila de Ocupação da Planta de Fabricação -->
                 <div class="row g-1">
                   <div class="overflow-auto"> <?php $nDiasBase = 31;
@@ -237,32 +237,76 @@
                   <label for="dataSelecionada" class="form-label" style="font-size: 10px; color:aqua">Selecione a Data na Fila</label>
                   <input style="font-size: 14px;" type="date" class="form-control" id="dataSelecionada" name="dataSelecionada" required autofocus>
                 </div>
-                <input class="btn btn-primary" type="submit" id="agendar" name="agendar" value="Confirmar Data" >         
+                <div class="col-md-2"><br>
+                  <input class="btn btn-primary" type="submit" id="agendar" name="agendar" value="Confirmar Data" style="float: right">   
+                </div>      
               </div><!-- fim do Footer -->
             </div><!-- fim do modal content -->
           </div><!-- fim do modal dialog -->
         </div><!-- fim do modal fade -->
       </div><!-- fim da div row do calendário -->       
     </form><?php
-    $dataLivre = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-    if(!empty($dataLivre['dataSelecionada'])){
-      $prazo = $xtend + 7;
-      $dataEntrega  = date('d/m/Y', strtotime("+$prazo days"));?>
-      <div class="row g-3">
-        <div class="col-md-2"><br>
-          <label for="dataAgendada" class="form-label" style="font-size: 10px; color:aqua">Data Agendada</label>
-          <input style="font-size: 14px; text-align: center" type="text" class="form-control" id="dataAgendada" name="dataAgendada"
-                 value="<?php echo $dataLivre['dataSelecionada'] ?>">
+    $dataLivre = filter_input_array(INPUT_POST, FILTER_DEFAULT);?>
+    <form action="">
+      <div class="row g-2"><?php
+        if(!empty($dataLivre['dataSelecionada'])){
+          $dataAgendada = date('Y-m-d', strtotime($dataLivre['dataSelecionada']));
+          $dataEntrega  = date('Y-m-d', strtotime($dataAgendada."+ 1 week"));?>
+          <div class="col-md-2"><br>
+            <label for="dataAgendada" class="form-label" style="font-size: 10px; color:aqua">Data Agendada</label>
+            <input style="font-size: 16px; text-align: center; color:yellow" type="text" class="form-control" id="dataAgendada" name="dataAgendada"
+                   value="<?php echo date('d/m/Y', strtotime($dataAgendada)) ?>">
+          </div>
+          <div class="col-md-2"><br>
+            <label for="dataPrazo" class="form-label" style="font-size: 10px; color:aqua">Data Estimada de Entrega</label>
+            <input style="font-size: 16px; text-align: center; color: yellow" type="text" class="form-control" id="dataPrazo" name="dataPrazo"
+                   value="<?php echo date('d/m/Y', strtotime($dataEntrega)) ?>">
+          </div>
+          <div class="col-md-8"><br>
+            <label for="cliente" class="form-label" style="font-size: 10px; color:aqua">Nome do Cliente</label>
+            <select style="font-size: 16px;color:yellow" class="form-select" id="cliente" name="cliente">
+              <option style="font-size: 16px" selected>Selecione o Produto</option><?php
+                //Pesquisa de descrição do PRODUTO para seleção
+                $query_cliente = $connDB->prepare("SELECT DISTINCT NOME_FANTASIA FROM pf_cliente");
+                $query_cliente->execute();
+                // inclui nome dos produtos como opções de seleção da tag <select>
+                while($rowCliente = $query_cliente->fetch(PDO::FETCH_ASSOC)){?>
+                  <option style="font-size: 16px; color:yellow"><?php echo $rowCliente['NOME_FANTASIA']; ?></option> <?php
+                } ?>
+            </select>
+          </div>
+          <?php
+        }?>
+        <div class="col-md-5">
+          <input style="width: 140px; float: right" class="btn btn-secondary" type="reset" id="reset2" name="reset2" value="Descartar"
+            onclick="location.href='./33PedidoProduto.php'">
         </div>
-        <div class="col-md-2"><br>
-          <label for="dataPrazo" class="form-label" style="font-size: 10px; color:aqua">Data Estimada de Entrega</label>
-          <input style="font-size: 14px; text-align: center" type="text" class="form-control" id="dataPrazo" name="dataPrazo"
-                 value="<?php echo $dataEntrega ?>">
-        </div>
+        <div class="col-md-7">
+          <!-- Gatilho do Modal -->
+          <button style="width: 250px; float: left" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirma">
+            Confirmar Pedido
+          </button>
+          <!-- Modal -->
+          <div class="modal fade" id="confirma" tabindex="-1" aria-labelledby="confirmaLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="confirmaLabel">Pedido de Produto</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Caso as informações estejam corretas, salve o registro no banco de dados
+                </div>
+                <S class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                  <input class="btn btn-primary" type="submit" id="salvar3" name="salvar3" value="Salvar Registro"
+                    style="width: 250px">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!---->
       </div>
-    <?php
-    }
-    ?>
-
+    </form>
   </div><!-- Fim da div container-fluid -->
 </div><!-- Fim da div main -->
