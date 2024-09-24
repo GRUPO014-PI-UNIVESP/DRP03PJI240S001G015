@@ -56,34 +56,33 @@
           </div><!-- fim da div id = rh-tab-pane -->
 
           <!-- Menu do Setor Comercial -->
-          <div class="tab-pane fade" id="comercial-tab-pane" role="tabpanel" aria-labelledby="prod-tab" tabindex="0"><br><br>
-            <div class="row g-4">
-              <div class="col-md-4">
-                <button type="button" class="btn btn-outline-success" style="width:300px" 
-                        onclick="location.href='<?php echo $acesso11 ?>'">Pedido de Produto</button><br><br>
+          <div class="tab-pane fade" id="comercial-tab-pane" role="tabpanel" aria-labelledby="prod-tab" tabindex="0"><br>
+            <div class="row g-3">
+              <div class="col-md-4"><br>
+                <button type="button" class="btn btn-outline-light" style="width:250px" 
+                      onclick="location.href='<?php echo $acesso11 ?>'">Pedido de Produto</button><br><br>
+                <button type="button" class="btn btn-outline-light" style="width:250px" 
+                      onclick="location.href='<?php echo $acesso13 ?>' ">Cadastro de Novo Cliente</button><br><br>  
+                <button type="button" class="btn btn-outline-light" style="width:250px" 
+                      onclick="location.href='<?php echo $acesso14 ?>'">Cadastro de Novo Produto</button><br><br>
               </div>
-              <div class="col-md-4">
-                <button type="button" class="btn btn-outline-success" style="width:300px" 
-                        onclick="location.href='<?php echo $acesso13 ?>' ">Cadastro de Novo Cliente</button><br><br>  
+              <div class="col-md-8">
+                Lista de Pedidos
               </div>
-              <div class="col-md-4">
-                <button type="button" class="btn btn-outline-success" style="width:300px" 
-                        onclick="location.href='<?php echo $acesso14 ?>'">Cadastro de Novo Produto</button><br><br>
-              </div>
-            </div>
+            </div><!-- fim da DIV row do setor comercial -->
           </div><!-- fim da div id = prod-tab-pane -->
 
           <!-- Menu do Setor de Compras -->
           <div class="tab-pane fade" id="compras-tab-pane" role="tabpanel" aria-labelledby="comercial-tab" tabindex="0"><br><br>
-            <button type="button" class="btn btn-outline-warning" style="width:300px" 
+            <button type="button" class="btn btn-outline-warning" style="width:250px" 
                     onclick="location.href='<?php echo $acesso12 ?>'">Compra de Material</button><br><br>
-            <button type="button" class="btn btn-outline-warning" style="width:300px" 
+            <button type="button" class="btn btn-outline-warning" style="width:250px" 
                     onclick="location.href='<?php echo $acesso15 ?>'">Cadastro de Novo Material</button><br><br>
           </div><!-- fim da div id = comercial-tab-pane -->
 
           <!-- Menu do Financeiro -->
           <div class="tab-pane fade" id="finance-tab-pane" role="tabpanel" aria-labelledby="finance-tab" tabindex="0" style="color: whitesmoke"><br><br>
-            <button type="button" class="btn btn-outline-secondary" style="width:300px" 
+            <button type="button" class="btn btn-outline-secondary" style="width:250px" 
                     onclick="location.href='<?php ?>'">Folha de Pagamento</button><br><br>
           </div><!-- fim da div id = finance-tab-pane -->
       </div> 

@@ -104,25 +104,14 @@
 
                 <td scope="col" style="width: 15%; text-align: center;"><?php
                   if($alerta == 'DISPONIVEL'){ ?>
-                    <div class="alert alert-success" role="alert">
-                      <?php echo 'Tudo OK!' ?>
+                    <div class="alert alert-success" role="alert" style="height: 50px">
+                      <p><?php echo 'Tudo OK!' ?></p> 
                     </div> <?php
                   }
                   if($alerta == 'INSUFICIENTE' && $contador <= 1){ ?>
-                    <div class="alert alert-warning" role="alert">
-                      <?php echo 'Compra Agendada!' ?>
+                    <div class="alert alert-warning" role="alert" style="height: 50px;">
+                      <p><?php echo 'Compra Agendada!' ?></p> 
                     </div> <?php
-                    $dataAgenda = date('Y-m-d');
-                    $situacao   = 'COMPRA AGENDADA';
-                    $compra = $connDB->prepare("INSERT INTO agenda_compra (DESCRICAO_MP, PEDIDO_NUM, NOME_PRODUTO, DATA_AGENDA, QTDE_PEDIDO, SITUACAO_QUALI)
-                                                                          VALUES (:descrMaterial, :numPedido, :nomeProduto, :dataAgenda, :qtdePedido, :situacao)");
-                    $compra->bindParam(':descrMaterial', $descrMaterial, PDO::PARAM_STR);
-                    $compra->bindParam(':numPedido'    , $numPedido    , PDO::PARAM_STR);
-                    $compra->bindParam(':nomeProduto'  , $nomeProduto  , PDO::PARAM_STR);
-                    $compra->bindParam(':dataAgenda'   , $dataAgenda   , PDO::PARAM_STR);
-                    $compra->bindParam(':qtdePedido'   , $qtdeMaterial , PDO::PARAM_STR);
-                    $compra->bindParam(':situacao'     , $situacao     , PDO::PARAM_STR);
-                    $compra->execute(); $contador = $contador + 1;
                   } ?>
                 </td>
               </tr> <?php 
@@ -238,7 +227,7 @@
               <div class="modal-footer">
                 <div class="col-md-2">
                   <label for="dataSelecionada" class="form-label" style="font-size: 10px; color:aqua">Selecione a Data na Fila</label>
-                  <input style="font-size: 14px;" type="date" class="form-control" id="dataSelecionada" name="dataSelecionada" required autofocus>
+                  <input style="font-size: 20px;" type="date" class="form-control" id="dataSelecionada" name="dataSelecionada" autofocus required>
                 </div>
                 <div class="col-md-2"><br>
                   <input class="btn btn-primary" type="submit" id="agendar" name="agendar" value="Confirmar Data" style="float: right">   
@@ -252,13 +241,14 @@
     $dataLivre = filter_input_array(INPUT_POST, FILTER_DEFAULT);?>
     <form method="POST">
       <div class="row g-2"><?php
-        if(!empty($dataLivre['dataSelecionada'])){
+        if(!empty($dataLivre['agendar']) || !empty($dataLivre['dataSelecionada'])){
           $dataAgendada = date('Y-m-d', strtotime($dataLivre['dataSelecionada']));
-          $dataEntrega  = date('Y-m-d', strtotime($dataAgendada."+ 1 week"));?>
+          $dataEntrega  = date('Y-m-d', strtotime($dataAgendada."+ 1 week"));
+          ?>
           <div class="col-md-1"></div>
           <div class="col-md-2">
-            <label for="dataAgendada" class="form-label" style="font-size: 10px; color:aqua">Data Agendada</label>
-            <input style="font-size: 16px; text-align: center; color:yellow" type="text" class="form-control" id="dataAgendada" name="dataAgendada"
+            <label for="dataAgenda" class="form-label" style="font-size: 10px; color:aqua">Data Agendada</label>
+            <input style="font-size: 16px; text-align: center; color:yellow" type="text" class="form-control" id="dataAgenda" name="dataAgenda"
                    value="<?php echo date('d/m/Y', strtotime($dataAgendada)) ?>" readonly>
           </div>
           <div class="col-md-8">
@@ -287,51 +277,33 @@
                    onclick="location.href='./35DescartarPedido.php'">
           </div>
           <div class="col-md-3"><br>
-            <!-- Gatilho do Modal -->
-            <button style="width: 250px;" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirma">
-                    Confirmar Pedido
-            </button>
-            <!-- Modal -->
-            <div class="modal fade" id="confirma" tabindex="-1" aria-labelledby="confirmaLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="confirmaLabel">Pedido de Produto</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                      Caso as informações estejam corretas, salve o registro no banco de dados
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <input class="btn btn-primary" type="submit" id="salvar3" name="salvar3" value="Salvar Registro"
-                           style="width: 250px">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div><!---->
+            <input style="width: 180px;" class="btn btn-primary" type="submit" id="salvar3" name="salvar3" value="Confirmar e Salvar">
+          </div>
           <?php
         }?>        
       </div>
     </form><?php
     $confirmaPedido = filter_input_array(INPUT_POST, FILTER_DEFAULT);
     if(!empty($confirmaPedido['salvar3'])){
-      $dataFabri = date('Y-m-d', strtotime($dataAgendada));
-      $dataSaida = date('Y-m-d', strtotime($dataEntrega));
-      $nomeCliente = $confirmaPedido['cliente']; $dataPedido = date('Y-m-d');
-      $uniMed = 'KG'; $situacao = 'PEDIDO REGISTRADO'; $responsavel = $_SESSION['nome_func'];
-      $registraPedido = $connDB->prepare("INSERT INTO pf_pedido (NUMERO_PEDIDO, DATA_PEDIDO, CLIENTE, NOME_PRODUTO, DATA_FABRICACAO, QTDE_LOTE_PF, UNIDADE_MEDIDA, SITUACAO_QUALI, DATA_SAIDA, REGISTRO_PEDIDO) 
+      $nomeCliente = $confirmaPedido['cliente'];
+      $dataPedido = date('Y-m-d');
+      $uniMed = 'KG';
+      $situacao = 'PEDIDO REGISTRADO';
+      $responsavel = $_SESSION['nome_func'];
+      $hoje = time(); $agenda = strtotime($dataAgendada); $diff = floor(($agenda - $hoje) / (60 * 60 * 24));
+      $dataFabri = date('Y-m-d', strtotime("+ $diff days")); $entrega = $diff + 7;
+      $dataSaida = date('Y-m-d', strtotime("+ $entrega days"));
+      $registraPedido = $connDB->prepare("INSERT INTO pf_pedido (NUMERO_PEDIDO, DATA_PEDIDO, CLIENTE, NOME_PRODUTO, DATA_FABRI, QTDE_LOTE_PF, UNIDADE_MEDIDA, SITUACAO_QUALI, DATA_ENTREGA, REGISTRO_PEDIDO) 
                                                  VALUES (:numPedido, :dataPedido, :nomeCliente, :nomeProduto, :dataFabri, :qtdeLote, :uniMed, :situacao, :dataEntrega, :responsavel)");
       $registraPedido->bindParam(':numPedido'  , $numPedido   , PDO::PARAM_INT);
-      $registraPedido->bindParam(':dataPedido' , $dataPedido  , PDO::PARAM_STR);
+      $registraPedido->bindParam(':dataPedido' , $dataPedido);
       $registraPedido->bindParam(':nomeCliente', $nomeCliente , PDO::PARAM_STR);
       $registraPedido->bindParam(':nomeProduto', $nomeProduto , PDO::PARAM_STR);
-      $registraPedido->bindParam(':dataFabri'  , $dataFabri   , PDO::PARAM_STR);
+      $registraPedido->bindParam(':dataFabri'  , $dataFabri);
       $registraPedido->bindParam(':qtdeLote'   , $qtdeLote    , PDO::PARAM_STR);
       $registraPedido->bindParam(':uniMed'     , $uniMed      , PDO::PARAM_STR);
       $registraPedido->bindParam(':situacao'   , $situacao    , PDO::PARAM_STR);
-      $registraPedido->bindParam(':dataEntrega', $dataSaida   , PDO::PARAM_STR);
+      $registraPedido->bindParam(':dataEntrega', $dataSaida);
       $registraPedido->bindParam(':responsavel', $responsavel , PDO::PARAM_STR);
       $registraPedido->execute();
 

@@ -267,14 +267,14 @@ function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
 
     <!-- Barra lateral Inferior-->
     <div class="sidebarBottom">
-      <p style="text-align: center; font-size: 15px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; color: rgba(0,0,0,0.7)">Informações do Usuário</p>
-      <p style="padding: 3px; color: rgba(0,0,0,0.7)" class="text-break">
+      <p style="text-align: center; font-size: 15px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; color:aqua">Informações do Usuário</p>
+      <p style="padding: 3px; color:aqua" class="text-break">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill-check" viewBox="0 0 16 16">
           <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
           <path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4"/>
         </svg> <?php echo '  '.$_SESSION['nome_func']  ?>
       </p>
-      <p style="padding: 3px; color: rgba(0,0,0,0.7)">
+      <p style="padding: 3px; color:aqua">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-calendar3" viewBox="0 0 16 16">
         <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z"/>
         <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
@@ -282,7 +282,7 @@ function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
                 $dLog = strtotime($_SESSION['dataLog']);
                 echo '  '.date('d/m/Y', $dLog);  ?>
       </p>
-      <p style="padding: 3px; color: rgba(0,0,0,0.7)">
+      <p style="padding: 3px; color:aqua">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-clock-fill" viewBox="0 0 16 16">
           <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
         </svg> <?php 
@@ -319,7 +319,7 @@ function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
 
     <!-- Rodapé com créditos-->
     <div class="sidebarFoot">
-      <p style="font-size:9px; color:bisque;text-align: center;">Developed by DRP03PJI240S001G015 2024</p>
+      <p class="text-break" style="font-size:11px; color:bisque;text-align: center;">Developed by DRP03PJI240S001G015 2024</p>
     </div>
     
     <!-- Área Principal-->

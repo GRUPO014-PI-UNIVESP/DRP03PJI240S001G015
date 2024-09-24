@@ -45,12 +45,12 @@ $responsavel = $_SESSION['nome_func'];
           <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="descrProduto" name="descrProduto" required>
         </div>
         <div class="col-md-2">
-            <label for="capacidade" class="form-label" style="font-size: 10px; color:aqua">Capacidade Produtiva</label>
-            <div class="input-group mb-2">
-              <input type="number" class="form-control" id="capacidade" name="capacidade" style="font-size: 13px" onchange="this.form.submit()" required>
-                <span class="input-group-text" style="font-size: 13px">Kg/Hora</span>
-            </div>
+          <label for="capacidade" class="form-label" style="font-size: 10px; color:aqua">Capacidade Produtiva</label>
+          <div class="input-group mb-2">
+            <input type="number" class="form-control" id="capacidade" name="capacidade" style="font-size: 13px" onchange="this.form.submit()" required>
+              <span class="input-group-text" style="font-size: 13px">Kg/Hora</span>
           </div>
+        </div>
       </div>
     </form><?php
     $verifica = filter_input_array(INPUT_POST, FILTER_DEFAULT);
