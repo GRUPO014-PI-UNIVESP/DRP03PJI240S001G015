@@ -21,7 +21,7 @@
     }
     function resetTimer() {
       clearTimeout(time);
-        time = setTimeout(deslogar, 300000);
+        time = setTimeout(deslogar, 36000000);
     }
   };
   inactivityTime();
@@ -58,7 +58,7 @@
           <!-- Menu do Setor Comercial -->
           <div class="tab-pane fade" id="comercial-tab-pane" role="tabpanel" aria-labelledby="prod-tab" tabindex="0"><br>
             <div class="row g-3">
-              <div class="col-md-4"><br>
+              <div class="col-md-3"><br>
                 <button type="button" class="btn btn-outline-light" style="width:250px" 
                       onclick="location.href='<?php echo $acesso11 ?>'">Pedido de Produto</button><br><br>
                 <button type="button" class="btn btn-outline-light" style="width:250px" 
@@ -66,9 +66,46 @@
                 <button type="button" class="btn btn-outline-light" style="width:250px" 
                       onclick="location.href='<?php echo $acesso14 ?>'">Cadastro de Novo Produto</button><br><br>
               </div>
-              <div class="col-md-8">
-                Lista de Pedidos
-              </div>
+              <div class="col-md-9">
+                <h5>Lista dos Pedidos em Execução</h5><?php
+                $produtos = $connDB->prepare("SELECT * FROM pf_pedido");
+                $produtos->execute();
+
+                while($rowPedido = $produtos->fetch(PDO::FETCH_ASSOC)){ ?>
+                  <div class="card text-bg-success mb-3" style="width: 53rem;">
+                    <div class="card-body">
+                      <div class="row g-2">
+                        <div class="col-md-3">
+                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1">Pedido No.</span>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="text-align: center; background: none"
+                                   value="<?php echo $rowPedido['NUMERO_PEDIDO']?>" readonly>
+                          </div>
+                        </div>
+                        <div class="col-md-9">
+                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1">Produto</span>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="background: none"
+                                  value="<?php echo $rowPedido['NOME_PRODUTO'] ?>" readonly>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1">Entrega</span>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="text-align: center; background: none"
+                                  value="<?php echo date('d/m/Y',strtotime($rowPedido['DATA_ENTREGA'])) ?>" readonly>
+                          </div>
+                        </div>
+                        <div class="col-md-9">
+                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1">Cliente</span>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="background: none"
+                                  value="<?php echo $rowPedido['CLIENTE'] ?>" readonly>
+                          </div>
+                        </div>
+                        <h5 style="color: yellow">Situação : <?php echo $rowPedido['SITUACAO_QUALI'] ?></h5>
+
+                      </div>
+                    </div><!-- fim da DIV do corpo do cartão -->
+                  </div><!-- fim da DIV do cartão --><?php
+                } ?><!-- fim da recursão -->
+              </div><!-- fim da coluna exclusiva dos cartões -->
             </div><!-- fim da DIV row do setor comercial -->
           </div><!-- fim da div id = prod-tab-pane -->
 

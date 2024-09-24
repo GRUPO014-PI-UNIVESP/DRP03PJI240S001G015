@@ -22,7 +22,7 @@
     }
     function resetTimer() {
       clearTimeout(time);
-        time = setTimeout(deslogar, 36000000);
+        time = setTimeout(deslogar, 300000);
     }
   };
   inactivityTime();
@@ -241,23 +241,23 @@
         </div><!-- fim do modal fade -->
       </div><!-- fim da div row do calendário -->       
     </form><br><?php
-    $dataLivre = filter_input_array(INPUT_POST, FILTER_DEFAULT);?>
+    $dataLivre = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+    ?>
     <form method="POST">
       <div class="row g-2"><?php
         if(!empty($dataLivre['agendar']) || !empty($dataLivre['dataSelecionada'])){
-          $dataAgendada = date('Y-m-d', strtotime($dataLivre['dataSelecionada']));
-          $dataEntrega  = date('Y-m-d', strtotime($dataAgendada."+ 1 week"));
-          $dataConvert  = date('Y-m-d', strtotime($dataLivre['dataSelecionada']));
-          $convert1     = time();
-          $convert2     = strtotime($dataConvert); 
-          $diff         = round(($convert2 - $convert1) / 86400); echo $diff . ' dias <br>';
-          $dataFabri = new DateTime(); $dataFabri->modify("+ 1 week"); $dataFabri->format('Y-m-d'); echo $dataFabri->format('Y-m-d');
+          $_SESSION['dataAgendada'] = date('Y-m-d', strtotime($dataLivre['dataSelecionada']));
+          $_SESSION['dataEntrega']  = date('Y-m-d', strtotime($_SESSION['dataAgendada']."+ 1 week"));
+          $dataConvert              = date('Y-m-d', strtotime($dataLivre['dataSelecionada']));
+          $convert1                 = time();
+          $convert2                 = strtotime($dataConvert); 
+          $_SESSION['diff']         = round(($convert2 - $convert1) / 86400);
           ?>
           <div class="col-md-1"></div>
           <div class="col-md-2">
             <label for="dataAgenda" class="form-label" style="font-size: 10px; color:aqua">Data Agendada</label>
             <input style="font-size: 16px; text-align: center; color:yellow" type="text" class="form-control" id="dataAgenda" name="dataAgenda"
-                   value="<?php echo date('d/m/Y', strtotime($dataAgendada)) ?>" readonly>
+                   value="<?php echo date('d/m/Y', strtotime($_SESSION['dataAgendada'])) ?>" readonly>
           </div>
           <div class="col-md-8">
             <label for="cliente" class="form-label" style="font-size: 10px; color:aqua">Nome do Cliente</label>
@@ -277,7 +277,7 @@
           <div class="col-md-2">
             <label for="dataPrazo" class="form-label" style="font-size: 10px; color:aqua">Data Estimada de Entrega</label>
             <input style="font-size: 16px; text-align: center; color: yellow" type="text" class="form-control" id="dataPrazo" name="dataPrazo"
-                   value="<?php echo date('d/m/Y', strtotime($dataEntrega)) ?>" readonly>
+                   value="<?php echo date('d/m/Y', strtotime($_SESSION['dataEntrega'])) ?>" readonly>
           </div>
 
           <div class="col-md-3"><br>
@@ -287,6 +287,10 @@
           <div class="col-md-3"><br>
             <input style="width: 180px;" class="btn btn-primary" type="submit" id="salvar3" name="salvar3" value="Confirmar e Salvar">
           </div>
+          <div class="col-md-6"><br></div>
+          <div class="col-md-12"><br></div>
+          <div class="col-md-12"><br></div>
+          <div class="col-md-12"><br></div>
           <?php
         }?>        
       </div>
@@ -296,33 +300,31 @@
       $nomeCliente = $confirmaPedido['cliente'];
       $dataPedido = date('Y-m-d');
       $uniMed = 'KG';
-      $situacao = 'PEDIDO REGISTRADO';
+      $situacao = 'PEDIDO REGISTRADO, AGUARDANDO FABRICAÇÃO';
       $responsavel = $_SESSION['nome_func'];
-      $dataFabri = new DateTime(); $dataFabri->modify("+ $diff days"); $dataFabri->format("Y-m-d");
-      $dataSaida = new DateTime(); $dataSaida->modify("+ ($diff + $padrao) days"); $dataSaida->format("Y-m-d");
 
       $registraPedido = $connDB->prepare("INSERT INTO pf_pedido (NUMERO_PEDIDO, DATA_PEDIDO, CLIENTE, NOME_PRODUTO, DATA_FABRI, QTDE_LOTE_PF, UNIDADE_MEDIDA, SITUACAO_QUALI, DATA_ENTREGA, REGISTRO_PEDIDO) 
                                                  VALUES (:numPedido, :dataPedido, :nomeCliente, :nomeProduto, :dataFabri, :qtdeLote, :uniMed, :situacao, :dataEntrega, :responsavel)");
-      $registraPedido->bindParam(':numPedido'  , $numPedido   , PDO::PARAM_INT);
-      $registraPedido->bindParam(':dataPedido' , $dataPedido);
-      $registraPedido->bindParam(':nomeCliente', $nomeCliente , PDO::PARAM_STR);
-      $registraPedido->bindParam(':nomeProduto', $nomeProduto , PDO::PARAM_STR);
-      $registraPedido->bindParam(':dataFabri'  , $dataFabri);
-      $registraPedido->bindParam(':qtdeLote'   , $qtdeLote    , PDO::PARAM_STR);
-      $registraPedido->bindParam(':uniMed'     , $uniMed      , PDO::PARAM_STR);
-      $registraPedido->bindParam(':situacao'   , $situacao    , PDO::PARAM_STR);
-      $registraPedido->bindParam(':dataEntrega', $dataSaida);
-      $registraPedido->bindParam(':responsavel', $responsavel , PDO::PARAM_STR);
+      $registraPedido->bindParam(':numPedido'  , $numPedido                , PDO::PARAM_INT);
+      $registraPedido->bindParam(':dataPedido' , $dataPedido               , PDO::PARAM_STR);
+      $registraPedido->bindParam(':nomeCliente', $nomeCliente              , PDO::PARAM_STR);
+      $registraPedido->bindParam(':nomeProduto', $nomeProduto              , PDO::PARAM_STR);
+      $registraPedido->bindParam(':dataFabri'  , $_SESSION['dataAgendada'] , PDO::PARAM_STR);
+      $registraPedido->bindParam(':qtdeLote'   , $qtdeLote                 , PDO::PARAM_STR);
+      $registraPedido->bindParam(':uniMed'     , $uniMed                   , PDO::PARAM_STR);
+      $registraPedido->bindParam(':situacao'   , $situacao                 , PDO::PARAM_STR);
+      $registraPedido->bindParam(':dataEntrega', $_SESSION['dataEntrega']  , PDO::PARAM_STR);
+      $registraPedido->bindParam(':responsavel', $responsavel              , PDO::PARAM_STR);
       $registraPedido->execute();
 
       $alocaFila = $connDB->prepare("INSERT INTO fila_ocupacao (PEDIDO_NUM, DATA_AGENDA, NOME_PRODUTO, QTDE_LOTE, CAPACIDADE_PROCESS, SITUACAO_QUALI) 
                                             VALUES (:numPedido, :dataFabri, :nomeProduto, :qtdeLote, :capaProcess, :situacao)");
-      $alocaFila->bindParam(':numPedido'  , $numPedido        , PDO::PARAM_INT);
-      $alocaFila->bindParam(':dataFabri'  , $dataFabri        , PDO::PARAM_STR);
-      $alocaFila->bindParam(':nomeProduto', $nomeProduto      , PDO::PARAM_STR);
-      $alocaFila->bindParam(':qtdeLote'   , $qtdeLote         , PDO::PARAM_STR);
-      $alocaFila->bindParam(':capaProcess', $capacidadeProcess, PDO::PARAM_STR);
-      $alocaFila->bindParam(':situacao'   , $situacao         , PDO::PARAM_STR);
+      $alocaFila->bindParam(':numPedido'  , $numPedido               , PDO::PARAM_INT);
+      $alocaFila->bindParam(':dataFabri'  , $_SESSION['dataAgendada'], PDO::PARAM_STR);
+      $alocaFila->bindParam(':nomeProduto', $nomeProduto             , PDO::PARAM_STR);
+      $alocaFila->bindParam(':qtdeLote'   , $qtdeLote                , PDO::PARAM_STR);
+      $alocaFila->bindParam(':capaProcess', $capacidadeProcess       , PDO::PARAM_STR);
+      $alocaFila->bindParam(':situacao'   , $situacao                , PDO::PARAM_STR);
       $alocaFila->execute();
 
       header('Location: ./33PedidoProduto.php');
