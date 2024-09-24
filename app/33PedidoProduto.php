@@ -34,6 +34,25 @@
     </div>
     <form action="#" method="POST">
       <div class="row g-3">
+        <div class="col-md-3">
+          <label for="padrao" class="form-label" style="font-size: 10px; color:aqua">Prazo para Entrega</label>
+          <div class="input-group mb-2">
+            <input type="number" class="form-control" id="padrao" name="padrao" 
+                   style="font-size: 13px; text-align: center;" value="7">
+              <span class="input-group-text" style="font-size: 13px">dias em média</span>
+          </div>
+          <p style="font-size:11px; color:grey">Tempo para fabricação e análises de qualidade</p>
+        </div>
+        <div class="col-md-3">
+          <label for="xtend" class="form-label" style="font-size: 10px; color:aqua">Prazo para Entrega Extendida</label>
+          <div class="input-group mb-2">
+            <input type="number" class="form-control" id="xtend" name="xtend" 
+                   style="font-size: 13px; text-align: center;" value="14">
+              <span class="input-group-text" style="font-size: 13px">dias em média</span>
+          </div>
+          <p style="font-size:11px; color:grey">Em casos de insuficiência de materiais e insumos</p>
+        </div>
+        <div class="col-md-6"></div>
         <div class="col-md-2"> <?php 
           // verifica o identificador do último registro
           $queryLast = $connDB->prepare("SELECT MAX(NUMERO_PEDIDO) AS ULTIMO FROM pf_pedido");
@@ -69,7 +88,7 @@
         $_SESSION['nomeProduto'] = $produto['nomeProduto']; $nomeProduto = $produto['nomeProduto'];
         $_SESSION['qtdeLote']    = $produto['qtdeLote']   ; $qtdeLote    = $produto['qtdeLote'];
         $_SESSION['numPedido']   = $produto['numPedido']  ; $numPedido   = $produto['numPedido'];
-        $_SESSION['interPadr']   = $produto['interPadr']  ; $_SESSION['interXtend'] = $produto['interXtend'];
+        $_SESSION['padrao']      = $produto['padrao']     ; $_SESSION['xtend'] = $produto['xtend'];
 
         $query_material = $connDB->prepare("SELECT * FROM pf_tabela WHERE NOME_PRODUTO = :nomeProduto");
         $query_material->bindParam(':nomeProduto', $nomeProduto, PDO::PARAM_STR);

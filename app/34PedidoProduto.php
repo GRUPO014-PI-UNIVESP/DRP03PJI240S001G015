@@ -61,14 +61,16 @@
               <th scope="col" style="width: 10%; color: gray; text-align: center;">Ação</th>
             </tr>
           </thead> <?php
-            $nomeProduto = $_SESSION['nomeProduto'];
-            $qtdeLote    = $_SESSION['qtdeLote'];
-            $numPedido   = $_SESSION['numPedido'];
+            $nomeProduto = $_SESSION['nomeProduto']; $padrao = $_SESSION['padrao'];
+            $qtdeLote    = $_SESSION['qtdeLote']   ; $xtend  = $_SESSION['xtend'];
+            $numPedido   = $_SESSION['numPedido']  ;
             $verificador = 0;
             $query_material = $connDB->prepare("SELECT * FROM pf_tabela WHERE NOME_PRODUTO = :nomeProduto");
-            $query_material->bindParam(':nomeProduto', $nomeProduto, PDO::PARAM_STR); $query_material->execute(); ?>
+            $query_material->bindParam(':nomeProduto', $nomeProduto, PDO::PARAM_STR);
+            $query_material->execute(); ?>
           <tbody> <?php            
-            while($rowLista = $query_material->fetch(PDO::FETCH_ASSOC)){ $contador = 1; $capacidadeProcess = $rowLista['CAPACIDADE_PROCESS'];?>
+            while($rowLista = $query_material->fetch(PDO::FETCH_ASSOC)){
+              $contador = 1; $capacidadeProcess = $rowLista['CAPACIDADE_PROCESS'];?>
               <tr>
                 <td scope="col" style="width: 30%; font-size: 13px; color: yellow"> <?php
                   $descrMaterial = $rowLista['DESCRICAO_MP'];
@@ -85,7 +87,8 @@
                   $query_disponivel = $connDB->prepare("SELECT SUM(QTDE_ESTOQUE) AS estoque, SUM(QTDE_RESERVADA) AS reservado 
                                                                FROM mp_estoque WHERE DESCRICAO_MP = :material");
                   $query_disponivel->bindParam(':material', $descrMaterial, PDO::PARAM_STR);
-                  $query_disponivel->execute(); $resultado = $query_disponivel->fetch(PDO::FETCH_ASSOC);
+                  $query_disponivel->execute();
+                  $resultado = $query_disponivel->fetch(PDO::FETCH_ASSOC);
                   $qtdeDisponivel = $resultado['estoque'] - $resultado['reservado'];
                   echo $qtdeDisponivel . ' ' . $rowLista['UNIDADE_MEDIDA']; ?>
                 </td> <?php
@@ -150,16 +153,16 @@
                 <div class="row g-1">
                   <div class="overflow-auto"> <?php $nDiasBase = 31;
                     if($verificador == 0){
-                      $xtend       = 0;
-                      $nDiasBase   = $nDiasBase + $xtend;
-                      $diaCal      = date('d/m'  , strtotime("+$xtend days"));
-                      $diaHoje     = date('d/m/Y', strtotime("+$xtend days"));
+                      $media       = 0;
+                      $nDiasBase   = $nDiasBase + $media;
+                      $diaCal      = date('d/m'  , strtotime("+$media days"));
+                      $diaHoje     = date('d/m/Y', strtotime("+$media days"));
                       $diaMaxi     = date('d/m/Y', strtotime("+$nDiasBase days"));        
                     } else if($verificador >= 1){
-                      $xtend       = 10;
-                      $nDiasBase   = $nDiasBase + $xtend;
-                      $diaCal      = date('d/m'  , strtotime("+$xtend days"));
-                      $diaHoje     = date('d/m/Y', strtotime("+$xtend days"));
+                      $media       = $xtend - $padrao;
+                      $nDiasBase   = $nDiasBase + $media;
+                      $diaCal      = date('d/m'  , strtotime("+$media days"));
+                      $diaHoje     = date('d/m/Y', strtotime("+$media days"));
                       $diaMaxi     = date('d/m/Y', strtotime("+$nDiasBase days"));         
                     }?>
                     <table class="table table-dark table-bordered table caption-top">
@@ -178,9 +181,9 @@
               
                       <tbody><!-- início do corpo da tabela calendario -->
                         <style>td:hover{background-color: rgba(0, 0, 0, 0.5);}</style> <?php
-                        $diaSemana = date('w', strtotime("+$xtend days")); 
-                        $nDias = $xtend + 1; 
-                        $vDias = $xtend + 0; 
+                        $diaSemana = date('w', strtotime("+$media days")); 
+                        $nDias = $media + 1; 
+                        $vDias = $media + 0; 
                         $verificaDataOcupada = date('Y-m-d');
 
                         for($i = 1; $i <= 5; $i++){ ?><!-- Recursão para => 1: Sem-1, 2: Sem-2, 3: Sem-3, 4: Sem-4, 5: Sem-5.-->
@@ -244,6 +247,11 @@
         if(!empty($dataLivre['agendar']) || !empty($dataLivre['dataSelecionada'])){
           $dataAgendada = date('Y-m-d', strtotime($dataLivre['dataSelecionada']));
           $dataEntrega  = date('Y-m-d', strtotime($dataAgendada."+ 1 week"));
+          $dataConvert  = date('Y-m-d', strtotime($dataLivre['dataSelecionada']));
+          $convert1     = time();
+          $convert2     = strtotime($dataConvert); 
+          $diff         = round(($convert2 - $convert1) / 86400); echo $diff . ' dias <br>';
+          $dataFabri = new DateTime(); $dataFabri->modify("+ 1 week"); $dataFabri->format('Y-m-d'); echo $dataFabri->format('Y-m-d');
           ?>
           <div class="col-md-1"></div>
           <div class="col-md-2">
@@ -290,9 +298,9 @@
       $uniMed = 'KG';
       $situacao = 'PEDIDO REGISTRADO';
       $responsavel = $_SESSION['nome_func'];
-      $hoje = time(); $agenda = strtotime($dataAgendada); $diff = floor(($agenda - $hoje) / (60 * 60 * 24));
-      $dataFabri = date('Y-m-d', strtotime("+ $diff days")); $entrega = $diff + 7;
-      $dataSaida = date('Y-m-d', strtotime("+ $entrega days"));
+      $dataFabri = new DateTime(); $dataFabri->modify("+ $diff days"); $dataFabri->format("Y-m-d");
+      $dataSaida = new DateTime(); $dataSaida->modify("+ ($diff + $padrao) days"); $dataSaida->format("Y-m-d");
+
       $registraPedido = $connDB->prepare("INSERT INTO pf_pedido (NUMERO_PEDIDO, DATA_PEDIDO, CLIENTE, NOME_PRODUTO, DATA_FABRI, QTDE_LOTE_PF, UNIDADE_MEDIDA, SITUACAO_QUALI, DATA_ENTREGA, REGISTRO_PEDIDO) 
                                                  VALUES (:numPedido, :dataPedido, :nomeCliente, :nomeProduto, :dataFabri, :qtdeLote, :uniMed, :situacao, :dataEntrega, :responsavel)");
       $registraPedido->bindParam(':numPedido'  , $numPedido   , PDO::PARAM_INT);
