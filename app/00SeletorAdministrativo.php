@@ -161,6 +161,12 @@
                 $dataAgenda = $rowDados['DATA_AGENDA'];
                 $uniMed     = $rowDados['UNIDADE_MEDIDA'];
 
+                $prazo = $connDB->prepare("SELECT DATA_FABRI FROM pf_pedido WHERE NUMERO_PEDIDO = :numPedido");
+                $prazo->bindParam(':numPedido', $numPedido, PDO::PARAM_INT);
+                $prazo->execute();
+                $dataMax = $prazo->fetch(PDO::FETCH_ASSOC);
+                $dataLimite = date('Y-m-d', strtotime($dataMax['DATA_FABRI']."- 2 days"));
+
                 $compras = $connDB->prepare("SELECT SUM(QTDE_PEDIDO) AS QTDETOTAL FROM agenda_compra WHERE DESCRICAO_MP = :descrMat");
                 $compras->bindParam(':descrMat', $descrMat, PDO::PARAM_STR);
                 $compras->execute();
@@ -182,16 +188,24 @@
                         </div>
                       </div>
                       <div class="col-md-4">
+                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Qtde.Mínima</span>
+                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: center; background: none;"
+                                 value="<?php echo $totalCompra . ' ' . $uniMed ?>" readonly>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
                         <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Data da Agenda</span>
                           <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: center; background: none;"
                                  value="<?php echo date('d/m/Y', strtotime($dataAgenda)) ?>" readonly>
                         </div>
                       </div>
                       <div class="col-md-4">
-                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Quantidade</span>
+                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Prazo de Recebimento</span>
                           <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: center; background: none;"
-                                 value="<?php echo $totalCompra . ' ' . $uniMed ?>" readonly>
+                                 value="<?php echo date('d/m/Y', strtotime($dataLimite)) ?>" readonly>
                         </div>
+                      </div>
+                      <div class="col-md-9">
                       </div>
                       <div class="col-md-3">
                         <button class="btn btn-primary" style="font-size: 14px; float: right" onclick="location.href='./37CompraMaterial.php?id=<?php echo $descrMat ?>'">Autorizar Compra</button>
