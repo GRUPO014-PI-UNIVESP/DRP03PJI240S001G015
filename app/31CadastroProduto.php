@@ -38,16 +38,16 @@ $responsavel = $_SESSION['nome_func'];
       <div class="row g-1">
         <div class="col-md-5">
           <label for="nomeProduto" class="form-label" style="font-size: 10px; color:aqua">Nome Fantasia do Produto</label>
-          <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="nomeProduto" name="nomeProduto" autofocus required>
+          <input style="font-size: 12px; text-transform: uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="nomeProduto" name="nomeProduto" autofocus required>
         </div>
         <div class="col-md-5">
           <label for="descrProduto" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
-          <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="descrProduto" name="descrProduto" required>
+          <input style="font-size: 12px; text-transform: uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="descrProduto" name="descrProduto" required>
         </div>
         <div class="col-md-2">
           <label for="capacidade" class="form-label" style="font-size: 10px; color:aqua">Capacidade Produtiva</label>
           <div class="input-group mb-2">
-            <input type="number" class="form-control" id="capacidade" name="capacidade" style="font-size: 13px" onchange="this.form.submit()" required>
+            <input type="number" class="form-control" id="capacidade" name="capacidade" style="font-size: 13px; background: rgba(0,0,0,0.3)" onchange="this.form.submit()" required>
               <span class="input-group-text" style="font-size: 13px">Kg/Hora</span>
           </div>
         </div>

@@ -36,15 +36,15 @@
     <div class="row g-1" id="entradaProduto">
       <div class="col-md-2">
         <label for="pedidoNum" class="form-label" style="font-size: 10px; color:aqua">Pedido No.</label>
-        <input style="font-size: 16px; text-align: center; color:yellow" type="text" class="form-control" id="" name="" value="<?php echo $_SESSION['numPedido'] ?>" readonly>
+        <input style="font-size: 16px; text-align: center; color:yellow; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="" name="" value="<?php echo $_SESSION['numPedido'] ?>" readonly>
       </div>
       <div class="col-md-2">
         <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Quantidade do Pedido</label>
-        <input style="font-size: 16px; color:yellow; text-align:right" type="text" class="form-control" id="" name="" value="<?php echo $_SESSION['qtdeLote'] . ' Kg' ?>" readonly>
+        <input style="font-size: 16px; color:yellow; text-align:right; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="" name="" value="<?php echo $_SESSION['qtdeLote'] . ' Kg' ?>" readonly>
       </div>
       <div class="col-md-8">
         <label for="" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
-        <input style="font-size: 16px; color:yellow;" type="text" class="form-control" id="" name="" value="<?php echo $_SESSION['nomeProduto'] ?>" readonly>
+        <input style="font-size: 16px; color:yellow; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="" name="" value="<?php echo $_SESSION['nomeProduto'] ?>" readonly>
       </div>
     </div><!-- Fim da div row entradaProduto --><br>
 
@@ -230,7 +230,7 @@
               <div class="modal-footer">
                 <div class="col-md-2">
                   <label for="dataSelecionada" class="form-label" style="font-size: 10px; color:aqua">Selecione a Data na Fila</label>
-                  <input style="font-size: 20px;" type="date" class="form-control" id="dataSelecionada" name="dataSelecionada" autofocus required>
+                  <input style="font-size: 20px; background: rgba(0,0,0,0.3)" type="date" class="form-control" id="dataSelecionada" name="dataSelecionada" autofocus required>
                 </div>
                 <div class="col-md-2"><br>
                   <input class="btn btn-primary" type="submit" id="agendar" name="agendar" value="Confirmar Data" style="float: right">   
@@ -256,19 +256,19 @@
           <div class="col-md-1"></div>
           <div class="col-md-2">
             <label for="dataAgenda" class="form-label" style="font-size: 10px; color:aqua">Data Agendada</label>
-            <input style="font-size: 16px; text-align: center; color:yellow" type="text" class="form-control" id="dataAgenda" name="dataAgenda"
+            <input style="font-size: 16px; text-align: center; color:yellow; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="dataAgenda" name="dataAgenda"
                    value="<?php echo date('d/m/Y', strtotime($_SESSION['dataAgendada'])) ?>" readonly>
           </div>
           <div class="col-md-8">
             <label for="cliente" class="form-label" style="font-size: 10px; color:aqua">Nome do Cliente</label>
-            <select style="font-size: 16px;color:yellow" class="form-select" id="cliente" name="cliente" required>
-              <option style="font-size: 16px" selected>Selecione o Cliente, caso não esteja relacionado será necessário fazer o cadastramento</option><?php
+            <select style="font-size: 16px;color:yellow; background: rgba(0,0,0,0.3)" class="form-select" id="cliente" name="cliente" required>
+              <option style="font-size: 16px; background: rgba(0,0,0,0.3)" selected>Selecione o Cliente, caso não esteja relacionado será necessário fazer o cadastramento</option><?php
                 //Pesquisa de descrição do PRODUTO para seleção
                 $query_cliente = $connDB->prepare("SELECT DISTINCT NOME_FANTASIA FROM pf_cliente");
                 $query_cliente->execute();
                 // inclui nome dos produtos como opções de seleção da tag <select>
                 while($rowCliente = $query_cliente->fetch(PDO::FETCH_ASSOC)){?>
-                  <option style="font-size: 16px; color:yellow"><?php echo $rowCliente['NOME_FANTASIA']; ?></option> <?php
+                  <option style="font-size: 16px; color:yellow; background: rgba(0,0,0,0.3)"><?php echo $rowCliente['NOME_FANTASIA']; ?></option> <?php
                 } ?>
             </select>
           </div>

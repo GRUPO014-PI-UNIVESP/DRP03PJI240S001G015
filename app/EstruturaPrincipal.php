@@ -319,7 +319,7 @@ function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
 
     <!-- Rodapé com créditos-->
     <div class="sidebarFoot">
-      <p class="text-break" style="font-size:11px; color:bisque;text-align: center;">Developed by DRP03PJI240S001G015 2024</p>
+      <p class="text-break" style="font-size: 11px; color:#DEB887; text-align: center;">Developed by DRP03PJI240S001G015 2024</p>
     </div>
     
     <!-- Área Principal-->

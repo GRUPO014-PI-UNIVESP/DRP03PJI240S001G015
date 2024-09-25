@@ -37,8 +37,7 @@
         <div class="col-md-3">
           <label for="padrao" class="form-label" style="font-size: 10px; color:aqua">Prazo para Entrega</label>
           <div class="input-group mb-2">
-            <input type="number" class="form-control" id="padrao" name="padrao" 
-                   style="font-size: 13px; text-align: center;" value="7">
+            <input type="number" class="form-control" id="padrao" name="padrao" style="font-size: 13px; text-align: center; background: rgba(0,0,0,0.3)" value="7">
               <span class="input-group-text" style="font-size: 13px">dias em média</span>
           </div>
           <p style="font-size:11px; color:grey">Tempo para fabricação e análises de qualidade</p>
@@ -47,7 +46,7 @@
           <label for="xtend" class="form-label" style="font-size: 10px; color:aqua">Prazo para Entrega Extendida</label>
           <div class="input-group mb-2">
             <input type="number" class="form-control" id="xtend" name="xtend" 
-                   style="font-size: 13px; text-align: center;" value="14">
+                   style="font-size: 13px; text-align: center; background: rgba(0,0,0,0.3)" value="14">
               <span class="input-group-text" style="font-size: 13px">dias em média</span>
           </div>
           <p style="font-size:11px; color:grey">Em casos de insuficiência de materiais e insumos</p>
@@ -59,16 +58,16 @@
           $queryLast->execute();
           $rowID = $queryLast->fetch(PDO::FETCH_ASSOC); $novoID = $rowID['ULTIMO'] + 1;?>
           <label for="numPedido" class="form-label" style="font-size: 10px; color:aqua;">Pedido No.</label>
-          <input style="font-size: 14px; text-align: center; color:yellow" type="number" class="form-control" id="numPedido" name="numPedido" value="<?php echo $novoID ?>" readonly>
+          <input style="font-size: 14px; text-align: center; color:yellow; background: rgba(0,0,0,0.3)" type="number" class="form-control" id="numPedido" name="numPedido" value="<?php echo $novoID ?>" readonly>
         </div>
         <div class="col-md-2">
           <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Quantidade do Pedido</label>
-          <input style="font-size: 14px; text-align:right" type="number" class="form-control" id="qtdeLote" name="qtdeLote" autofocus required>
+          <input style="font-size: 14px; text-align:right; background: rgba(0,0,0,0.3)" type="number" class="form-control" id="qtdeLote" name="qtdeLote" autofocus required>
         </div>
         <div class="col-md-8">
           <label for="nomeProduto" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
-          <select style="font-size: 14px;" class="form-select" id="nomeProduto" name="nomeProduto" onchange="this.form.submit()">
-            <option style="font-size: 14px" selected>Selecione o Produto</option><?php
+          <select style="font-size: 14px; background: rgba(0,0,0,0.3)" class="form-select" id="nomeProduto" name="nomeProduto" onchange="this.form.submit()">
+            <option style="font-size: 14px; color: black; background: rgba(0,0,0,0.3)" selected>Selecione o Produto</option><?php
 
               //Pesquisa de descrição do PRODUTO para seleção
               $query_produto = $connDB->prepare("SELECT DISTINCT NOME_PRODUTO FROM pf_tabela");
@@ -76,7 +75,7 @@
 
               // inclui nome dos produtos como opções de seleção da tag <select>
               while($produto = $query_produto->fetch(PDO::FETCH_ASSOC)){?>
-                <option style="font-size: 14px"><?php echo $produto['NOME_PRODUTO']; ?></option> <?php
+                <option style="font-size: 14px; color: black; background: rgba(0,0,0,0.3)"><?php echo $produto['NOME_PRODUTO']; ?></option> <?php
               } ?>
           </select>
         </div>

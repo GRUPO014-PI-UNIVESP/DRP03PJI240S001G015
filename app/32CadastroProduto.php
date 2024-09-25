@@ -37,17 +37,17 @@ $responsavel = $_SESSION['nome_func'];
       <div class="row g-1">
         <div class="col-md-5">
           <label for="" class="form-label" style="font-size: 10px; color:aqua">Nome Fantasia do Produto</label>
-          <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="" name=""
+          <input style="font-size: 12px; text-transform: uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="" name=""
             value="<?php echo $_SESSION['nomeProduto']; ?>" readonly>
         </div>
         <div class="col-md-5">
           <label for="" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
-          <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="" name=""
+          <input style="font-size: 12px; text-transform: uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="" name=""
             value="<?php echo $_SESSION['descrProduto']; ?>" readonly>
         </div>
         <div class="col-md-2">
           <label for="" class="form-label" style="font-size: 10px; color:aqua">Capacidade Produtiva</label>
-          <input style="font-size: 12px; text-align: right" type="text" class="form-control" id="" name=""
+          <input style="font-size: 12px; text-align: right; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="" name=""
             value="<?php echo $_SESSION['capacidade'] . ' Kg/hora'; ?>" readonly>
         </div>
       </div><br>
@@ -62,12 +62,12 @@ $responsavel = $_SESSION['nome_func'];
             <div class="row g-1">
               <div class="col-md-5">
                 <label for="" class="form-label" style="font-size: 10px; color:aqua">Componente</label>
-                <input style="font-size: 12px; color: yellow" type="text" class="form-control" id="" name=""
+                <input style="font-size: 12px; color: yellow; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="" name=""
                   value="<?php echo $rowMaterial['DESCRICAO_MP']; ?>" readonly>
               </div>
               <div class="col-md-2">
                 <label for="" class="form-label" style="font-size: 10px; color:aqua">Proporção</label>
-                <input type="text" class="form-control" id="" name="" style="font-size: 13px" value="<?php echo $rowMaterial['PROPORCAO_MATERIAL'] . ' %'; ?>" readonly>
+                <input type="text" class="form-control" id="" name="" style="font-size: 13px; background: rgba(0,0,0,0.3)" value="<?php echo $rowMaterial['PROPORCAO_MATERIAL'] . ' %'; ?>" readonly>
               </div>
               <div class="col-md-3">
                 <label for="adicionar" class="form-label" style="font-size: 10px; color:aqua;">Ação</label><br>
@@ -81,21 +81,21 @@ $responsavel = $_SESSION['nome_func'];
         <div class="row g-1">
           <div class="col-md-5">
             <label for="material" class="form-label" style="font-size: 10px; color:aqua">Material Componente</label>
-            <select style="font-size: 13px;" class="form-select" id="material" name="material" autofocus>
-              <option style="font-size: 13px" selected>Selecione o material a ser utilizado</option> <?php
+            <select style="font-size: 13px; background: rgba(0,0,0,0.3)" class="form-select" id="material" name="material" autofocus>
+              <option style="font-size: 13px; color: black; background: rgba(0,0,0,0.3)" selected>Selecione o material a ser utilizado</option> <?php
                 //Pesquisa de material
                 $listaMateriais = $connDB->prepare("SELECT * FROM mp_tabela");
                 $listaMateriais->execute();
                 // inclui nome dos materiais disponíveis como opções de seleção da tag <select>
                 while($rowLista = $listaMateriais->fetch(PDO::FETCH_ASSOC)){?>
-                  <option style="font-size: 13px"><?php echo $rowLista['DESCRICAO_MP']; ?></option> <?php
+                  <option style="font-size: 13px; color: black; background: rgba(0,0,0,0.3)"><?php echo $rowLista['DESCRICAO_MP']; ?></option> <?php
                 }?>
             </select>          
           </div>
           <div class="col-md-2">
             <label for="proporcao" class="form-label" style="font-size: 10px; color:aqua">Proporção</label>
             <div class="input-group mb-2">
-              <input type="number" class="form-control" id="proporcao" name="proporcao" style="font-size: 13px">
+              <input type="number" class="form-control" id="proporcao" name="proporcao" style="font-size: 13px; background: rgba(0,0,0,0.3)">
                 <span class="input-group-text" style="font-size: 13px">%</span>
             </div>
           </div>

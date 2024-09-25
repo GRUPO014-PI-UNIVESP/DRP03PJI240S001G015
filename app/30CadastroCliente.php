@@ -45,67 +45,67 @@ $responsavel = $_SESSION['nome_func'];
       <div class="row g-1">
         <div class="col-md-4">
           <label for="fantasia" class="form-label" style="font-size: 10px; color:aqua">Nome Fantasia da Empresa</label>
-          <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="fantasia" name="fantasia" 
-            placeholder="">
+          <input style="font-size: 12px; text-transform: uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="fantasia" name="fantasia" 
+            placeholder="" autofocus>
             <p style="font-size: 10px; color: grey">Será modificado para caixa alta</p>
         </div>
         <div class="col-md-8">
           <label for="razaoSocial" class="form-label" style="font-size: 10px; color:aqua">Razão Social</label>
-          <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="razaoSocial" name="razaoSocial" 
+          <input style="font-size: 12px; text-transform: uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="razaoSocial" name="razaoSocial" 
             placeholder="">
             <p style="font-size: 10px; color: grey">Será modificado para caixa alta</p>
         </div>
         <div class="col-md-2">
           <label for="cnpj" class="form-label" style="font-size: 10px; color:aqua">CNPJ</label>
-          <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="CNPJInput" name="cnpj" 
+          <input style="font-size: 12px; text-transform: uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="CNPJInput" name="cnpj" 
             placeholder="" maxlength="14" onkeyup="criaMascara('CNPJ')">
           <p style="font-size: 10px; color: grey">Somente números 14 dígitos</p>                 
         </div>
         <div class="col-md-2">
           <label for="inscrEstadual" class="form-label" style="font-size: 10px; color:aqua">Inscrição Estadual</label>
-          <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="IEInput" name="inscrEstadual" 
+          <input style="font-size: 12px; text-transform: uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="IEInput" name="inscrEstadual" 
             placeholder="" maxlength="12" onkeyup="criaMascara('IE')">
           <p style="font-size: 10px; color: grey">Somente números 12 dígitos</p>
         </div>
         <div class="col-md-6">
           <label for="cidade" class="form-label" style="font-size: 10px; color:aqua">Cidade</label>
-          <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="cidade" name="cidade" 
+          <input style="font-size: 12px; text-transform: uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="cidade" name="cidade" 
             placeholder="">
             <p style="font-size: 10px; color: grey">Será modificado para caixa alta</p>
         </div>
           <div class="col-md-2">
           <label for="estado" class="form-label" style="font-size: 10px; color:aqua">Estado (U.F.)</label>
-          <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="estado" name="estado" 
+          <input style="font-size: 12px; text-transform: uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="estado" name="estado" 
             placeholder="" maxlength="2">
           <p style="font-size: 10px; color: grey">Será modificado para caixa alta</p>
         </div>
         <div class="col-md-12">
           <label for="endereco" class="form-label" style="font-size: 10px; color:aqua">Endereço Completo</label>
-          <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="endereco" name="endereco" 
+          <input style="font-size: 12px; text-transform: uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="endereco" name="endereco" 
             placeholder="">
           <p style="font-size: 10px; color: grey">Será modificado para caixa alta</p>
         </div>
         <div class="col-md-9">
           <label for="email" class="form-label" style="font-size: 10px; color:aqua">E-Mail</label>
-          <input style="font-size: 12px; text-transform: lowercase" type="email" class="form-control" id="email" name="email" 
+          <input style="font-size: 12px; text-transform: lowercase; background: rgba(0,0,0,0.3)" type="email" class="form-control" id="email" name="email" 
             placeholder="">
           <p style="font-size: 10px; color: grey">Digite corretamente o endereço no formato "endereço@provedor.domínio"</p>
         </div>
         <div class="col-md-3">
           <label for="telefone" class="form-label" style="font-size: 10px; color:aqua">Telefone Fixo</label>
-          <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="FixoInput" name="Fixo" 
+          <input style="font-size: 12px; text-transform: uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="FixoInput" name="Fixo" 
             placeholder="" maxlength="10" onkeyup="criaMascara('Fixo')">
           <p style="font-size: 10px; color: grey">Somente números: 10 dígitos formato (xx) xxxx-xxxx</p>
         </div>
         <div class="col-md-9">
           <label for="nomeRepresentante" class="form-label" style="font-size: 10px; color:aqua">Nome do Representante</label>
-          <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="nomeRepresentante" name="nomeRepresentante" 
+          <input style="font-size: 12px; text-transform: uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="nomeRepresentante" name="nomeRepresentante" 
             placeholder="">
           <p style="font-size: 10px; color: grey">Será modificado para caixa alta</p>
         </div>
         <div class="col-md-3">
           <label for="telefone" class="form-label" style="font-size: 10px; color:aqua">Telefone Celular</label>
-          <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="CelularInput" name="Celular" 
+          <input style="font-size: 12px; text-transform: uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="CelularInput" name="Celular" 
             placeholder="" maxlength="11" onkeyup="criaMascara('Celular')">
           <p style="font-size: 10px; color: grey">Somente números: 11 dígitos formato (xx) xxxxx-xxxx</p>
         </div>
