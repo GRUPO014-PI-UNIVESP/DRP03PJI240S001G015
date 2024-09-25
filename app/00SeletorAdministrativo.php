@@ -208,7 +208,7 @@
                       <div class="col-md-9">
                       </div>
                       <div class="col-md-3">
-                        <button class="btn btn-primary" style="font-size: 14px; float: right" onclick="location.href='./37CompraMaterial.php?id=<?php echo $descrMat ?>'">Autorizar Compra</button>
+                        <button class="btn btn-primary" style="font-size: 14px; float: right" onclick="location.href='./21CompraMaterial.php?id=<?php echo $descrMat ?>'">Autorizar Compra</button>
                       </div>
                       <div class="col-md-12" style="background: rgba(0,0,0,0.3); border-radius: 5px;">
                         <h6 style="color: orange;">Situação : <?php echo $situacao ?></h6>
