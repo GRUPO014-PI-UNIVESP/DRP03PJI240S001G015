@@ -28,7 +28,7 @@
   }else{ $acesso1 = ''; $acesso5 = ''; $acesso7 = ''; $acesso8 = ''; $acesso9 = ''; $acesso10 = ''; $acesso11 = '';}
 
   if($_SESSION['departamento'] === 'GARANTIA DA QUALIDADE'|| $_SESSION['credencial'] >= 4){
-    $acesso20  = './01SeletorGQualidade.php';
+    $acesso20 = './01SeletorGQualidade.php';
     $acesso21 = './40RegistroAnalise.php'  ;  
   }else{ $acesso2 = ''; $acesso12 = ''; }
 
