@@ -30,16 +30,16 @@
   if($_SESSION['departamento'] === 'GARANTIA DA QUALIDADE'|| $_SESSION['credencial'] >= 4){
     $acesso20 = './01SeletorGQualidade.php';
     $acesso21 = './40RegistroAnalise.php'  ;  
-  }else{ $acesso2 = ''; $acesso12 = ''; }
+  }else{ $acesso20 = ''; $acesso21 = ''; }
 
   if($_SESSION['departamento'] === 'LOGÍSTICA'      || $_SESSION['credencial'] >= 4){
     $acesso30 = './02SeletorLogistica.php';     
-  }else{ $acesso3 = ''; }
+  }else{ $acesso30 = ''; }
 
   if($_SESSION['departamento'] === 'PRODUÇÃO'       || $_SESSION['credencial'] >= 4){
-    $acesso4 = './03SeletorProducao.php';      
+    $acesso40 = './03SeletorProducao.php';      
   }else{ $acesso40 = ''; }
-  if($_SESSION['credencial'] >= 2){ $acesso60 = './05MonitorLogin.php'; } else{ $acesso6 = ''; }
+  if($_SESSION['credencial'] >= 2){ $acesso60 = './05MonitorLogin.php'; } else{ $acesso60 = ''; }
 
 function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
   if($tamanho <= $limite){ $novo_texto = $texto; }else{
@@ -166,20 +166,20 @@ function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
         <path d="m8 0 6.61 3h.89a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H15v7a.5.5 0 0 1 .485.38l.5 2a.498.498 0 0 1-.485.62H.5a.498.498 0 0 1-.485-.62l.5-2A.5.5 0 0 1 1 13V6H.5a.5.5 0 0 1-.5-.5v-2A.5.5 0 0 1 .5 3h.89zM3.777 3h8.447L8 1zM2 6v7h1V6zm2 0v7h2.5V6zm3.5 0v7h1V6zm2 0v7H12V6zM13 6v7h1V6zm2-1V4H1v1zm-.39 9H1.39l-.25 1h13.72z"/>
       </svg>  Administrativo</a>
 
-    <a href="<?php echo $acesso2 ?>">
+    <a href="<?php echo $acesso20 ?>">
       <!-- ícone do GQ  -->
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-clipboard2-check-fill" viewBox="0 0 16 16">
         <path d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5"/>
         <path d="M4.085 1H3.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1h-.585q.084.236.085.5V2a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 2v-.5q.001-.264.085-.5m6.769 6.854-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708.708"/>
       </svg> Garantia da Qualidade</a>
 
-    <a href="<?php echo $acesso3 ?>">
+    <a href="<?php echo $acesso30 ?>">
       <!-- ícone da Logística  -->
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
         <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/>
       </svg> Logística</a>
 
-    <a href="<?php echo $acesso4 ?>">
+    <a href="<?php echo $acesso40 ?>">
       <!-- ícone da Produção  -->
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-building-gear" viewBox="0 0 16 16">
         <path d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6.5a.5.5 0 0 1-1 0V1H3v14h3v-2.5a.5.5 0 0 1 .5-.5H8v4H3a1 1 0 0 1-1-1z"/>

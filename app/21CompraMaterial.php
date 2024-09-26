@@ -139,9 +139,11 @@
       $uniMed      = $confirmaCompra['uniMed'];
       $qtdeCompra  = $confirmaCompra['qtdeLote'];
       $situacao    = 'COMPRA EFETUADA, AGUARDANDO RECEBIMENTO';
+      $etapa       = 1;
 
-      $realiza = $connDB->prepare("INSERT INTO mp_estoque (DATA_COMPRA, DESCRICAO_MP, QTDE_LOTE, UNIDADE_MEDIDA, SITUACAO_QUALI)
-                                          VALUES (:dataEntrega, :descrMat, :qtdeLote, :uniMed, :situacao)");
+      $realiza = $connDB->prepare("INSERT INTO mp_estoque (ETAPA_PROD, DATA_COMPRA, DESCRICAO_MP, QTDE_LOTE, UNIDADE_MEDIDA, SITUACAO_QUALI)
+                                          VALUES (:etapa, :dataEntrega, :descrMat, :qtdeLote, :uniMed, :situacao)");
+      $realiza->bindParam(':etapa'      , $etapa      , PDO::PARAM_STR);                                    
       $realiza->bindParam(':dataEntrega', $dataEntrega, PDO::PARAM_STR);
       $realiza->bindParam(':descrMat'   , $descrMat   , PDO::PARAM_STR);
       $realiza->bindParam(':qtdeLote'   , $qtdeCompra , PDO::PARAM_STR);

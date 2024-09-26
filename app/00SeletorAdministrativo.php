@@ -50,7 +50,7 @@
           <button type="button" class="btn btn-outline-info" style="width:300px" 
                   onclick="location.href='<?php echo $acesso5; ?>'">Quadro de Funcionários</button><br><br>
           <button type="button" class="btn btn-outline-info" style="width:300px" 
-                  onclick="location.href='<?php echo $acesso6 ?>' ">Monitor do Histórico de Login</button><br><br>             
+                  onclick="location.href='<?php echo $acesso60 ?>' ">Monitor do Histórico de Login</button><br><br>             
           <button type="button" class="btn btn-outline-info" style="width:300px" 
                   onclick="location.href=''">Estrutura da Organização</button><br><br>
         </div><!-- fim da div id = rh-tab-pane -->
