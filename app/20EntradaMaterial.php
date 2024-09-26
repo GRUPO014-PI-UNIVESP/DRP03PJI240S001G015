@@ -41,7 +41,7 @@ $responsavel = $_SESSION['nome_func'];
       // algoritmo para geração de numero de lote interno
       ?>
       <div class="row g-2">
-      <div class="col-md-2">
+        <div class="col-md-2">
           <div class="form-floating mb-3">
             <input type="dataEntrada" class="form-control" id="dataEntrada" name="dataEntrada" style="font-weight: bolder; text-align: center" value="<?php echo date('d/m/Y') ?>">
             <label for="floatingInput" style="color: aqua; font-size: 12px">Data de Recebimento</label>

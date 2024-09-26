@@ -153,9 +153,15 @@
       
       if(!empty($_GET['id'])){
 
-        $atualiza = $connDB->prepare("UPDATE agenda_compra SET SITUACAO_QUALI = :situacao WHERE DESCRICAO_MP = :descrMat");
-        $atualiza->bindParam(':descrMat', $descrMat, PDO::PARAM_STR);
-        $atualiza->bindParam(':situacao', $situacao, PDO::PARAM_STR);
+        $idCompra = $connDB->prepare("SELECT MAX(ID_ESTOQUE_MP) AS ultimo FROM mp_estoque WHERE DESCRICAO_MP = :descrMat");
+        $idCompra->bindParam(':descrMat', $descrMat, PDO::PARAM_STR);
+        $idCompra->execute();
+        $rowID = $idCompra->fetch(PDO::FETCH_ASSOC);
+
+        $atualiza = $connDB->prepare("UPDATE agenda_compra SET SITUACAO_QUALI = :situacao, ID_ESTOQUE = :idEstoque WHERE DESCRICAO_MP = :descrMat");
+        $atualiza->bindParam(':descrMat' , $descrMat       , PDO::PARAM_STR);
+        $atualiza->bindParam(':situacao' , $situacao       , PDO::PARAM_STR);
+        $atualiza->bindParam(':idEstoque', $rowID['ultimo'], PDO::PARAM_STR);
         $atualiza->execute();
       }
 
