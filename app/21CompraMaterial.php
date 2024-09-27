@@ -115,11 +115,11 @@
         </div>
         <div class="col-md-2">
           <label for="uniMed" class="form-label" style="font-size: 10px; color:aqua">Unidade de Medida</label>
-            <select style="font-weight: bold; font-size: 20px; background: rgba(0,0,0,0.3); text-align: center" class="form-select" id="uniMed" name="uniMed">
-              <option selected>Selecione</option>
-              <option value="KG">KG</option>
-              <option value="LT">LT</option>
-              <option value="UN">UNIDADE</option>
+            <select style="font-weight: bold; font-size: 20px; background: rgba(0,0,0,0.3); text-align: center;" class="form-select" id="uniMed" name="uniMed">
+              <option style="color: black" selected  >Selecione</option>
+              <option style="color: black" value="KG">KG</option>
+              <option style="color: black" value="LT">LT</option>
+              <option style="color: black" value="UN">UN</option>
             </select>
         </div>
         <div class="col-md-6"></div>

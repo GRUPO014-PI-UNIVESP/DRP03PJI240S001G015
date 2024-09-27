@@ -96,6 +96,7 @@
         while($rowLista = $query_material->fetch(PDO::FETCH_ASSOC)){ 
           $_SESSION['capacidade'] = $rowLista['CAPACIDADE_PROCESS'];
           $descrMaterial          = $rowLista['DESCRICAO_MP'];
+          $uniMed                 = $rowLista['UNIDADE_MEDIDA'];
           $qtdeMaterial           = $qtdeLote * ($rowLista['PROPORCAO_MATERIAL'] / 100);
 
           $query_disponivel = $connDB->prepare("SELECT SUM(QTDE_ESTOQUE) AS estoque, SUM(QTDE_RESERVADA) AS reservado FROM mp_estoque WHERE DESCRICAO_MP = :material");
@@ -110,15 +111,19 @@
 
           if($alerta == 'INSUFICIENTE'){
             $dataAgenda = date('Y-m-d');
+            $dataPrazo  = date('Y-m-d', strtotime("+ 1 week"));
             $situacao   = 'COMPRA AGENDADA';
-            $compra = $connDB->prepare("INSERT INTO agenda_compra (DESCRICAO_MP, PEDIDO_NUM, NOME_PRODUTO, DATA_AGENDA, QTDE_PEDIDO, SITUACAO_QUALI) 
-                                               VALUES (:descrMaterial, :numPedido, :nomeProduto, :dataAgenda, :qtdePedido, :situacao)");
-            $compra->bindParam(':descrMaterial', $descrMaterial, PDO::PARAM_STR);
-            $compra->bindParam(':numPedido'    , $numPedido    , PDO::PARAM_STR);
-            $compra->bindParam(':nomeProduto'  , $nomeProduto  , PDO::PARAM_STR);
-            $compra->bindParam(':dataAgenda'   , $dataAgenda   , PDO::PARAM_STR);
-            $compra->bindParam(':qtdePedido'   , $qtdeMaterial , PDO::PARAM_STR);
-            $compra->bindParam(':situacao'     , $situacao     , PDO::PARAM_STR);
+            $compra = $connDB->prepare("INSERT INTO agenda_compra (DESCRICAO_MP, PEDIDO_NUM, NOME_PRODUTO, DATA_AGENDA, DATA_PRAZO, QTDE_PEDIDO, UNIDADE_MEDIDA, SITUACAO_QUALI, CAPACIDADE_PROCESS) 
+                                               VALUES (:descrMaterial, :numPedido, :nomeProduto, :dataAgenda, :dataPrazo, :qtdePedido, :uniMed, :situacao, :capacidade)");
+            $compra->bindParam(':descrMaterial', $descrMaterial         , PDO::PARAM_STR);
+            $compra->bindParam(':numPedido'    , $numPedido             , PDO::PARAM_STR);
+            $compra->bindParam(':nomeProduto'  , $nomeProduto           , PDO::PARAM_STR);
+            $compra->bindParam(':dataAgenda'   , $dataAgenda            , PDO::PARAM_STR);
+            $compra->bindParam(':dataPrazo'    , $dataPrazo             , PDO::PARAM_STR);
+            $compra->bindParam(':qtdePedido'   , $qtdeMaterial          , PDO::PARAM_STR);
+            $compra->bindParam(':uniMed'       , $uniMed                , PDO::PARAM_STR);
+            $compra->bindParam(':situacao'     , $situacao              , PDO::PARAM_STR);
+            $compra->bindParam(':capacidade'   , $_SESSION['capacidade'], PDO::PARAM_INT);
             $compra->execute();
           }
         }
