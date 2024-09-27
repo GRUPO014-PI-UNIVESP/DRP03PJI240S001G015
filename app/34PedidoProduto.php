@@ -262,13 +262,13 @@
           <div class="col-md-8">
             <label for="cliente" class="form-label" style="font-size: 10px; color:aqua">Nome do Cliente</label>
             <select style="font-size: 16px;color:yellow; background: rgba(0,0,0,0.3)" class="form-select" id="cliente" name="cliente" required>
-              <option style="font-size: 16px; background: rgba(0,0,0,0.3)" selected>Selecione o Cliente, caso não esteja relacionado será necessário fazer o cadastramento</option><?php
+              <option style="font-size: 16px; background: rgba(0,0,0,0.3), color: black" selected>Selecione o Cliente, caso não esteja relacionado será necessário fazer o cadastramento</option><?php
                 //Pesquisa de descrição do PRODUTO para seleção
                 $query_cliente = $connDB->prepare("SELECT DISTINCT NOME_FANTASIA FROM pf_cliente");
                 $query_cliente->execute();
                 // inclui nome dos produtos como opções de seleção da tag <select>
                 while($rowCliente = $query_cliente->fetch(PDO::FETCH_ASSOC)){?>
-                  <option style="font-size: 16px; color:yellow; background: rgba(0,0,0,0.3)"><?php echo $rowCliente['NOME_FANTASIA']; ?></option> <?php
+                  <option style="font-size: 16px; color:black; background: rgba(0,0,0,0.3)"><?php echo $rowCliente['NOME_FANTASIA']; ?></option> <?php
                 } ?>
             </select>
           </div>
@@ -297,24 +297,27 @@
     </form><?php
     $confirmaPedido = filter_input_array(INPUT_POST, FILTER_DEFAULT);
     if(!empty($confirmaPedido['salvar3'])){
+      $etapaProd = 0;
       $nomeCliente = $confirmaPedido['cliente'];
       $dataPedido = date('Y-m-d');
       $uniMed = 'KG';
       $situacao = 'PEDIDO REGISTRADO, AGUARDANDO FABRICAÇÃO';
       $responsavel = $_SESSION['nome_func'];
 
-      $registraPedido = $connDB->prepare("INSERT INTO pf_pedido (NUMERO_PEDIDO, DATA_PEDIDO, CLIENTE, NOME_PRODUTO, DATA_FABRI, QTDE_LOTE_PF, UNIDADE_MEDIDA, SITUACAO_QUALI, DATA_ENTREGA, REGISTRO_PEDIDO) 
-                                                 VALUES (:numPedido, :dataPedido, :nomeCliente, :nomeProduto, :dataFabri, :qtdeLote, :uniMed, :situacao, :dataEntrega, :responsavel)");
-      $registraPedido->bindParam(':numPedido'  , $numPedido                , PDO::PARAM_INT);
-      $registraPedido->bindParam(':dataPedido' , $dataPedido               , PDO::PARAM_STR);
-      $registraPedido->bindParam(':nomeCliente', $nomeCliente              , PDO::PARAM_STR);
-      $registraPedido->bindParam(':nomeProduto', $nomeProduto              , PDO::PARAM_STR);
-      $registraPedido->bindParam(':dataFabri'  , $_SESSION['dataAgendada'] , PDO::PARAM_STR);
-      $registraPedido->bindParam(':qtdeLote'   , $qtdeLote                 , PDO::PARAM_STR);
-      $registraPedido->bindParam(':uniMed'     , $uniMed                   , PDO::PARAM_STR);
-      $registraPedido->bindParam(':situacao'   , $situacao                 , PDO::PARAM_STR);
-      $registraPedido->bindParam(':dataEntrega', $_SESSION['dataEntrega']  , PDO::PARAM_STR);
-      $registraPedido->bindParam(':responsavel', $responsavel              , PDO::PARAM_STR);
+      $registraPedido = $connDB->prepare("INSERT INTO pf_pedido (ETAPA_PROD, NUMERO_PEDIDO, DATA_PEDIDO, CLIENTE, NOME_PRODUTO, DATA_FABRI, QTDE_LOTE_PF, CAPACIDADE_PROCESS, UNIDADE_MEDIDA, SITUACAO_QUALI, DATA_ENTREGA, REGISTRO_PEDIDO) 
+                                                 VALUES (:etapaProd, :numPedido, :dataPedido, :nomeCliente, :nomeProduto, :dataFabri, :qtdeLote, :capacidade, :uniMed, :situacao, :dataEntrega, :responsavel)");
+      $registraPedido->bindParam(':etapaProd'  , $etapaProd               , PDO::PARAM_INT);
+      $registraPedido->bindParam(':numPedido'  , $numPedido               , PDO::PARAM_INT);
+      $registraPedido->bindParam(':dataPedido' , $dataPedido              , PDO::PARAM_STR);
+      $registraPedido->bindParam(':nomeCliente', $nomeCliente             , PDO::PARAM_STR);
+      $registraPedido->bindParam(':nomeProduto', $nomeProduto             , PDO::PARAM_STR);
+      $registraPedido->bindParam(':dataFabri'  , $_SESSION['dataAgendada'], PDO::PARAM_STR);
+      $registraPedido->bindParam(':qtdeLote'   , $qtdeLote                , PDO::PARAM_STR);
+      $registraPedido->bindParam(':capacidade' , $_SESSION['capacidade']  , PDO::PARAM_INT);
+      $registraPedido->bindParam(':uniMed'     , $uniMed                  , PDO::PARAM_STR);
+      $registraPedido->bindParam(':situacao'   , $situacao                , PDO::PARAM_STR);
+      $registraPedido->bindParam(':dataEntrega', $_SESSION['dataEntrega'] , PDO::PARAM_STR);
+      $registraPedido->bindParam(':responsavel', $responsavel             , PDO::PARAM_STR);
       $registraPedido->execute();
 
       $alocaFila = $connDB->prepare("INSERT INTO fila_ocupacao (PEDIDO_NUM, DATA_AGENDA, NOME_PRODUTO, QTDE_LOTE, CAPACIDADE_PROCESS, SITUACAO_QUALI) 
@@ -323,7 +326,7 @@
       $alocaFila->bindParam(':dataFabri'  , $_SESSION['dataAgendada'], PDO::PARAM_STR);
       $alocaFila->bindParam(':nomeProduto', $nomeProduto             , PDO::PARAM_STR);
       $alocaFila->bindParam(':qtdeLote'   , $qtdeLote                , PDO::PARAM_STR);
-      $alocaFila->bindParam(':capaProcess', $capacidadeProcess       , PDO::PARAM_STR);
+      $alocaFila->bindParam(':capaProcess', $_SESSION['capacidade']  , PDO::PARAM_STR);
       $alocaFila->bindParam(':situacao'   , $situacao                , PDO::PARAM_STR);
       $alocaFila->execute();
 

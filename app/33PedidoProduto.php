@@ -94,9 +94,9 @@
         $query_material->execute();
 
         while($rowLista = $query_material->fetch(PDO::FETCH_ASSOC)){ 
-          $capacidadeProcess = $rowLista['CAPACIDADE_PROCESS'];
-          $descrMaterial     = $rowLista['DESCRICAO_MP'];
-          $qtdeMaterial      = $qtdeLote * ($rowLista['PROPORCAO_MATERIAL'] / 100);
+          $_SESSION['capacidade'] = $rowLista['CAPACIDADE_PROCESS'];
+          $descrMaterial          = $rowLista['DESCRICAO_MP'];
+          $qtdeMaterial           = $qtdeLote * ($rowLista['PROPORCAO_MATERIAL'] / 100);
 
           $query_disponivel = $connDB->prepare("SELECT SUM(QTDE_ESTOQUE) AS estoque, SUM(QTDE_RESERVADA) AS reservado FROM mp_estoque WHERE DESCRICAO_MP = :material");
           $query_disponivel->bindParam(':material', $descrMaterial, PDO::PARAM_STR);
