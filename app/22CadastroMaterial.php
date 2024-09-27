@@ -48,6 +48,9 @@ $responsavel = $_SESSION['nome_func'];
         <select style="font-size: 12px;" class="form-select" id="fornecedor" name="fornecedor">
           <option style="font-size: 12px" selected>Selecione o fornecedor</option><?php
             //Pesquisa por fornecedores para seleção
+            //
+            // criar algoritmo para novos fornecedores
+            //
             $query_supplier = $connDB->prepare("SELECT DISTINCT FORNECEDOR FROM mp_tabela");
             $query_supplier->execute();
             while($supplier = $query_supplier->fetch(PDO::FETCH_ASSOC)){?>

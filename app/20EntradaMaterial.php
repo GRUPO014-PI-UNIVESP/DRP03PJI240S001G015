@@ -39,6 +39,12 @@ $responsavel = $_SESSION['nome_func'];
       $rowMP = $mpEntra->fetch(PDO::FETCH_ASSOC);
 
       // algoritmo para geração de numero de lote interno
+      $data1 = intval(date('m'));
+      echo $data1 . '<br>';
+      $codMes = array('', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', );
+      $mes    = array('', 'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro', );
+      echo $mes[$data1]; echo '<br>';
+      echo $codMes[$data1];
       ?>
       <div class="row g-2">
         <div class="col-md-2">

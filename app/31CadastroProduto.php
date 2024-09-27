@@ -35,15 +35,14 @@ $responsavel = $_SESSION['nome_func'];
   <div class="container-fluid"><br> 
     <h5>Cadastro de Novo Produto</h5>         
     <form method="POST" action="#" id="cadastroProduto">
-      <div class="row g-1">
-        <div class="col-md-5">
+        <div class="col-md-6">
           <label for="nomeProduto" class="form-label" style="font-size: 10px; color:aqua">Nome Fantasia do Produto</label>
           <input style="font-size: 12px; text-transform: uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="nomeProduto" name="nomeProduto" autofocus required>
-        </div>
-        <div class="col-md-5">
+        </div><br>
+        <div class="col-md-8">
           <label for="descrProduto" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
           <input style="font-size: 12px; text-transform: uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="descrProduto" name="descrProduto" required>
-        </div>
+        </div><br>
         <div class="col-md-2">
           <label for="capacidade" class="form-label" style="font-size: 10px; color:aqua">Capacidade Produtiva</label>
           <div class="input-group mb-2">
@@ -51,7 +50,6 @@ $responsavel = $_SESSION['nome_func'];
               <span class="input-group-text" style="font-size: 13px">Kg/Hora</span>
           </div>
         </div>
-      </div>
     </form><?php
     $verifica = filter_input_array(INPUT_POST, FILTER_DEFAULT);
     if(!empty($verifica['descrProduto'])){

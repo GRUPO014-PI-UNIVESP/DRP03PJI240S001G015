@@ -157,7 +157,7 @@
               $material->execute();
 
               while($rowMaterial = $material->fetch(PDO::FETCH_ASSOC)){
-                $descrMat  = $rowMaterial['DESCRICAO_MP'];
+                $descrMat = $rowMaterial['DESCRICAO_MP'];
 
                 $dados = $connDB->prepare("SELECT * FROM agenda_compra WHERE DESCRICAO_MP = :descrMat");
                 $dados->bindParam(':descrMat', $descrMat, PDO::PARAM_STR);
@@ -215,9 +215,18 @@
                       </div>
                       <div class="col-md-9">
                       </div>
-                      <div class="col-md-3">
-                        <button class="btn btn-primary" style="font-size: 14px; float: right" onclick="location.href='./21CompraMaterial.php?id=<?php echo $descrMat ?>'">Autorizar Compra</button>
-                      </div>
+                      <?php
+                      // verifica se compra já foi efetuada para desativar botão de compra
+                      $sitCompra = 'COMPRA AGENDADA';
+                      if($rowDados['SITUACAO_QUALI'] == $sitCompra){ ?>
+                        <div class="col-md-3">
+                          <button class="btn btn-primary" style="font-size: 14px; float: right" onclick="location.href='./21CompraMaterial.php?id=<?php echo $descrMat ?>'">Autorizar Compra</button>
+                        </div> <?php                        
+                      } else { ?>
+                        <div class="col-md-3">
+                          <button class="btn btn-secondary" style="font-size: 14px; float: right">Autorizar Compra</button>
+                      </div> <?php
+                      } ?>
                       <div class="col-md-12" style="background: rgba(0,0,0,0.3); border-radius: 5px;">
                         <h6 style="color: orange;">Situação : <?php echo $situacao ?></h6>
                       </div>
