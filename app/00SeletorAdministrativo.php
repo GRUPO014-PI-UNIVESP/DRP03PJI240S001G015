@@ -153,7 +153,7 @@
 
             <div class="col-md-9">
               <h5>Lista de Compra Agendada</h5><?php
-              $material = $connDB->prepare("SELECT DISTINCT DESCRICAO_MP FROM agenda_compra");
+              $material = $connDB->prepare("SELECT DISTINCT DESCRICAO_MP FROM agenda_compra ORDER BY SITUACAO_QUALI ASC");
               $material->execute();
 
               while($rowMaterial = $material->fetch(PDO::FETCH_ASSOC)){
