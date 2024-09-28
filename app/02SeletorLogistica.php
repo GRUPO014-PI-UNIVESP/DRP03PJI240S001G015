@@ -55,7 +55,7 @@ include_once './RastreadorAtividades.php';
           <div class="col-md-6">
             <h6>Lista de Materiais para Recebimento</h6>
             <div class="row g-1"><?php
-              $materiais = $connDB->prepare("SELECT * FROM mp_estoque WHERE ETAPA_PROD <= 3");
+              $materiais = $connDB->prepare("SELECT * FROM mp_estoque WHERE ETAPA_PROD < 2");
               $materiais->execute();
               while($rowMat = $materiais->fetch(PDO::FETCH_ASSOC)){
                 $id = $rowMat['ID_ESTOQUE_MP']; ?>
