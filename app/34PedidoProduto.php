@@ -301,7 +301,7 @@
       $nomeCliente = $confirmaPedido['cliente'];
       $dataPedido = date('Y-m-d');
       $uniMed = 'KG';
-      $situacao = 'PEDIDO REGISTRADO, AGUARDANDO FABRICAÇÃO';
+      $situacao = 'PEDIDO REGISTRADO, PROVIDENCIANDO MATERIAIS';
       $responsavel = $_SESSION['nome_func'];
 
       $registraPedido = $connDB->prepare("INSERT INTO pf_pedido (ETAPA_PROD, NUMERO_PEDIDO, DATA_PEDIDO, CLIENTE, NOME_PRODUTO, DATA_FABRI, QTDE_LOTE_PF, CAPACIDADE_PROCESS, UNIDADE_MEDIDA, SITUACAO_QUALI, DATA_ENTREGA, REGISTRO_PEDIDO) 

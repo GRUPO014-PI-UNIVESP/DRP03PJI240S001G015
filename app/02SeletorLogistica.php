@@ -21,7 +21,7 @@ include_once './RastreadorAtividades.php';
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 3000000);
+       time = setTimeout(deslogar, 300000);
      }
   };
   inactivityTime();
@@ -31,16 +31,16 @@ include_once './RastreadorAtividades.php';
   <div class="container-fluid">
     <ul style="padding:5px" class="nav nav-tabs" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="manage-tab" data-bs-toggle="tab" data-bs-target="#manage-tab-pane" type="button" 
-                role="tab" aria-controls="manage-tab-pane" aria-selected="true">Controle</button>
+        <button class="nav-link active" id="controle-tab" data-bs-toggle="tab" data-bs-target="#controle-tab-pane" type="button" 
+                role="tab" aria-controls="controle-tab-pane" aria-selected="true">Controle</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="lab-tab" data-bs-toggle="tab" data-bs-target="#lab-tab-pane" type="button" 
-                role="tab" aria-controls="lab-tab-pane" aria-selected="false">Almoxarifado</button>
+        <button class="nav-link" id="almoxarifado-tab" data-bs-toggle="tab" data-bs-target="#almoxarifado-tab-pane" type="button" 
+                role="tab" aria-controls="almoxarifado-tab-pane" aria-selected="false">Almoxarifado</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="warehouse-tab" data-bs-toggle="tab" data-bs-target="#warehouse-tab-pane" type="button" 
-                role="tab" aria-controls="warehouse-tab-pane" aria-selected="false">Transporte</button>
+        <button class="nav-link" id="transporte-tab" data-bs-toggle="tab" data-bs-target="#transporte-tab-pane" type="button" 
+                role="tab" aria-controls="transporte-tab-pane" aria-selected="false">Transporte</button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="other-tab" data-bs-toggle="tab" data-bs-target="#other-tab-pane" type="button" 
@@ -49,7 +49,7 @@ include_once './RastreadorAtividades.php';
       <p style="margin-left: 5%; font-size: 20px; color: whitesmoke">Departamento de Logística e Armazenamento</p>
     </ul>
     <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="manage-tab-pane" role="tabpanel" aria-labelledby="manage-tab" tabindex="0"><br>
+      <div class="tab-pane fade show active" id="controle-tab-pane" role="tabpanel" aria-labelledby="controle-tab" tabindex="0"><br>
         <div class="row g-3">
           <!-- coluna para cards de materiais -->
           <div class="col-md-6">
@@ -79,13 +79,13 @@ include_once './RastreadorAtividades.php';
                       <div class="col-md-4">
                         <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Data Prevista para Recebimento</label>
                         <input style="font-weight:bold; width: 140px; font-size: 14px; text-align: center; background: rgba(0,0,0,0.3)" type="text" class="form-control"
-                              value="<?php echo date('d/m/Y', strtotime($rowMat['DATA_COMPRA'])) ?>" readonly>
+                              value="<?php echo date('m/d/Y', strtotime($rowMat['DATA_COMPRA'])) ?>" readonly>
                       </div>
                       <div class="col-md-5">
                         <br>
                         <button class="btn btn-primary" style="float: right" onclick="location.href='./20EntradaMaterial.php?id=<?php echo $id ?>'">Efetuar Recebimento</button>
                       </div>
-                    </div><!-- fim da DIV row g2 -->
+                    </div><!-- fim da DIV row g1 -->
                   </div><!-- fim da DIV do corpo do cartão -->
                 </div><!-- fim da DIV do cartão --><?php
               } ?>
@@ -94,31 +94,67 @@ include_once './RastreadorAtividades.php';
 
           <!-- coluna para cardas de produtos acabados -->
           <div class="col-md-6">
-          <h6>Lista de Produtos </h6>
-          <div class="card text-bg-success mb-3" style="width: 35rem;">
+            <h6>Lista de Produtos </h6>
+            <div class="row g-1"><?php
+              $query_pedido = $connDB->prepare("SELECT * FROM pf_pedido");
+              $query_pedido->execute(); 
+              while($rowPedido = $query_pedido->fetch(PDO::FETCH_ASSOC)){
+                $idPed = $rowPedido['ID_PEDIDO'];?>
+                <div class="card text-bg-success mb-3" style="width: 35rem;">
                   <div class="card-body">
                     <div class="row g-1">
                       <div class="col-md-12" style="background: rgba(0,0,0,0.3); border-radius: 5px;">
-                        <h6 style="color: orange;">Situação :</h6>
+                        <h6 style="color: orange;">Situação : <?php echo $rowPedido['SITUACAO_QUALI']; ?></h6>
                       </div>
                       <div class="col-md-8">
-                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Nome do Produto</span>
-                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: center; background: none;"
-                                value="" readonly>
+                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Produto</span>
+                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold;  background: none;"
+                                 value="<?php echo $rowPedido['NOME_PRODUTO']; ?>" readonly>
                         </div>
-                      </div>                      
-                    </div><!-- fim da DIV row g2 -->
+                      </div>
+                      <div class="col-md-4">
+                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Quantidade</span>
+                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: center; background: none;"
+                                 value="<?php echo $rowPedido['QTDE_LOTE_PF'] . ' ' . $rowPedido['UNIDADE_MEDIDA']; ?>" readonly>
+                        </div>
+                      </div>
+                      <div class="col-md-8">
+                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Cliente</span>
+                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none;"
+                                 value="<?php echo $rowPedido['CLIENTE']; ?>" readonly>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Entrega</span>
+                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: center; background: none;"
+                                 value="<?php echo date('d/m/Y', strtotime($rowPedido['DATA_ENTREGA'])); ?>" readonly>
+                        </div>
+                      </div><?php
+                      if($rowPedido['ETAPA_PROD'] == 6){ ?>
+                        <div class="col-md-12">
+                          <button class="btn btn-primary" onclick="location.href='#'" style="float: right">Efetuar Saída do Produto</button>
+                        </div> <?php 
+                      }
+                      if($rowPedido['ETAPA_PROD'] < 6){ ?>
+                        <div class="col-md-12">
+                          <button class="btn btn-secondary" onclick="location.href='#'" style="float: right" disabled>Efetuar Saída do Produto</button>
+                        </div> <?php 
+                      }
+                      ?>
+                    </div>
                   </div><!-- fim da DIV do corpo do cartão -->
-                </div><!-- fim da DIV do cartão -->
+                </div><!-- fim da DIV do cartão --> <?php 
+              } ?>
+            </div><!-- fim da DIV row g1 -->
           </div><!-- fim da coluna de cards de produtos acabados -->
         </div><!-- fim da row g2 -->
       </div><!-- fim da DIV tab pane manager -->
           
-      <div class="tab-pane fade" id="lab-tab-pane" role="tabpanel" aria-labelledby="lab-tab" tabindex="0"><br>
+      <div class="tab-pane fade" id="almoxarifado-tab-pane" role="tabpanel" aria-labelledby="almoxarifado-tab" tabindex="0"><br>
         <h5>Estoque de Materiais e Insumos</h5>  
       </div>
 
-      <div class="tab-pane fade" id="warehouse-tab-pane" role="tabpanel" aria-labelledby="warehouse-tab" tabindex="0"><br><br>
+      <div class="tab-pane fade" id="transporte-tab-pane" role="tabpanel" aria-labelledby="transporte-tab" tabindex="0"><br><br>
         <button type="button" class="btn btn-outline-info" style="width:400px" 
                 onclick="location.href='./60RastreamentoEntrega.php'">Rastreamento de Entrega</button><br><br>
       </div>

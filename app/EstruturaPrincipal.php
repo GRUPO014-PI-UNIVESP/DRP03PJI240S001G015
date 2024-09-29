@@ -116,45 +116,6 @@ function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
       v = v.replace(/(\d)(\d{3}),/g, "$1.$2,");
       e.target.value = v;
     }
-    // para formatar cpf
-    input.addEventListener("keyup", formatarCPF);
-    function formatarCPF(e){
-      var v=e.target.value.replace(/\D/g,"");
-      v=v.replace(/(\d{3})(\d)/,"$1.$2");
-      v=v.replace(/(\d{3})(\d)/,"$1.$2");
-      v=v.replace(/(\d{3})(\d{1,2})$/,"$1-$2");
-      e.target.value = v;
-    }
-
-    input.addEventListener("keyup", formatarCNPJ);
-    function formatarCNPJ(e){
-      var v= e.target.value.replace(/\D/g,"");
-      v=v.replace(/^(\d{2})(\d)/,"$1.$2");
-      v=v.replace(/^(\d{2})\.(\d{3})(\d)/,"$1.$2.$3");
-      v=v.replace(/\.(\d{3})(\d)/,".$1/$2");
-      v=v.replace(/(\d{4})(\d)/,"$1-$2");  
-      e.target.value = v;
-    }
-    // verificar dados digitados ex:telefone
-    input.addEventListener("keyup", formatarTelefone);
-    input.addEventListener("blur", validarTelefone); 
-    function formatarTelefone(e){
-      var v=e.target.value.replace(/\D/g,"");
-      v=v.replace(/^(\d\d)(\d)/g,"($1)$2"); 
-      v=v.replace(/(\d{5})(\d)/,"$1-$2");    
-      e.target.value = v;
-    }
-
-    function validarTelefone(e){
-      var texto = e.target.value;
-      var RegExp = /^\(\d{2}\)\d{5}-\d{4}/;
-      if (texto.match(RegExp) != null) {
-      alert("telefone válido");
-      } else {
-      alert("telefone inválido");
-      e.target.value = "";
-      }
-    }
 </script>
 <body>
   <!-- Barra lateral Superior-->

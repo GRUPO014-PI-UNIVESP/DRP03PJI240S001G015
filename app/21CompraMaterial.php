@@ -22,7 +22,7 @@
     }
     function resetTimer() {
       clearTimeout(time);
-        time = setTimeout(deslogar, 30000000);
+        time = setTimeout(deslogar, 300000);
     }
   };
   inactivityTime();

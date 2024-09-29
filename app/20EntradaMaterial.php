@@ -24,7 +24,7 @@ $responsavel = $_SESSION['nome_func'];
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 3000000);
+       time = setTimeout(deslogar, 300000);
      }
   };
   inactivityTime();
@@ -214,6 +214,12 @@ $responsavel = $_SESSION['nome_func'];
       $salvaMat->bindParam(':notaFiscal'  , $notaFiscal  , PDO::PARAM_STR); $salvaMat->bindParam(':fornecedor'     , $fornecedor           , PDO::PARAM_STR);
       $salvaMat->bindParam(':encarregado' , $encarregado , PDO::PARAM_STR); $salvaMat->bindParam(':responsavel'    , $_SESSION['nome_func'], PDO::PARAM_STR);
       $salvaMat->execute();
+
+      $sitProduto = 'AGUARDANDO LIBERAÇÃO DOS MATERIAIS';
+      $atualizaPedido = $connDB->prepare("UPDATE pf_pedido SET SITUACAO_QUALI = :situacao WHERE NUMERO_PEDIDO = :numPedido");
+      $atualizaPedido->bindParam(':situacao', $sitProduto, PDO::PARAM_STR);
+      $atualizaPedido->bindParam(':numPedido', $rowReserva['PEDIDO_NUM'], PDO::PARAM_STR);
+      $atualizaPedido->execute();
 
       $limpaAgenda = $connDB->prepare("DELETE FROM agenda_compra WHERE DESCRICAO_MP = :descrMat");
       $limpaAgenda->bindParam(':descrMat', $descrMat, PDO::PARAM_STR);

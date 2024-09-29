@@ -27,7 +27,7 @@
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 300000);
+       time = setTimeout(deslogar, 30000000);
      }
   };
   inactivityTime();
@@ -37,12 +37,12 @@
     <div class="container-fluid">
       <ul style="padding:5px" class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="manage-tab" data-bs-toggle="tab" data-bs-target="#manage-tab-pane" type="button" 
-            role="tab" aria-controls="manage-tab-pane" aria-selected="true">Laboratório</button>
+          <button class="nav-link active" id="laboratorio-tab" data-bs-toggle="tab" data-bs-target="#laboratorio-tab-pane" type="button" 
+            role="tab" aria-controls="laboratorio-tab-pane" aria-selected="true">Laboratório</button>
         </li>
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="lab-tab" data-bs-toggle="tab" data-bs-target="#lab-tab-pane" type="button" 
-            role="tab" aria-controls="lab-tab-pane" aria-selected="false">Estoque</button>
+          <button class="nav-link" id="reagentes-tab" data-bs-toggle="tab" data-bs-target="#reagentes-tab-pane" type="button" 
+            role="tab" aria-controls="reagentes-tab-pane" aria-selected="false">Reagentes</button>
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="other-tab" data-bs-toggle="tab" data-bs-target="#other-tab-pane" type="button" 
@@ -52,47 +52,106 @@
       </ul>
 
       <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="manage-tab-pane" role="tabpanel" aria-labelledby="manage-tab" tabindex="0"><br><br>
-          <?php while($rowMP = $query_MP->fetch(PDO::FETCH_ASSOC)){ $idmp = $rowMP['ID_ESTOQUE_MP'];?>
-            <div class="row">
-              <!-- Cards de Análises de MP -->
-              <div class="col-sm-6 mb-3 mb-sm-0">
-              <h6>Análise de Matéria Prima</h6>
-                <div class="card border-primary">
-                  <div class="card-body">
-                  <h6 class="card-title" style="color: yellow; font-size: 12px">Amostra: <?php echo $rowMP['DESCRICAO_MP'] . ' [ ' . $rowMP['FORNECEDOR'] . ' ]' ?></h6>
-                    <p class="card-text" style="font-size: 12px">Prazo para conclusão: </p>
-                    <p class="card-text" style="font-size: 12px">linha 2</p>
-                    <a href="<?php echo $acesso12 ?>?id=<?php echo $idmp ?>" class="btn btn-primary" style="float: right">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-                      </svg>
-                    </a>
-                  </div>
-                </div><br>
-              </div>
-              <!-- Cards de Análises de PF -->
-              <div class="col-sm-6">
-              <h6>Análise de Produto Final</h6>
-                <div class="card border-primary">
-                  <div class="card-body">
-                  <h6 class="card-title" style="color: yellow; font-size: 12px">Amostra: Descrição do Produto Final analisado</h6>
-                    <p class="card-text" style="font-size: 12px">Prazo para conclusão: </p>
-                    <p class="card-text" style="font-size: 12px">linha 2</p>
-                    <a href="#" class="btn btn-primary" style="float: right">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-                      </svg>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <?php } ?>
-        </div>         
-        <div class="tab-pane fade" id="lab-tab-pane" role="tabpanel" aria-labelledby="lab-tab" tabindex="0"><br><br>
+        <div class="tab-pane fade show active" id="laboratorio-tab-pane" role="tabpanel" aria-labelledby="laboratorio-tab" tabindex="0"><br>
+          <div class="row g-3">
+            <!-- coluna para cards de materiais -->
+            <div class="col-md-6">
+              <h6>Lista de Materiais para Análise</h6>
+              <div class="row g-1"><?php
+                $materiais = $connDB->prepare("SELECT * FROM mp_estoque WHERE ETAPA_PROD = 2");
+                $materiais->execute();
+                while($rowMat = $materiais->fetch(PDO::FETCH_ASSOC)){
+                  $id = $rowMat['ID_ESTOQUE_MP']; ?>
+                  <div class="card text-bg-success mb-3" style="width: 45rem;">
+                    <div class="card-body">
+                      <div class="row g-1">
+                        <div class="col-md-12" style="background: rgba(0,0,0,0.3); border-radius: 5px;">
+                          <h6 style="color: orange;">Situação : <?php echo $rowMat['SITUACAO_QUALI'] ?></h6>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Descrição do Material</span>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
+                                value="<?php echo $rowMat['DESCRICAO_MP']?>" readonly>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">No.Lote</span>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
+                                value="<?php echo $rowMat['NUMERO_LOTE_INTERNO']?>" readonly>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Qtde</span>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
+                                value="<?php echo $rowMat['QTDE_LOTE'] . ' ' . $rowMat['UNIDADE_MEDIDA'] ?>" readonly>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Limite</span>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
+                                value="<?php echo date('d/m/Y', strtotime($rowMat['DATA_FABRICACAO'])) ?>" readonly>
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <button class="btn btn-primary" style="float: right" onclick="location.href='./40RegistroAnalise.php?id=<?php echo $id ?>'">Registro da Análise</button>
+                        </div>
+                      </div><!-- fim da DIV row g1 -->
+                    </div><!-- fim da DIV do corpo do cartão -->
+                  </div><!-- fim da DIV do cartão --><?php
+                } ?>
+              </div><!-- fim da DIV row g1 -->
+            </div><!-- fim da coluna de cards de materiais -->
+
+            <!-- coluna para cards de produtos -->
+            <div class="col-md-6">
+              <h6>Lista de Produtos para Análise</h6>
+              <div class="row g-1"><?php
+                $pedido = $connDB->prepare("SELECT * FROM pf_pedido");
+                $pedido->execute();
+                while($rowPedido = $pedido->fetch(PDO::FETCH_ASSOC)){
+                  $id = $rowPedido['ID_PEDIDO']; ?>
+                  <div class="card text-bg-success mb-3" style="width: 45rem;">
+                    <div class="card-body">
+                      <div class="row g-1">
+                        <div class="col-md-12" style="background: rgba(0,0,0,0.3); border-radius: 5px;">
+                          <h6 style="color: orange;">Situação : <?php echo $rowPedido['SITUACAO_QUALI']; ?></h6>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Produto</span>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
+                                value="<?php echo $rowPedido['NOME_PRODUTO']; ?>" readonly>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">No.Lote</span>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
+                                value="<?php echo $rowPedido['NUMERO_LOTE_PF']; ?>" readonly>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Qtde</span>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
+                                value="<?php echo $rowPedido['QTDE_LOTE_PF'] . ' ' . $rowPedido['UNIDADE_MEDIDA'] ?>" readonly>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Limite</span>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
+                                value="<?php echo date('d/m/Y', strtotime($rowPedido['DATA_ENTREGA']."- 2 days")) ?>" readonly>
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <button class="btn btn-primary" style="float: right" onclick="location.href='./40RegistroAnalise.php?id=<?php echo $id ?>'">Registro da Análise</button>
+                        </div>
+                      </div><!-- fim da DIV row g1 -->
+                    </div><!-- fim da DIV do corpo do cartão -->
+                  </div><!-- fim da DIV do cartão --><?php
+                } ?>
+              </div><!-- fim da DIV row g1 -->
+            </div><!-- fim da coluna de cards de materiais -->  
+          </div><!-- fim da DIV row g3 -->  
+        </div><!-- fim tab -->         
+        <div class="tab-pane fade" id="reagentes-tab-pane" role="tabpanel" aria-labelledby="reagentes-tab" tabindex="0"><br><br>
           <button type="button" class="btn btn-outline-info" style="width:350px" onclick="">Reabastecimento de Estoque de Reagentes</button><br><br>
           <button type="button" class="btn btn-outline-info" style="width:350px" onclick="">Tabela Geral do Estoque de Reagentes</button><br><br>       
         </div>
