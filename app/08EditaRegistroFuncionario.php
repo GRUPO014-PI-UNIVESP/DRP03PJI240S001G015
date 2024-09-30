@@ -104,107 +104,107 @@ if(isset($_SESSION['msg'])){
 
         <div class="col-md-2">
           <label for="idFunc" class="form-label" style="color:aqua; font-size: 10px">Cadastro No.</label>
-          <input style="text-align:right; font-size: 12px" type="number" class="form-control" id="idFunc" name="idFunc" value="<?php echo $rowID['ID_FUNCIONARIO'];?>" readonly>
+          <input style="text-align: center; font-size: 12px; background: rgba(0,0,0,0.3)" type="number" class="form-control" id="idFunc" name="idFunc" value="<?php echo $rowID['ID_FUNCIONARIO'];?>" readonly>
         </div>
 
         <div class="col-md-2">
           <label for="dataNasc" class="form-label" style="font-size: 10px; color:aqua">Data de Nascimento</label>
-          <input style="font-size: 12px" type="date" class="form-control" id="dataNasc" name="dataNasc" value="<?php echo $rowID['DATA_NASCIMENTO'];?>" autofocus>
+          <input style="font-size: 12px; background: rgba(0,0,0,0.3)" type="date" class="form-control" id="dataNasc" name="dataNasc" value="<?php echo $rowID['DATA_NASCIMENTO'];?>" autofocus>
         </div>
 
         <div class="col-md-3">
           <label for="cpfFunc" class="form-label" style="font-size: 10px; color:aqua">C.P.F.</label>
-          <input style="font-size: 12px" type="text" class="form-control" id="CPFInput" name="cpfFunc" value="<?php echo $rowID['CPF'];?>" maxlength="11" onkeyup="criaMascara('CPF')">
+          <input style="font-size: 12px; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="CPFInput" name="cpfFunc" value="<?php echo $rowID['CPF'];?>" maxlength="11" onkeyup="criaMascara('CPF')">
           <p style="font-size: 10px; color: grey">Somente números</p>
         </div>
 
         <div class="col-md-3">
           <label for="rgFunc" class="form-label" style="font-size: 10px; color:aqua">R.G.</label>
-          <input style="font-size: 12px" type="text" class="form-control" id="RGInput" name="rgFunc" value="<?php echo $rowID['RG'];?>" maxlength="9" onkeyup="criaMascara('RG')">
+          <input style="font-size: 12px; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="RGInput" name="rgFunc" value="<?php echo $rowID['RG'];?>" maxlength="9" onkeyup="criaMascara('RG')">
           <p style="font-size: 10px; color: grey">Somente números</p>
         </div>
 
         <div class="col-12">
           <label for="nomeFunc" class="form-label" style="font-size: 10px; color:aqua">Nome Completo</label>
-          <input style="font-size: 12px; text-transform:uppercase" type="text" class="form-control" id="nomeFunc" name="nomeFunc" value="<?php echo $rowID['NOME_FUNCIONARIO'];?>" maxlength="120">
+          <input style="font-size: 12px; text-transform:uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="nomeFunc" name="nomeFunc" value="<?php echo $rowID['NOME_FUNCIONARIO'];?>" maxlength="120">
           <p style="font-size: 10px; color: grey">Tamanho máximo de 120 caracteres</p>
         </div>
 
         <div class="col-8">
           <label for="emailFunc" class="form-label" style="font-size: 10px; color:aqua">Email</label>
-          <input style="font-size: 12px; text-transform:lowercase" type="text" class="form-control" id="emailFunc" name="emailFunc" value="<?php echo $rowID['EMAIL'];?>">
+          <input style="font-size: 12px; text-transform:lowercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="emailFunc" name="emailFunc" value="<?php echo $rowID['EMAIL'];?>">
           <p style="font-size: 10px; color: grey">Tamanho máximo de 120 caracteres</p>
         </div>
 
         <div class="col-md-4">
           <label for="telefone" class="form-label" style="font-size: 10px; color:aqua">Telefone de Contato</label>
-          <input style="font-size: 12px" type="text" class="form-control" id="CelularInput" name="telefone" value="<?php echo $rowID['TELEFONE'];?>" maxlength="11" onkeyup="criaMascara('Celular')">
+          <input style="font-size: 12px; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="CelularInput" name="telefone" value="<?php echo $rowID['TELEFONE'];?>" maxlength="11" onkeyup="criaMascara('Celular')">
           <p style="font-size: 10px; color: grey">Somente números incluindo DDD</p>
         </div>
 
         <div class="col-md-2">
           <label for="dataAdmi" class="form-label" style="font-size: 10px; color:aqua">Data de Admissão</label>
-          <input style="font-size: 12px" type="date" class="form-control" id="dataAdmi" name="dataAdmi" value="<?php echo $rowID['DATA_ADMISSAO'];?>">
+          <input style="font-size: 12px; background: rgba(0,0,0,0.3)" type="date" class="form-control" id="dataAdmi" name="dataAdmi" value="<?php echo $rowID['DATA_ADMISSAO'];?>">
         </div>
 
         <div class="col-md-4">
           <label for="departamento" class="form-label" style="font-size: 10px; color:aqua">Departamento</label>
-          <select style="font-size: 12px" id="departamento" class="form-select" name="departamento" value="<?php echo $rowID['DEPARTAMENTO'];?>">
-            <option style="font-size: 12px" selected><?php echo $rowID['DEPARTAMENTO'];?></option>
+          <select style="font-size: 12px; background: rgba(0,0,0,0.3)" id="departamento" class="form-select" name="departamento" value="<?php echo $rowID['DEPARTAMENTO'];?>">
+            <option style="font-size: 12px; background: rgba(0,0,0,0.3); color: black" selected><?php echo $rowID['DEPARTAMENTO'];?></option>
             <?php
               while($selDepto = $query_depto->fetch(PDO::FETCH_ASSOC)){?>
-                <option style="font-size: 12px"><?php echo $selDepto['DEPARTAMENTO']; ?></option> <?php
+                <option style="font-size: 12px; background: rgba(0,0,0,0.3); color: black"><?php echo $selDepto['DEPARTAMENTO']; ?></option> <?php
               }?>
           </select>
         </div>
 
         <div class="col-md-4">
           <label for="cargo" class="form-label" style="font-size: 10px; color:aqua">Cargo</label>
-          <select style="font-size: 12px" id="cargo" class="form-select" name="cargo" value="<?php echo $rowID['CARGO'];?>">
-            <option style="font-size: 12px" selected><?php echo $rowID['CARGO'];?></option>
+          <select style="font-size: 12px; background: rgba(0,0,0,0.3)" id="cargo" class="form-select" name="cargo" value="<?php echo $rowID['CARGO'];?>">
+            <option style="font-size: 12px; background: rgba(0,0,0,0.3); color: black" selected><?php echo $rowID['CARGO'];?></option>
             <?php
               while($selCargo = $query_cargo->fetch(PDO::FETCH_ASSOC)){?>
-                <option style="font-size: 12px"><?php echo $selCargo['CARGO']; ?></option> <?php
+                <option style="font-size: 12px; background: rgba(0,0,0,0.3); color: black"><?php echo $selCargo['CARGO']; ?></option> <?php
               }?>               
           </select>
         </div>
 
         <div class="col-10">
           <label for="ruaRes" class="form-label" style="font-size: 10px; color:aqua">Endereço Residencial: Rua/Avenida</label>
-          <input style="font-size: 12px" type="text" class="form-control" id="ruaRes" name="ruaRes" value="<?php echo $rowID['RUA_RES'];?>">
+          <input style="font-size: 12px; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="ruaRes" name="ruaRes" value="<?php echo $rowID['RUA_RES'];?>">
         </div>
 
         <div class="col-md-2">
           <label for="numRes" class="form-label" style="font-size: 10px; color:aqua">Número da Residência</label>
-          <input style="font-size: 12px" type="number" class="form-control" id="numRes" name="numRes" value="<?php echo $rowID['NUM_RES'];?>"maxlength="6">
+          <input style="font-size: 12px; background: rgba(0,0,0,0.3)" type="number" class="form-control" id="numRes" name="numRes" value="<?php echo $rowID['NUM_RES'];?>"maxlength="6">
           <p style="font-size: 10px; color: grey">Somente números</p>
         </div>
 
         <div class="col-md-3">
           <label for="cplRes" class="form-label" style="font-size: 10px; color:aqua">Complemento</label>
-          <input style="font-size: 12px" type="text" class="form-control" id="cplRes" name="cplRes" value="<?php echo $rowID['COMPLEMENTO'];?>">
+          <input style="font-size: 12px; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="cplRes" name="cplRes" value="<?php echo $rowID['COMPLEMENTO'];?>">
           <p style="font-size: 10px; color: grey">Apto, Bloco, Casa, Ed. etc</p>
         </div>
 
         <div class="col-md-3">
           <label for="bairro" class="form-label" style="font-size: 10px; color:aqua">Bairro</label>
-          <input style="font-size: 12px; text-transform:uppercase" type="text" class="form-control" id="bairro" name="bairro" value="<?php echo $rowID['BAIRRO'];?>">
+          <input style="font-size: 12px; text-transform:uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="bairro" name="bairro" value="<?php echo $rowID['BAIRRO'];?>">
         </div>
 
         <div class="col-md-4">
           <label for="cidade" class="form-label" style="font-size: 10px; color:aqua">Cidade</label>
-          <input style="font-size: 12px; text-transform:uppercase" type="text" class="form-control" id="cidade" name="cidade" value="<?php echo $rowID['CIDADE'];?>">
+          <input style="font-size: 12px; text-transform:uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="cidade" name="cidade" value="<?php echo $rowID['CIDADE'];?>">
         </div>
 
         <div class="col-md-2">
           <label for="uf" class="form-label" style="font-size: 10px; color:aqua">Estado (U.F.)</label>
-          <input style="font-size: 12px; text-transform: uppercase" type="text" class="form-control" id="uf" name="uf" value="<?php echo $rowID['UF'];?>" maxlength="2">
+          <input style="font-size: 12px; text-transform: uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="uf" name="uf" value="<?php echo $rowID['UF'];?>" maxlength="2">
         </div>
 
         <!-- Botão para confirmar -->
         <div class="col-md-4"><br>
           <!-- Aciona Modal -->
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="width: 280px">Confirmar Edição</button>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="width: 280px; float: right">Confirmar Edição</button>
           <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog">

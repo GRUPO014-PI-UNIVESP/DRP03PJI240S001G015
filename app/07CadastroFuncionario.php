@@ -131,108 +131,108 @@ if(isset($_SESSION['msg'])){
 
         <div class="col-md-2">
           <label for="idFunc" class="form-label" style="color:aqua; font-size: 10px">Cadastro No.</label>
-          <input style="text-align:right; font-size: 12px" type="number" class="form-control" id="idFunc" name="idFunc" value="<?php echo $novoID?>" readonly>
+          <input style="text-align: center; font-size: 12px; background: rgba(0,0,0,0.3)" type="number" class="form-control" id="idFunc" name="idFunc" value="<?php echo $novoID?>" readonly>
           <p style="font-size: 10px; color: grey">Campo não editável</p>
         </div>
 
         <div class="col-md-2">
           <label for="dataNasc" class="form-label" style="font-size: 10px; color:aqua">Data de Nascimento</label>
-          <input style="font-size: 12px" type="date" class="form-control" id="dataNasc" name="dataNasc" required autofocus>
+          <input style="font-size: 12px; background: rgba(0,0,0,0.3)" type="date" class="form-control" id="dataNasc" name="dataNasc" required autofocus>
         </div>
 
         <div class="col-md-3">
           <label for="cpfFunc" class="form-label" style="font-size: 10px; color:aqua">C.P.F.</label>
-          <input style="font-size: 12px" type="text" class="form-control" id="CPFInput" name="cpfFunc" placeholder="Opcional, somente números" maxlength="11" onkeyup="criaMascara('CPF')">
+          <input style="font-size: 12px; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="CPFInput" name="cpfFunc" placeholder="Opcional, somente números" maxlength="11" onkeyup="criaMascara('CPF')">
           <p style="font-size: 10px; color: grey">Somente números</p>
         </div>
 
         <div class="col-md-3">
           <label for="rgFunc" class="form-label" style="font-size: 10px; color:aqua">R.G.</label>
-          <input style="font-size: 12px" type="text" class="form-control" id="RGInput" name="rgFunc" placeholder="Opcional, somente números" maxlength="9" onkeyup="criaMascara('RG')">
+          <input style="font-size: 12px; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="RGInput" name="rgFunc" placeholder="Opcional, somente números" maxlength="9" onkeyup="criaMascara('RG')">
           <p style="font-size: 10px; color: grey">Somente números</p>
         </div>
 
         <div class="col-12">
           <label for="nomeFunc" class="form-label" style="font-size: 10px; color:aqua">Nome Completo</label>
-          <input style="font-size: 12px; text-transform:uppercase" type="text" class="form-control" id="nomeFunc" name="nomeFunc" placeholder="" maxlength="120" required>
+          <input style="font-size: 12px; text-transform:uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="nomeFunc" name="nomeFunc" placeholder="" maxlength="120" required>
           <p style="font-size: 10px; color: grey">Tamanho máximo de 120 caracteres</p>
         </div>
 
         <div class="col-8">
           <label for="emailFunc" class="form-label" style="font-size: 10px; color:aqua">Email</label>
-          <input style="font-size: 12px; text-transform:lowercase" type="email" class="form-control" id="emailFunc" name="emailFunc" placeholder="Opcional">
+          <input style="font-size: 12px; text-transform:lowercase; background: rgba(0,0,0,0.3)" type="email" class="form-control" id="emailFunc" name="emailFunc" placeholder="Opcional">
           <p style="font-size: 10px; color: grey">Tamanho máximo de 120 caracteres</p>
         </div>
 
         <div class="col-md-4">
           <label for="telefone" class="form-label" style="font-size: 10px; color:aqua">Telefone de Contato</label>
-          <input style="font-size: 12px; " type="text" class="form-control" id="CelularInput" name="telefone" placeholder="Opcional, somente números" maxlength="11" onkeyup="criaMascara('Celular')">
+          <input style="font-size: 12px; background: rgba(0,0,0,0.3) " type="text" class="form-control" id="CelularInput" name="telefone" placeholder="Opcional, somente números" maxlength="11" onkeyup="criaMascara('Celular')">
           <p style="font-size: 10px; color: grey">Somente números incluindo DDD</p>
         </div>
 
         <div class="col-md-2">
           <label for="dataAdmi" class="form-label" style="font-size: 10px; color:aqua">Data de Admissão</label>
-          <input style="font-size: 12px" type="date" class="form-control" id="dataAdmi" name="dataAdmi" required>
+          <input style="font-size: 12px; background: rgba(0,0,0,0.3)" type="date" class="form-control" id="dataAdmi" name="dataAdmi" required>
         </div>
 
         <div class="col-md-4">
           <label for="departamento" class="form-label" style="font-size: 10px; color:aqua">Departamento</label>
-          <select style="font-size: 12px" id="departamento" class="form-select" name="departamento">
-            <option style="font-size: 12px" selected>Selecione uma opção</option>
+          <select style="font-size: 12px; background: rgba(0,0,0,0.3)" id="departamento" class="form-select" name="departamento">
+            <option style="font-size: 12px; background: rgba(0,0,0,0.3); color: black" selected>Selecione uma opção</option>
             <?php
               while($selDepto = $query_depto->fetch(PDO::FETCH_ASSOC)){?>
-                <option style="font-size: 12px"><?php echo $selDepto['DEPARTAMENTO']; ?></option> <?php
+                <option style="font-size: 12px; background: rgba(0,0,0,0.3); color: black"><?php echo $selDepto['DEPARTAMENTO']; ?></option> <?php
               }?>
           </select>
         </div>
 
         <div class="col-md-4">
           <label for="cargo" class="form-label" style="font-size: 10px; color:aqua">Cargo</label>
-          <select style="font-size: 12px" id="cargo" class="form-select" name="cargo" >
-            <option style="font-size: 12px" selected>Selecione uma opção</option>
+          <select style="font-size: 12px; background: rgba(0,0,0,0.3)" id="cargo" class="form-select" name="cargo" >
+            <option style="font-size: 12px; background: rgba(0,0,0,0.3); color: black" selected>Selecione uma opção</option>
             <?php
               while($selCargo = $query_cargo->fetch(PDO::FETCH_ASSOC)){?>
-                <option style="font-size: 12px"><?php echo $selCargo['CARGO']; ?></option> <?php
+                <option style="font-size: 12px; background: rgba(0,0,0,0.3); color: black"><?php echo $selCargo['CARGO']; ?></option> <?php
               }?>               
           </select>
         </div>
 
         <div class="col-10">
           <label for="ruaRes" class="form-label" style="font-size: 10px; color:aqua">Endereço Residencial: Rua/Avenida</label>
-          <input style="font-size: 12px" type="text" class="form-control" id="ruaRes" name="ruaRes" placeholder="Opcional">
+          <input style="font-size: 12px; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="ruaRes" name="ruaRes" placeholder="Opcional">
         </div>
 
         <div class="col-md-2">
           <label for="numRes" class="form-label" style="font-size: 10px; color:aqua">Número da Residência</label>
-          <input style="font-size: 12px" type="number" class="form-control" id="numRes" name="numRes" maxlength="6">
+          <input style="font-size: 12px; background: rgba(0,0,0,0.3)" type="number" class="form-control" id="numRes" name="numRes" maxlength="6">
           <p style="font-size: 10px; color: grey">Somente números</p>
         </div>
 
         <div class="col-md-3">
           <label for="cplRes" class="form-label" style="font-size: 10px; color:aqua">Complemento</label>
-          <input style="font-size: 12px" type="text" class="form-control" id="cplRes" name="cplRes" placeholder="Opcional">
+          <input style="font-size: 12px; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="cplRes" name="cplRes" placeholder="Opcional">
           <p style="font-size: 10px; color: grey">Apto, Bloco, Casa, Ed. etc</p>
         </div>
 
         <div class="col-md-3">
           <label for="bairro" class="form-label" style="font-size: 10px; color:aqua">Bairro</label>
-          <input style="font-size: 12px; text-transform:uppercase" type="text" class="form-control" id="bairro" name="bairro" placeholder="Opcional">
+          <input style="font-size: 12px; text-transform:uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="bairro" name="bairro" placeholder="Opcional">
         </div>
 
         <div class="col-md-4">
           <label for="cidade" class="form-label" style="font-size: 10px; color:aqua">Cidade</label>
-          <input style="font-size: 12px; text-transform:uppercase" type="text" class="form-control" id="cidade" name="cidade" placeholder="Opcional">
+          <input style="font-size: 12px; text-transform:uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="cidade" name="cidade" placeholder="Opcional">
         </div>
 
         <div class="col-md-2">
           <label for="uf" class="form-label" style="font-size: 10px; color:aqua">Estado (U.F.)</label>
-          <input style="font-size: 12px; text-transform:uppercase" type="text" class="form-control" id="uf" name="uf" placeholder="Opcional" maxlength="2">
+          <input style="font-size: 12px; text-transform:uppercase; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="uf" name="uf" placeholder="Opcional" maxlength="2">
         </div>
 
         <!-- Botão para confirmar -->
         <div class="col-md-4"><br>
           <!-- Aciona Modal -->
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="width: 280px">Confirmar Dados</button>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="width: 280px; float: right">Confirmar Dados</button>
           <!-- Modal -->
           <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -251,7 +251,7 @@ if(isset($_SESSION['msg'])){
                   <p style="color: grey; font-size: 12px">Chaves provisórias. Anote e informe ao funcionário. Pode ser alterado posteriormente</p>
                 </div>
                 <div class="modal-footer">
-                  <button style="width: 210px" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar sem Salvar</button>
+                  <button style="width: 210px;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar sem Salvar</button>
                   <input style="width: 210px" class="btn btn-primary" type="submit" id="submit" name="submit" value="Salvar">
                 </div>
               </div>
