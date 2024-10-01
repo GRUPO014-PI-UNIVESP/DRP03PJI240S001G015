@@ -121,57 +121,96 @@
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
-          <fieldset>
-            <div class="row g-2">
-              <h6>Dados Analisados</h6>
-              <div class="col-md-2">
-                <p style="color: aqua">Aspecto</p>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="aspecto" id="aspecto" value="Regular" checked>
-                  <label class="form-check-label" for="aspecto"> Regular </label>
+          <div class="row g-2">
+            <div class="col-md-5">
+              <div class="row g-2">
+                <h6>Dados Analisados</h6>
+                <div class="col-md-5">
+                  <p style="color: aqua">Aspecto</p>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="aspecto" id="aspecto" value="Regular" checked>
+                    <label class="form-check-label" for="aspecto"> Regular </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="aspecto" id="aspecto" value="Irregular">
+                    <label class="form-check-label" for="aspecto"> Irregular </label>
+                  </div>           
                 </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="aspecto" id="aspecto" value="Irregular">
-                  <label class="form-check-label" for="aspecto"> Irregular </label>
-                </div>           
-              </div>
-              <div class="col-md-2">
-                <p style="color: aqua">Coloração</p>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="cor" id="cor" value="Normal" checked>
-                  <label class="form-check-label" for="cor"> Normal </label>
+                <div class="col-md-6">
+                  <p style="color: aqua">Coloração</p>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="cor" id="cor" value="Normal" checked>
+                    <label class="form-check-label" for="cor"> Normal </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="cor" id="cor">
+                    <label class="form-check-label" for="cor"> Anormal </label>
+                  </div>           
                 </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="cor" id="cor">
-                  <label class="form-check-label" for="cor"> Anormal </label>
-                </div>           
-              </div>
-              <div class="col-md-2">
-                <p style="color: aqua">Odor</p>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="odor" id="odor" value="Normal" checked>
-                  <label class="form-check-label" for="odor"> Normal </label>
+                <div class="col-md-5"><br>
+                  <p style="color: aqua">Odor</p>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="odor" id="odor" value="Normal" checked>
+                    <label class="form-check-label" for="odor"> Normal </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="odor" id="odor">
+                    <label class="form-check-label" for="odor"> Anormal </label>
+                  </div>           
                 </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="odor" id="odor">
-                  <label class="form-check-label" for="odor"> Anormal </label>
-                </div>           
-              </div>
-              <div class="col-md-2">
-                <p style="color: aqua">Contaminantes</p>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="contaminantes" id="contaminantes" value="" checked>
-                  <label class="form-check-label" for="odor"> Normal </label>
+                <div class="col-md-6"><br>
+                  <p style="color: aqua">Contaminantes</p>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="contaminantes" id="contaminantes" value="" checked>
+                    <label class="form-check-label" for="contaminantes"> Não Detectado </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="contaminantes" id="contaminantes">
+                    <label class="form-check-label" for="contaminantes"> Detectado </label>
+                  </div>           
                 </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="odor" id="odor">
-                  <label class="form-check-label" for="odor"> Anormal </label>
-                </div>           
               </div>
+            </div>              
+            <div class="col-md-7">
+              <div class="row g-2">
+                <div class="col-md-4"><br>
+                  <div class="input-group mb-1">
+                    <div class="form-floating mb-0">
+                      <input type="number" class="form-control" id="perdaMassa" name="perdaMassa" style="font-weight: bolder; background: rgba(0,0,0,0.3);">
+                      <label for="perdaMassa" style="color: aqua; font-size: 12px; background: none">Perda de Massa</label>
+                    </div>
+                    <span class="input-group-text">%</span>
+                  </div>
+                </div>  
+                <div class="col-md-4"><br>
+                  <div class="input-group mb-1">
+                    <div class="form-floating mb-0">
+                      <input type="number" class="form-control" id="escalaPH" name="escalaPH" style="font-weight: bolder; background: rgba(0,0,0,0.3);">
+                      <label for="escalaPH" style="color: aqua; font-size: 12px; background: none">Escala de pH</label>
+                    </div>
+                    <span class="input-group-text"></span>
+                  </div>
+                </div>
+                <div class="col-md-4"><br>
+                  <div class="input-group mb-1">
+                    <div class="form-floating mb-0">
+                      <input type="number" class="form-control" id="pureza" name="pureza" style="font-weight: bolder; background: rgba(0,0,0,0.3);">
+                      <label for="pureza" style="color: aqua; font-size: 12px; background: none">Pureza</label>
+                    </div>
+                    <span class="input-group-text">%</span>
+                  </div>
+                </div>
+                <div class="form-floating">
+                  <textarea class="form-control" id="odorObs" name="odorObs" style="font-size: 14px; height: 150px; width: 630px; background: rgba(0,0,0,0.3);"></textarea>
+                  <label for="odorObs" style="color: aqua; font-size: 12px; background: none">Observações</label>
+                </div>
+              </div>             
             </div>
-          </fieldset>
-        </div><!-- fim da div row g1 -->
-      </div><!-- fim da tab entrada -->
+          </div>
+          
+        </div>
+      </div><!-- fim da div row g1 -->
+    </div><!-- fim da tab entrada -->
 
       <!-- Especificações -->
       <div class="tab-pane fade" id="ET-tab-pane" role="tabpanel" aria-labelledby="ET-tab" tabindex="0">
