@@ -21,58 +21,159 @@
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 300000);
+       time = setTimeout(deslogar, 3000000);
      }
   };
   inactivityTime();
 </script>
 <!-- Área Principal -->
 <div class="main">
-    <div class="container-fluid">
-      <ul style="padding:5px" class="nav nav-tabs" id="myTab" role="tablist">
+  <div class="container-fluid">
+    <ul style="padding:5px" class="nav nav-tabs" id="myTab" role="tablist">
       <!-- Etiqueta das Abas -->
-        <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="entrada-tab" data-bs-toggle="tab" data-bs-target="#entrada-tab-pane" type="button" role="tab" aria-controls="entrada-tab-pane" aria-selected="true">Entrada de Dados</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="ET-tab" data-bs-toggle="tab" data-bs-target="#ET-tab-pane" type="button" 
-            role="tab" aria-controls="ET-tab-pane" aria-selected="false">E.T.</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="MA-tab" data-bs-toggle="tab" data-bs-target="#MA-tab-pane" type="button" 
-            role="tab" aria-controls="MA-tab-pane" aria-selected="false">M.A.</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="PQ-tab" data-bs-toggle="tab" data-bs-target="#PQ-tab-pane" type="button" 
-            role="tab" aria-controls="PQ-tab-pane" aria-selected="false">P.Q.</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="RE-tab" data-bs-toggle="tab" data-bs-target="#RE-tab-pane" type="button" 
-            role="tab" aria-controls="RE-tab-pane" aria-selected="false">R.E.</button>
-        </li>        
-      </ul>
-      <!-- Conteúdos das Abas -->
-      <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="entrada-tab-pane" role="tabpanel" aria-labelledby="entrada-tab" tabindex="0">
-          <br><br><br>
-          <p>Espaço para entrada de dados</p>
-        </div>
-        <div class="tab-pane fade" id="ET-tab-pane" role="tabpanel" aria-labelledby="ET-tab" tabindex="0">
-          <br><br><br>
-          <p>Espaço para documentação de especificação técnica</p>
-        </div>
-        <div class="tab-pane fade" id="MA-tab-pane" role="tabpanel" aria-labelledby="MA-tab" tabindex="0">
-          <br><br><br>
-          <p>Espaço para documentação MA</p>
-        </div>
-        <div class="tab-pane fade" id="PQ-tab-pane" role="tabpanel" aria-labelledby="PQ-tab" tabindex="0">
-          <br><br><br>
-          <p>Espaço para documentação PQ</p>
-        </div>
-        <div class="tab-pane fade" id="RE-tab-pane" role="tabpanel" aria-labelledby="RE-tab" tabindex="0">
-          <br><br><br>
-          <p>Espaço para documentação RE</p>
-        </div>
-      </div>      
-    </div>
-  </div>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="entrada-tab" data-bs-toggle="tab" data-bs-target="#entrada-tab-pane" type="button" role="tab" aria-controls="entrada-tab-pane" aria-selected="true">Entrada de Dados</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="ET-tab" data-bs-toggle="tab" data-bs-target="#ET-tab-pane" type="button" 
+            role="tab" aria-controls="ET-tab-pane" aria-selected="false">Especificações</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="MA-tab" data-bs-toggle="tab" data-bs-target="#MA-tab-pane" type="button" 
+            role="tab" aria-controls="MA-tab-pane" aria-selected="false">Metodologia</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="PQ-tab" data-bs-toggle="tab" data-bs-target="#PQ-tab-pane" type="button" 
+            role="tab" aria-controls="PQ-tab-pane" aria-selected="false">Procedimentos</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="RE-tab" data-bs-toggle="tab" data-bs-target="#RE-tab-pane" type="button" 
+            role="tab" aria-controls="RE-tab-pane" aria-selected="false">Referências</button>
+      </li>        
+    </ul>
+
+    <!-- Análises de Matérias Primas e Insumos -->
+    <div class="tab-content" id="myTabContent">
+
+      <!-- Entrada de Dados --><?php
+      if(!empty($_GET['id'])){
+        $dadosMaterial = $connDB->prepare("SELECT * FROM mp_estoque WHERE ID_ESTOQUE_MP = :idMat");
+        $dadosMaterial->bindParam(':idMat', $_GET['id'], PDO::PARAM_INT);
+        $dadosMaterial->execute(); $rowMaterial = $dadosMaterial->fetch(PDO::FETCH_ASSOC);
+        $dataRegistro = date('Y-m-d');
+      } ?>
+      <div class="tab-pane fade show active" id="entrada-tab-pane" role="tabpanel" aria-labelledby="entrada-tab" tabindex="0"><br>
+        <div class="row g-1">
+          <h6>Informações do Material Analisado</h6>
+          <div class="col-md-2">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="dataRegistro" name="dataRegistro" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($dataRegistro)) ?>" readonly>
+              <label for="dataRegistro" style="color: aqua; font-size: 12px; background: none">Data de Registro</label>
+              <p style="font-size: 11px; color: grey"></p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="nLoteInterno" name="nLoteInterno" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['NUMERO_LOTE_INTERNO'] ?>" readonly>
+              <label for="nLoteInterno" style="color: aqua; font-size: 12px; background: none">No.de Lote Interno</label>
+              <p style="font-size: 11px; color: grey"></p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="nLoteFornecedor" name="nLoteFornecedor" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['NUMERO_LOTE_FORNECEDOR'] ?>" readonly>
+              <label for="nLoteFornecedor" style="color: aqua; font-size: 12px; background: none">No.de Lote do Fornecedor</label>
+              <p style="font-size: 11px; color: grey"></p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="fornecedor" name="fornecedor" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['FORNECEDOR'] ?>" readonly>
+              <label for="fornecedor" style="color: aqua; font-size: 12px; background: none">Fornecedor</label>
+              <p style="font-size: 11px; color: grey"></p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="dataFabri" name="dataFabri" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($rowMaterial['DATA_FABRICACAO'])) ?>" readonly>
+              <label for="dataFabri" style="color: aqua; font-size: 12px; background: none">Data de Fabricação</label>
+              <p style="font-size: 11px; color: grey"></p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="dataVali" name="dataVali" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($rowMaterial['DATA_VALIDADE'])) ?>" readonly>
+              <label for="dataVali" style="color: aqua; font-size: 12px; background: none">Data de Validade</label>
+              <p style="font-size: 11px; color: grey"></p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="notaFiscal" name="notaFiscal" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['NOTA_FISCAL_LOTE'] ?>" readonly>
+              <label for="notaFiscal" style="color: aqua; font-size: 12px; background: none">Nota Fiscal</label>
+              <p style="font-size: 11px; color: grey"></p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="descrMat" name="descrMat" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['DESCRICAO_MP'] ?>" readonly>
+              <label for="descrMat" style="color: aqua; font-size: 12px; background: none">Descrição do Material</label>
+              <p style="font-size: 11px; color: grey"></p>
+            </div>
+          </div>
+          <fieldset>
+            <div class="row g-2">
+              <h6>Dados Analisados</h6>
+              <div class="col-md-3">
+                <p>Aspecto da Amostra</p>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                  <label class="form-check-label" for="flexRadioDefault1"> Default radio </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                  <label class="form-check-label" for="flexRadioDefault2"> Default checked radio </label>
+                </div>           
+              </div>
+              <div class="col-md-3">
+                <p>Aspecto da Amostra</p>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                  <label class="form-check-label" for="flexRadioDefault1"> Default radio </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                  <label class="form-check-label" for="flexRadioDefault2"> Default checked radio </label>
+                </div>           
+              </div>
+            </div>
+          </fieldset>
+        </div><!-- fim da div row g1 -->
+      </div><!-- fim da tab entrada -->
+
+      <!-- Especificações -->
+      <div class="tab-pane fade" id="ET-tab-pane" role="tabpanel" aria-labelledby="ET-tab" tabindex="0">
+        <br><br><br>
+        <p>Espaço para documentação de especificação técnica</p>
+      </div>
+
+      <!-- Metodologias -->
+      <div class="tab-pane fade" id="MA-tab-pane" role="tabpanel" aria-labelledby="MA-tab" tabindex="0">
+        <br><br><br>
+        <p>Espaço para documentação MA</p>
+      </div>
+
+      <!-- Peocedimentos -->
+      <div class="tab-pane fade" id="PQ-tab-pane" role="tabpanel" aria-labelledby="PQ-tab" tabindex="0">
+        <br><br><br>
+        <p>Espaço para documentação PQ</p>
+      </div>
+
+      <!-- Referências -->
+      <div class="tab-pane fade" id="RE-tab-pane" role="tabpanel" aria-labelledby="RE-tab" tabindex="0">
+        <br><br><br>
+        <p>Espaço para documentação RE</p>
+      </div>
+    </div><!-- container tab -->     
+  </div><!-- container fluid -->
+</div><!-- Entrada de Dados -->

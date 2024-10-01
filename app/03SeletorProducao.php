@@ -113,8 +113,13 @@ include_once './RastreadorAtividades.php';
                                      value="<?php echo date('d/m/Y',strtotime($rowPedido['DATA_ENTREGA'])) ?>" readonly>
                             </div>
                           </div>
-                          <div class="col-md-3">
-                            <button class="btn btn-primary" style="font-size: 14px; float: right" onclick="location.href='./37ProcessaPedido.php?id=<?php echo $id ?>'">Registro da Fabricação</button>
+                          <div class="col-md-3"><?php
+                            if($rowPedido['ETAPA_PROD'] < 2){ ?>
+                              <button class="btn btn-secondary" style="font-size: 14px; float: right" onclick="" disabled>Registro da Fabricação</button> <?php 
+                            }
+                            if($rowPedido['ETAPA_PROD'] == 2){ ?>
+                              <button class="btn btn-primary" style="font-size: 14px; float: right" onclick="location.href='./37ProcessaPedido.php?id=<?php echo $id ?>'">Registro da Fabricação</button><?php
+                            } ?>
                           </div>
                           <div class="col-md-12" style="background: rgba(0,0,0,0.3); border-radius: 5px;">
                             <h6 style="color: orange;">Situação : <?php echo $rowPedido['SITUACAO_QUALI'] ?></h6>
