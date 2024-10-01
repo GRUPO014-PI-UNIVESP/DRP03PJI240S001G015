@@ -124,26 +124,48 @@
           <fieldset>
             <div class="row g-2">
               <h6>Dados Analisados</h6>
-              <div class="col-md-3">
-                <p>Aspecto da Amostra</p>
+              <div class="col-md-2">
+                <p style="color: aqua">Aspecto</p>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                  <label class="form-check-label" for="flexRadioDefault1"> Default radio </label>
+                  <input class="form-check-input" type="radio" name="aspecto" id="aspecto" value="Regular" checked>
+                  <label class="form-check-label" for="aspecto"> Regular </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
-                  <label class="form-check-label" for="flexRadioDefault2"> Default checked radio </label>
+                  <input class="form-check-input" type="radio" name="aspecto" id="aspecto" value="Irregular">
+                  <label class="form-check-label" for="aspecto"> Irregular </label>
                 </div>           
               </div>
-              <div class="col-md-3">
-                <p>Aspecto da Amostra</p>
+              <div class="col-md-2">
+                <p style="color: aqua">Coloração</p>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                  <label class="form-check-label" for="flexRadioDefault1"> Default radio </label>
+                  <input class="form-check-input" type="radio" name="cor" id="cor" value="Normal" checked>
+                  <label class="form-check-label" for="cor"> Normal </label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
-                  <label class="form-check-label" for="flexRadioDefault2"> Default checked radio </label>
+                  <input class="form-check-input" type="radio" name="cor" id="cor">
+                  <label class="form-check-label" for="cor"> Anormal </label>
+                </div>           
+              </div>
+              <div class="col-md-2">
+                <p style="color: aqua">Odor</p>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="odor" id="odor" value="Normal" checked>
+                  <label class="form-check-label" for="odor"> Normal </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="odor" id="odor">
+                  <label class="form-check-label" for="odor"> Anormal </label>
+                </div>           
+              </div>
+              <div class="col-md-2">
+                <p style="color: aqua">Contaminantes</p>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="contaminantes" id="contaminantes" value="" checked>
+                  <label class="form-check-label" for="odor"> Normal </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="odor" id="odor">
+                  <label class="form-check-label" for="odor"> Anormal </label>
                 </div>           
               </div>
             </div>
