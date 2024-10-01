@@ -192,27 +192,53 @@ $responsavel = $_SESSION['nome_func'];
       }?>
     </form><?php
     $confirma = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-    if(!empty($confirma['recebe'])){ $situacao = 'MATERIAL RECEBIDO, AGUARDANDO LIBERAÇÃO';
-      $descrMat     = $confirma['descrMat']    ; $etapa = 2; $notaFiscal   = $confirma['notaFiscal']  ; 
+    if(!empty($confirma['recebe'])){
+      $situacao     = 'MATERIAL RECEBIDO, AGUARDANDO LIBERAÇÃO';
+      $descrMat     = $confirma['descrMat']    ;
+      $etapa        = 2;
+      $notaFiscal   = $confirma['notaFiscal']  ; 
       $dataFabriMP  = date('Y-m-d', strtotime($confirma['dataFabriMP']));
       $dataValidade = date('Y-m-d', strtotime($confirma['dataValidade']));
-      $fornecedor   = $confirma['fornecedor']  ; $nLoteForn    = $confirma['nLoteForn']   ;
-      $nLoteInterno = $confirma['nLoteInterno']; $atualiza     = $confirma['atualizado']  ;
-      $reservado    = $confirma['reservado']   ; $encarregado  = $confirma['encarregado'] ;
-      $salvaMat     = $connDB->prepare("UPDATE mp_estoque  SET ETAPA_PROD       = :etapa      , SITUACAO_QUALI      = :situacao    , DATA_ENTRADA            = :dataEntrada    ,
-                                                                  DATA_FABRICACAO      = :dataFabri  , DATA_VALIDADE       = :dataVali    , QTDE_ESTOQUE            = :atualiza       ,
-                                                                  QTDE_RESERVADA       = :reservado  , N_LOTE_SEQ          = :nSeq        , N_LOTE_MES              = :nMes           ,
-                                                                  N_LOTE_ANO           = :nAno       , NUMERO_LOTE_INTERNO = :nLoteInterno, NUMERO_LOTE_FORNECEDOR  = :nLoteFornecedor,
-                                                                  NOTA_FISCAL_LOTE     = :notaFiscal , FORNECEDOR          = :fornecedor  , ENCARREGADO_RECEBIMENTO = :encarregado    ,
-                                                                  RESPONSAVEL_REGISTRO = :responsavel  WHERE DESCRICAO_MP = :descrMat");
-      $salvaMat->bindParam(':descrMat'    , $descrMat    , PDO::PARAM_STR); $salvaMat->bindParam(':etapa'          , $etapa                , PDO::PARAM_INT);
-      $salvaMat->bindParam(':dataEntrada' , $dataEntrada , PDO::PARAM_STR); $salvaMat->bindParam(':dataFabri'      , $dataFabriMP          , PDO::PARAM_STR);
-      $salvaMat->bindParam(':dataVali'    , $dataValidate, PDO::PARAM_STR); $salvaMat->bindParam(':atualiza'       , $atualiza             , PDO::PARAM_INT);
-      $salvaMat->bindParam(':reservado'   , $reservado   , PDO::PARAM_INT); $salvaMat->bindParam(':nSeq'           , $codSeq               , PDO::PARAM_STR);
-      $salvaMat->bindParam(':nMes'        , $codMes      , PDO::PARAM_STR); $salvaMat->bindParam(':nAno'           , $codAno               , PDO::PARAM_STR);
-      $salvaMat->bindParam(':nLoteInterno', $nLoteInterno, PDO::PARAM_STR); $salvaMat->bindParam(':nLoteFornecedor', $nLoteForn            , PDO::PARAM_STR);
-      $salvaMat->bindParam(':notaFiscal'  , $notaFiscal  , PDO::PARAM_STR); $salvaMat->bindParam(':fornecedor'     , $fornecedor           , PDO::PARAM_STR);
-      $salvaMat->bindParam(':encarregado' , $encarregado , PDO::PARAM_STR); $salvaMat->bindParam(':responsavel'    , $_SESSION['nome_func'], PDO::PARAM_STR);
+      $fornecedor   = $confirma['fornecedor']  ;
+      $nLoteForn    = $confirma['nLoteForn']   ;
+      $nLoteInterno = $confirma['nLoteInterno'];
+      $atualiza     = $confirma['atualizado']  ;
+      $reservado    = $confirma['reservado']   ;
+      $encarregado  = $confirma['encarregado'] ;
+      $salvaMat     = $connDB->prepare("UPDATE mp_estoque  SET ETAPA_PROD              = :etapa          , 
+                                                                      SITUACAO_QUALI          = :situacao       , 
+                                                                      DATA_ENTRADA            = :dataEntrada    ,
+                                                                      DATA_FABRICACAO         = :dataFabri      ,
+                                                                      DATA_VALIDADE           = :dataVali       ,
+                                                                      QTDE_ESTOQUE            = :atualiza       ,
+                                                                      QTDE_RESERVADA          = :reservado      ,
+                                                                      N_LOTE_SEQ              = :nSeq           ,
+                                                                      N_LOTE_MES              = :nMes           ,
+                                                                      N_LOTE_ANO              = :nAno           ,
+                                                                      NUMERO_LOTE_INTERNO     = :nLoteInterno   ,
+                                                                      NUMERO_LOTE_FORNECEDOR  = :nLoteFornecedor,
+                                                                      NOTA_FISCAL_LOTE        = :notaFiscal     ,
+                                                                      FORNECEDOR              = :fornecedor     ,
+                                                                      ENCARREGADO_RECEBIMENTO = :encarregado    ,
+                                                                      RESPONSAVEL_REGISTRO    = :responsavel
+                                                WHERE DESCRICAO_MP = :descrMat");
+      $salvaMat->bindParam(':descrMat'       , $descrMat    , PDO::PARAM_STR);
+      $salvaMat->bindParam(':etapa'          , $etapa       , PDO::PARAM_INT);
+      $salvaMat->bindParam(':situacao'       , $situacao    , PDO::PARAM_STR);
+      $salvaMat->bindParam(':dataEntrada'    , $dataEntrada , PDO::PARAM_STR);
+      $salvaMat->bindParam(':dataFabri'      , $dataFabriMP , PDO::PARAM_STR);
+      $salvaMat->bindParam(':dataVali'       , $dataValidate, PDO::PARAM_STR);
+      $salvaMat->bindParam(':atualiza'       , $atualiza    , PDO::PARAM_INT);
+      $salvaMat->bindParam(':reservado'      , $reservado   , PDO::PARAM_INT);
+      $salvaMat->bindParam(':nSeq'           , $codSeq      , PDO::PARAM_STR);
+      $salvaMat->bindParam(':nMes'           , $codMes      , PDO::PARAM_STR);
+      $salvaMat->bindParam(':nAno'           , $codAno      , PDO::PARAM_STR);
+      $salvaMat->bindParam(':nLoteInterno'   , $nLoteInterno, PDO::PARAM_STR);
+      $salvaMat->bindParam(':nLoteFornecedor', $nLoteForn   , PDO::PARAM_STR);
+      $salvaMat->bindParam(':notaFiscal'     , $notaFiscal  , PDO::PARAM_STR);
+      $salvaMat->bindParam(':fornecedor'     , $fornecedor  , PDO::PARAM_STR);
+      $salvaMat->bindParam(':encarregado'    , $encarregado , PDO::PARAM_STR);
+      $salvaMat->bindParam(':responsavel'    , $_SESSION['nome_func'], PDO::PARAM_STR);
       $salvaMat->execute();
 
       $sitProduto = 'AGUARDANDO LIBERAÇÃO DOS MATERIAIS';
