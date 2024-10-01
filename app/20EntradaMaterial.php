@@ -141,22 +141,20 @@ $responsavel = $_SESSION['nome_func'];
               $ultimo = $connDB->prepare("SELECT MAX(N_LOTE_SEQ) AS U_SEQ, MAX(N_LOTE_MES) AS U_MES, MAX(N_LOTE_ANO) AS U_ANO FROM mp_estoque");
               $ultimo->execute(); $resultado = $ultimo->fetch(PDO::FETCH_ASSOC);
 
-              $dMes = intval(date('m')); $codAno = intval(date('y'));
+              $codMes = intval(date('m')); $codAno = intval(date('y'));
               $codLetra = array('', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', );
-              $seq    = $resultado['U_SEQ'] + 1;
-              if(!empty($resultado['U_SEQ'] && !empty($resultado['U_MES']) && !empty($resultado['U_ANO']))){
-                if($seq > 0   && $seq  < 10  )   { $codSeq    = '00'.$seq;}
-                if($seq > 10  && $seq  < 100 )   { $codSeq    = '0' .$seq;}
-                if($seq > 100 && $seq  < 1000)   { $codSeq    =      $seq;}
-                if($resultado['U_MES'] < $dMes)  { $codSeq   = '001';}
-                if($resultado['U_ANO'] < $codAno){ $codAno = intval(date('y', strtotime("+ 1 year" )));}
-                $interno = $codSeq . ' ' . $codLetra[$dMes] . ' ' . $codAno;
-              }
-              if($resultado['U_SEQ'] == '' && $resultado['U_MES'] == '' && $resultado['U_ANO'] == ''){
-                $codAno = intval(date('y'));
-                $interno = '001' . ' ' . $codLetra[$dMes] . ' ' . $codAno;
-              } ?>
-              <input type="text" class="form-control" id="nLoteInterno" name="nLoteInterno" style="font-weight: bolder; background: rgba(0,0,0,0.3); text-align: center; color: yellow" value="<?php echo $interno ?>" readonly>
+              if($resultado['U_ANO'] < $codAno){ $anoAtual = $resultado['U_ANO'] + 1; 
+              } else {$anoAtual = $resultado['U_ANO'];}
+
+              if($resultado['U_MES'] < $codMes){ $mesAtual = $resultado['U_MES'] + 1; $seqAtual = 1; 
+              } else {$mesAtual = $resultado['U_MES']; $seqAtual = $resultado['U_SEQ'] + 1;}
+
+              if($seqAtual < 10){ $seqLote = '00' . $seqAtual;}
+              if($seqAtual >=10 && $seqAtual < 100){ $seqLote = '0' . $seqAtual;} 
+              if($seqAtual >= 100){ $seqLote = $seqAtual;}
+
+              $nLoteInterno = $seqLote . ' ' . $codLetra[$mesAtual] . ' ' . $anoAtual; ?>
+              <input type="text" class="form-control" id="nLoteInterno" name="nLoteInterno" style="font-weight: bolder; background: rgba(0,0,0,0.3); text-align: center; color: yellow" value="<?php echo $nLoteInterno ?>" readonly>
               <label for="nLoteInterno" style="color: aqua; font-size: 12px; background: none">Identificação de Lote Interno</label>
               <p style="font-size: 11px; color: grey">Gerado pelo sistema</p>
             </div>
@@ -201,7 +199,6 @@ $responsavel = $_SESSION['nome_func'];
       $dataValidade = date('Y-m-d', strtotime($confirma['dataValidade']));
       $fornecedor   = $confirma['fornecedor']  ;
       $nLoteForn    = $confirma['nLoteForn']   ;
-      $nLoteInterno = $confirma['nLoteInterno'];
       $atualiza     = $confirma['atualizado']  ;
       $reservado    = $confirma['reservado']   ;
       $encarregado  = $confirma['encarregado'] ;
@@ -230,9 +227,9 @@ $responsavel = $_SESSION['nome_func'];
       $salvaMat->bindParam(':dataVali'       , $dataValidate, PDO::PARAM_STR);
       $salvaMat->bindParam(':atualiza'       , $atualiza    , PDO::PARAM_INT);
       $salvaMat->bindParam(':reservado'      , $reservado   , PDO::PARAM_INT);
-      $salvaMat->bindParam(':nSeq'           , $codSeq      , PDO::PARAM_STR);
-      $salvaMat->bindParam(':nMes'           , $codMes      , PDO::PARAM_STR);
-      $salvaMat->bindParam(':nAno'           , $codAno      , PDO::PARAM_STR);
+      $salvaMat->bindParam(':nSeq'           , $seqAtual    , PDO::PARAM_STR);
+      $salvaMat->bindParam(':nMes'           , $mesAtual    , PDO::PARAM_STR);
+      $salvaMat->bindParam(':nAno'           , $anoAtual    , PDO::PARAM_STR);
       $salvaMat->bindParam(':nLoteInterno'   , $nLoteInterno, PDO::PARAM_STR);
       $salvaMat->bindParam(':nLoteFornecedor', $nLoteForn   , PDO::PARAM_STR);
       $salvaMat->bindParam(':notaFiscal'     , $notaFiscal  , PDO::PARAM_STR);
