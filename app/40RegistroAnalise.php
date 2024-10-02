@@ -170,10 +170,6 @@
                       <label class="form-check-label" for="contaminantes"> Detectado </label>
                     </div>           
                   </div>
-                  <div class="col-md-12"><br><br>
-                    <h6>Condição:</h6>
-                    <img src="./aprovado.jpg" class="img-thumbnail" style="width: 150px; height: 150px;" alt="...">
-                  </div>
                 </div>
               </div>              
               <div class="col-md-7">
@@ -206,11 +202,11 @@
                     </div>
                   </div>
                   <div class="form-floating">
-                    <textarea class="form-control" id="observacao" name="observacao" style="font-size: 14px; height: 150px; width: 650px; background: rgba(0,0,0,0.3);"></textarea>
+                    <textarea class="form-control" id="observacao" name="observacao" style="font-size: 14px; height: 100px; width: 650px; background: rgba(0,0,0,0.3);"></textarea>
                     <label for="observacao" style="color: aqua; font-size: 12px; background: none">Observações</label>
                   </div>
                 </div>
-                <div class="col-md-3"><br><br>
+                <div class="col-md-3"><br>
                   <input class="btn btn-primary" type="submit" id="registra" name="registra" value="Confirmar Registro">
                 </div>
               </div>                           
@@ -220,9 +216,14 @@
             if(!empty($registra['registra'])){
 
             } ?>
-        </div>
-      </div><!-- fim da div row g1 -->
-    </div><!-- fim da tab entrada -->
+          <div class="col-md-1"><br>
+            <h6>Condição:</h6>
+          </div>
+          <div class="col-md-11"><br>
+            <img src="./aprovado.jpg" class="img-thumbnail" style="width: 150px; height: 150px;" alt="...">
+          </div>
+        </div><!-- fim da div row g1 -->
+      </div><!-- fim da tab entrada -->
 
       <!-- Especificações -->
       <div class="tab-pane fade" id="ET-tab-pane" role="tabpanel" aria-labelledby="ET-tab" tabindex="0">
