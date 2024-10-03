@@ -121,113 +121,125 @@
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
-          <form method="POST">
-            <div class="row g-2">
-              <div class="col-md-5">
-                <div class="row g-2">
-                  <h6>Dados Analisados</h6>
-                  <div class="col-md-5">
-                    <p style="color: aqua">Aspecto</p>
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="aspecto" id="aspecto" value="Regular" checked>
-                      <label class="form-check-label" for="aspecto"> Regular </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="aspecto" id="aspecto" value="Irregular">
-                      <label class="form-check-label" for="aspecto"> Irregular </label>
-                    </div>           
-                  </div>
-                  <div class="col-md-6">
-                    <p style="color: aqua">Coloração</p>
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="cor" id="cor" value="Normal" checked>
-                      <label class="form-check-label" for="cor"> Normal </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="cor" id="cor">
-                      <label class="form-check-label" for="cor"> Anormal </label>
-                    </div>           
-                  </div>
-                  <div class="col-md-5"><br>
-                    <p style="color: aqua">Odor</p>
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="odor" id="odor" value="Normal" checked>
-                      <label class="form-check-label" for="odor"> Normal </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="odor" id="odor">
-                      <label class="form-check-label" for="odor"> Anormal </label>
-                    </div>           
-                  </div>
-                  <div class="col-md-6"><br>
-                    <p style="color: aqua">Contaminantes</p> 
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="contaminantes" id="contaminantes" value="Não Detectado" checked>
-                      <label class="form-check-label" for="contaminantes"> Não Detectado </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="contaminantes" id="contaminantes" value="Detectado">
-                      <label class="form-check-label" for="contaminantes"> Detectado </label>
-                    </div>           
-                  </div>
-                </div>
-              </div>              
-              <div class="col-md-7">
-                <div class="row g-2">
-                  <div class="col-md-4"><br>
-                    <div class="input-group mb-1">
-                      <div class="form-floating mb-0">
-                        <input type="number" class="form-control" id="perdaMassa" name="perdaMassa" style="font-weight: bolder; background: rgba(0,0,0,0.3);">
-                        <label for="perdaMassa" style="color: aqua; font-size: 12px; background: none">Perda de Massa</label>
-                      </div>
-                      <span class="input-group-text">%</span>
-                    </div>
-                  </div>  
-                  <div class="col-md-4"><br>
-                    <div class="input-group mb-1">
-                      <div class="form-floating mb-0">
-                        <input type="number" class="form-control" id="escalaPH" name="escalaPH" style="font-weight: bolder; background: rgba(0,0,0,0.3);">
-                        <label for="escalaPH" style="color: aqua; font-size: 12px; background: none">Escala de pH</label>
-                      </div>
-                      <span class="input-group-text"></span>
-                    </div>
-                  </div>
-                  <div class="col-md-4"><br>
-                    <div class="input-group mb-1">
-                      <div class="form-floating mb-0">
-                        <input type="number" class="form-control" id="pureza" name="pureza" style="font-weight: bolder; background: rgba(0,0,0,0.3);">
-                        <label for="pureza" style="color: aqua; font-size: 12px; background: none">Pureza</label>
-                      </div>
-                      <span class="input-group-text">%</span>
-                    </div>
-                  </div>
-                  <div class="form-floating">
-                    <textarea class="form-control" id="observacao" name="observacao" style="font-size: 14px; height: 100px; width: 650px; background: rgba(0,0,0,0.3);"></textarea>
-                    <label for="observacao" style="color: aqua; font-size: 12px; background: none">Observações</label>
-                  </div>
-                </div>
-                <div class="col-md-3"><br>
-                  <input class="btn btn-primary" type="submit" id="confirma" name="confirma" value="Confirmar Dados">
-                </div>
-              </div>                           
+          <h6>Dados Analisados</h6>
+          <div class="col-md-3">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="aspecto" name="aspecto" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $_SESSION['aspecto'] ?>" readonly>
+              <label for="aspecto" style="color: aqua; font-size: 12px; background: none">Aspecto</label>
+              <p style="font-size: 11px; color: grey"></p>
             </div>
-          </form><?php
-          $confirma = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-          if(!empty($confirma['confirma'])){
-            $_SESSION['confirma']      = $confirma['confirma'];
-            $_SESSION['aspecto']       = $confirma['aspecto'];
-            $_SESSION['cor']           = $confirma['cor'];
-            $_SESSION['odor']          = $confirma['odor'];
-            $_SESSION['contaminantes'] = $confirma['contaminantes'];
-            $_SESSION['perdaMassa']    = $confirma['perdaMassa'];
-            $_SESSION['escalaPH']      = $confirma['escalaPH'];
-            $_SESSION['pureza']        = $confirma['pureza'];
-            $_SESSION['observacao']    = $confirma['observacao'];
+          </div>
+          <div class="col-md-3">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="cor" name="cor" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $_SESSION['cor'] ?>" readonly>
+              <label for="cor" style="color: aqua; font-size: 12px; background: none">Coloração</label>
+              <p style="font-size: 11px; color: grey"></p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="odor" name="odor" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $_SESSION['odor'] ?>" readonly>
+              <label for="odor" style="color: aqua; font-size: 12px; background: none">Odor</label>
+              <p style="font-size: 11px; color: grey"></p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="contaminantes" name="contaminantes" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $_SESSION['contaminantes'] ?>" readonly>
+              <label for="contaminantes" style="color: aqua; font-size: 12px; background: none">Presença de Contaminantes</label>
+              <p style="font-size: 11px; color: grey"></p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="perdaMassa" name="perdaMassa" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $_SESSION['perdaMassa'] ?>" readonly>
+              <label for="perdaMassa" style="color: aqua; font-size: 12px; background: none">Perda de Massa</label>
+              <p style="font-size: 11px; color: grey"></p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="escalaPH" name="escalaPH" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $_SESSION['escalaPH'] ?>" readonly>
+              <label for="escalaPH" style="color: aqua; font-size: 12px; background: none">Escala do pH</label>
+              <p style="font-size: 11px; color: grey"></p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="pureza" name="pureza" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $_SESSION['pureza'] ?>" readonly>
+              <label for="pureza" style="color: aqua; font-size: 12px; background: none">Pureza</label>
+              <p style="font-size: 11px; color: grey"></p>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-floating">
+              <textarea class="form-control" id="observacao" name="observacao" style="height: 75px"><?php echo $_SESSION['observacao'] ?></textarea>
+              <label for="floatingTextarea2">Observações da análise</label>
+            </div>
+          </div><?php
+          if(!empty($_SESSION['confirma'])){ $c = 0;
+            if($_SESSION['aspecto']       == 'Regular')      { $c = $c + 1;} if($_SESSION['aspecto']       == 'Irregular') { $c = $c - 1;} 
+            if($_SESSION['cor']           == 'Normal')       { $c = $c + 1;} if($_SESSION['cor']           == 'Anormal')   { $c = $c - 1;}
+            if($_SESSION['odor']          == 'Normal')       { $c = $c + 1;} if($_SESSION['odor']          == 'Anormal')   { $c = $c - 1;}
+            if($_SESSION['contaminantes'] == 'Não Detectado'){ $c = $c + 1;} if($_SESSION['contaminantes'] == 'Detectado') { $c = $c - 1;}
+            if($_SESSION['perdaMassa'] < 5 )                 { $c = $c + 1;} if($_SESSION['perdaMassa'] > 5 )              { $c = $c - 1;}
+            if($_SESSION['pureza']     > 95 )                { $c = $c + 1;} if($_SESSION['pureza']     < 95 )             { $c = $c - 1;}         
+            if($_SESSION['escalaPH'] <= 9 && $$_SESSION['escalaPH'] >= 5){ $c = $c + 1;} if($_SESSION['escalaPH'] <= 5 && $_SESSION['escalaPH'] >= 9){ $c = $c - 1;}
+            if($c > 6){ $condicao = 'Aprovado'; ?>
+              <div class="col-md-1"><br>
+                <h6>Condição:</h6>
+              </div>
+              <div class="col-md-3"><br>
+                <img src="./aprovado.jpg" class="img-thumbnail" style="width: 150px; height: 150px;" alt="...">
+              </div>
+              <div class="col-md-5"><br><br>
+                <div class="alert alert-success" role="alert">
+                  O material pode ser liberado para uso na planta!
+                </div>
+              </div><?php              
+            }
+            if($c < 7){ $condicao = 'Reprovado'; ?>
+              <div class="col-md-1"><br>
+                <h6>Condição:</h6>
+              </div>
+              <div class="col-md-3"><br>
+                <img src="./reprovado.jpg" class="img-thumbnail" style="width: 150px; height: 150px;" alt="...">
+              </div> 
+              <div class="col-md-5"><br><br>
+                <div class="alert alert-danger" role="alert">
+                  O material não foi aprovado! Comunique o responsável!
+                </div>
+              </div><?php 
+            }
+          } ?>
+        </div><?php
+          $registra = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+          if(!empty($registra['registra'])){
+            $dataAnalise = date('Y-m-d');
+            $regAnalise = $connDB->prepare("INSERT INTO analise_mp (NUMERO_LOTE_MP, DESCRICAO_MP, QTDE_LOTE_MP, ASPECTO, COLORACAO, ODOR, CONTAMINANTES, PERDA_MASSA, ESCALA_PH,
+                                                                          PUREZA, CONDICAO, OBSERVACOES, DATA_ANALISE, ANALISTA, RESPONSAVEL)
+                                                   VALUES (:nLote, :descrMat, :qtdeLote, :aspecto, :cor, :odor, :contam, :perda, :ph, :pureza, :condicao, :analista, :observ)");
+            $regAnalise->bindParam(':nLote'      , $rowMaterial['NUMERO_LOTE_INTERNO'], PDO::PARAM_STR);
+            $regAnalise->bindParam(':descrMat'   , $rowMaterial['DESCRICAO_MP']       , PDO::PARAM_STR);
+            $regAnalise->bindParam(':qtdeLote'   , $rowMaterial['QTDE_LOTE']          , PDO::PARAM_STR);
+            $regAnalise->bindParam(':aspecto'    , $_SESSION['aspecto']               , PDO::PARAM_STR);
+            $regAnalise->bindParam(':cor'        , $_SESSION['cor']                   , PDO::PARAM_STR);
+            $regAnalise->bindParam(':odor'       , $_SESSION['odor']                  , PDO::PARAM_STR);
+            $regAnalise->bindParam(':contam'     , $_SESSION['contaminantes']         , PDO::PARAM_STR);
+            $regAnalise->bindParam(':perda'      , $_SESSION['perdaMassa']            , PDO::PARAM_STR);
+            $regAnalise->bindParam(':ph'         , $_SESSION['escalaPH']              , PDO::PARAM_STR);
+            $regAnalise->bindParam(':pureza'     , $_SESSION['pureza']                , PDO::PARAM_STR);
+            $regAnalise->bindParam(':condicao'   , $condicao                          , PDO::PARAM_STR);
+            $regAnalise->bindParam(':observ'     , $_SESSION['observacao']            , PDO::PARAM_STR);
+            $regAnalise->bindParam(':dataAnalise', $dataAnalise                       , PDO::PARAM_STR);
+            $regAnalise->bindParam(':analista'   , $_SESSION['nome_func']             , PDO::PARAM_STR);
+            $regAnalise->bindParam(':responsavel', $_SESSION['nome_func']             , PDO::PARAM_STR);
+            $regAnalise->execute();
 
-            header('Location: ./41RegistroAnalise.php');
-          }
+            $atualiza = $connDB->prepare("UPDATE mp_estoque SET ");
 
-        ?></div><!-- fim da div row g1 -->
+          } ?>
+        </div><!-- fim da div row g1 -->
       </div><!-- fim da tab entrada -->
 
       <!-- Especificações -->
