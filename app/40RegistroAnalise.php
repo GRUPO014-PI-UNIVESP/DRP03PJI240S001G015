@@ -160,13 +160,13 @@
                     </div>           
                   </div>
                   <div class="col-md-6"><br>
-                    <p style="color: aqua">Contaminantes</p>
+                    <p style="color: aqua">Contaminantes</p> 
                     <div class="form-check">
-                      <input class="form-check-input" type="radio" name="contaminantes" id="contaminantes" value="" checked>
+                      <input class="form-check-input" type="radio" name="contaminantes" id="contaminantes" value="Não Detectado" checked>
                       <label class="form-check-label" for="contaminantes"> Não Detectado </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="radio" name="contaminantes" id="contaminantes">
+                      <input class="form-check-input" type="radio" name="contaminantes" id="contaminantes" value="Detectado">
                       <label class="form-check-label" for="contaminantes"> Detectado </label>
                     </div>           
                   </div>
@@ -207,22 +207,75 @@
                   </div>
                 </div>
                 <div class="col-md-3"><br>
-                  <input class="btn btn-primary" type="submit" id="registra" name="registra" value="Confirmar Registro">
+                  <input class="btn btn-primary" type="submit" id="registra" name="registra" value="Confirmar Dados">
                 </div>
               </div>                           
             </div>
           </form><?php
-            $registra = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-            if(!empty($registra['registra'])){
+          $registra = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+          if(!empty($registra['registra'])){ $c = 0;
+            if($registra['aspecto']       == 'Regular')      { $c = $c + 1;} if($registra['aspecto']       == 'Irregular') { $c = $c - 1;} 
+            if($registra['cor']           == 'Normal')       { $c = $c + 1;} if($registra['cor']           == 'Anormal')   { $c = $c - 1;}
+            if($registra['odor']          == 'Normal')       { $c = $c + 1;} if($registra['odor']          == 'Anormal')   { $c = $c - 1;}
+            if($registra['contaminantes'] == 'Não Detectado'){ $c = $c + 1;} if($registra['contaminantes'] == 'Detectado') { $c = $c - 1;}
+            if($registra['perdaMassa'] < 5 )                 { $c = $c + 1;} if($registra['perdaMassa'] > 5 )              { $c = $c - 1;}
+            if($registra['pureza']     > 95 )                { $c = $c + 1;} if($registra['pureza']     < 95 )             { $c = $c - 1;}         
+            if($registra['escalaPH'] <= 9 && $registra['escalaPH'] >= 5){ $c = $c + 1;} if($registra['escalaPH'] <= 5 && $registra['escalaPH'] >= 9){ $c = $c - 1;}
 
-            } ?>
-          <div class="col-md-1"><br>
-            <h6>Condição:</h6>
-          </div>
-          <div class="col-md-11"><br>
-            <img src="./aprovado.jpg" class="img-thumbnail" style="width: 150px; height: 150px;" alt="...">
-          </div>
-        </div><!-- fim da div row g1 -->
+            if($c > 6){ $condicao = 'Aprovado'; ?>
+              <div class="col-md-1"><br>
+                <h6>Condição:</h6>
+              </div>
+              <div class="col-md-4"><br>
+                <img src="./aprovado.jpg" class="img-thumbnail" style="width: 150px; height: 150px;" alt="...">
+              </div>
+              <div class="col-md-6"><br><br>
+                <div class="alert alert-success" role="alert">
+                  O material pode ser liberado para uso na planta!
+                </div>
+              </div><?php              
+            }
+            if($c < 7){ $condicao = 'Reprovado'; ?>
+              <div class="col-md-1"><br>
+                <h6>Condição:</h6>
+              </div>
+              <div class="col-md-4"><br>
+                <img src="./reprovado.jpg" class="img-thumbnail" style="width: 150px; height: 150px;" alt="...">
+              </div> 
+              <div class="col-md-6">
+                <div class="alert alert-danger" role="alert">
+                  O material não foi aprovado! Comunique o responsável para as devidas tratativas!
+                </div>
+              </div><?php 
+            }
+          } ?>
+          <form method="POST">
+            <div class="col-md-3"><br>
+              <input class="btn btn-primary" type="submit" id="confirma" name="confirma" value="Registra Análise">
+            </div>            
+          </form><?php
+          $confirma = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+          if(!empty($confirma['confirma'])){
+            $regAnalise = $connDB->prepare("INSERT INTO analise_mp (NUMERO_LOTE_MP, DESCRICAO_MP, QTDE_LOTE_MP, ASPECTO, COLORACAO, ODOR, CONTAMINANTES, PERDA_MASSA, ESCALA_PH,
+                                                                          PUREZA, CONDICAO, ANALISTA, OBSERVACOES)
+                                                    VALUES (:nLote, :descrMat, :qtdeLote, :aspecto, :cor, :odor, :contam, :perda, :ph, :pureza, :condicao, :analista, :observ)");
+            $regAnalise->bindParam(':nLote'   , $rowMaterial['NUMERO_LOTE_INTERNO'], PDO::PARAM_STR);
+            $regAnalise->bindParam(':descrMat', $rowMaterial['DESCRICAO_MP']       , PDO::PARAM_STR);
+            $regAnalise->bindParam(':qtdeLote', $rowMaterial['QTDE_LOTE']          , PDO::PARAM_STR);
+            $regAnalise->bindParam(':aspecto' , $registra['aspecto']               , PDO::PARAM_STR);
+            $regAnalise->bindParam(':cor'     , $registra['cor']                   , PDO::PARAM_STR);
+            $regAnalise->bindParam(':odor'    , $registra['odor']                  , PDO::PARAM_STR);
+            $regAnalise->bindParam(':contam'  , $registra['contaminantes']         , PDO::PARAM_STR);
+            $regAnalise->bindParam(':perda'   , $registra['perdaMassa']            , PDO::PARAM_STR);
+            $regAnalise->bindParam(':ph'      , $registra['escalaPH']              , PDO::PARAM_STR);
+            $regAnalise->bindParam(':pureza'  , $registra['pureza']                , PDO::PARAM_STR);
+            $regAnalise->bindParam(':condicao', $condicao                          , PDO::PARAM_STR);
+            $regAnalise->bindParam(':analista', $_SESSION['nome_func']             , PDO::PARAM_STR);
+            $regAnalise->bindParam(':observ'  , $registra['observacao']            , PDO::PARAM_STR);
+
+          }
+          ?>
+          </div><!-- fim da div row g1 -->
       </div><!-- fim da tab entrada -->
 
       <!-- Especificações -->
