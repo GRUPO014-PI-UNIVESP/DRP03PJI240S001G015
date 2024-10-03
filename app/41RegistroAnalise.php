@@ -176,42 +176,73 @@
               <textarea class="form-control" id="observacao" name="observacao" style="height: 75px"><?php echo $_SESSION['observacao'] ?></textarea>
               <label for="floatingTextarea2">Observações da análise</label>
             </div>
-          </div><?php
-          if(!empty($_SESSION['confirma'])){ $c = 0;
-            if($_SESSION['aspecto']       == 'Regular')      { $c = $c + 1;} if($_SESSION['aspecto']       == 'Irregular') { $c = $c - 1;} 
-            if($_SESSION['cor']           == 'Normal')       { $c = $c + 1;} if($_SESSION['cor']           == 'Anormal')   { $c = $c - 1;}
-            if($_SESSION['odor']          == 'Normal')       { $c = $c + 1;} if($_SESSION['odor']          == 'Anormal')   { $c = $c - 1;}
-            if($_SESSION['contaminantes'] == 'Não Detectado'){ $c = $c + 1;} if($_SESSION['contaminantes'] == 'Detectado') { $c = $c - 1;}
-            if($_SESSION['perdaMassa'] < 5 )                 { $c = $c + 1;} if($_SESSION['perdaMassa'] > 5 )              { $c = $c - 1;}
-            if($_SESSION['pureza']     > 95 )                { $c = $c + 1;} if($_SESSION['pureza']     < 95 )             { $c = $c - 1;}         
-            if($_SESSION['escalaPH'] <= 9 && $$_SESSION['escalaPH'] >= 5){ $c = $c + 1;} if($_SESSION['escalaPH'] <= 5 && $_SESSION['escalaPH'] >= 9){ $c = $c - 1;}
-            if($c > 6){ $condicao = 'Aprovado'; ?>
-              <div class="col-md-1"><br>
-                <h6>Condição:</h6>
+          </div>
+          <form method="POST">
+            <div class="col-md-3">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="dataAnalise" name="dataAnalise" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y') ?>" readonly>
+                <label for="dataAnalise" style="color: aqua; font-size: 12px; background: none">Data da Análise</label>
+                <p style="font-size: 11px; color: grey"></p>
               </div>
-              <div class="col-md-3"><br>
-                <img src="./aprovado.jpg" class="img-thumbnail" style="width: 150px; height: 150px;" alt="...">
+            </div>
+            <div class="col-md-9">
+              <div class="form-floating"><?php
+                $depto = 'GARANTIA DA QUALIDADE';
+                $analista = $connDB->prepare("SELECT NOME_FUNCIONARIO FROM quadro_funcionarios WHERE DEPARTAMENTO = :depto");
+                $analista->bindParam(':depto', $depto, PDO::PARAM_STR);
+                $analista->execute();?>
+                <select class="form-select" id="analista" name="analista" aria-label="Floating label select example">
+                  <option selected>Selecione o nome do analista responsável</option><?php
+                  while($rowAnalista = $analista->fetch(PDO::FETCH_ASSOC));{ ?>
+                    <option value="1"><?php echo $rowAnalista['NOME_FUNCIONARIO'] ?></option><?php 
+                  }?>
+                </select>
+                <label for="analista" style="font-size: 10px; color:aqua">Analista</label>
               </div>
-              <div class="col-md-5"><br><br>
-                <div class="alert alert-success" role="alert">
-                  O material pode ser liberado para uso na planta!
+            </div><?php
+            $registra = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+            if(!empty($_SESSION['confirma'])){ $c = 0;
+              if($_SESSION['aspecto']       == 'Regular')      { $c = $c + 1;} if($_SESSION['aspecto']       == 'Irregular') { $c = $c - 1;} 
+              if($_SESSION['cor']           == 'Normal')       { $c = $c + 1;} if($_SESSION['cor']           == 'Anormal')   { $c = $c - 1;}
+              if($_SESSION['odor']          == 'Normal')       { $c = $c + 1;} if($_SESSION['odor']          == 'Anormal')   { $c = $c - 1;}
+              if($_SESSION['contaminantes'] == 'Não Detectado'){ $c = $c + 1;} if($_SESSION['contaminantes'] == 'Detectado') { $c = $c - 1;}
+              if($_SESSION['perdaMassa'] < 5 )                 { $c = $c + 1;} if($_SESSION['perdaMassa'] > 5 )              { $c = $c - 1;}
+              if($_SESSION['pureza']     > 95 )                { $c = $c + 1;} if($_SESSION['pureza']     < 95 )             { $c = $c - 1;}         
+              if($_SESSION['escalaPH'] <= 9 && $$_SESSION['escalaPH'] >= 5){ $c = $c + 1;} if($_SESSION['escalaPH'] <= 5 && $_SESSION['escalaPH'] >= 9){ $c = $c - 1;}
+              if($c > 6){ $condicao = 'Aprovado'; ?>
+                <div class="col-md-1"><br>
+                  <h6>Condição:</h6>
                 </div>
-              </div><?php              
-            }
-            if($c < 7){ $condicao = 'Reprovado'; ?>
-              <div class="col-md-1"><br>
-                <h6>Condição:</h6>
-              </div>
-              <div class="col-md-3"><br>
-                <img src="./reprovado.jpg" class="img-thumbnail" style="width: 150px; height: 150px;" alt="...">
-              </div> 
-              <div class="col-md-5"><br><br>
-                <div class="alert alert-danger" role="alert">
-                  O material não foi aprovado! Comunique o responsável!
+                <div class="col-md-3"><br>
+                  <img src="./aprovado.jpg" class="img-thumbnail" style="width: 150px; height: 150px;" alt="...">
                 </div>
-              </div><?php 
-            }
-          } ?>
+                <div class="col-md-5"><br><br>
+                  <div class="alert alert-success" role="alert">
+                    O material pode ser liberado para uso na planta!
+                  </div>
+                </div><?php              
+              }
+              if($c < 7){ $condicao = 'Reprovado'; ?>
+                <div class="col-md-1"><br>
+                  <h6>Condição:</h6>
+                </div>
+                <div class="col-md-3"><br>
+                  <img src="./reprovado.jpg" class="img-thumbnail" style="width: 150px; height: 150px;" alt="...">
+                </div> 
+                <div class="col-md-5"><br><br>
+                  <div class="alert alert-danger" role="alert">
+                    O material não foi aprovado! Comunique o responsável!
+                  </div>
+                </div><?php 
+              }
+            } ?>
+            <div class="col-md-3"><br>
+              <input class="btn btn-primary" type="submit" id="registra" name="registra" value="Salvar Registro" style="width: 200px">
+            </div>
+            <div class="col-md-3"><br>
+              <input class="btn btn-danger" type="reset" id="descarta" name="descarta" value="Descartar e Sair" style="width: 200px" onclick="location.href='./01SeletorGQualidade.php'">
+            </div>            
+          </form>
         </div><?php
           $registra = filter_input_array(INPUT_POST, FILTER_DEFAULT);
           if(!empty($registra['registra'])){
@@ -232,7 +263,7 @@
             $regAnalise->bindParam(':condicao'   , $condicao                          , PDO::PARAM_STR);
             $regAnalise->bindParam(':observ'     , $_SESSION['observacao']            , PDO::PARAM_STR);
             $regAnalise->bindParam(':dataAnalise', $dataAnalise                       , PDO::PARAM_STR);
-            $regAnalise->bindParam(':analista'   , $_SESSION['nome_func']             , PDO::PARAM_STR);
+            $regAnalise->bindParam(':analista'   , $registra['analista']              , PDO::PARAM_STR);
             $regAnalise->bindParam(':responsavel', $_SESSION['nome_func']             , PDO::PARAM_STR);
             $regAnalise->execute();
 

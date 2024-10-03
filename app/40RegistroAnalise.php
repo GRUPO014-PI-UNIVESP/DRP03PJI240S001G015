@@ -207,7 +207,10 @@
                   </div>
                 </div>
                 <div class="col-md-3"><br>
-                  <input class="btn btn-primary" type="submit" id="confirma" name="confirma" value="Confirmar Dados">
+                  <input class="btn btn-primary" type="submit" id="confirma" name="confirma" value="Confirmar Dados" style="width: 200px">
+                </div>
+                <div class="col-md-3"><br>
+                  <input class="btn btn-danger" type="reset" id="descarta" name="descarta" value="Descartar e Sair" style="width: 200px" onclick="location.href='./01SeletorGQualidade.php'">
                 </div>
               </div>                           
             </div>
