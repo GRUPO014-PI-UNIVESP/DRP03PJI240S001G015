@@ -61,6 +61,15 @@
         $dadosMaterial->bindParam(':idMat', $_GET['id'], PDO::PARAM_INT);
         $dadosMaterial->execute(); $rowMaterial = $dadosMaterial->fetch(PDO::FETCH_ASSOC);
         $dataRegistro = date('Y-m-d');
+        $_SESSION['nLoteI']     = $rowMaterial['NUMERO_LOTE_INTERNO'];
+        $_SESSION['nLoteF']     = $rowMaterial['NUMERO_LOTE_FORNECEDOR'];
+        $_SESSION['fornecedor'] = $rowMaterial['NUMERO_LOTE_INTERNO'];
+        $_SESSION['dataFabri']  = $rowMaterial['DATA_FABRICACAO'];
+        $_SESSION['dataVali']   = $rowMaterial['DATA_VALIDADE'];
+        $_SESSION['notaFiscal'] = $rowMaterial['NOTA_FISCAL_LOTE'];
+        $_SESSION['descrMat']   = $rowMaterial['DESCRICAO_MP'];
+        $_SESSION['qtdeLote']   = $rowMaterial['QTDE_LOTE'];
+
       } ?>
       <div class="tab-pane fade show active" id="entrada-tab-pane" role="tabpanel" aria-labelledby="entrada-tab" tabindex="0"><br>
         <div class="row g-1">

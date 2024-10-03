@@ -55,221 +55,218 @@
     <!-- Análises de Matérias Primas e Insumos -->
     <div class="tab-content" id="myTabContent">
 
-      <!-- Entrada de Dados --><?php
-      if(!empty($_GET['id'])){
-        $dadosMaterial = $connDB->prepare("SELECT * FROM mp_estoque WHERE ID_ESTOQUE_MP = :idMat");
-        $dadosMaterial->bindParam(':idMat', $_GET['id'], PDO::PARAM_INT);
-        $dadosMaterial->execute(); $rowMaterial = $dadosMaterial->fetch(PDO::FETCH_ASSOC);
-        $dataRegistro = date('Y-m-d');
-      } ?>
+      <!-- Entrada de Dados -->
       <div class="tab-pane fade show active" id="entrada-tab-pane" role="tabpanel" aria-labelledby="entrada-tab" tabindex="0"><br>
         <div class="row g-1">
           <h6>Informações do Material Analisado</h6>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="dataRegistro" name="dataRegistro" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($dataRegistro)) ?>" readonly>
+              <input type="text" class="form-control" id="dataRegistro" name="dataRegistro" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y') ?>" readonly>
               <label for="dataRegistro" style="color: aqua; font-size: 12px; background: none">Data de Registro</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="nLoteInterno" name="nLoteInterno" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['NUMERO_LOTE_INTERNO'] ?>" readonly>
+              <input type="text" class="form-control" id="nLoteInterno" name="nLoteInterno" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $_SESSION['nLoteI'] ?>" readonly>
               <label for="nLoteInterno" style="color: aqua; font-size: 12px; background: none">No.de Lote Interno</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="nLoteFornecedor" name="nLoteFornecedor" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['NUMERO_LOTE_FORNECEDOR'] ?>" readonly>
+              <input type="text" class="form-control" id="nLoteFornecedor" name="nLoteFornecedor" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $_SESSION['nLoteF'] ?>" readonly>
               <label for="nLoteFornecedor" style="color: aqua; font-size: 12px; background: none">No.de Lote do Fornecedor</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="fornecedor" name="fornecedor" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['FORNECEDOR'] ?>" readonly>
+              <input type="text" class="form-control" id="fornecedor" name="fornecedor" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $_SESSION['fornecedor']  ?>" readonly>
               <label for="fornecedor" style="color: aqua; font-size: 12px; background: none">Fornecedor</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="dataFabri" name="dataFabri" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($rowMaterial['DATA_FABRICACAO'])) ?>" readonly>
+              <input type="text" class="form-control" id="dataFabri" name="dataFabri" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($_SESSION['dataFabri'] )) ?>" readonly>
               <label for="dataFabri" style="color: aqua; font-size: 12px; background: none">Data de Fabricação</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="dataVali" name="dataVali" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($rowMaterial['DATA_VALIDADE'])) ?>" readonly>
+              <input type="text" class="form-control" id="dataVali" name="dataVali" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($_SESSION['dataVali'] )) ?>" readonly>
               <label for="dataVali" style="color: aqua; font-size: 12px; background: none">Data de Validade</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="notaFiscal" name="notaFiscal" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['NOTA_FISCAL_LOTE'] ?>" readonly>
+              <input type="text" class="form-control" id="notaFiscal" name="notaFiscal" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $_SESSION['notaFiscal']  ?>" readonly>
               <label for="notaFiscal" style="color: aqua; font-size: 12px; background: none">Nota Fiscal</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="descrMat" name="descrMat" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['DESCRICAO_MP'] ?>" readonly>
+              <input type="text" class="form-control" id="descrMat" name="descrMat" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $_SESSION['descrMat']  ?>" readonly>
               <label for="descrMat" style="color: aqua; font-size: 12px; background: none">Descrição do Material</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <h6>Dados Analisados</h6>
-          <div class="col-md-3">
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="aspecto" name="aspecto" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $_SESSION['aspecto'] ?>" readonly>
-              <label for="aspecto" style="color: aqua; font-size: 12px; background: none">Aspecto</label>
-              <p style="font-size: 11px; color: grey"></p>
+          <div class="col-md-6">
+            <div class="row g-1">
+              <div class="col-md-3">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="aspecto" name="aspecto" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center;" value="<?php echo $_SESSION['aspecto'] ?>" readonly>
+                  <label for="aspecto" style="color: aqua; font-size: 12px; background: none">Aspecto</label>
+                  <p style="font-size: 11px; color: grey"></p>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="cor" name="cor" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center;" value="<?php echo $_SESSION['cor'] ?>" readonly>
+                  <label for="cor" style="color: aqua; font-size: 12px; background: none">Coloração</label>
+                  <p style="font-size: 11px; color: grey"></p>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="odor" name="odor" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center;" value="<?php echo $_SESSION['odor'] ?>" readonly>
+                  <label for="odor" style="color: aqua; font-size: 12px; background: none">Odor</label>
+                  <p style="font-size: 11px; color: grey"></p>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="contaminantes" name="contaminantes" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center;" value="<?php echo $_SESSION['contaminantes'] ?>" readonly>
+                  <label for="contaminantes" style="color: aqua; font-size: 12px; background: none">Contaminantes</label>
+                  <p style="font-size: 11px; color: grey"></p>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="perdaMassa" name="perdaMassa" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center;" value="<?php echo $_SESSION['perdaMassa'] . ' %' ?>" readonly>
+                  <label for="perdaMassa" style="color: aqua; font-size: 12px; background: none">Perda de Massa</label>
+                  <p style="font-size: 11px; color: grey"></p>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="escalaPH" name="escalaPH" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center;" value="<?php echo $_SESSION['escalaPH'] ?>" readonly>
+                  <label for="escalaPH" style="color: aqua; font-size: 12px; background: none">Escala do pH</label>
+                  <p style="font-size: 11px; color: grey"></p>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="pureza" name="pureza" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center;" value="<?php echo $_SESSION['pureza'] . ' %' ?>" readonly>
+                  <label for="pureza" style="color: aqua; font-size: 12px; background: none">Pureza</label>
+                  <p style="font-size: 11px; color: grey"></p>
+                </div>
+              </div><?php
+              $registra = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+              if(!empty($_SESSION['confirma'])){ $c = 0;
+                if($_SESSION['aspecto']       == 'Regular')      { $c = $c + 1;} if($_SESSION['aspecto']       == 'Irregular') { $c = $c - 1;} 
+                if($_SESSION['cor']           == 'Normal')       { $c = $c + 1;} if($_SESSION['cor']           == 'Anormal')   { $c = $c - 1;}
+                if($_SESSION['odor']          == 'Normal')       { $c = $c + 1;} if($_SESSION['odor']          == 'Anormal')   { $c = $c - 1;}
+                if($_SESSION['contaminantes'] == 'Não Detectado'){ $c = $c + 1;} if($_SESSION['contaminantes'] == 'Detectado') { $c = $c - 1;}
+                if($_SESSION['perdaMassa'] < 5 )                 { $c = $c + 1;} if($_SESSION['perdaMassa'] > 5 )              { $c = $c - 1;}
+                if($_SESSION['pureza']     > 95 )                { $c = $c + 1;} if($_SESSION['pureza']     < 95 )             { $c = $c - 1;}         
+                if($_SESSION['escalaPH'] <= 9 && $_SESSION['escalaPH'] >= 5){ $c = $c + 1;} if($_SESSION['escalaPH'] <= 5 && $_SESSION['escalaPH'] >= 9){ $c = $c - 1;}
+                if($c > 6){ $condicao = 'Aprovado'; ?>
+                  <div class="col-md-1"></div>
+                  <h6>Condição:</h6>
+                  <div class="col-md-3">
+                    <img src="./aprovado.jpg" class="img-thumbnail" style="width: 120px; height: 120px;" alt="...">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="alert alert-success" role="alert">
+                      O material pode ser liberado para uso na planta!
+                    </div>
+                  </div><?php              
+                }
+                if($c < 7){ $condicao = 'Reprovado'; ?>
+                  <div class="col-md-1"><br>
+                    <h6>Condição:</h6>
+                  </div>
+                  <div class="col-md-3">
+                    <img src="./reprovado.jpg" class="img-thumbnail" style="width: 120px; height: 120px;" alt="...">
+                  </div> 
+                  <div class="col-md-8">
+                    <div class="alert alert-danger" role="alert">
+                      O material não foi aprovado! Comunique o responsável!
+                    </div>
+                  </div><?php 
+                }
+              } ?>
             </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="cor" name="cor" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $_SESSION['cor'] ?>" readonly>
-              <label for="cor" style="color: aqua; font-size: 12px; background: none">Coloração</label>
-              <p style="font-size: 11px; color: grey"></p>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="odor" name="odor" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $_SESSION['odor'] ?>" readonly>
-              <label for="odor" style="color: aqua; font-size: 12px; background: none">Odor</label>
-              <p style="font-size: 11px; color: grey"></p>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="contaminantes" name="contaminantes" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $_SESSION['contaminantes'] ?>" readonly>
-              <label for="contaminantes" style="color: aqua; font-size: 12px; background: none">Presença de Contaminantes</label>
-              <p style="font-size: 11px; color: grey"></p>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="perdaMassa" name="perdaMassa" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $_SESSION['perdaMassa'] ?>" readonly>
-              <label for="perdaMassa" style="color: aqua; font-size: 12px; background: none">Perda de Massa</label>
-              <p style="font-size: 11px; color: grey"></p>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="escalaPH" name="escalaPH" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $_SESSION['escalaPH'] ?>" readonly>
-              <label for="escalaPH" style="color: aqua; font-size: 12px; background: none">Escala do pH</label>
-              <p style="font-size: 11px; color: grey"></p>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="pureza" name="pureza" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $_SESSION['pureza'] ?>" readonly>
-              <label for="pureza" style="color: aqua; font-size: 12px; background: none">Pureza</label>
-              <p style="font-size: 11px; color: grey"></p>
-            </div>
-          </div>
-          <div class="col-md-12">
+          </div>           
+          <div class="col-md-6">
             <div class="form-floating">
-              <textarea class="form-control" id="observacao" name="observacao" style="height: 75px"><?php echo $_SESSION['observacao'] ?></textarea>
-              <label for="floatingTextarea2">Observações da análise</label>
+              <textarea class="form-control" id="observacao" name="observacao" style="height: 135px; background: rgba(0,0,0,0.3); color: yellow;"><?php echo $_SESSION['observacao'] ?></textarea>
+              <label for="observacao" style="color: aqua; font-size: 12px; background: none">Observações da análise</label>
             </div>
-          </div>
-          <form method="POST">
-            <div class="col-md-3">
-              <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="dataAnalise" name="dataAnalise" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y') ?>" readonly>
-                <label for="dataAnalise" style="color: aqua; font-size: 12px; background: none">Data da Análise</label>
-                <p style="font-size: 11px; color: grey"></p>
+            <form method="POST">
+              <div class="col-md-12"><br>
+                <div class="form-floating"><?php
+                  $depto = 'GARANTIA DA QUALIDADE';
+                  $query_analista = $connDB->prepare("SELECT NOME_FUNCIONARIO FROM quadro_funcionarios WHERE DEPARTAMENTO = :depto");
+                  $query_analista->bindParam(':depto', $depto, PDO::PARAM_STR);
+                  $query_analista->execute(); ?>
+                  <select class="form-select" id="analista" name="analista" aria-label="Floating label select example" style="background: rgba(0,0,0,0.3);">
+                    <option style="font-size: 14px; color: black; background: rgba(0,0,0,0.3)" selected>Selecione o nome do analista responsável</option><?php
+                    while($rowAna = $query_analista->fetch(PDO::FETCH_ASSOC)){ ?>
+                      <option style="font-size: 14px; color: black; background: rgba(0,0,0,0.3)"><?php echo $rowAna['NOME_FUNCIONARIO']; ?></option><?php 
+                    } ?>
+                  </select>
+                  <label for="analista" style="font-size: 12px; color:aqua">Analista</label>
+                </div>
+              </div>           
+              <div class="col-md-3"><br>
+                <input class="btn btn-primary" type="submit" id="registra" name="registra" value="Salvar Registro" style="width: 200px">
               </div>
-            </div>
-            <div class="col-md-9">
-              <div class="form-floating"><?php
-                $depto = 'GARANTIA DA QUALIDADE';
-                $analista = $connDB->prepare("SELECT NOME_FUNCIONARIO FROM quadro_funcionarios WHERE DEPARTAMENTO = :depto");
-                $analista->bindParam(':depto', $depto, PDO::PARAM_STR);
-                $analista->execute();?>
-                <select class="form-select" id="analista" name="analista" aria-label="Floating label select example">
-                  <option selected>Selecione o nome do analista responsável</option><?php
-                  while($rowAnalista = $analista->fetch(PDO::FETCH_ASSOC));{ ?>
-                    <option value="1"><?php echo $rowAnalista['NOME_FUNCIONARIO'] ?></option><?php 
-                  }?>
-                </select>
-                <label for="analista" style="font-size: 10px; color:aqua">Analista</label>
-              </div>
-            </div><?php
-            $registra = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-            if(!empty($_SESSION['confirma'])){ $c = 0;
-              if($_SESSION['aspecto']       == 'Regular')      { $c = $c + 1;} if($_SESSION['aspecto']       == 'Irregular') { $c = $c - 1;} 
-              if($_SESSION['cor']           == 'Normal')       { $c = $c + 1;} if($_SESSION['cor']           == 'Anormal')   { $c = $c - 1;}
-              if($_SESSION['odor']          == 'Normal')       { $c = $c + 1;} if($_SESSION['odor']          == 'Anormal')   { $c = $c - 1;}
-              if($_SESSION['contaminantes'] == 'Não Detectado'){ $c = $c + 1;} if($_SESSION['contaminantes'] == 'Detectado') { $c = $c - 1;}
-              if($_SESSION['perdaMassa'] < 5 )                 { $c = $c + 1;} if($_SESSION['perdaMassa'] > 5 )              { $c = $c - 1;}
-              if($_SESSION['pureza']     > 95 )                { $c = $c + 1;} if($_SESSION['pureza']     < 95 )             { $c = $c - 1;}         
-              if($_SESSION['escalaPH'] <= 9 && $$_SESSION['escalaPH'] >= 5){ $c = $c + 1;} if($_SESSION['escalaPH'] <= 5 && $_SESSION['escalaPH'] >= 9){ $c = $c - 1;}
-              if($c > 6){ $condicao = 'Aprovado'; ?>
-                <div class="col-md-1"><br>
-                  <h6>Condição:</h6>
-                </div>
-                <div class="col-md-3"><br>
-                  <img src="./aprovado.jpg" class="img-thumbnail" style="width: 150px; height: 150px;" alt="...">
-                </div>
-                <div class="col-md-5"><br><br>
-                  <div class="alert alert-success" role="alert">
-                    O material pode ser liberado para uso na planta!
-                  </div>
-                </div><?php              
-              }
-              if($c < 7){ $condicao = 'Reprovado'; ?>
-                <div class="col-md-1"><br>
-                  <h6>Condição:</h6>
-                </div>
-                <div class="col-md-3"><br>
-                  <img src="./reprovado.jpg" class="img-thumbnail" style="width: 150px; height: 150px;" alt="...">
-                </div> 
-                <div class="col-md-5"><br><br>
-                  <div class="alert alert-danger" role="alert">
-                    O material não foi aprovado! Comunique o responsável!
-                  </div>
-                </div><?php 
-              }
-            } ?>
-            <div class="col-md-3"><br>
-              <input class="btn btn-primary" type="submit" id="registra" name="registra" value="Salvar Registro" style="width: 200px">
-            </div>
-            <div class="col-md-3"><br>
-              <input class="btn btn-danger" type="reset" id="descarta" name="descarta" value="Descartar e Sair" style="width: 200px" onclick="location.href='./01SeletorGQualidade.php'">
-            </div>            
-          </form>
-        </div><?php
+              <div class="col-md-3"><br>
+                <input class="btn btn-danger" type="reset" id="descarta" name="descarta" value="Descartar e Sair" style="width: 200px" onclick="location.href='./01SeletorGQualidade.php'">
+              </div>            
+            </form>
+          </div>        
+          <?php
           $registra = filter_input_array(INPUT_POST, FILTER_DEFAULT);
           if(!empty($registra['registra'])){
             $dataAnalise = date('Y-m-d');
             $regAnalise = $connDB->prepare("INSERT INTO analise_mp (NUMERO_LOTE_MP, DESCRICAO_MP, QTDE_LOTE_MP, ASPECTO, COLORACAO, ODOR, CONTAMINANTES, PERDA_MASSA, ESCALA_PH,
                                                                           PUREZA, CONDICAO, OBSERVACOES, DATA_ANALISE, ANALISTA, RESPONSAVEL)
-                                                   VALUES (:nLote, :descrMat, :qtdeLote, :aspecto, :cor, :odor, :contam, :perda, :ph, :pureza, :condicao, :analista, :observ)");
-            $regAnalise->bindParam(':nLote'      , $rowMaterial['NUMERO_LOTE_INTERNO'], PDO::PARAM_STR);
-            $regAnalise->bindParam(':descrMat'   , $rowMaterial['DESCRICAO_MP']       , PDO::PARAM_STR);
-            $regAnalise->bindParam(':qtdeLote'   , $rowMaterial['QTDE_LOTE']          , PDO::PARAM_STR);
-            $regAnalise->bindParam(':aspecto'    , $_SESSION['aspecto']               , PDO::PARAM_STR);
-            $regAnalise->bindParam(':cor'        , $_SESSION['cor']                   , PDO::PARAM_STR);
-            $regAnalise->bindParam(':odor'       , $_SESSION['odor']                  , PDO::PARAM_STR);
-            $regAnalise->bindParam(':contam'     , $_SESSION['contaminantes']         , PDO::PARAM_STR);
-            $regAnalise->bindParam(':perda'      , $_SESSION['perdaMassa']            , PDO::PARAM_STR);
-            $regAnalise->bindParam(':ph'         , $_SESSION['escalaPH']              , PDO::PARAM_STR);
-            $regAnalise->bindParam(':pureza'     , $_SESSION['pureza']                , PDO::PARAM_STR);
-            $regAnalise->bindParam(':condicao'   , $condicao                          , PDO::PARAM_STR);
-            $regAnalise->bindParam(':observ'     , $_SESSION['observacao']            , PDO::PARAM_STR);
-            $regAnalise->bindParam(':dataAnalise', $dataAnalise                       , PDO::PARAM_STR);
-            $regAnalise->bindParam(':analista'   , $registra['analista']              , PDO::PARAM_STR);
-            $regAnalise->bindParam(':responsavel', $_SESSION['nome_func']             , PDO::PARAM_STR);
+                                                   VALUES (:nLote, :descrMat, :qtdeLote, :aspecto, :cor, :odor, :contam, :perda, :ph, :pureza, :condicao, :observ, :dataAnalise, :analista, :responsavel)");
+            $regAnalise->bindParam(':nLote'      , $_SESSION['nLoteI']       , PDO::PARAM_STR);
+            $regAnalise->bindParam(':descrMat'   , $_SESSION['descrMat']     , PDO::PARAM_STR);
+            $regAnalise->bindParam(':qtdeLote'   , $_SESSION['qtdeLote']     , PDO::PARAM_STR);
+            $regAnalise->bindParam(':aspecto'    , $_SESSION['aspecto']      , PDO::PARAM_STR);
+            $regAnalise->bindParam(':cor'        , $_SESSION['cor']          , PDO::PARAM_STR);
+            $regAnalise->bindParam(':odor'       , $_SESSION['odor']         , PDO::PARAM_STR);
+            $regAnalise->bindParam(':contam'     , $_SESSION['contaminantes'], PDO::PARAM_STR);
+            $regAnalise->bindParam(':perda'      , $_SESSION['perdaMassa']   , PDO::PARAM_STR);
+            $regAnalise->bindParam(':ph'         , $_SESSION['escalaPH']     , PDO::PARAM_STR);
+            $regAnalise->bindParam(':pureza'     , $_SESSION['pureza']       , PDO::PARAM_STR);
+            $regAnalise->bindParam(':condicao'   , $condicao                 , PDO::PARAM_STR);
+            $regAnalise->bindParam(':observ'     , $_SESSION['observacao']   , PDO::PARAM_STR);
+            $regAnalise->bindParam(':dataAnalise', $dataAnalise              , PDO::PARAM_STR);
+            $regAnalise->bindParam(':analista'   , $registra['analista']     , PDO::PARAM_STR);
+            $regAnalise->bindParam(':responsavel', $_SESSION['nome_func']    , PDO::PARAM_STR);
             $regAnalise->execute();
+            
+            $etapa = 3; $situacao = 'MATERIAL LIBERADO PARA USO';
+            $atualiza = $connDB->prepare("UPDATE mp_estoque SET ETAPA_PROD = :etapa, SITUACAO_QUALI = :situacao WHERE NUMERO_LOTE_INTERNO = :nLoteInterno");
+            $atualiza->bindParam(':etapa'       , $etapa             , PDO::PARAM_INT);
+            $atualiza->bindParam(':situacao'    , $situacao          , PDO::PARAM_STR);
+            $atualiza->bindParam(':nLoteInterno', $_SESSION['nLoteI'], PDO::PARAM_STR);
+            $atualiza->execute();
 
-            $atualiza = $connDB->prepare("UPDATE mp_estoque SET ");
+            header('Location: ./01SeletorGQualidade.php');
 
-          } ?>
+          }?>
         </div><!-- fim da div row g1 -->
       </div><!-- fim da tab entrada -->
 
