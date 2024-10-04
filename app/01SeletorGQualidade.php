@@ -5,11 +5,6 @@
   $_SESSION['posicao'] = 'Qualidade';
   include_once './RastreadorAtividades.php';
 
-  // pesquisa de MP para serem analisadas
-  $query_MP = $connDB->prepare("SELECT ID_ESTOQUE_MP, FORNECEDOR, DESCRICAO_MP FROM mp_estoque WHERE SITUACAO_QUALI = 'AGUARDANDO'");
-  $query_MP->execute();
-
-  //$query_PF = $connDB->prepare("SELECT ");
 ?>
 <script>
   // verifica inatividade da página e fecha sessão
@@ -27,7 +22,7 @@
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 30000000);
+       time = setTimeout(deslogar, 3000000);
      }
   };
   inactivityTime();
@@ -139,10 +134,31 @@
                             <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
                                 value="<?php echo date('d/m/Y', strtotime($rowPedido['DATA_ENTREGA']."- 2 days")) ?>" readonly>
                           </div>
-                        </div>
-                        <div class="col-md-12">
-                          <button class="btn btn-primary" style="float: right" onclick="location.href='./40RegistroAnalise.php?id=<?php echo $id ?>'">Registro da Análise</button>
-                        </div>
+                        </div><?php
+                          $material = $connDB->prepare("SELECT * FROM pf_tabela WHERE NOME_PRODUTO = :nomeProduto");
+                          $material->bindParam(':nomeProd', $rowPedido['NOME_PRODUTO'], PDO::PARAM_STR);
+                          $material->execute();
+                          while($rowMaterial = $material->fetch(PDO::FETCH_ASSOC)){
+                            $estoque = $connDB->prepare("SELECT * FROM mp_estoque WHERE DESCRICAO_MP = :material");
+                            $estoque->bindParam(':material', $rowMaterial['DESCRICAO_MP'], pdo::PARAM_STR);
+                            $estoque->execute(); $rowEstoque = $estoque->fetch(PDO::FETCH_ASSOC);
+                            if($rowEstoque['ETAPA_PROD'] == 3 && $rowEstoque['QTDE_ESTOQUE'] >= ($rowPedido['QTDE_LOTE_PF'] * ($rowMaterial['PROPORCAO_MATERIAL'] / 100))){
+                              $disponivel = 1;
+                            }
+                            if($rowEstoque['ETAPA_PROD'] < 3 && $rowEstoque['QTDE_ESTOQUE'] < ($rowPedido['QTDE_LOTE_PF'] * ($rowMaterial['PROPORCAO_MATERIAL'] / 100))){
+                              $disponivel = 0;
+                            }
+                          }
+                          if($disponivel == 1){ ?>
+                            <div class="col-md-12">
+                              <button class="btn btn-primary" style="float: right" onclick="location.href='./42RegistroAnalise.php?id=<?php echo $id ?>'">Registro da Análise</button>
+                            </div><?php
+                          }
+                          if($disponivel == 0){ ?>
+                            <div class="col-md-12">
+                              <button class="btn btn-secondary" style="float: right" onclick="">Registro da Análise</button>
+                            </div><?php
+                          }?>
                       </div><!-- fim da DIV row g1 -->
                     </div><!-- fim da DIV do corpo do cartão -->
                   </div><!-- fim da DIV do cartão --><?php

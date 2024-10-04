@@ -21,7 +21,7 @@
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 300000);
+       time = setTimeout(deslogar, 3000000);
      }
   };
   inactivityTime();
@@ -57,9 +57,9 @@
 
       <!-- Entrada de Dados --><?php
       if(!empty($_GET['id'])){
-        $dadosMaterial = $connDB->prepare("SELECT * FROM mp_estoque WHERE ID_ESTOQUE_MP = :idMat");
-        $dadosMaterial->bindParam(':idMat', $_GET['id'], PDO::PARAM_INT);
-        $dadosMaterial->execute(); $rowMaterial = $dadosMaterial->fetch(PDO::FETCH_ASSOC);
+        $dadosPedido = $connDB->prepare("SELECT * FROM pf_pedido WHERE ID_PEDIDO = :idPedido");
+        $dadosPedido->bindParam(':idPedido', $_GET['id'], PDO::PARAM_INT);
+        $dadosPedido->execute(); $rowPedido = $dadosPedido->fetch(PDO::FETCH_ASSOC);
         $dataRegistro = date('Y-m-d');
         $_SESSION['nLoteI']     = $rowMaterial['NUMERO_LOTE_INTERNO'];
         $_SESSION['nLoteF']     = $rowMaterial['NUMERO_LOTE_FORNECEDOR'];
@@ -73,7 +73,7 @@
       } ?>
       <div class="tab-pane fade show active" id="entrada-tab-pane" role="tabpanel" aria-labelledby="entrada-tab" tabindex="0"><br>
         <div class="row g-1">
-          <h6>Informações do Material Analisado</h6>
+          <h6>Informações do Produto Analisado</h6>
           <div class="col-md-2">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="dataRegistro" name="dataRegistro" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($dataRegistro)) ?>" readonly>
