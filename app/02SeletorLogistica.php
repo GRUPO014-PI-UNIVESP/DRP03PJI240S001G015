@@ -21,7 +21,7 @@ include_once './RastreadorAtividades.php';
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 300000);
+       time = setTimeout(deslogar, 3000000);
      }
   };
   inactivityTime();
@@ -151,7 +151,41 @@ include_once './RastreadorAtividades.php';
       </div><!-- fim da DIV tab pane manager -->
           
       <div class="tab-pane fade" id="almoxarifado-tab-pane" role="tabpanel" aria-labelledby="almoxarifado-tab" tabindex="0"><br>
-        <h5>Estoque de Materiais e Insumos</h5>  
+        <h5 style="color: aqua">Estoque de Materiais e Insumos</h5>
+        <div class="container">
+          <div class="overflow-auto"><?php
+            $listaEstoque = $connDB->prepare("SELECT * FROM mp_estoque ORDER BY DESCRICAO_MP ASC"); $listaEstoque->execute(); ?>
+            <table class="table table-dark table-hover">
+              <thead style="font-size: 12px">
+                <tr>
+                  <th scope="col" style="width: 35%">Descrição do Material</th>
+                  <th scope="col" style="width: 10%; text-align: center">ID Interno</th>
+                  <th scope="col" style="width: 10%; text-align: center">Qtde Lote</th>
+                  <th scope="col" style="width: 10%; text-align: center">Qtde em Estoque</th>
+                  <th scope="col" style="width: 10%; text-align: center">Qtde Reservada</th>
+                  <th scope="col" style="width: 25%">Situação Atual</th>
+                </tr>
+              </thead>
+              <tbody style="height: 80%; font-size: 11px;">
+                <?php while($rowEstoque = $listaEstoque->fetch(PDO::FETCH_ASSOC)){ ?>
+                <tr>
+                  <td style="width: 35%; font-size: 14px"> 
+                    <?php echo $rowEstoque['DESCRICAO_MP'] . '<BR>' . $rowEstoque['FORNECEDOR']; ?> </td>
+                  <td style="width: 10%; font-size: 18px; text-align: center"> 
+                    <?php echo $rowEstoque['NUMERO_LOTE_INTERNO']; ?> </td>
+                  <td style="width: 10%; font-size: 18px; text-align: center"> 
+                    <?php echo $rowEstoque['QTDE_LOTE'] . ' ' . $rowEstoque['UNIDADE_MEDIDA'] ?> </td>
+                  <td style="width: 10%; font-size: 18px; text-align: center"> 
+                    <?php echo $rowEstoque['QTDE_ESTOQUE'] . ' ' . $rowEstoque['UNIDADE_MEDIDA'] ?> </td>
+                  <td style="width: 10%; font-size: 18px; text-align: center"> 
+                    <?php echo $rowEstoque['QTDE_RESERVADA'] . ' ' . $rowEstoque['UNIDADE_MEDIDA'] ?> </td>
+                  <td style="width: 25%; font-size: 14px"> 
+                    <?php echo $rowEstoque['SITUACAO_QUALI']  ?> </td>
+                </tr><?php } ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       <div class="tab-pane fade" id="transporte-tab-pane" role="tabpanel" aria-labelledby="transporte-tab" tabindex="0"><br><br>
