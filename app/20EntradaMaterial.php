@@ -93,14 +93,14 @@ $responsavel = $_SESSION['nome_func'];
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="notaFiscal" name="notaFiscal" style="font-weight: bolder; background: rgba(0,0,0,0.3); text-transform: uppercase">
+              <input type="text" class="form-control" id="notaFiscal" name="notaFiscal" style="font-weight: bolder; background: rgba(0,0,0,0.3); text-align: center;">
               <label for="notaFiscal" style="color: aqua; font-size: 12px; background: none">Nota Fiscal</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="nLoteForn" name="nLoteForn" style="font-weight: bolder; background: rgba(0,0,0,0.3)">
+              <input type="text" class="form-control" id="nLoteForn" name="nLoteForn" style="font-weight: bolder; background: rgba(0,0,0,0.3); text-align: center; text-transform: uppercase">
               <label for="nLoteForn" style="color: aqua; font-size: 12px; background: none">Identificação de Lote Externo</label>
               <p style="font-size: 11px; color: grey">Inserir o número ou código de identificação do material recebido</p>
             </div>
@@ -143,16 +143,20 @@ $responsavel = $_SESSION['nome_func'];
 
               $codMes = intval(date('m')); $codAno = intval(date('y'));
               $codLetra = array('', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', );
-              if($resultado['U_ANO'] < $codAno){ $anoAtual = $resultado['U_ANO'] + 1; 
-              } else {$anoAtual = $resultado['U_ANO'];}
-
-              if($resultado['U_MES'] < $codMes){ $mesAtual = $resultado['U_MES'] + 1; $seqAtual = 1; 
-              } else {$mesAtual = $resultado['U_MES']; $seqAtual = $resultado['U_SEQ'] + 1;}
-
-              if($seqAtual < 10){ $seqLote = '00' . $seqAtual;}
-              if($seqAtual >=10 && $seqAtual < 100){ $seqLote = '0' . $seqAtual;} 
-              if($seqAtual >= 100){ $seqLote = $seqAtual;}
-
+              if(!empty($resultado['U_SEQ'])){
+                if($resultado['U_ANO'] < $codAno){ $anoAtual = $resultado['U_ANO'] + 1; 
+                } else {$anoAtual = $resultado['U_ANO'];}
+  
+                if($resultado['U_MES'] < $codMes){ $mesAtual = $resultado['U_MES'] + 1; $seqAtual = 1; 
+                } else {$mesAtual = $resultado['U_MES']; $seqAtual = $resultado['U_SEQ'] + 1;}
+  
+                if($seqAtual < 10){ $seqLote = '00' . $seqAtual;}
+                if($seqAtual >=10 && $seqAtual < 100){ $seqLote = '0' . $seqAtual;} 
+                if($seqAtual >= 100){ $seqLote = $seqAtual;}
+              }
+              if(empty($resultado['U_SEQ'])){
+                $seqLote = '001'; $seqAtual = 1; $mesAtual = intval(date('m')); $anoAtual = intval(date('y'));
+              }
               $nLoteInterno = $seqLote . ' ' . $codLetra[$mesAtual] . ' ' . $anoAtual; ?>
               <input type="text" class="form-control" id="nLoteInterno" name="nLoteInterno" style="font-weight: bolder; background: rgba(0,0,0,0.3); text-align: center; color: yellow" value="<?php echo $nLoteInterno ?>" readonly>
               <label for="nLoteInterno" style="color: aqua; font-size: 12px; background: none">Identificação de Lote Interno</label>
@@ -192,16 +196,16 @@ $responsavel = $_SESSION['nome_func'];
     $confirma = filter_input_array(INPUT_POST, FILTER_DEFAULT);
     if(!empty($confirma['recebe'])){
       $situacao     = 'MATERIAL RECEBIDO, AGUARDANDO LIBERAÇÃO';
-      $descrMat     = $confirma['descrMat']    ;
+      $descrMat     = strtoupper($confirma['descrMat']);
       $etapa        = 2;
-      $notaFiscal   = $confirma['notaFiscal']  ; 
+      $notaFiscal   = $confirma['notaFiscal']; 
       $dataFabriMP  = date('Y-m-d', strtotime($confirma['dataFabriMP']));
       $dataValidade = date('Y-m-d', strtotime($confirma['dataValidade']));
-      $fornecedor   = $confirma['fornecedor']  ;
-      $nLoteForn    = $confirma['nLoteForn']   ;
-      $atualiza     = $confirma['atualizado']  ;
-      $reservado    = $confirma['reservado']   ;
-      $encarregado  = $confirma['encarregado'] ;
+      $fornecedor   = strtoupper($confirma['fornecedor']);
+      $nLoteForn    = strtoupper($confirma['nLoteForn']);
+      $atualiza     = $confirma['atualizado'];
+      $reservado    = $confirma['reservado'];
+      $encarregado  = strtoupper($confirma['encarregado']);
       $salvaMat     = $connDB->prepare("UPDATE mp_estoque  SET ETAPA_PROD              = :etapa          , 
                                                                       SITUACAO_QUALI          = :situacao       , 
                                                                       DATA_ENTRADA            = :dataEntrada    ,
@@ -224,7 +228,7 @@ $responsavel = $_SESSION['nome_func'];
       $salvaMat->bindParam(':situacao'       , $situacao    , PDO::PARAM_STR);
       $salvaMat->bindParam(':dataEntrada'    , $dataEntrada , PDO::PARAM_STR);
       $salvaMat->bindParam(':dataFabri'      , $dataFabriMP , PDO::PARAM_STR);
-      $salvaMat->bindParam(':dataVali'       , $dataValidate, PDO::PARAM_STR);
+      $salvaMat->bindParam(':dataVali'       , $dataValidade, PDO::PARAM_STR);
       $salvaMat->bindParam(':atualiza'       , $atualiza    , PDO::PARAM_INT);
       $salvaMat->bindParam(':reservado'      , $reservado   , PDO::PARAM_INT);
       $salvaMat->bindParam(':nSeq'           , $seqAtual    , PDO::PARAM_STR);

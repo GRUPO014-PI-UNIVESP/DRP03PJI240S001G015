@@ -57,34 +57,37 @@
                 $materiais->execute();
                 while($rowMat = $materiais->fetch(PDO::FETCH_ASSOC)){
                   $id = $rowMat['ID_ESTOQUE_MP']; ?>
-                  <div class="card text-bg-success mb-3" style="width: 45rem;">
+                  <div class="card text-bg-success mb-2" style="width: 45rem;">
                     <div class="card-body">
                       <div class="row g-1">
-                        <div class="col-md-12" style="background: rgba(0,0,0,0.3); border-radius: 5px;">
-                          <h6 style="color: orange;">Situação : <?php echo $rowMat['SITUACAO_QUALI'] ?></h6>
-                        </div>
                         <div class="col-md-12">
-                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Descrição do Material</span>
+                          <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Descrição do Material</span>
                             <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
                                 value="<?php echo $rowMat['DESCRICAO_MP']?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-4">
-                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">No.Lote</span>
+                          <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">No.Lote</span>
                             <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
                                 value="<?php echo $rowMat['NUMERO_LOTE_INTERNO']?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-4">
-                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Qtde</span>
+                          <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Qtde</span>
                             <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
                                 value="<?php echo $rowMat['QTDE_LOTE'] . ' ' . $rowMat['UNIDADE_MEDIDA'] ?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-4">
-                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Limite</span>
+                          <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Limite</span>
                             <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
                                 value="<?php echo date('d/m/Y', strtotime($rowMat['DATA_FABRICACAO'])) ?>" readonly>
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none; color: orange"
+                                value="<?php echo $rowMat['SITUACAO_QUALI']?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-12">
@@ -103,62 +106,72 @@
               <div class="row g-1"><?php
                 $pedido = $connDB->prepare("SELECT * FROM pf_pedido");
                 $pedido->execute();
-                while($rowPedido = $pedido->fetch(PDO::FETCH_ASSOC)){
+                while($rowPedido = $pedido->fetch(PDO::FETCH_ASSOC)){ // recursão de cards de pedidos
                   $id = $rowPedido['ID_PEDIDO']; ?>
-                  <div class="card text-bg-success mb-3" style="width: 45rem;">
+                  <div class="card text-bg-success mb-2" style="width: 45rem;">
                     <div class="card-body">
                       <div class="row g-1">
-                        <div class="col-md-12" style="background: rgba(0,0,0,0.3); border-radius: 5px;">
-                          <h6 style="color: orange;">Situação : <?php echo $rowPedido['SITUACAO_QUALI']; ?></h6>
-                        </div>
                         <div class="col-md-12">
-                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Produto</span>
+                          <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Nome do Produto</span>
                             <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
                                 value="<?php echo $rowPedido['NOME_PRODUTO']; ?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-4">
-                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">No.Lote</span>
+                          <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">No.Lote</span>
                             <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
                                 value="<?php echo $rowPedido['NUMERO_LOTE_PF']; ?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-4">
-                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Qtde</span>
+                          <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Qtde</span>
                             <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
                                 value="<?php echo $rowPedido['QTDE_LOTE_PF'] . ' ' . $rowPedido['UNIDADE_MEDIDA'] ?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-4">
-                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Limite</span>
+                          <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Limite</span>
                             <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
                                 value="<?php echo date('d/m/Y', strtotime($rowPedido['DATA_ENTREGA']."- 2 days")) ?>" readonly>
                           </div>
                         </div><?php
+                        if($rowPedido['ID_PEDIDO'] == 0){
                           $material = $connDB->prepare("SELECT * FROM pf_tabela WHERE NOME_PRODUTO = :nomeProduto");
-                          $material->bindParam(':nomeProd', $rowPedido['NOME_PRODUTO'], PDO::PARAM_STR);
-                          $material->execute();
-                          while($rowMaterial = $material->fetch(PDO::FETCH_ASSOC)){
-                            $estoque = $connDB->prepare("SELECT * FROM mp_estoque WHERE DESCRICAO_MP = :material");
-                            $estoque->bindParam(':material', $rowMaterial['DESCRICAO_MP'], pdo::PARAM_STR);
-                            $estoque->execute(); $rowEstoque = $estoque->fetch(PDO::FETCH_ASSOC);
-                            if($rowEstoque['ETAPA_PROD'] == 3 && $rowEstoque['QTDE_ESTOQUE'] >= ($rowPedido['QTDE_LOTE_PF'] * ($rowMaterial['PROPORCAO_MATERIAL'] / 100))){
-                              $disponivel = 1;
-                            }
-                            if($rowEstoque['ETAPA_PROD'] < 3 && $rowEstoque['QTDE_ESTOQUE'] < ($rowPedido['QTDE_LOTE_PF'] * ($rowMaterial['PROPORCAO_MATERIAL'] / 100))){
-                              $disponivel = 0;
-                            }
+                          $material->bindParam(':nomeProduto', $rowPedido['NOME_PRODUTO'], PDO::PARAM_STR);
+                          $material->execute(); $qMat = $material->rowCount(); $contador = 0;
+                          while($rowMat = $material->fetch(PDO::FETCH_ASSOC)){
+                            $estoque = $connDB->prepare("SELECT * FROM mp_estoque WHERE DESCRICAO_MP = :descrMat");
+                            $estoque->bindParam(':descrMat', $rowMat['DESCRICAO_MP'], PDO::PARAM_STR);
+                            $estoque->execute(); $rowStock = $estoque->fetch(PDO::FETCH_ASSOC);
+                            if($rowStock['ETAPA_PROD'] == 3){ $contador = $contador + 1; }
                           }
-                          if($disponivel == 1){ ?>
+                          if($contador < $qMat){ ?>
                             <div class="col-md-12">
-                              <button class="btn btn-primary" style="float: right" onclick="location.href='./42RegistroAnalise.php?id=<?php echo $id ?>'">Registro da Análise</button>
-                            </div><?php
-                          }
-                          if($disponivel == 0){ ?>
+                              <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
+                                <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none; color: orange"
+                                value="<?php echo $rowPedido['SITUACAO_QUALI']?>" readonly>
+                              </div>
+                            </div>                        
                             <div class="col-md-12">
                               <button class="btn btn-secondary" style="float: right" onclick="">Registro da Análise</button>
-                            </div><?php
-                          }?>
+                            </div><?php                          
+                          } 
+                          if($contador == $qMat){ $sitAtual = 'MATERIAIS DISPONÍVEIS PARA PRODUÇÃO';
+                            $atualiza = $connDB->prepare("UPDATE pf_pedido SET SITUACAO_QUALI = :situacao WHERE NOME_PRODUTO = :nomeProduto");
+                            $atualiza->bindParam(':situacao'   , $sitAtual, PDO::PARAM_STR);
+                            $atualiza->bindParam(':nomeProduto', $rowPedido['NOME_PRODUTO'], PDO::PARAM_STR);
+                            $atualiza->execute(); ?>
+                            <div class="col-md-12">
+                              <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
+                                <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none; color: orange"
+                                value="<?php echo $sitAtual?>" readonly>
+                              </div>
+                            </div>                          
+                            <div class="col-md-12">
+                              <button class="btn btn-primary" style="float: right" onclick="location.href='./42RegistroAnalise.php?id=<?php echo $id ?>'">Registro da Análise</button>
+                            </div> <?php
+                          }
+                        } ?>
                       </div><!-- fim da DIV row g1 -->
                     </div><!-- fim da DIV do corpo do cartão -->
                   </div><!-- fim da DIV do cartão --><?php
