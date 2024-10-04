@@ -129,8 +129,11 @@
                         <div class="col-md-3">
                           <button class="btn btn-danger" style="font-size: 14px; float: right" onclick="location.href='./36CancelaPedido.php?id=<?php echo $id ?>'">Cancelar Pedido</button>
                         </div>
-                        <div class="col-md-12" style="background: rgba(0,0,0,0.3); border-radius: 5px;">
-                          <h6 style="color: orange;">Situação : <?php echo $rowPedido['SITUACAO_QUALI'] ?></h6>
+                        <div class="col-md-12">
+                          <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none; color: orange"
+                                   value="<?php echo $rowPedido['SITUACAO_QUALI'] ?>" readonly>
+                          </div>
                         </div>
                       </div><!-- fim da DIV row g2 -->
                     </div><!-- fim da DIV do corpo do cartão -->

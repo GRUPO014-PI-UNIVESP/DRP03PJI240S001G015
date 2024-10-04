@@ -134,43 +134,22 @@
                             <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
                                 value="<?php echo date('d/m/Y', strtotime($rowPedido['DATA_ENTREGA']."- 2 days")) ?>" readonly>
                           </div>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none; color: orange"
+                                value="<?php echo $rowPedido['SITUACAO_QUALI']; ?>" readonly>
+                          </div>
                         </div><?php
-                        if($rowPedido['ID_PEDIDO'] == 0){
-                          $material = $connDB->prepare("SELECT * FROM pf_tabela WHERE NOME_PRODUTO = :nomeProduto");
-                          $material->bindParam(':nomeProduto', $rowPedido['NOME_PRODUTO'], PDO::PARAM_STR);
-                          $material->execute(); $qMat = $material->rowCount(); $contador = 0;
-                          while($rowMat = $material->fetch(PDO::FETCH_ASSOC)){
-                            $estoque = $connDB->prepare("SELECT * FROM mp_estoque WHERE DESCRICAO_MP = :descrMat");
-                            $estoque->bindParam(':descrMat', $rowMat['DESCRICAO_MP'], PDO::PARAM_STR);
-                            $estoque->execute(); $rowStock = $estoque->fetch(PDO::FETCH_ASSOC);
-                            if($rowStock['ETAPA_PROD'] == 3){ $contador = $contador + 1; }
-                          }
-                          if($contador < $qMat){ ?>
-                            <div class="col-md-12">
-                              <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
-                                <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none; color: orange"
-                                value="<?php echo $rowPedido['SITUACAO_QUALI']?>" readonly>
-                              </div>
-                            </div>                        
-                            <div class="col-md-12">
-                              <button class="btn btn-secondary" style="float: right" onclick="">Registro da Análise</button>
-                            </div><?php                          
-                          } 
-                          if($contador == $qMat){ $sitAtual = 'MATERIAIS DISPONÍVEIS PARA PRODUÇÃO';
-                            $atualiza = $connDB->prepare("UPDATE pf_pedido SET SITUACAO_QUALI = :situacao WHERE NOME_PRODUTO = :nomeProduto");
-                            $atualiza->bindParam(':situacao'   , $sitAtual, PDO::PARAM_STR);
-                            $atualiza->bindParam(':nomeProduto', $rowPedido['NOME_PRODUTO'], PDO::PARAM_STR);
-                            $atualiza->execute(); ?>
-                            <div class="col-md-12">
-                              <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
-                                <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none; color: orange"
-                                value="<?php echo $sitAtual?>" readonly>
-                              </div>
-                            </div>                          
-                            <div class="col-md-12">
-                              <button class="btn btn-primary" style="float: right" onclick="location.href='./42RegistroAnalise.php?id=<?php echo $id ?>'">Registro da Análise</button>
-                            </div> <?php
-                          }
+                        if($rowPedido['ETAPA_PROD'] < 2){ ?>
+                          <div class="col-md-12">
+                            <button class="btn btn-secondary" style="float: right" disabled>Registro da Análise</button>
+                          </div> <?php                                                  
+                        }
+                        if($rowPedido['ETAPA_PROD'] == 2){ ?>
+                          <div class="col-md-12">
+                            <button class="btn btn-primary" style="float: right" onclick="location.href='./42RegistroAnalise.php?id=<?php echo $id ?>'">Registro da Análise</button>
+                          </div> <?php                                                  
                         } ?>
                       </div><!-- fim da DIV row g1 -->
                     </div><!-- fim da DIV do corpo do cartão -->

@@ -21,7 +21,7 @@ include_once './RastreadorAtividades.php';
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 3000000);
+       time = setTimeout(deslogar, 300000);
      }
   };
   inactivityTime();
@@ -62,9 +62,6 @@ include_once './RastreadorAtividades.php';
                 <div class="card text-bg-success mb-3" style="width: 35rem;">
                   <div class="card-body">
                     <div class="row g-1">
-                      <div class="col-md-12" style="background: rgba(0,0,0,0.3); border-radius: 5px;">
-                        <h6 style="color: orange;">Situação : <?php echo $rowMat['SITUACAO_QUALI'] ?></h6>
-                      </div>
                       <div class="col-md-12">
                         <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Descrição do Material</span>
                           <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none;"
@@ -80,6 +77,12 @@ include_once './RastreadorAtividades.php';
                         <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Data Prevista para Recebimento</label>
                         <input style="font-weight:bold; width: 140px; font-size: 14px; text-align: center; background: rgba(0,0,0,0.3)" type="text" class="form-control"
                               value="<?php echo date('m/d/Y', strtotime($rowMat['DATA_COMPRA'])) ?>" readonly>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
+                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none; color: orange;"
+                                value="<?php echo $rowMat['SITUACAO_QUALI']?>" readonly>
+                        </div>
                       </div>
                       <div class="col-md-5">
                         <br>
@@ -103,9 +106,6 @@ include_once './RastreadorAtividades.php';
                 <div class="card text-bg-success mb-3" style="width: 35rem;">
                   <div class="card-body">
                     <div class="row g-1">
-                      <div class="col-md-12" style="background: rgba(0,0,0,0.3); border-radius: 5px;">
-                        <h6 style="color: orange;">Situação : <?php echo $rowPedido['SITUACAO_QUALI']; ?></h6>
-                      </div>
                       <div class="col-md-8">
                         <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Produto</span>
                           <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold;  background: none;"
@@ -128,6 +128,12 @@ include_once './RastreadorAtividades.php';
                         <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Entrega</span>
                           <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: center; background: none;"
                                  value="<?php echo date('d/m/Y', strtotime($rowPedido['DATA_ENTREGA'])); ?>" readonly>
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
+                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold;  background: none; color:orange"
+                                 value="<?php echo $rowPedido['SITUACAO_QUALI']; ?>" readonly>
                         </div>
                       </div><?php
                       if($rowPedido['ETAPA_PROD'] == 6){ ?>
