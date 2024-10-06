@@ -57,7 +57,7 @@ include_once './RastreadorAtividades.php';
             </div><!-- fim da div coluna esquerda para botões -->
             <div class="col-md-9">
               <?php
-                $listaPedido = $connDB->prepare("SELECT * FROM pf_pedido");
+                $listaPedido = $connDB->prepare("SELECT * FROM pf_pedido WHERE ETAPA_PROD < 2");
                 $listaPedido->execute();
                 while($rowPedido = $listaPedido->fetch(PDO::FETCH_ASSOC)){
                   if(!empty($rowPedido['NUMERO_PEDIDO'])){ ?>

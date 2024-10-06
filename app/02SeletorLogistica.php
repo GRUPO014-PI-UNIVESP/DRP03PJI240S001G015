@@ -176,7 +176,7 @@ include_once './RastreadorAtividades.php';
                 <?php while($rowEstoque = $listaEstoque->fetch(PDO::FETCH_ASSOC)){ ?>
                 <tr>
                   <td style="width: 35%; font-size: 14px"> 
-                    <?php echo $rowEstoque['DESCRICAO_MP'] . '<BR>' . $rowEstoque['FORNECEDOR']; ?> </td>
+                    <?php echo $rowEstoque['DESCRICAO_MP'] . '<BR>' . ' [ ' . $rowEstoque['NUMERO_LOTE_FORNECEDOR'] . ' ] ' . $rowEstoque['FORNECEDOR']; ?> </td>
                   <td style="width: 10%; font-size: 18px; text-align: center"> 
                     <?php echo $rowEstoque['NUMERO_LOTE_INTERNO']; ?> </td>
                   <td style="width: 10%; font-size: 18px; text-align: center"> 
