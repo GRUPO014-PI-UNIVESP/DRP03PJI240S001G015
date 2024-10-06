@@ -21,7 +21,7 @@
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 600000);
+       time = setTimeout(deslogar, 6000000);
      }
   };
   inactivityTime();
@@ -63,7 +63,7 @@
           <div class="col-md-2">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="dataRegistro" name="dataRegistro" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
-              value="<?php echo date('d/m/Y') ?>" readonly>
+                     value="<?php echo date('d/m/Y', strtotime($_SESSION['dataR'])) ?>" readonly>
               <label for="dataRegistro" style="color: aqua; font-size: 12px; background: none">Data de Registro</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
@@ -71,31 +71,23 @@
           <div class="col-md-2">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="nLoteInterno" name="nLoteInterno" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
-              value="<?php echo $_SESSION['nLoteI'] ?>" readonly>
+                     value="<?php echo $_SESSION['nLotePF'] ?>" readonly>
               <label for="nLoteInterno" style="color: aqua; font-size: 12px; background: none">No.de Lote Interno</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
-          <div class="col-md-2">
+          <div class="col-md-8">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="nLoteFornecedor" name="nLoteFornecedor" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
-              value="<?php echo $_SESSION['nLoteF'] ?>" readonly>
-              <label for="nLoteFornecedor" style="color: aqua; font-size: 12px; background: none">No.de Lote do Fornecedor</label>
-              <p style="font-size: 11px; color: grey"></p>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="fornecedor" name="fornecedor" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" 
-              value="<?php echo $_SESSION['fornecedor']  ?>" readonly>
-              <label for="fornecedor" style="color: aqua; font-size: 12px; background: none">Fornecedor</label>
+              <input type="text" class="form-control" id="nomeProduto" name="nomeProduto" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" 
+                     value="<?php echo $_SESSION['nProd']  ?>" readonly>
+              <label for="nomeProduto" style="color: aqua; font-size: 12px; background: none">Produto Analisado</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="dataFabri" name="dataFabri" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
-              value="<?php echo date('d/m/Y', strtotime($_SESSION['dataFabri'] )) ?>" readonly>
+                     value="<?php echo date('d/m/Y', strtotime($_SESSION['dataF'] )) ?>" readonly>
               <label for="dataFabri" style="color: aqua; font-size: 12px; background: none">Data de Fabricação</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
@@ -103,24 +95,16 @@
           <div class="col-md-2">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="dataVali" name="dataVali" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
-              value="<?php echo date('d/m/Y', strtotime($_SESSION['dataVali'] )) ?>" readonly>
+                     value="<?php echo date('d/m/Y', strtotime($_SESSION['dataV'] )) ?>" readonly>
               <label for="dataVali" style="color: aqua; font-size: 12px; background: none">Data de Validade</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
-          <div class="col-md-2">
+          <div class="col-md-8">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="notaFiscal" name="notaFiscal" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
-              value="<?php echo $_SESSION['notaFiscal']  ?>" readonly>
-              <label for="notaFiscal" style="color: aqua; font-size: 12px; background: none">Nota Fiscal</label>
-              <p style="font-size: 11px; color: grey"></p>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="descrMat" name="descrMat" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" 
-              value="<?php echo $_SESSION['descrMat']  ?>" readonly>
-              <label for="descrMat" style="color: aqua; font-size: 12px; background: none">Descrição do Material</label>
+              <input type="text" class="form-control" id="cliente" name="cliente" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" 
+                     value="<?php echo $_SESSION['nClnt']  ?>" readonly>
+              <label for="cliente" style="color: aqua; font-size: 12px; background: none">Cliente</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
@@ -182,7 +166,6 @@
                   <p style="font-size: 11px; color: grey"></p>
                 </div>
               </div><?php
-              $registra = filter_input_array(INPUT_POST, FILTER_DEFAULT);
               if(!empty($_SESSION['confirma'])){ $c = 0;
                 if($_SESSION['aspecto']       == 'Regular')      { $c = $c + 1;} if($_SESSION['aspecto']       == 'Irregular') { $c = $c - 1;} 
                 if($_SESSION['cor']           == 'Normal')       { $c = $c + 1;} if($_SESSION['cor']           == 'Anormal')   { $c = $c - 1;}
@@ -249,34 +232,38 @@
             </form>
           </div>        
           <?php
-          $registra = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-          if(!empty($registra['registra'])){
-            $dataAnalise = date('Y-m-d');
-            $regAnalise = $connDB->prepare("INSERT INTO analise_mp (NUMERO_LOTE_MP, DESCRICAO_MP, QTDE_LOTE_MP, ASPECTO, COLORACAO, ODOR, CONTAMINANTES, PERDA_MASSA, ESCALA_PH,
-                                                                          PUREZA, CONDICAO, OBSERVACOES, DATA_ANALISE, ANALISTA, RESPONSAVEL)
-                                                   VALUES (:nLote, :descrMat, :qtdeLote, :aspecto, :cor, :odor, :contam, :perda, :ph, :pureza, :condicao, :observ, :dataAnalise, :analista, :responsavel)");
-            $regAnalise->bindParam(':nLote'      , $_SESSION['nLoteI']       , PDO::PARAM_STR);
-            $regAnalise->bindParam(':descrMat'   , $_SESSION['descrMat']     , PDO::PARAM_STR);
-            $regAnalise->bindParam(':qtdeLote'   , $_SESSION['qtdeLote']     , PDO::PARAM_STR);
-            $regAnalise->bindParam(':aspecto'    , $_SESSION['aspecto']      , PDO::PARAM_STR);
-            $regAnalise->bindParam(':cor'        , $_SESSION['cor']          , PDO::PARAM_STR);
-            $regAnalise->bindParam(':odor'       , $_SESSION['odor']         , PDO::PARAM_STR);
-            $regAnalise->bindParam(':contam'     , $_SESSION['contaminantes'], PDO::PARAM_STR);
-            $regAnalise->bindParam(':perda'      , $_SESSION['perdaMassa']   , PDO::PARAM_STR);
-            $regAnalise->bindParam(':ph'         , $_SESSION['escalaPH']     , PDO::PARAM_STR);
-            $regAnalise->bindParam(':pureza'     , $_SESSION['pureza']       , PDO::PARAM_STR);
-            $regAnalise->bindParam(':condicao'   , $condicao                 , PDO::PARAM_STR);
-            $regAnalise->bindParam(':observ'     , $_SESSION['observacao']   , PDO::PARAM_STR);
-            $regAnalise->bindParam(':dataAnalise', $dataAnalise              , PDO::PARAM_STR);
-            $regAnalise->bindParam(':analista'   , $registra['analista']     , PDO::PARAM_STR);
-            $regAnalise->bindParam(':responsavel', $_SESSION['nome_func']    , PDO::PARAM_STR);
-            $regAnalise->execute();
-            
-            $etapa = 3; $situacao = 'MATERIAL LIBERADO PARA USO';
-            $atualiza = $connDB->prepare("UPDATE mp_estoque SET ETAPA_PROD = :etapa, SITUACAO_QUALI = :situacao WHERE NUMERO_LOTE_INTERNO = :nLoteInterno");
+          $regPedido = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+          if(!empty($regPedido['registra'])){
+
+            // registra análise do produto
+            $ProdAnalisado = $connDB->prepare("INSERT INTO analise_pf (NUMERO_LOTE_PF, QTDE_LOTE_PF, NOME_PRODUTO, CLIENTE, DATA_ANALI, DATA_FABRI, DATA_VALID, ASPECTO, COLORACAO,
+                                                                              ODOR, CONTAMINANTES, PERDA_MASSA, ESCALA_PH, PUREZA, CONDICAO, OBSERVACOES, ANALISTA, RESPONSAVEL)
+                                                      VALUES (:nLote, :qLote, :nProd, :nClnt, :dataA, :dataF, :dataV, :aspec, :color, :odore, :conta, :perda, :escal, :purez, :condi, :obser, :anali, :respo)");
+            $ProdAnalisado->bindParam(':nLote', $_SESSION['nLotePF']  , PDO::PARAM_STR);
+            $ProdAnalisado->bindParam(':qLote', $_SESSION['qLote']    , PDO::PARAM_STR);
+            $ProdAnalisado->bindParam(':nProd', $_SESSION['nProd']    , PDO::PARAM_STR);
+            $ProdAnalisado->bindParam(':nClnt', $_SESSION['nClnt']    , PDO::PARAM_STR);
+            $ProdAnalisado->bindParam(':dataA', $_SESSION['dataR']    , PDO::PARAM_STR);
+            $ProdAnalisado->bindParam(':dataF', $_SESSION['dataF']    , PDO::PARAM_STR);
+            $ProdAnalisado->bindParam(':dataV', $_SESSION['dataV']    , PDO::PARAM_STR);
+            $ProdAnalisado->bindParam(':aspec', $_SESSION['aspecto']  , PDO::PARAM_STR);
+            $ProdAnalisado->bindParam(':color', $_SESSION['cor']      , PDO::PARAM_STR);
+            $ProdAnalisado->bindParam(':odore', $_SESSION['odor']     , PDO::PARAM_STR);
+            $ProdAnalisado->bindParam(':conta', $_SESSION['contami']  , PDO::PARAM_STR);
+            $ProdAnalisado->bindParam(':perda', $_SESSION['perdaM']   , PDO::PARAM_STR);
+            $ProdAnalisado->bindParam(':escal', $_SESSION['scalaPH']  , PDO::PARAM_STR);
+            $ProdAnalisado->bindParam(':purez', $_SESSION['pureza']   , PDO::PARAM_STR);
+            $ProdAnalisado->bindParam(':condi', $condicao             , PDO::PARAM_STR);
+            $ProdAnalisado->bindParam(':obser', $_SESSION['observ']   , PDO::PARAM_STR);
+            $ProdAnalisado->bindParam(':anali', $regPedido['analista'], PDO::PARAM_STR);
+            $ProdAnalisado->bindParam(':respo', $_SESSION['nome_func'], PDO::PARAM_STR);
+
+            // atualiza tabela de pedidos
+            $etapa = 3; $situacao = 'PRODUTO LIBERADO PARA ENTREGA';
+            $atualiza = $connDB->prepare("UPDATE pf_pedido SET ETAPA_PROD = :etapa, SITUACAO_QUALI = :situacao WHERE NUMERO_LOTE_PF = :nLoteInterno");
             $atualiza->bindParam(':etapa'       , $etapa             , PDO::PARAM_INT);
             $atualiza->bindParam(':situacao'    , $situacao          , PDO::PARAM_STR);
-            $atualiza->bindParam(':nLoteInterno', $_SESSION['nLoteI'], PDO::PARAM_STR);
+            $atualiza->bindParam(':nLoteInterno', $_SESSION['nLotePF'], PDO::PARAM_STR);
             $atualiza->execute();
 
             header('Location: ./01SeletorGQualidade.php');

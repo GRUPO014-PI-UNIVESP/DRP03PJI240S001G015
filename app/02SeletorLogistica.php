@@ -21,7 +21,7 @@ include_once './RastreadorAtividades.php';
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 300000);
+       time = setTimeout(deslogar, 600000);
      }
   };
   inactivityTime();
@@ -136,12 +136,12 @@ include_once './RastreadorAtividades.php';
                                  value="<?php echo $rowPedido['SITUACAO_QUALI']; ?>" readonly>
                         </div>
                       </div><?php
-                      if($rowPedido['ETAPA_PROD'] == 6){ ?>
+                      if($rowPedido['ETAPA_PROD'] == 3){ ?>
                         <div class="col-md-12">
-                          <button class="btn btn-primary" onclick="location.href='#'" style="float: right">Efetuar Saída do Produto</button>
+                          <button class="btn btn-primary" onclick="location.href='./50SaidaProdutoFinal.php'" style="float: right">Efetuar Saída do Produto</button>
                         </div> <?php 
                       }
-                      if($rowPedido['ETAPA_PROD'] < 6){ ?>
+                      if($rowPedido['ETAPA_PROD'] < 3){ ?>
                         <div class="col-md-12">
                           <button class="btn btn-secondary" onclick="location.href='#'" style="float: right" disabled>Efetuar Saída do Produto</button>
                         </div> <?php 

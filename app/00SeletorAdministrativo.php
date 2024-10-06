@@ -21,7 +21,7 @@
     }
     function resetTimer() {
       clearTimeout(time);
-        time = setTimeout(deslogar, 300000);
+        time = setTimeout(deslogar, 600000);
     }
   };
   inactivityTime();
@@ -126,8 +126,13 @@
                                    value="<?php echo date('d/m/Y',strtotime($rowPedido['DATA_ENTREGA'])) ?>" readonly>
                           </div>
                         </div>
-                        <div class="col-md-3">
-                          <button class="btn btn-danger" style="font-size: 14px; float: right" onclick="location.href='./36CancelaPedido.php?id=<?php echo $id ?>'">Cancelar Pedido</button>
+                        <div class="col-md-3"><?php
+                          if($rowPedido['ETAPA_PROD'] > 1){ ?>
+                            <button class="btn btn-secondary" style="font-size: 14px; float: right" onclick="" disabled>Cancelar Pedido</button><?php
+                          }
+                          if($rowPedido['ETAPA_PROD'] <= 1){ ?>
+                            <button class="btn btn-danger" style="font-size: 14px; float: right" onclick="location.href='./36CancelaPedido.php?id=<?php echo $id ?>'">Cancelar Pedido</button><?php
+                          } ?>
                         </div>
                         <div class="col-md-12">
                           <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>

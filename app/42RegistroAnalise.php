@@ -21,7 +21,7 @@
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 3000000);
+       time = setTimeout(deslogar, 6000000);
      }
   };
   inactivityTime();
@@ -32,7 +32,8 @@
     <ul style="padding:5px" class="nav nav-tabs" id="myTab" role="tablist">
       <!-- Etiqueta das Abas -->
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="entrada-tab" data-bs-toggle="tab" data-bs-target="#entrada-tab-pane" type="button" role="tab" aria-controls="entrada-tab-pane" aria-selected="true">Entrada de Dados</button>
+        <button class="nav-link active" id="entrada-tab" data-bs-toggle="tab" data-bs-target="#entrada-tab-pane" 
+                type="button" role="tab" aria-controls="entrada-tab-pane" aria-selected="true">Entrada de Dados</button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="ET-tab" data-bs-toggle="tab" data-bs-target="#ET-tab-pane" type="button" 
@@ -61,72 +62,63 @@
         $dadosPedido->bindParam(':idPedido', $_GET['id'], PDO::PARAM_INT);
         $dadosPedido->execute(); $rowPedido = $dadosPedido->fetch(PDO::FETCH_ASSOC);
         $dataRegistro = date('Y-m-d');
-        $_SESSION['nLoteI']     = $rowMaterial['NUMERO_LOTE_INTERNO'];
-        $_SESSION['nLoteF']     = $rowMaterial['NUMERO_LOTE_FORNECEDOR'];
-        $_SESSION['fornecedor'] = $rowMaterial['NUMERO_LOTE_INTERNO'];
-        $_SESSION['dataFabri']  = $rowMaterial['DATA_FABRICACAO'];
-        $_SESSION['dataVali']   = $rowMaterial['DATA_VALIDADE'];
-        $_SESSION['notaFiscal'] = $rowMaterial['NOTA_FISCAL_LOTE'];
-        $_SESSION['descrMat']   = $rowMaterial['DESCRICAO_MP'];
-        $_SESSION['qtdeLote']   = $rowMaterial['QTDE_LOTE'];
-
+        $validade = date('Y-m-d', strtotime("+ 6 months"));
+        $_SESSION['nLotePF'] = $rowPedido['NUMERO_LOTE_PF'];
+        $_SESSION['dataR']   = date('Y-m-d', strtotime($dataRegistro));
+        $_SESSION['dataF']   = date('Y-m-d', strtotime($rowPedido['DATA_FABRI']));
+        $_SESSION['dataV']   = date('Y-m-d', strtotime($validade));
+        $_SESSION['nProd']   = $rowPedido['NOME_PRODUTO'];
+        $_SESSION['nClnt']   = $rowPedido['CLIENTE'];
+        $_SESSION['qLote']   = $rowPedido['QTDE_LOTE_PF'];
       } ?>
       <div class="tab-pane fade show active" id="entrada-tab-pane" role="tabpanel" aria-labelledby="entrada-tab" tabindex="0"><br>
         <div class="row g-1">
           <h6>Informações do Produto Analisado</h6>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="dataRegistro" name="dataRegistro" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($dataRegistro)) ?>" readonly>
+              <input type="text" class="form-control" id="dataRegistro" name="dataRegistro" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
+              value="<?php echo date('d/m/Y', strtotime($dataRegistro)) ?>" readonly>
               <label for="dataRegistro" style="color: aqua; font-size: 12px; background: none">Data de Registro</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="nLoteInterno" name="nLoteInterno" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['NUMERO_LOTE_INTERNO'] ?>" readonly>
+              <input type="text" class="form-control" id="nLoteInterno" name="nLoteInterno" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
+              value="<?php echo $rowPedido['NUMERO_LOTE_PF'] ?>" readonly>
               <label for="nLoteInterno" style="color: aqua; font-size: 12px; background: none">No.de Lote Interno</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
-          <div class="col-md-2">
+          <div class="col-md-8">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="nLoteFornecedor" name="nLoteFornecedor" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['NUMERO_LOTE_FORNECEDOR'] ?>" readonly>
-              <label for="nLoteFornecedor" style="color: aqua; font-size: 12px; background: none">No.de Lote do Fornecedor</label>
-              <p style="font-size: 11px; color: grey"></p>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="fornecedor" name="fornecedor" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['FORNECEDOR'] ?>" readonly>
-              <label for="fornecedor" style="color: aqua; font-size: 12px; background: none">Fornecedor</label>
+              <input type="text" class="form-control" id="nomeProduto" name="nomeProduto" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" 
+              value="<?php echo $rowPedido['NOME_PRODUTO'] ?>" readonly>
+              <label for="nomeProduto" style="color: aqua; font-size: 12px; background: none">Produto Analisado</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="dataFabri" name="dataFabri" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($rowMaterial['DATA_FABRICACAO'])) ?>" readonly>
+              <input type="text" class="form-control" id="dataFabri" name="dataFabri" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
+              value="<?php echo date('d/m/Y', strtotime($rowPedido['DATA_FABRI'])) ?>" readonly>
               <label for="dataFabri" style="color: aqua; font-size: 12px; background: none">Data de Fabricação</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="dataVali" name="dataVali" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($rowMaterial['DATA_VALIDADE'])) ?>" readonly>
+              <input type="text" class="form-control" id="dataVali" name="dataVali" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
+              value="<?php echo date('d/m/Y', strtotime($validade)) ?>" readonly>
               <label for="dataVali" style="color: aqua; font-size: 12px; background: none">Data de Validade</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
-          <div class="col-md-2">
+          <div class="col-md-8">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="notaFiscal" name="notaFiscal" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['NOTA_FISCAL_LOTE'] ?>" readonly>
-              <label for="notaFiscal" style="color: aqua; font-size: 12px; background: none">Nota Fiscal</label>
-              <p style="font-size: 11px; color: grey"></p>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="descrMat" name="descrMat" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['DESCRICAO_MP'] ?>" readonly>
-              <label for="descrMat" style="color: aqua; font-size: 12px; background: none">Descrição do Material</label>
+              <input type="text" class="form-control" id="cliente" name="cliente" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" 
+              value="<?php echo $rowPedido['CLIENTE'] ?>" readonly>
+              <label for="cliente" style="color: aqua; font-size: 12px; background: none">Cliente</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
@@ -230,13 +222,13 @@
             $_SESSION['aspecto']       = $confirma['aspecto'];
             $_SESSION['cor']           = $confirma['cor'];
             $_SESSION['odor']          = $confirma['odor'];
-            $_SESSION['contaminantes'] = $confirma['contaminantes'];
-            $_SESSION['perdaMassa']    = $confirma['perdaMassa'];
-            $_SESSION['escalaPH']      = $confirma['escalaPH'];
+            $_SESSION['contami']       = $confirma['contaminantes'];
+            $_SESSION['perdaM']    = $confirma['perdaMassa'];
+            $_SESSION['scalaPH']      = $confirma['escalaPH'];
             $_SESSION['pureza']        = $confirma['pureza'];
-            $_SESSION['observacao']    = $confirma['observacao'];
+            $_SESSION['observ']    = $confirma['observacao'];
 
-            header('Location: ./41RegistroAnalise.php');
+            header('Location: ./43RegistroAnalise.php');
           }
 
         ?></div><!-- fim da div row g1 -->

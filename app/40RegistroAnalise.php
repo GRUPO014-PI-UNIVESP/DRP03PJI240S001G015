@@ -21,7 +21,7 @@
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 300000);
+       time = setTimeout(deslogar, 600000);
      }
   };
   inactivityTime();
@@ -32,23 +32,24 @@
     <ul style="padding:5px" class="nav nav-tabs" id="myTab" role="tablist">
       <!-- Etiqueta das Abas -->
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="entrada-tab" data-bs-toggle="tab" data-bs-target="#entrada-tab-pane" type="button" role="tab" aria-controls="entrada-tab-pane" aria-selected="true">Entrada de Dados</button>
+        <button class="nav-link active" id="entrada-tab" data-bs-toggle="tab" data-bs-target="#entrada-tab-pane" type="button" 
+                role="tab" aria-controls="entrada-tab-pane" aria-selected="true">Entrada de Dados</button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="ET-tab" data-bs-toggle="tab" data-bs-target="#ET-tab-pane" type="button" 
-            role="tab" aria-controls="ET-tab-pane" aria-selected="false">Especificações</button>
+                role="tab" aria-controls="ET-tab-pane" aria-selected="false">Especificações</button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="MA-tab" data-bs-toggle="tab" data-bs-target="#MA-tab-pane" type="button" 
-            role="tab" aria-controls="MA-tab-pane" aria-selected="false">Metodologia</button>
+                role="tab" aria-controls="MA-tab-pane" aria-selected="false">Metodologia</button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="PQ-tab" data-bs-toggle="tab" data-bs-target="#PQ-tab-pane" type="button" 
-            role="tab" aria-controls="PQ-tab-pane" aria-selected="false">Procedimentos</button>
+                role="tab" aria-controls="PQ-tab-pane" aria-selected="false">Procedimentos</button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="RE-tab" data-bs-toggle="tab" data-bs-target="#RE-tab-pane" type="button" 
-            role="tab" aria-controls="RE-tab-pane" aria-selected="false">Referências</button>
+                role="tab" aria-controls="RE-tab-pane" aria-selected="false">Referências</button>
       </li>        
     </ul>
 
@@ -76,56 +77,64 @@
           <h6>Informações do Material Analisado</h6>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="dataRegistro" name="dataRegistro" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($dataRegistro)) ?>" readonly>
+              <input type="text" class="form-control" id="dataRegistro" name="dataRegistro" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
+                     value="<?php echo date('d/m/Y', strtotime($dataRegistro)) ?>" readonly>
               <label for="dataRegistro" style="color: aqua; font-size: 12px; background: none">Data de Registro</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="nLoteInterno" name="nLoteInterno" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['NUMERO_LOTE_INTERNO'] ?>" readonly>
+              <input type="text" class="form-control" id="nLoteInterno" name="nLoteInterno" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
+                     value="<?php echo $rowMaterial['NUMERO_LOTE_INTERNO'] ?>" readonly>
               <label for="nLoteInterno" style="color: aqua; font-size: 12px; background: none">No.de Lote Interno</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="nLoteFornecedor" name="nLoteFornecedor" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['NUMERO_LOTE_FORNECEDOR'] ?>" readonly>
+              <input type="text" class="form-control" id="nLoteFornecedor" name="nLoteFornecedor" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
+                     value="<?php echo $rowMaterial['NUMERO_LOTE_FORNECEDOR'] ?>" readonly>
               <label for="nLoteFornecedor" style="color: aqua; font-size: 12px; background: none">No.de Lote do Fornecedor</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="fornecedor" name="fornecedor" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['FORNECEDOR'] ?>" readonly>
+              <input type="text" class="form-control" id="fornecedor" name="fornecedor" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" 
+                     value="<?php echo $rowMaterial['FORNECEDOR'] ?>" readonly>
               <label for="fornecedor" style="color: aqua; font-size: 12px; background: none">Fornecedor</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="dataFabri" name="dataFabri" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($rowMaterial['DATA_FABRICACAO'])) ?>" readonly>
+              <input type="text" class="form-control" id="dataFabri" name="dataFabri" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
+                     value="<?php echo date('d/m/Y', strtotime($rowMaterial['DATA_FABRICACAO'])) ?>" readonly>
               <label for="dataFabri" style="color: aqua; font-size: 12px; background: none">Data de Fabricação</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="dataVali" name="dataVali" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($rowMaterial['DATA_VALIDADE'])) ?>" readonly>
+              <input type="text" class="form-control" id="dataVali" name="dataVali" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
+                     value="<?php echo date('d/m/Y', strtotime($rowMaterial['DATA_VALIDADE'])) ?>" readonly>
               <label for="dataVali" style="color: aqua; font-size: 12px; background: none">Data de Validade</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="notaFiscal" name="notaFiscal" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['NOTA_FISCAL_LOTE'] ?>" readonly>
+              <input type="text" class="form-control" id="notaFiscal" name="notaFiscal" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
+                     value="<?php echo $rowMaterial['NOTA_FISCAL_LOTE'] ?>" readonly>
               <label for="notaFiscal" style="color: aqua; font-size: 12px; background: none">Nota Fiscal</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="descrMat" name="descrMat" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['DESCRICAO_MP'] ?>" readonly>
+              <input type="text" class="form-control" id="descrMat" name="descrMat" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" 
+                     value="<?php echo $rowMaterial['DESCRICAO_MP'] ?>" readonly>
               <label for="descrMat" style="color: aqua; font-size: 12px; background: none">Descrição do Material</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>

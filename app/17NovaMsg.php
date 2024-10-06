@@ -69,7 +69,7 @@ if(!empty($msg_query['enviar'])){
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 300000);
+       time = setTimeout(deslogar, 600000);
      }
   };
   inactivityTime();
