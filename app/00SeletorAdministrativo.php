@@ -69,7 +69,7 @@
 
             <div class="col-md-9">
               <h5>Lista dos Pedidos em Execução</h5><?php
-              $produtos = $connDB->prepare("SELECT * FROM pf_pedido");
+              $produtos = $connDB->prepare("SELECT * FROM pf_pedido WHERE ETAPA_PROD < 4");
               $produtos->execute();
 
               while($rowPedido = $produtos->fetch(PDO::FETCH_ASSOC)){

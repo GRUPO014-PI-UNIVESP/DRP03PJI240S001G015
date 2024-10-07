@@ -68,24 +68,25 @@ include_once './RastreadorAtividades.php';
                                 value="<?php echo $rowMat['DESCRICAO_MP']?>" readonly>
                         </div>
                       </div>
-                      <div class="col-md-3">
-                        <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Quantidade da Compra</label>
-                        <input style="font-weight:bold; font-size: 14px; text-align:right; background: rgba(0,0,0,0.3)" type="text" class="form-control"
-                              value="<?php echo $rowMat['QTDE_LOTE'] . ' ' . $rowMat['UNIDADE_MEDIDA'] ?>" readonly>
+                      <div class="col-md-6">
+                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Quantidade da Compra</span>
+                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none;"
+                                value="<?php echo $rowMat['QTDE_LOTE'] . ' ' . $rowMat['UNIDADE_MEDIDA']  ?>" readonly>
+                        </div>
                       </div>
-                      <div class="col-md-4">
-                        <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Data Prevista para Recebimento</label>
-                        <input style="font-weight:bold; width: 140px; font-size: 14px; text-align: center; background: rgba(0,0,0,0.3)" type="text" class="form-control"
-                              value="<?php echo date('m/d/Y', strtotime($rowMat['DATA_COMPRA'])) ?>" readonly>
+                      <div class="col-md-6">
+                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Data Prevista</span>
+                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none;"
+                                value="<?php echo date('m/d/Y', strtotime($rowMat['DATA_COMPRA'])) ?>" readonly>
+                        </div>
                       </div>
                       <div class="col-md-12">
                         <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
-                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none; color: orange;"
+                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none; color: orange;"
                                 value="<?php echo $rowMat['SITUACAO_QUALI']?>" readonly>
                         </div>
                       </div>
                       <div class="col-md-5">
-                        <br>
                         <button class="btn btn-primary" style="float: right" onclick="location.href='./20EntradaMaterial.php?id=<?php echo $id ?>'">Efetuar Recebimento</button>
                       </div>
                     </div><!-- fim da DIV row g1 -->
@@ -99,7 +100,7 @@ include_once './RastreadorAtividades.php';
           <div class="col-md-6">
             <h6>Lista de Produtos </h6>
             <div class="row g-1"><?php
-              $query_pedido = $connDB->prepare("SELECT * FROM pf_pedido");
+              $query_pedido = $connDB->prepare("SELECT * FROM pf_pedido WHERE ETAPA_PROD < 4");
               $query_pedido->execute(); 
               while($rowPedido = $query_pedido->fetch(PDO::FETCH_ASSOC)){
                 $idPed = $rowPedido['ID_PEDIDO'];?>
@@ -108,7 +109,7 @@ include_once './RastreadorAtividades.php';
                     <div class="row g-1">
                       <div class="col-md-8">
                         <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Produto</span>
-                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold;  background: none;"
+                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none;"
                                  value="<?php echo $rowPedido['NOME_PRODUTO']; ?>" readonly>
                         </div>
                       </div>
@@ -132,13 +133,13 @@ include_once './RastreadorAtividades.php';
                       </div>
                       <div class="col-md-12">
                         <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
-                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold;  background: none; color:orange"
+                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none; color:orange"
                                  value="<?php echo $rowPedido['SITUACAO_QUALI']; ?>" readonly>
                         </div>
                       </div><?php
                       if($rowPedido['ETAPA_PROD'] == 3){ ?>
                         <div class="col-md-12">
-                          <button class="btn btn-primary" onclick="location.href='./50SaidaProdutoFinal.php'" style="float: right">Efetuar Saída do Produto</button>
+                          <button class="btn btn-primary" onclick="location.href='./50SaidaProdutoFinal.php?id=<?php echo $idPed ?>'" style="float: right">Efetuar Saída do Produto</button>
                         </div> <?php 
                       }
                       if($rowPedido['ETAPA_PROD'] < 3){ ?>

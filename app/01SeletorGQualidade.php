@@ -104,7 +104,7 @@
             <div class="col-md-6">
               <h6>Lista de Produtos para Análise</h6>
               <div class="row g-1"><?php
-                $pedido = $connDB->prepare("SELECT * FROM pf_pedido");
+                $pedido = $connDB->prepare("SELECT * FROM pf_pedido WHERE ETAPA_PROD < 3");
                 $pedido->execute();
                 while($rowPedido = $pedido->fetch(PDO::FETCH_ASSOC)){ // recursão de cards de pedidos
                   $id = $rowPedido['ID_PEDIDO']; ?>

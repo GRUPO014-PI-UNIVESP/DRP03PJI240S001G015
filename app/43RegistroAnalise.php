@@ -260,10 +260,13 @@
 
             // atualiza tabela de pedidos
             $etapa = 3; $situacao = 'PRODUTO LIBERADO PARA ENTREGA';
-            $atualiza = $connDB->prepare("UPDATE pf_pedido SET ETAPA_PROD = :etapa, SITUACAO_QUALI = :situacao WHERE NUMERO_LOTE_PF = :nLoteInterno");
-            $atualiza->bindParam(':etapa'       , $etapa             , PDO::PARAM_INT);
-            $atualiza->bindParam(':situacao'    , $situacao          , PDO::PARAM_STR);
-            $atualiza->bindParam(':nLoteInterno', $_SESSION['nLotePF'], PDO::PARAM_STR);
+            $atualiza = $connDB->prepare("UPDATE pf_pedido SET ETAPA_PROD = :etapa, SITUACAO_QUALI = :situacao, DATA_VALIDADE = :dataV, REGISTRO_ANALISE = :respo
+                                                                  WHERE NUMERO_LOTE_PF = :nLoteInterno");
+            $atualiza->bindParam(':etapa'       , $etapa                , PDO::PARAM_INT);
+            $atualiza->bindParam(':situacao'    , $situacao             , PDO::PARAM_STR);
+            $atualiza->bindParam(':dataV'       , $_SESSION['dataV']    , PDO::PARAM_STR);
+            $atualiza->bindParam(':respo'       , $_SESSION['nome_func'], PDO::PARAM_STR);
+            $atualiza->bindParam(':nLoteInterno', $_SESSION['nLotePF']  , PDO::PARAM_STR);
             $atualiza->execute();
 
             header('Location: ./01SeletorGQualidade.php');

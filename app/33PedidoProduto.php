@@ -116,7 +116,7 @@
             $compra = $connDB->prepare("INSERT INTO agenda_compra (DESCRICAO_MP, PEDIDO_NUM, NOME_PRODUTO, DATA_AGENDA, DATA_PRAZO, QTDE_PEDIDO, UNIDADE_MEDIDA, SITUACAO_QUALI, CAPACIDADE_PROCESS) 
                                                VALUES (:descrMaterial, :numPedido, :nomeProduto, :dataAgenda, :dataPrazo, :qtdePedido, :uniMed, :situacao, :capacidade)");
             $compra->bindParam(':descrMaterial', $descrMaterial         , PDO::PARAM_STR);
-            $compra->bindParam(':numPedido'    , $numPedido             , PDO::PARAM_STR);
+            $compra->bindParam(':numPedido'    , $numPedido             , PDO::PARAM_INT);
             $compra->bindParam(':nomeProduto'  , $nomeProduto           , PDO::PARAM_STR);
             $compra->bindParam(':dataAgenda'   , $dataAgenda            , PDO::PARAM_STR);
             $compra->bindParam(':dataPrazo'    , $dataPrazo             , PDO::PARAM_STR);
@@ -125,6 +125,14 @@
             $compra->bindParam(':situacao'     , $situacao              , PDO::PARAM_STR);
             $compra->bindParam(':capacidade'   , $_SESSION['capacidade'], PDO::PARAM_INT);
             $compra->execute();
+
+            $reserva = $connDB->prepare("INSERT INTO mp_reserva (NUMERO_PEDIDO, DESCRICAO_MP, QTDE_RESERVADA, UNIDADE_MEDIDA) 
+                                                VALUES (:numPedido, :descrMat, :qtdeReserva, :uniMed)");
+            $reserva->bindParam(':numPedido'  , $numPedido    , PDO::PARAM_INT);
+            $reserva->bindParam(':descrMat'   , $descrMaterial, PDO::PARAM_STR);
+            $reserva->bindParam(':qtdeReserva', $qtdeMaterial , PDO::PARAM_STR);
+            $reserva->bindParam(':uniMed'     , $uniMed       , PDO::PARAM_STR);
+            $reserva->execute();
           }
         }
         header('Location: ./34PedidoProduto.php');

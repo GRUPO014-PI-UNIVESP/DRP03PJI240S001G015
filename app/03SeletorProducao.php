@@ -4,6 +4,7 @@ include_once './ConnectDB.php';
 include_once './EstruturaPrincipal.php';
 $_SESSION['posicao'] = 'Produção';
 include_once './RastreadorAtividades.php';
+
 ?>
 <script>
   // verifica inatividade da página e fecha sessão
@@ -53,7 +54,34 @@ include_once './RastreadorAtividades.php';
 
         <div class="tab-pane fade show active" id="manage-tab-pane" role="tabpanel" aria-labelledby="manage-tab" tabindex="0"><br><br>
           <div class="row g-3">
-            <div class="col-md-3">
+            <div class="col-md-3"><?php
+            // verifica se materiais estão disponíveis para iniciar fabricação
+            $pedido = $connDB->prepare("SELECT NOME_PRODUTO FROM pf_pedido"); $pedido->execute();
+            while($rowPedido = $pedido->fetch(PDO::FETCH_ASSOC)){
+              $tabela = $connDB->prepare("SELECT * FROM pf_tabela WHERE NOME_PRODUTO = :nomeProd");
+              $tabela->bindParam(':nomeProd', $rowPedido['NOME_PRODUTO'], pdo::PARAM_STR);
+              $tabela->execute(); $qMateriais = $tabela->rowCount(); $disp = 0; echo $qMateriais . '<BR>';  
+              while($rowTabela = $tabela->fetch(PDO::FETCH_ASSOC)){
+                $estoque = $connDB->prepare("SELECT ETAPA_PROD, DESCRICAO_MP FROM mp_estoque WHERE DESCRICAO_MP = :descrMat");
+                $estoque->bindParam(':descrMat', $rowTabela['DESCRICAO_MP'], pdo::PARAM_STR);
+                $estoque->execute(); 
+                while($rowEstoque = $estoque->fetch(PDO::FETCH_ASSOC)){
+                  if($rowEstoque['ETAPA_PROD'] == 3){
+                    
+                    $disp = $disp + 1; echo $disp; 
+                  } echo $rowEstoque['DESCRICAO_MP'] . 'ok' . '<BR>';
+                } 
+              }
+              if($qMateriais == $disp){
+                $situacao = 'MATERIAIS LIBERADOS E DISPONÍVEIS PARA FABRICAÇÃO';
+                $etapa = 1;
+                //$atualiza = $connDB->prepare("UPDATE pf_pedido SET ETAPA_PROD = :etapa, SITUACAO_QUALI = :situacao WHERE NOME_PRODUTO = :nomeProd");
+                //$atualiza->bindParam(':etapa'   , $etapa   , PDO::PARAM_INT);
+                //$atualiza->bindParam(':situacao', $situacao, PDO::PARAM_STR);
+                //$atualiza->bindParam(':nomeProd', $rowPedido['NOME_PRODUTO'], PDO::PARAM_STR);
+                //$atualiza->execute();
+              }
+            }?>
             </div><!-- fim da div coluna esquerda para botões -->
             <div class="col-md-9">
               <?php
