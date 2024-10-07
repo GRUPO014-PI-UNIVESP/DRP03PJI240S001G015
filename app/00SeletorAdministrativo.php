@@ -36,7 +36,7 @@
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="comercial-tab" data-bs-toggle="tab" data-bs-target="#comercial-tab-pane" type="button" 
-                  role="tab" aria-controls="comercial-tab-pane" aria-selected="false">Setor Comercial</button>
+                  role="tab" aria-controls="comercial-tab-pane" aria-selected="false">Setor de Vendas</button>
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="compras-tab" data-bs-toggle="tab" data-bs-target="#compras-tab-pane" type="button" 

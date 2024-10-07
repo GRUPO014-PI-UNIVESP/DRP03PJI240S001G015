@@ -64,7 +64,7 @@
         $dataRegistro = date('Y-m-d');
         $_SESSION['nLoteI']     = $rowMaterial['NUMERO_LOTE_INTERNO'];
         $_SESSION['nLoteF']     = $rowMaterial['NUMERO_LOTE_FORNECEDOR'];
-        $_SESSION['fornecedor'] = $rowMaterial['NUMERO_LOTE_INTERNO'];
+        $_SESSION['fornecedor'] = $rowMaterial['FORNECEDOR'];
         $_SESSION['dataFabri']  = $rowMaterial['DATA_FABRICACAO'];
         $_SESSION['dataVali']   = $rowMaterial['DATA_VALIDADE'];
         $_SESSION['notaFiscal'] = $rowMaterial['NOTA_FISCAL_LOTE'];

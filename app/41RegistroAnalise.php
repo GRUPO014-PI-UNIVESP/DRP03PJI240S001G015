@@ -272,6 +272,28 @@
             $regAnalise->bindParam(':responsavel', $_SESSION['nome_func']    , PDO::PARAM_STR);
             $regAnalise->execute();
             
+            $reserva = $connDB->prepare("SELECT * FROM mp_reserva WHERE DESCRICAO_MP = :descrMat ORDER BY NUMERO_PEDIDO ASC");
+            $reserva->bindParam(':descrMat', $_SESSION['descrMat'], PDO::PARAM_STR);
+            $reserva->execute();
+            while($rowReserva = $reserva->fetch(PDO::FETCH_ASSOC)){
+              $estoque = $connDB->prepare("SELECT QTDE_ESTOQUE FROM mp_estoque WHERE NUMERO_LOTE_INTERNO = :nLoteI");
+              $estoque->bindParam(':nLoteI', $_SESSION['nLoteI'], PDO::PARAM_STR);
+              $estoque->execute(); $rowEstoque = $estoque->fetch(PDO::FETCH_ASSOC);
+              if($rowEstoque['QTDE_ESTOQUE'] > $rowReserva['QTDE_RESERVADA']){
+                $ajusteQtde = $rowEstoque['QTDE_ESTOQUE'] - $rowReserva['QTDE_RESERVADA'];
+                $ajusta = $connDB->prepare("UPDATE mp_estoque SET QTDE_ESTOQUE = :qAjuste , QTDE_RESERVADA = :qReserva , RESERVA_NUM_PEDIDO = :nPedido WHERE NUMERO_LOTE_INTERNO = :nLoteI");
+                $ajusta->bindParam(':nLoteI'  , $_SESSION['nLoteI']          , PDO::PARAM_STR);
+                $ajusta->bindParam(':qAjuste' , $ajusteQtde                  , PDO::PARAM_STR);
+                $ajusta->bindParam(':qReserva', $rowReserva['QTDE_RESERVADA'], PDO::PARAM_STR);
+                $ajusta->bindParam(':nPedido' , $rowReserva['NUMERO_PEDIDO'] , PDO::PARAM_STR);
+                $ajusta->execute();
+
+                $retira = $connDB->prepare("DELETE FROM mp_reserva WHERE NUMERO_PEDIDO = :nPedido");
+                $retira->bindParam(':nPedido', $rowReserva['NUMERO_PEDIDO'], PDO::PARAM_INT);
+                $retira->execute();
+              }
+            }
+
             $etapa = 3; $situacao = 'MATERIAL LIBERADO PARA USO';
             $atualiza = $connDB->prepare("UPDATE mp_estoque SET ETAPA_PROD = :etapa, SITUACAO_QUALI = :situacao WHERE NUMERO_LOTE_INTERNO = :nLoteInterno");
             $atualiza->bindParam(':etapa'       , $etapa             , PDO::PARAM_INT);

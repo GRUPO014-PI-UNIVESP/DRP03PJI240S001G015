@@ -60,7 +60,7 @@ include_once './RastreadorAtividades.php';
             while($rowPedido = $pedido->fetch(PDO::FETCH_ASSOC)){
               $tabela = $connDB->prepare("SELECT * FROM pf_tabela WHERE NOME_PRODUTO = :nomeProd");
               $tabela->bindParam(':nomeProd', $rowPedido['NOME_PRODUTO'], pdo::PARAM_STR);
-              $tabela->execute(); $qMateriais = $tabela->rowCount(); $disp = 0; echo $qMateriais . '<BR>';  
+              $tabela->execute(); $qMateriais = $tabela->rowCount(); $disp = 0; echo 'Qtde Materiais: ' . $qMateriais . '<BR>';  
               while($rowTabela = $tabela->fetch(PDO::FETCH_ASSOC)){
                 $estoque = $connDB->prepare("SELECT ETAPA_PROD, DESCRICAO_MP FROM mp_estoque WHERE DESCRICAO_MP = :descrMat");
                 $estoque->bindParam(':descrMat', $rowTabela['DESCRICAO_MP'], pdo::PARAM_STR);
@@ -68,8 +68,8 @@ include_once './RastreadorAtividades.php';
                 while($rowEstoque = $estoque->fetch(PDO::FETCH_ASSOC)){
                   if($rowEstoque['ETAPA_PROD'] == 3){
                     
-                    $disp = $disp + 1; echo $disp; 
-                  } echo $rowEstoque['DESCRICAO_MP'] . 'ok' . '<BR>';
+                    $disp = $disp + 1; echo $disp; echo $rowEstoque['DESCRICAO_MP'] . 'ok' . '<BR>';
+                  } 
                 } 
               }
               if($qMateriais == $disp){
