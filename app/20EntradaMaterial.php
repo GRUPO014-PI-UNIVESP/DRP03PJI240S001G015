@@ -202,7 +202,7 @@ $responsavel = $_SESSION['nome_func'];
       $salvaMat = $connDB->prepare("UPDATE mp_estoque  SET ETAPA_PROD = :etapa, SITUACAO_QUALI = :situacao, DATA_ENTRADA = :dataEntrada, DATA_FABRICACAO = :dataFabri, DATA_VALIDADE = :dataVali,
                                                                   QTDE_ESTOQUE = :atualiza, N_LOTE_SEQ = :nSeq, N_LOTE_MES = :nMes, N_LOTE_ANO = :nAno, NUMERO_LOTE_INTERNO = :nLoteInterno,
                                                                   NUMERO_LOTE_FORNECEDOR = :nLoteFornecedor, NOTA_FISCAL_LOTE = :notaFiscal, FORNECEDOR = :fornecedor, ENCARREGADO_RECEBIMENTO = :encarregado, RESPONSAVEL_REGISTRO = :responsavel
-                                                              WHERE DESCRICAO_MP = :descrMat");
+                                                              WHERE DESCRICAO_MP = :descrMat AND ETAPA_PROD = 1");
       $salvaMat->bindParam(':descrMat'       , $descrMat   , PDO::PARAM_STR); $salvaMat->bindParam(':etapa'       , $etapa       , PDO::PARAM_INT);
       $salvaMat->bindParam(':situacao'       , $situacao   , PDO::PARAM_STR); $salvaMat->bindParam(':dataEntrada' , $dataEntrada , PDO::PARAM_STR);
       $salvaMat->bindParam(':dataFabri'      , $dataFabriMP, PDO::PARAM_STR); $salvaMat->bindParam(':dataVali'    , $dataValidade, PDO::PARAM_STR);

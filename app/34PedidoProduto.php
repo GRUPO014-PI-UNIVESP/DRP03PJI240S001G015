@@ -330,6 +330,21 @@
       $alocaFila->bindParam(':situacao'   , $situacao                , PDO::PARAM_STR);
       $alocaFila->execute();
 
+      $itens = $connDB->prepare("SELECT DESCRICAO_MP, PROPORCAO_MATERIAL, UNIDADE_MEDIDA FROM pf_tabela WHERE NOME_PRODUTO = :nomeProduto");
+      $itens->bindParam(':nomeProduto', $nomeProduto, PDO::PARAM_STR); $itens->execute();
+      while($rowItens = $itens->fetch(PDO::FETCH_ASSOC)){
+        $qUso = $qtdeLote * ($rowItens['PROPORCAO_MATERIAL'] / 100);
+        $componentes = $connDB->prepare("INSERT INTO pf_componentes (NUMERO_PEDIDO, DESCRICAO_MP, QTDE_USO, UNIDADE_MEDIDA)
+                                                                    VALUES (:nPedido, :descrMat, :qtdeUso, :uniMed)");
+        $componentes->bindParam(':nPedido' , $numPedido                 , PDO::PARAM_INT);
+        $componentes->bindParam(':descrMat', $rowItens['DESCRICAO_MP']  , PDO::PARAM_STR);
+        $componentes->bindParam(':qtdeUso' , $qUso                      , PDO::PARAM_STR);
+        $componentes->bindParam(':uniMed'  , $rowItens['UNIDADE_MEDIDA'], PDO::PARAM_STR);
+        $componentes->execute();
+      }
+
+      
+
       header('Location: ./33PedidoProduto.php');
     } ?>
   </div><!-- Fim da div container-fluid -->

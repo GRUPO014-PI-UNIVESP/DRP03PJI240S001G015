@@ -132,7 +132,7 @@
             $reserva->bindParam(':descrMat'   , $descrMaterial, PDO::PARAM_STR);
             $reserva->bindParam(':qtdeReserva', $qtdeMaterial , PDO::PARAM_STR);
             $reserva->bindParam(':uniMed'     , $uniMed       , PDO::PARAM_STR);
-            $reserva->execute();
+            $reserva->execute();            
           }
         }
         header('Location: ./34PedidoProduto.php');

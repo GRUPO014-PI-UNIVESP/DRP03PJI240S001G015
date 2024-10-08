@@ -56,30 +56,44 @@ include_once './RastreadorAtividades.php';
           <div class="row g-3">
             <div class="col-md-3"><?php
             // verifica se materiais estão disponíveis para iniciar fabricação
-            $pedido = $connDB->prepare("SELECT NOME_PRODUTO FROM pf_pedido"); $pedido->execute();
+            $pedido = $connDB->prepare("SELECT ETAPA_PROD, NUMERO_PEDIDO, NOME_PRODUTO, QTDE_LOTE_PF 
+                                               FROM pf_pedido"); $pedido->execute();
             while($rowPedido = $pedido->fetch(PDO::FETCH_ASSOC)){
-              $tabela = $connDB->prepare("SELECT * FROM pf_tabela WHERE NOME_PRODUTO = :nomeProd");
-              $tabela->bindParam(':nomeProd', $rowPedido['NOME_PRODUTO'], pdo::PARAM_STR);
-              $tabela->execute(); $qMateriais = $tabela->rowCount(); $disp = 0; echo 'Qtde Materiais: ' . $qMateriais . '<BR>';  
-              while($rowTabela = $tabela->fetch(PDO::FETCH_ASSOC)){
-                $estoque = $connDB->prepare("SELECT ETAPA_PROD, DESCRICAO_MP FROM mp_estoque WHERE DESCRICAO_MP = :descrMat");
-                $estoque->bindParam(':descrMat', $rowTabela['DESCRICAO_MP'], pdo::PARAM_STR);
-                $estoque->execute(); 
-                while($rowEstoque = $estoque->fetch(PDO::FETCH_ASSOC)){
-                  if($rowEstoque['ETAPA_PROD'] == 3){
-                    
-                    $disp = $disp + 1; echo $disp; echo $rowEstoque['DESCRICAO_MP'] . 'ok' . '<BR>';
-                  } 
-                } 
-              }
-              if($qMateriais == $disp){
+              $componentes = $connDB->prepare("SELECT * FROM pf_componentes WHERE NUMERO_PEDIDO = :nPedido");
+              $componentes->bindParam(':nPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT); $componentes->execute();
+              $nComp = $componentes->rowCount(); echo 'Total de componentes: ' . $nComp . '<br>'; $lib = 0;
+              while($comp = $componentes->fetch(PDO::FETCH_ASSOC)){
+                $estoque = $connDB->prepare("SELECT ETAPA_PROD, DESCRICAO_MP, QTDE_ESTOQUE, SUM(QTDE_ESTOQUE) AS TOTAL_ESTOQUE, QTDE_RESERVADA, NUMERO_LOTE_INTERNO 
+                                                    FROM mp_estoque 
+                                                    WHERE DESCRICAO_MP = :descrMat AND ETAPA_PROD = 3 ORDER BY QTDE_ESTOQUE DESC");
+                $estoque->bindParam(':descrMat', $comp['DESCRICAO_MP'], pdo::PARAM_STR);
+                $estoque->execute(); $rowEstoque = $estoque->fetch(PDO::FETCH_ASSOC);
+                
+                if(($rowEstoque['TOTAL_ESTOQUE'] >= $comp['QTDE_USO']) && $rowPedido['ETAPA_PROD'] == 0){
+                  $lib = $lib + 1; echo $rowEstoque['DESCRICAO_MP'] . ' LIBERADO <BR>';
+                  $novoEstoque = $rowEstoque['QTDE_ESTOQUE']   - $comp['QTDE_USO'];
+                  $reserva     = $rowEstoque['QTDE_RESERVADA'] + $comp['QTDE_USO'];     // DESMEMBRAR ESTOQUE EM DUAS TABELAS, UMA COM TODOS OS MATERIAIS E
+                                                                                        // OUTRO COM OS LOTES INDIVIDUAIS DE CADA MATERIAL
+                  $ajusta = $connDB->prepare("UPDATE mp_estoque 
+                                                     SET QTDE_ESTOQUE = :ajuste, QTDE_RESERVADA = :reserva 
+                                                     WHERE DESCRICAO_MP = :descrMat");
+                  $ajusta->bindParam(':descrMat', $comp['DESCRICAO_MP'], PDO::PARAM_STR);
+                  $ajusta->bindParam(':ajuste'  , $novoEstoque         , PDO::PARAM_STR);
+                  $ajusta->bindParam(':reserva' , $reserva             , PDO::PARAM_STR);
+                  $ajusta->execute();
+                }
+                if(($rowEstoque['QTDE_ESTOQUE'] < $comp['QTDE_USO']) || $rowEstoque['ETAPA_PROD'] != 3){
+                  echo $rowEstoque['DESCRICAO_MP'] . ' não LIBERADO <BR>';
+                }
+              }             
+              if($nComp == $lib){
                 $situacao = 'MATERIAIS LIBERADOS E DISPONÍVEIS PARA FABRICAÇÃO';
-                $etapa = 1;
-                //$atualiza = $connDB->prepare("UPDATE pf_pedido SET ETAPA_PROD = :etapa, SITUACAO_QUALI = :situacao WHERE NOME_PRODUTO = :nomeProd");
-                //$atualiza->bindParam(':etapa'   , $etapa   , PDO::PARAM_INT);
-                //$atualiza->bindParam(':situacao', $situacao, PDO::PARAM_STR);
-                //$atualiza->bindParam(':nomeProd', $rowPedido['NOME_PRODUTO'], PDO::PARAM_STR);
-                //$atualiza->execute();
+                $etapa = 1; echo 'material liberado <br>';
+                $atualiza = $connDB->prepare("UPDATE pf_pedido SET ETAPA_PROD = :etapa, SITUACAO_QUALI = :situacao WHERE NOME_PRODUTO = :nomeProd");
+                $atualiza->bindParam(':etapa'   , $etapa   , PDO::PARAM_INT);
+                $atualiza->bindParam(':situacao', $situacao, PDO::PARAM_STR);
+                $atualiza->bindParam(':nomeProd', $rowPedido['NOME_PRODUTO'], PDO::PARAM_STR);
+                $atualiza->execute();
               }
             }?>
             </div><!-- fim da div coluna esquerda para botões -->
@@ -151,7 +165,7 @@ include_once './RastreadorAtividades.php';
                           </div>
                           <div class="col-md-12">
                             <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
-                              <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: center; background: none; color: orange"
+                              <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none; color: orange"
                                      value="<?php echo $rowPedido['SITUACAO_QUALI']?>" readonly>
                             </div>
                           </div>
