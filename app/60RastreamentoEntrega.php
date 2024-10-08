@@ -26,6 +26,77 @@ include_once './RastreadorAtividades.php';
   };
   inactivityTime();
 </script>
+<style>
+  .table-rounded {
+  position: relative;
+  border-collapse: collapse;
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+  grid-template-columns: auto;
+  grid-gap: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  background-color: dimgray;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+  .table-rounded table {
+    border-collapse: separate;
+    border-spacing: 10px 0;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .table-rounded th {
+    padding: 5px 10px;
+    border: 1px solid black;
+    margin-right: 10px;
+    white-space: nowrap;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+    color: #333;
+    font-size: 12px;
+  }
+  .table-rounded th, .table-rounded td {
+    padding: 5px 10px;
+    border: 1px solid black;
+    text-align: center;
+    background-color: darkgray;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+    color: black;
+    font-size: 12px;
+  }
+
+</style>
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $numero_pedido = $_POST['rastreamento'];
+    if (is_numeric($numero_pedido)) {
+        $query = "SELECT NUMERO_PEDIDO, CLIENTE, DATA_PEDIDO, DATA_ENTREGA, TRANSPORTADORA, ETAPA_PROCED, SITUACAO FROM pedidos WHERE NUMERO_PEDIDO = :numero_pedido";
+        $stmt = $connDB->prepare($query);
+        $stmt->bindParam(':numero_pedido', $numero_pedido);
+        $stmt->execute();
+        $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (count($dados) > 0) {
+            $cabecalho = '<tr><th style="color: #556B2F;">Número do Pedido</th><th style="color: #556B2F;">Cliente</th><th style="color: #556B2F;">Data do Pedido</th><th style="color: #556B2F;">Data de Entrega</th><th style="color: #556B2F;">Transportadora</th><th style="color: #556B2F;">Etapa do Processo</th><th style="color: #556B2F;">Situação</th></tr>';
+            $linhas = '';
+            foreach ($dados as $dado) {
+                $linhas .= '<tr>
+                    <td style="color: #7FFF00;">' . $dado['NUMERO_PEDIDO'] . '</td>
+                    <td style="color: #7FFF00;">' . $dado['CLIENTE'] . '</td>
+                    <td style="color: #7FFF00;">' . $dado['DATA_PEDIDO'] . '</td>
+                    <td style="color: #7FFF00;">' . $dado['DATA_ENTREGA'] . '</td>
+                    <td style="color: #7FFF00;">' . $dado['TRANSPORTADORA'] . '</td>
+                    <td style="color: #7FFF00;">' . $dado['ETAPA_PROCED'] . '</td>
+                    <td style="color: #7FFF00;">' . $dado['SITUACAO'] . '</td>
+                </tr>';
+            }
+            $resultado = $cabecalho . $linhas;
+        } else {
+          $resultado = '<div class="text-center" style="display: table-cell; vertical-align: middle; height: 100%; width: 500px; text-alingn: center;"><h2>Nenhum registro encontrado.</h2></div>';
+        }
+    }
+}
+?>
 <!doctype html>
 <html lang="pt-br" data-bs-theme="dark">
   <head>
@@ -36,7 +107,14 @@ include_once './RastreadorAtividades.php';
     <form method="POST" action="#">
       <div class="container-fluid">
         <div class="col-2 mt-5 mb-3 mx-auto">
-
+          <div class="card text-bg-primary mb-3" style="margin-left: -2.5rem; width: 25rem;">
+            <div class="card-body">
+              <div class="row g-1">
+                <h5 class="card-title">Instruções</h5>
+                <p class="card-text">Insira o número do pedido e clique em "Rastrear".</p>
+              </div>
+            </div>
+          </div>
           <div class="input-group flex-nowrap">
             <span class="input-group-text" id="addon-wrapping">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-pin-map-fill" viewBox="0 0 16 16">
@@ -44,14 +122,21 @@ include_once './RastreadorAtividades.php';
                 <path fill-rule="evenodd" d="M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999z"/>
               </svg>
             </span>
-            <input type="text" id="rastreamento" name="rastreamento" class="form-control" placeholder="Número do Pedido" 
-              maxlength="20" aria-label="text" aria-describedby="addon-wrapping" require>
+            <input type="text" id="rastreamento" name="rastreamento" class="form-control" placeholder="Número do Pedido" maxlength="20" aria-label="text" aria-describedby="addon-wrapping" pattern="[0-9]*">
           </div><br>
           <div class="d-grid gap-2">
             <input class="btn btn-primary" type="submit" id="rastrear" name="rastrear" value="Rastrear" require>
           </div>
         </div>
       </div>
-    </form>
+    </form><br>
+    <div class="table-rounded">
+      <table>
+        <?php if (isset($resultado)) { echo $resultado; } ?>
+      </table>
+    </div>
   </body>
 </html>
+
+
+
