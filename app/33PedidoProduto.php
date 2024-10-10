@@ -114,20 +114,19 @@
           if($qtdeDisponivel < $qtdeMaterial) { $alerta = 'INSUFICIENTE';}
 
           if($alerta == 'INSUFICIENTE'){
-            $dataAgenda = date('Y-m-d');
-            $dataPrazo  = date('Y-m-d', strtotime("+ 1 week"));
+            $dataPedido = date('Y-m-d');
             $situacao   = 'COMPRA AGENDADA';
-            $compra = $connDB->prepare("INSERT INTO materiais_compra (DESCRICAO, NUMERO_PEDIDO, PRODUTO, DATA_AGENDA, DATA_PRAZO, QTDE_PEDIDO, UNIDADE, SITUACAO, CAPAC_PROCESS) 
-                                               VALUES (:descrMaterial, :numPedido, :nomeProduto, :dataAgenda, :dataPrazo, :qtdePedido, :uniMed, :situacao, :capacidade)");
-            $compra->bindParam(':descrMaterial', $descrMaterial         , PDO::PARAM_STR);
-            $compra->bindParam(':numPedido'    , $numPedido             , PDO::PARAM_INT);
-            $compra->bindParam(':nomeProduto'  , $nomeProduto           , PDO::PARAM_STR);
-            $compra->bindParam(':dataAgenda'   , $dataAgenda            , PDO::PARAM_STR);
-            $compra->bindParam(':dataPrazo'    , $dataPrazo             , PDO::PARAM_STR);
-            $compra->bindParam(':qtdePedido'   , $qtdeMaterial          , PDO::PARAM_STR);
-            $compra->bindParam(':uniMed'       , $uniMed                , PDO::PARAM_STR);
-            $compra->bindParam(':situacao'     , $situacao              , PDO::PARAM_STR);
-            $compra->bindParam(':capacidade'   , $_SESSION['capacidade'], PDO::PARAM_INT);
+            $compra = $connDB->prepare("INSERT INTO materiais_compra (ID_ESTOQUE, DESCRICAO, NUMERO_PEDIDO, PRODUTO, DATA_PEDIDO, QTDE_PEDIDO, UNIDADE, SITUACAO, CAPAC_PROCESS) 
+                                               VALUES (:idEstoque, :descrMaterial, :numPedido, :nomeProduto, :dataPedido, :qtdePedido, :uniMed, :situacao, :capacidade)");
+            $compra->bindParam(':idEstoque'    , $resultEstoque['ID_ESTOQUE'], PDO::PARAM_INT);
+            $compra->bindParam(':descrMaterial', $descrMaterial              , PDO::PARAM_STR);
+            $compra->bindParam(':numPedido'    , $numPedido                  , PDO::PARAM_INT);
+            $compra->bindParam(':nomeProduto'  , $nomeProduto                , PDO::PARAM_STR);
+            $compra->bindParam(':dataPedido'   , $dataPedido                 , PDO::PARAM_STR);
+            $compra->bindParam(':qtdePedido'   , $qtdeMaterial               , PDO::PARAM_STR);
+            $compra->bindParam(':uniMed'       , $uniMed                     , PDO::PARAM_STR);
+            $compra->bindParam(':situacao'     , $situacao                   , PDO::PARAM_STR);
+            $compra->bindParam(':capacidade'   , $_SESSION['capacidade']     , PDO::PARAM_INT);
             $compra->execute();
 
             $reserva = $connDB->prepare("INSERT INTO materiais_reserva (NUMERO_PEDIDO, ID_ESTOQUE, QTDE_RESERVA, UNIDADE) 

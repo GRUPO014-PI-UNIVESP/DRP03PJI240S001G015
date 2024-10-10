@@ -36,28 +36,31 @@ $responsavel = $_SESSION['nome_func'];
       <h6>Dados do Material</h6> <?php
       if(!empty($_GET['id'])){
         $dataEntrada = date('Y-m-d');
-        $mpEntra = $connDB->prepare("SELECT * FROM mp_estoque WHERE ID_ESTOQUE_MP = :id");
+        $mpEntra = $connDB->prepare("SELECT * FROM materiais_lotes WHERE ID_ESTOQUE = :id");
         $mpEntra->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
         $mpEntra->execute();
         $rowMP = $mpEntra->fetch(PDO::FETCH_ASSOC); ?>
         <div class="row g-2">
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="dataEntrada" name="dataEntrada" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3);" value="<?php echo date('d/m/Y', strtotime($dataEntrada)) ?>" autofocus>
+              <input type="text" class="form-control" id="dataEntrada" name="dataEntrada" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3);" 
+                     value="<?php echo date('d/m/Y', strtotime($dataEntrada)) ?>" autofocus>
               <label for="dataEntrada" style="color: aqua; font-size: 12px; background: none">Data de Recebimento</label>
               <p style="font-size: 11px; color: grey">Atualize a data caso necessário</p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="qtdeLote" name="qtdeLote" style="font-weight: bolder; text-align:right; background: rgba(0,0,0,0.3); color: yellow; text-align: center" value="<?php echo $rowMP['QTDE_LOTE'] . ' ' . $rowMP['UNIDADE_MEDIDA'] ?>" readonly>
+              <input type="text" class="form-control" id="qtdeLote" name="qtdeLote" style="font-weight: bolder; text-align:right; background: rgba(0,0,0,0.3); color: yellow; text-align: center" 
+                     value="<?php echo $rowMP['QTDE_LOTE'] . ' ' . $rowMP['UNIDADE'] ?>" readonly>
               <label for="qtdeLote" style="color: aqua; font-size: 12px; background: none">Quantidade Recebida</label>
               <p style="font-size: 11px; color: grey">Somente consulta</p>
             </div>
           </div>
           <div class="col-md-8">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="descrMat" name="descrMat" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMP['DESCRICAO_MP'] ?>" readonly>
+              <input type="text" class="form-control" id="descrMat" name="descrMat" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" 
+                     value="<?php echo $rowMP['DESCRICAO'] ?>" readonly>
               <label for="descrMat" style="color: aqua; font-size: 12px; background: none">Descrição do Material</label>
               <p style="font-size: 11px; color: grey">Somente consulta</p>
             </div>
@@ -75,16 +78,16 @@ $responsavel = $_SESSION['nome_func'];
               <label for="dataValidade" style="color: aqua; font-size: 12px; background: none">Prazo de Validade</label>
               <p style="font-size: 11px; color: grey">Insira a prazo de validade do material caso esteja discriminado</p>
             </div>
-          </div>  
+          </div>
           <div class="col-md-8">
             <div class="form-floating">
               <select class="form-select" id="fornecedor" name="fornecedor" aria-label="Floating label select example" style="font-weight: bolder; background: rgba(0,0,0,0.3)">
                 <option style="font-size: 14px; color: black; background: rgba(0,0,0,0.3)" selected>Selecione o fornecedor</option><?php
-                  $query_fornecedor = $connDB->prepare("SELECT DISTINCT FORNECEDOR FROM mp_tabela");
+                  $query_fornecedor = $connDB->prepare("SELECT DISTINCT FORNECEDOR FROM materiais_estoque");
                   $query_fornecedor->execute();
 
                   // inclui nome dos produtos como opções de seleção da tag <select>
-                  while($supplier = $query_fornecedor->fetch(PDO::FETCH_ASSOC)){?>
+                  while($supplier = $query_fornecedor->fetch(PDO::FETCH_ASSOC)){ ?>
                     <option style="font-size: 14px; color: black; background: rgba(0,0,0,0.3)"><?php echo $supplier['FORNECEDOR']; ?></option> <?php
                   } ?>
               </select><label style="color: aqua; font-size: 12px; background: none" for="fornecedor">Fornecedor</label>
@@ -126,10 +129,14 @@ $responsavel = $_SESSION['nome_func'];
           <div class="col-md-2"></div>
           <div class="col-md-2">
             <div class="form-floating mb-3"><?php
-              if($rowMP['QTDE_ESTOQUE'] == null){ $estoque = 0;}
-              if($rowMP['QTDE_ESTOQUE'] > 0){ $estoque = $rowMP['QTDE_ESTOQUE']; }
-              $atualizado = $estoque + $rowMP['QTDE_LOTE']; ?>
-              <input type="text" class="form-control" id="estoque" name="estoque" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center" value="<?php echo $estoque . ' ' . $rowMP['UNIDADE_MEDIDA'] ?>" readonly>
+              $queryEstoque = $connDB->prepare("SELECT * FROM materiais_estoque WHERE ID_ESTOQUE = :idEstoque");
+              $queryEstoque->bindParam(':idEstoque', $_GET['id'], PDO::PARAM_INT);
+              $queryEstoque->execute(); $rowEstoque = $queryEstoque->fetch(PDO::FETCH_ASSOC);
+              if($rowEstoque['QTDE_ESTOQUE'] == null){ $estoque = 0;}
+              if($rowEstoque['QTDE_ESTOQUE'] > 0){ $estoque = $rowEstoque['QTDE_ESTOQUE']; }
+              $atualizado = $estoque + $rowEstoque['QTDE_ESTOQUE']; ?>
+              <input type="text" class="form-control" id="estoque" name="estoque" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center" 
+                     value="<?php echo $estoque . ' ' . $rowEstoque['UNIDADE'] ?>" readonly>
               <label for="estoque" style="color: aqua; font-size: 12px; background: none">Qtde em Estoque</label>
               <p style="font-size: 11px; color: grey">Somente consulta</p>
             </div>
@@ -138,7 +145,7 @@ $responsavel = $_SESSION['nome_func'];
             <div class="form-floating mb-3"><?php
               // algoritmo para geração de numero de lote interno
               // verifica último lote registrado
-              $ultimo = $connDB->prepare("SELECT MAX(N_LOTE_SEQ) AS U_SEQ, MAX(N_LOTE_MES) AS U_MES, MAX(N_LOTE_ANO) AS U_ANO FROM mp_estoque");
+              $ultimo = $connDB->prepare("SELECT MAX(ID1) AS U_SEQ, MAX(ID2) AS U_MES, MAX(ID3) AS U_ANO FROM materiais_lotes");
               $ultimo->execute(); $resultado = $ultimo->fetch(PDO::FETCH_ASSOC);
 
               $codMes = intval(date('m')); $codAno = intval(date('y'));
@@ -157,8 +164,9 @@ $responsavel = $_SESSION['nome_func'];
               if(empty($resultado['U_SEQ'])){
                 $seqLote = '001'; $seqAtual = 1; $mesAtual = intval(date('m')); $anoAtual = intval(date('y'));
               }
-              $nLoteInterno = $seqLote . ' ' . $codLetra[$mesAtual] . ' ' . $anoAtual; ?>
-              <input type="text" class="form-control" id="nLoteInterno" name="nLoteInterno" style="font-weight: bolder; background: rgba(0,0,0,0.3); text-align: center; color: yellow" value="<?php echo $nLoteInterno ?>" readonly>
+              $nLoteIn = $seqLote . ' ' . $codLetra[$mesAtual] . ' ' . $anoAtual; ?>
+              <input type="text" class="form-control" id="nLoteInterno" name="nLoteInterno" style="font-weight: bolder; background: rgba(0,0,0,0.3); text-align: center; color: yellow" 
+                     value="<?php echo $nLoteIn ?>" readonly>
               <label for="nLoteInterno" style="color: aqua; font-size: 12px; background: none">Identificação de Lote Interno</label>
               <p style="font-size: 11px; color: grey">Gerado pelo sistema</p>
             </div>
@@ -167,20 +175,22 @@ $responsavel = $_SESSION['nome_func'];
           <div class="col-md-2"></div>
           <div class="col-md-2">
             <div class="form-floating mb-3"><?php
-              $estoque = $rowMP['QTDE_ESTOQUE'] + $rowMP['QTDE_LOTE']; ?>
-              <input type="text" class="form-control" id="atualizado" name="atualizado" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center" value="<?php echo $atualizado . ' ' . $rowMP['UNIDADE_MEDIDA'] ?>" readonly>
+              $estoque = $rowEstoque['QTDE_ESTOQUE'] + $rowMP['QTDE_LOTE']; ?>
+              <input type="text" class="form-control" id="atualizado" name="atualizado" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center" 
+                     value="<?php echo $estoque . ' ' . $rowEstoque['UNIDADE'] ?>" readonly>
               <label for="atualizado" style="color: aqua; font-size: 12px; background: none">Estoque Atualizado</label>
               <p style="font-size: 11px; color: grey">Somente consulta</p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3"><?php
-              $reserva = $connDB->prepare("SELECT SUM(QTDE_PEDIDO) AS RESERVA FROM agenda_compra WHERE DESCRICAO = :descrMat");
-              $reserva->bindParam(':descrMat', $rowMP['DESCRICAO'], PDO::PARAM_STR);
+              $reserva = $connDB->prepare("SELECT SUM(QTDE_RESERVA) AS RESERVA, UNIDADE FROM materiais_reserva WHERE ID_ESTOQUE = :idEstoque");
+              $reserva->bindParam(':idEstoque', $rowEstoque['ID_ESTOQUE'], PDO::PARAM_STR);
               $reserva->execute();
               $rowReserva = $reserva->fetch(PDO::FETCH_ASSOC);
               ?>
-              <input type="text" class="form-control" id="reservado" name="reservado" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center" value="<?php echo $rowReserva['RESERVA'] . ' ' . $rowMP['UNIDADE_MEDIDA'] ?>" readonly>
+              <input type="text" class="form-control" id="reservado" name="reservado" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center" 
+                     value="<?php echo $rowReserva['RESERVA'] . ' ' . $rowReserva['UNIDADE'] ?>" readonly>
               <label for="reservado" style="color: aqua; font-size: 12px; background: none">Quantidade Reservada</label>
               <p style="font-size: 11px; color: grey">Somente consulta</p>
             </div>
@@ -195,36 +205,65 @@ $responsavel = $_SESSION['nome_func'];
     </form><?php
     $confirma = filter_input_array(INPUT_POST, FILTER_DEFAULT);
     if(!empty($confirma['recebe'])){
-      $situacao     = 'MATERIAL RECEBIDO, AGUARDANDO LIBERAÇÃO'; $descrMat = strtoupper($confirma['descrMat']); $etapa = 2; $notaFiscal = $confirma['notaFiscal']; $atualiza = $confirma['atualizado']; 
-      $dataFabriMP  = date('Y-m-d', strtotime($confirma['dataFabriMP'])); $nLoteForn = strtoupper($confirma['nLoteForn']); $reservado = $confirma['reservado'];
-      $dataValidade = date('Y-m-d', strtotime($confirma['dataValidade'])); $fornecedor = strtoupper($confirma['fornecedor']); $encarregado = strtoupper($confirma['encarregado']);
+      $situacao    = 'MATERIAL RECEBIDO, AGUARDANDO LIBERAÇÃO'; 
+      $descrMat    = strtoupper($confirma['descrMat']); 
+      $etapa       = 2; 
+      $notaFiscal  = $confirma['notaFiscal']; 
+      $atualiza    = $confirma['atualizado'];
+      $nLoteForn   = strtoupper($confirma['nLoteForn']); 
+      $reservado   = $confirma['reservado'];
+      $fornecedor  = strtoupper($confirma['fornecedor']); 
+      $encarregado = strtoupper($confirma['encarregado']);
+      $dataFabri   = date('Y-m-d', strtotime($confirma['dataFabriMP'])); 
+      $dataVali    = date('Y-m-d', strtotime($confirma['dataValidade']));
+
+      $dadosCompra = $connDB->prepare("SELECT DATA_PEDIDO FROM materiais_compra WHERE ID_ESTOQUE = :idEstoque");
+      $dadosCompra->bindParam(':idEstoque', $rowEstoque['ID_ESTOQUE'], PDO::PARAM_STR);
+      $dadosCompra->execute(); $rowCompra = $dadosCompra->fetch(PDO::FETCH_ASSOC);
             
-      $salvaMat = $connDB->prepare("UPDATE mp_estoque  SET ETAPA_PROD = :etapa, SITUACAO_QUALI = :situacao, DATA_ENTRADA = :dataEntrada, DATA_FABRICACAO = :dataFabri, DATA_VALIDADE = :dataVali,
-                                                                  QTDE_ESTOQUE = :atualiza, N_LOTE_SEQ = :nSeq, N_LOTE_MES = :nMes, N_LOTE_ANO = :nAno, NUMERO_LOTE_INTERNO = :nLoteInterno,
-                                                                  NUMERO_LOTE_FORNECEDOR = :nLoteFornecedor, NOTA_FISCAL_LOTE = :notaFiscal, FORNECEDOR = :fornecedor, ENCARREGADO_RECEBIMENTO = :encarregado, RESPONSAVEL_REGISTRO = :responsavel
-                                                              WHERE DESCRICAO_MP = :descrMat AND ETAPA_PROD = 1");
-      $salvaMat->bindParam(':descrMat'       , $descrMat   , PDO::PARAM_STR); $salvaMat->bindParam(':etapa'       , $etapa       , PDO::PARAM_INT);
-      $salvaMat->bindParam(':situacao'       , $situacao   , PDO::PARAM_STR); $salvaMat->bindParam(':dataEntrada' , $dataEntrada , PDO::PARAM_STR);
-      $salvaMat->bindParam(':dataFabri'      , $dataFabriMP, PDO::PARAM_STR); $salvaMat->bindParam(':dataVali'    , $dataValidade, PDO::PARAM_STR);
-      $salvaMat->bindParam(':atualiza'       , $atualiza   , PDO::PARAM_INT); 
-      $salvaMat->bindParam(':nSeq'           , $seqAtual   , PDO::PARAM_STR); $salvaMat->bindParam(':nMes'        , $mesAtual    , PDO::PARAM_STR);
-      $salvaMat->bindParam(':nAno'           , $anoAtual   , PDO::PARAM_STR); $salvaMat->bindParam(':nLoteInterno', $nLoteInterno, PDO::PARAM_STR);
-      $salvaMat->bindParam(':nLoteFornecedor', $nLoteForn  , PDO::PARAM_STR); $salvaMat->bindParam(':notaFiscal'  , $notaFiscal  , PDO::PARAM_STR);
-      $salvaMat->bindParam(':fornecedor'     , $fornecedor , PDO::PARAM_STR); $salvaMat->bindParam(':encarregado' , $encarregado , PDO::PARAM_STR);
-      $salvaMat->bindParam(':responsavel'    , $_SESSION['nome_func'], PDO::PARAM_STR);
+      $salvaMat = $connDB->prepare("UPDATE materiais_lotes SET NUMERO_LOTE      = :nLoteF,
+                                                                      ID_INTERNO       = :nLoteIn,
+                                                                      ID1              = :id1,
+                                                                      ID2              = :id2,
+                                                                      ID3              = :id3,
+                                                                      ETAPA_PROCESS    = :etapa,
+                                                                      SITUACAO         = :situacao,
+                                                                      NOTA_FISCAL      = :notaFiscal,
+                                                                      DATA_FABRI       = :dataFabri,
+                                                                      DATA_VALI        = :dataVali,
+                                                                      DATA_COMPRA      = :dataCompra,
+                                                                      DATA_RECEBIMENTO = :dataReceb,
+                                                                      ENCARREGADO      = :encarregado,
+                                                                      RESPONSAVEL      = :responsavel
+                                           WHERE DESCRICAO = :descrMat AND ETAPA_PROCESS = 1");
+      $salvaMat->bindParam(':nLoteF'     , $nLoteForn               , PDO::PARAM_STR); 
+      $salvaMat->bindParam(':nLoteIn'    , $nLoteIn                 , PDO::PARAM_STR);
+      $salvaMat->bindParam(':id1'        , $seqAtual                , PDO::PARAM_STR); 
+      $salvaMat->bindParam(':id2'        , $mesAtual                , PDO::PARAM_INT);
+      $salvaMat->bindParam(':id3'        , $anoAtual                , PDO::PARAM_INT); 
+      $salvaMat->bindParam(':etapa'      , $etapa                   , PDO::PARAM_INT); 
+      $salvaMat->bindParam(':situacao'   , $situacao                , PDO::PARAM_STR);
+      $salvaMat->bindParam(':notaFiscal' , $notaFiscal              , PDO::PARAM_STR);
+      $salvaMat->bindParam(':dataFabri'  , $dataFabri               , PDO::PARAM_STR); 
+      $salvaMat->bindParam(':dataVali'   , $dataVali                , PDO::PARAM_STR);
+      $salvaMat->bindParam(':dataCompra' , $rowCompra['DATA_PEDIDO'], PDO::PARAM_STR); 
+      $salvaMat->bindParam(':dataReceb'  , $dataEntrada             , PDO::PARAM_STR);
+      $salvaMat->bindParam(':encarregado', $encarregado             , PDO::PARAM_STR);
+      $salvaMat->bindParam(':responsavel', $_SESSION['nome_func']   , PDO::PARAM_STR);
+      $salvaMat->bindParam(':descrMat'   , $descrMat                , PDO::PARAM_STR);
       $salvaMat->execute();
 
       $sitProduto = 'AGUARDANDO LIBERAÇÃO DOS MATERIAIS';
-      $atualizaPedido = $connDB->prepare("UPDATE pf_pedido SET SITUACAO_QUALI = :situacao WHERE NUMERO_PEDIDO = :numPedido");
-      $atualizaPedido->bindParam(':situacao', $sitProduto, PDO::PARAM_STR);
-      $atualizaPedido->bindParam(':numPedido', $rowReserva['PEDIDO_NUM'], PDO::PARAM_STR);
+      $atualizaPedido = $connDB->prepare("UPDATE pedidos SET SITUACAO = :situacao WHERE NUMERO_PEDIDO = :numPedido");
+      $atualizaPedido->bindParam(':situacao' , $sitProduto                 , PDO::PARAM_STR);
+      $atualizaPedido->bindParam(':numPedido', $rowReserva['NUMERO_PEDIDO'], PDO::PARAM_STR);
       $atualizaPedido->execute();
 
-      $limpaAgenda = $connDB->prepare("DELETE FROM agenda_compra WHERE DESCRICAO = :descrMat");
+      $limpaAgenda = $connDB->prepare("DELETE FROM materiais_compra WHERE DESCRICAO = :descrMat");
       $limpaAgenda->bindParam(':descrMat', $descrMat, PDO::PARAM_STR);
       $limpaAgenda->execute();
 
       header('Location: ./02SeletorLogistica.php');
-    }
-  ?></div><!-- fim da container fluid -->
+    } ?>
+  </div><!-- fim da container fluid -->
 </div><!-- fim da main -->

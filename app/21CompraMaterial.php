@@ -39,7 +39,7 @@
         $busca->bindParam(':descrMat', $material, PDO::PARAM_STR);
         $busca->execute(); $rowMat = $busca->fetch(PDO::FETCH_ASSOC);
         $uniMed     = $rowMat['UNIDADE'];
-        $dataAgenda = $rowMat['DATA_AGENDA'];
+        $dataAgenda = date('Y-m-d', strtotime($rowMat['DATA_PEDIDO']));
         $dataPrazo  = $rowMat['DATA_PRAZO'];
         
         $busca2 = $connDB->prepare("SELECT SUM(QTDE_PEDIDO) AS TOTAL FROM materiais_compra WHERE DESCRICAO = :descrMat");
@@ -60,7 +60,7 @@
         <div class="col-md-2">
           <label for="dataPrazo" class="form-label" style="font-size: 10px; color:aqua">Data Prazo de Recebimento</label>
           <input style="font-weight: bold; font-size: 20px; background: rgba(0,0,0,0.3); text-align: center" type="text" class="form-control" 
-                 id="dataPrazo" name="dataPrazo" value="<?php echo date('d/m/Y', strtotime($dataPrazo."- 2 days")) ?>" readonly>
+                 id="dataPrazo" name="dataPrazo" value="<?php echo date('d/m/Y', strtotime($dataPrazo)) ?>" readonly>
         </div>
         <div class="col-md-8"></div>
         <div class="col-md-2">
@@ -150,8 +150,9 @@
         $idCompra->execute();
         $rowID = $idCompra->fetch(PDO::FETCH_ASSOC);
 
-        $atualiza = $connDB->prepare("UPDATE materiais_compra SET SITUACAO = :situacao WHERE DESCRICAO = :descrMat");
+        $atualiza = $connDB->prepare("UPDATE materiais_compra SET ETAPA_PROCESS = :etapa, SITUACAO = :situacao WHERE DESCRICAO = :descrMat");
         $atualiza->bindParam(':descrMat', $descrMat, PDO::PARAM_STR);
+        $atualiza->bindParam(':etapa'   , $etapa   , PDO::PARAM_STR);
         $atualiza->bindParam(':situacao', $situacao, PDO::PARAM_STR);
         $atualiza->execute();
       }

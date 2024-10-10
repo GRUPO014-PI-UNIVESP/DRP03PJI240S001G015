@@ -55,35 +55,35 @@ include_once './RastreadorAtividades.php';
           <div class="col-md-6">
             <h6>Lista de Materiais para Recebimento</h6>
             <div class="row g-1"><?php
-              $materiais = $connDB->prepare("SELECT * FROM materiais_lotes WHERE ETAPA_PROCESSO < 2");
+              $materiais = $connDB->prepare("SELECT * FROM materiais_compra WHERE ETAPA_PROCESS < 2");
               $materiais->execute();
               while($rowMat = $materiais->fetch(PDO::FETCH_ASSOC)){
-                $id = $rowMat['ID_ESTOQUE_MP']; ?>
+                $id = $rowMat['ID_ESTOQUE']; ?>
                 <div class="card text-bg-success mb-3" style="width: 35rem;">
                   <div class="card-body">
                     <div class="row g-1">
                       <div class="col-md-12">
                         <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Descrição do Material</span>
                           <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none;"
-                                value="<?php echo $rowMat['DESCRICAO_MP']?>" readonly>
+                                 value="<?php echo $rowMat['DESCRICAO']?>" readonly>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Quantidade da Compra</span>
                           <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none;"
-                                value="<?php echo $rowMat['QTDE_LOTE'] . ' ' . $rowMat['UNIDADE_MEDIDA']  ?>" readonly>
+                                 value="<?php echo $rowMat['QTDE_PEDIDO'] . ' ' . $rowMat['UNIDADE']  ?>" readonly>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Data Prevista</span>
                           <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none;"
-                                value="<?php echo date('m/d/Y', strtotime($rowMat['DATA_COMPRA'])) ?>" readonly>
+                                 value="<?php echo date('d/m/Y', strtotime($rowMat['DATA_PRAZO'])) ?>" readonly>
                         </div>
                       </div>
                       <div class="col-md-12">
                         <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
                           <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none; color: orange;"
-                                value="<?php echo $rowMat['SITUACAO_QUALI']?>" readonly>
+                                 value="<?php echo $rowMat['SITUACAO']?>" readonly>
                         </div>
                       </div>
                       <div class="col-md-5">
@@ -100,7 +100,7 @@ include_once './RastreadorAtividades.php';
           <div class="col-md-6">
             <h6>Lista de Produtos </h6>
             <div class="row g-1"><?php
-              $query_pedido = $connDB->prepare("SELECT * FROM pf_pedido WHERE ETAPA_PROD < 4");
+              $query_pedido = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 4");
               $query_pedido->execute(); 
               while($rowPedido = $query_pedido->fetch(PDO::FETCH_ASSOC)){
                 $idPed = $rowPedido['ID_PEDIDO'];?>
@@ -110,13 +110,13 @@ include_once './RastreadorAtividades.php';
                       <div class="col-md-8">
                         <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Produto</span>
                           <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none;"
-                                 value="<?php echo $rowPedido['NOME_PRODUTO']; ?>" readonly>
+                                 value="<?php echo $rowPedido['PRODUTO']; ?>" readonly>
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Quantidade</span>
                           <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: center; background: none;"
-                                 value="<?php echo $rowPedido['QTDE_LOTE_PF'] . ' ' . $rowPedido['UNIDADE_MEDIDA']; ?>" readonly>
+                                 value="<?php echo $rowPedido['QTDE_PEDIDO'] . ' ' . $rowPedido['UNIDADE']; ?>" readonly>
                         </div>
                       </div>
                       <div class="col-md-8">
@@ -134,15 +134,15 @@ include_once './RastreadorAtividades.php';
                       <div class="col-md-12">
                         <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
                           <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none; color:orange"
-                                 value="<?php echo $rowPedido['SITUACAO_QUALI']; ?>" readonly>
+                                 value="<?php echo $rowPedido['SITUACAO']; ?>" readonly>
                         </div>
                       </div><?php
-                      if($rowPedido['ETAPA_PROD'] == 3){ ?>
+                      if($rowPedido['ETAPA_PROCESS'] == 3){ ?>
                         <div class="col-md-12">
                           <button class="btn btn-primary" onclick="location.href='./50SaidaProdutoFinal.php?id=<?php echo $idPed ?>'" style="float: right">Efetuar Saída do Produto</button>
                         </div> <?php 
                       }
-                      if($rowPedido['ETAPA_PROD'] < 3){ ?>
+                      if($rowPedido['ETAPA_PROCESS'] < 3){ ?>
                         <div class="col-md-12">
                           <button class="btn btn-secondary" onclick="location.href='#'" style="float: right" disabled>Efetuar Saída do Produto</button>
                         </div> <?php 
@@ -165,31 +165,31 @@ include_once './RastreadorAtividades.php';
             <table class="table table-dark table-hover">
               <thead style="font-size: 12px">
                 <tr>
-                  <th scope="col" style="width: 30%">Descrição do Material</th>
-                  <th scope="col" style="width: 15%; text-align: center">Total em Estoque</th>
-                  <th scope="col" style="width: 15%; text-align: center">ID Interno</th>
-                  <th scope="col" style="width: 15%; text-align: center">Qtde do Lote</th>
-                  <th scope="col" style="width: 25%">Situação Atual</th>
+                  <th scope="col" style="width: 30%"                    >Descrição do Material</th>
+                  <th scope="col" style="width: 15%; text-align: center">Total em Estoque     </th>
+                  <th scope="col" style="width: 15%; text-align: center">ID Interno           </th>
+                  <th scope="col" style="width: 15%; text-align: center">Qtde do Lote         </th>
+                  <th scope="col" style="width: 25%"                    >Situação Atual       </th>
                 </tr>
               </thead>
               <tbody style="height: 80%; font-size: 11px;"><?php
               while($rowEstoque = $listaEstoque->fetch(PDO::FETCH_ASSOC)){ ?>
                 <tr>
                   <td style="width: 35%; font-size: 14px"><?php echo $rowEstoque['DESCRICAO'] . '<br>' . $rowEstoque['FORNECEDOR']; ?></td>
-                  <td style="width: 10%; font-size: 18px; text-align: center"><?php echo $rowEstoque['QTDE_ESTOQUE'] . ' ' . $rowEstoque['UNIDADE'] ?></td>
+                  <td style="width: 10%; font-size: 15px; text-align: center"><?php echo $rowEstoque['QTDE_ESTOQUE'] . ' ' . $rowEstoque['UNIDADE'] ?></td>
                   <?php
-                  $listaLotes = $connDB->prepare("SELECT NUMERO_LOTE, ID_INTERNO, QTDE_LOTE, SITUACAO FROM materiais_lotes WHERE ID_ESTOQUE = :idLote");
+                  $listaLotes = $connDB->prepare("SELECT NUMERO_LOTE, ID_INTERNO, QTDE_LOTE, UNIDADE, SITUACAO FROM materiais_lotes WHERE ID_ESTOQUE = :idLote");
                   $listaLotes->bindParam(':idLote', $rowEstoque['ID_ESTOQUE'], PDO::PARAM_INT); $listaLotes->execute();
                   while($rowLotes = $listaLotes->fetch(PDO::FETCH_ASSOC)){ ?>
-                    <td style="width: 10%; font-size: 18px; text-align: center"><?php
+                    <td style="width: 10%; font-size: 15px; text-align: center"><?php
                       if($rowLotes['QTDE_LOTE'] == null){ echo ' empty ';}
                       if($rowLotes['QTDE_LOTE'] > 0){ echo $rowLotes['ID_INTERNO'] . '<br>' . 'No.Lote Forn:[ ' . $rowLotes['NUMERO_LOTE'] . ' ]';} ?>
                     </td>
-                    <td style="width: 10%; font-size: 18px; text-align: center"><?php
+                    <td style="width: 10%; font-size: 15px; text-align: center"><?php
                       if($rowLotes['QTDE_LOTE'] == null){ echo ' - ';}
-                      if($rowLotes['QTDE_LOTE'] > 0){ echo $rowLotes['QTDE_LOTE'];} ?>                   
+                      if($rowLotes['QTDE_LOTE'] > 0){ echo $rowLotes['QTDE_LOTE'] . ' ' . $rowLotes['UNIDADE'];} ?>                   
                     </td>
-                    <td style="width: 25%; font-size: 14px"><?php 
+                    <td style="width: 25%; font-size: 12px"><?php 
                       if($rowLotes['QTDE_LOTE'] == null){ echo 'Estoque está vazio';}
                       if($rowLotes['QTDE_LOTE'] > 0){ echo $rowLotes['SITUACAO'];} ?>                      
                     </td> <?php 

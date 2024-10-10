@@ -312,8 +312,8 @@
       $situacao = 'PEDIDO REGISTRADO, PROVIDENCIANDO MATERIAIS';
       $responsavel = $_SESSION['nome_func'];
 
-      $registraPedido = $connDB->prepare("INSERT INTO pedidos (NUMERO_PEDIDO, CLIENTE, PRODUTO, QTDE_PEDIDO, UNIDADE, CAPAC_PROCESS, DATA_PEDIDO, DATA_ENTREGA, ENCARREGADO_PEDIDO, ETAPA_PROCESS, SITUACAO) 
-                                                              VALUES (:numPedido, :nomeCliente, :nomeProduto, :qtdePedido, :uniMed, :capacidade, :dataPedido, :dataFabri, :responsavel, :etapa, :situacao)");
+      $registraPedido = $connDB->prepare("INSERT INTO pedidos (NUMERO_PEDIDO, CLIENTE, PRODUTO, QTDE_PEDIDO, UNIDADE, CAPAC_PROCESS, DATA_PEDIDO, DATA_AGENDA, DATA_ENTREGA, ENCARREGADO_PEDIDO, ETAPA_PROCESS, SITUACAO) 
+                                                 VALUES (:numPedido, :nomeCliente, :nomeProduto, :qtdePedido, :uniMed, :capacidade, :dataPedido, :dataAgenda, :dataEntrega, :responsavel, :etapa, :situacao)");
       
       $registraPedido->bindParam(':numPedido'  , $numPedido               , PDO::PARAM_INT);
       $registraPedido->bindParam(':nomeCliente', $nomeCliente             , PDO::PARAM_STR);
@@ -322,7 +322,8 @@
       $registraPedido->bindParam(':uniMed'     , $rowProduto['UNIDADE']   , PDO::PARAM_STR);
       $registraPedido->bindParam(':capacidade' , $_SESSION['capacidade']  , PDO::PARAM_INT);
       $registraPedido->bindParam(':dataPedido' , $dataPedido              , PDO::PARAM_STR);
-      $registraPedido->bindParam(':dataFabri'  , $_SESSION['dataAgendada'], PDO::PARAM_STR);
+      $registraPedido->bindParam(':dataAgenda' , $_SESSION['dataAgendada'], PDO::PARAM_STR);
+      $registraPedido->bindParam(':dataEntrega', $_SESSION['dataEntrega'] , PDO::PARAM_STR);
       $registraPedido->bindParam(':responsavel', $responsavel             , PDO::PARAM_STR);
       $registraPedido->bindParam(':etapa'      , $etapaProcess            , PDO::PARAM_INT);
       $registraPedido->bindParam(':situacao'   , $situacao                , PDO::PARAM_STR);
@@ -337,6 +338,13 @@
       $alocaFila->bindParam(':capaProcess', $_SESSION['capacidade']  , PDO::PARAM_STR);
       $alocaFila->bindParam(':situacao'   , $situacao                , PDO::PARAM_STR);
       $alocaFila->execute();
+
+      $dataLimite = date('Y-m-d', strtotime($_SESSION['dataAgendada']."- 3 days"));
+      $completaCompra = $connDB->prepare("UPDATE materiais_compra SET DATA_AGENDA = :dataAgenda , DATA_PRAZO = :dataLimite WHERE NUMERO_PEDIDO = :numPedido");
+      $completaCompra->bindParam('dataAgenda', $_SESSION['dataAgendada'], PDO::PARAM_STR);
+      $completaCompra->bindParam('dataLimite', $dataLimite              , PDO::PARAM_STR);
+      $completaCompra->bindParam(':numPedido', $numPedido               , PDO::PARAM_INT);
+      $completaCompra->execute();
 
       header('Location: ./33PedidoProduto.php');
     } ?>

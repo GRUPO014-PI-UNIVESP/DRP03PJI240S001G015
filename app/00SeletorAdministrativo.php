@@ -127,10 +127,10 @@
                           </div>
                         </div>
                         <div class="col-md-3"><?php
-                          if($rowPedido['ETAPA_PROD'] > 1){ ?>
+                          if($rowPedido['ETAPA_PROCESS'] > 1){ ?>
                             <button class="btn btn-secondary" style="font-size: 14px; float: right" onclick="" disabled>Cancelar Pedido</button><?php
                           }
-                          if($rowPedido['ETAPA_PROD'] <= 1){ ?>
+                          if($rowPedido['ETAPA_PROCESS'] <= 1){ ?>
                             <button class="btn btn-danger" style="font-size: 14px; float: right" onclick="location.href='./36CancelaPedido.php?id=<?php echo $id ?>'">Cancelar Pedido</button><?php
                           } ?>
                         </div>
@@ -174,14 +174,14 @@
 
                 $situacao   = $rowDados['SITUACAO']; 
                 $numPedido  = $rowDados['NUMERO_PEDIDO'];
-                $dataAgenda = $rowDados['DATA_AGENDA'];
+                $dataAgenda = $rowDados['DATA_PEDIDO'];
                 $uniMed     = $rowDados['UNIDADE'];
 
                 $prazo = $connDB->prepare("SELECT DATA_AGENDA FROM materiais_compra WHERE NUMERO_PEDIDO = :numPedido");
                 $prazo->bindParam(':numPedido', $numPedido, PDO::PARAM_INT);
                 $prazo->execute();
                 $dataMax = $prazo->fetch(PDO::FETCH_ASSOC);
-                $dataLimite = date('Y-m-d', strtotime($dataMax['DATA_AGENDA']."- 2 days"));
+                $dataLimite = date('Y-m-d', strtotime($dataMax['DATA_AGENDA']."- 3 days"));
 
                 $compras = $connDB->prepare("SELECT SUM(QTDE_PEDIDO) AS QTDETOTAL FROM materiais_compra WHERE DESCRICAO = :descrMat");
                 $compras->bindParam(':descrMat', $descrMat, PDO::PARAM_STR);
@@ -210,7 +210,7 @@
                         </div>
                       </div>
                       <div class="col-md-4">
-                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Data da Agenda</span>
+                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Data do Pedido</span>
                           <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: center; background: none;"
                                  value="<?php echo date('d/m/Y', strtotime($dataAgenda)) ?>" readonly>
                         </div>
