@@ -71,7 +71,7 @@ include_once './RastreadorAtividades.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $numero_pedido = $_POST['rastreamento'];
     if (is_numeric($numero_pedido)) {
-        $query = "SELECT NUMERO_PEDIDO, CLIENTE, DATA_PEDIDO, DATA_ENTREGA, TRANSPORTADORA, ETAPA_PROCED, SITUACAO FROM pedidos WHERE NUMERO_PEDIDO = :numero_pedido";
+        $query = "SELECT NUMERO_PEDIDO, CLIENTE, DATA_PEDIDO, DATA_ENTREGA, TRANSPORTADORA, ETAPA_PROCESS, SITUACAO FROM pedidos WHERE NUMERO_PEDIDO = :numero_pedido";
         $stmt = $connDB->prepare($query);
         $stmt->bindParam(':numero_pedido', $numero_pedido);
         $stmt->execute();
@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <td style="color: #7FFF00;">' . $dado['DATA_PEDIDO'] . '</td>
                     <td style="color: #7FFF00;">' . $dado['DATA_ENTREGA'] . '</td>
                     <td style="color: #7FFF00;">' . $dado['TRANSPORTADORA'] . '</td>
-                    <td style="color: #7FFF00;">' . $dado['ETAPA_PROCED'] . '</td>
+                    <td style="color: #7FFF00;">' . $dado['ETAPA_PROCESS'] . '</td>
                     <td style="color: #7FFF00;">' . $dado['SITUACAO'] . '</td>
                 </tr>';
             }

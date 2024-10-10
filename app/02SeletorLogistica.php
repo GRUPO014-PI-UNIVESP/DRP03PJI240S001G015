@@ -183,7 +183,7 @@ include_once './RastreadorAtividades.php';
                   while($rowLotes = $listaLotes->fetch(PDO::FETCH_ASSOC)){ ?>
                     <td style="width: 10%; font-size: 15px; text-align: center"><?php
                       if($rowLotes['QTDE_LOTE'] == null){ echo ' empty ';}
-                      if($rowLotes['QTDE_LOTE'] > 0){ echo $rowLotes['ID_INTERNO'] . '<br>' . 'No.Lote Forn:[ ' . $rowLotes['NUMERO_LOTE'] . ' ]';} ?>
+                      if($rowLotes['QTDE_LOTE'] > 0){ echo $rowLotes['ID_INTERNO'] . '<br>' . '[ ' . $rowLotes['NUMERO_LOTE'] . ' ]';} ?>
                     </td>
                     <td style="width: 10%; font-size: 15px; text-align: center"><?php
                       if($rowLotes['QTDE_LOTE'] == null){ echo ' - ';}
