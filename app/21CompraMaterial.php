@@ -35,18 +35,16 @@
       <?php
       if(!empty($_GET['id'])){
         $material = $_GET['id'];
-        $busca = $connDB->prepare("SELECT * FROM agenda_compra WHERE DESCRICAO_MP = :descrMat");
+        $busca = $connDB->prepare("SELECT * FROM materiais_compra WHERE DESCRICAO = :descrMat");
         $busca->bindParam(':descrMat', $material, PDO::PARAM_STR);
-        $busca->execute();
-        $rowMat     = $busca->fetch(PDO::FETCH_ASSOC);
-        $uniMed     = $rowMat['UNIDADE_MEDIDA'];
+        $busca->execute(); $rowMat = $busca->fetch(PDO::FETCH_ASSOC);
+        $uniMed     = $rowMat['UNIDADE'];
         $dataAgenda = $rowMat['DATA_AGENDA'];
         $dataPrazo  = $rowMat['DATA_PRAZO'];
         
-        $busca2 = $connDB->prepare("SELECT SUM(QTDE_PEDIDO) AS TOTAL FROM agenda_compra WHERE DESCRICAO_MP = :descrMat");
+        $busca2 = $connDB->prepare("SELECT SUM(QTDE_PEDIDO) AS TOTAL FROM materiais_compra WHERE DESCRICAO = :descrMat");
         $busca2->bindParam(':descrMat', $material, PDO::PARAM_STR);
-        $busca2->execute();
-        $rowQtde = $busca2->fetch(PDO::FETCH_ASSOC);
+        $busca2->execute(); $rowQtde = $busca2->fetch(PDO::FETCH_ASSOC);
         $totalCompra = $rowQtde['TOTAL']; ?>
         <div class="col-md-7">
           <label for="descrMat" class="form-label" style="font-size: 10px; color:aqua">Descrição do Material</label>
@@ -88,12 +86,12 @@
             <option style="font-size: 20px; color: black; background: rgba(0,0,0,0.3)" selected>Selecione o Produto</option><?php
 
               //Pesquisa de descrição do PRODUTO para seleção
-              $busca = $connDB->prepare("SELECT DISTINCT DESCRICAO_MP FROM mp_tabela");
+              $busca = $connDB->prepare("SELECT DISTINCT DESCRICAO FROM materiais_estoque");
               $busca->execute();
 
               // inclui nome dos produtos como opções de seleção da tag <select>
               while($rowMat = $busca->fetch(PDO::FETCH_ASSOC)){?>
-                <option style="font-size: 14px; color: black; background: rgba(0,0,0,0.3)"><?php echo $rowMat['DESCRICAO_MP']; ?></option> <?php
+                <option style="font-size: 14px; color: black; background: rgba(0,0,0,0.3)"><?php echo $rowMat['DESCRICAO']; ?></option> <?php
               } ?>
           </select>
         </div>
@@ -113,15 +111,6 @@
           <input style="font-weight: bold; font-size: 25px; background: rgba(0,0,0,0.3); text-align: center" type="number" class="form-control" 
                  id="qtdeLote" name="qtdeLote" required>
         </div>
-        <div class="col-md-2">
-          <label for="uniMed" class="form-label" style="font-size: 10px; color:aqua">Unidade de Medida</label>
-            <select style="font-weight: bold; font-size: 20px; background: rgba(0,0,0,0.3); text-align: center;" class="form-select" id="uniMed" name="uniMed">
-              <option style="color: black" selected  >Selecione</option>
-              <option style="color: black" value="KG">KG</option>
-              <option style="color: black" value="LT">LT</option>
-              <option style="color: black" value="UN">UN</option>
-            </select>
-        </div>
         <div class="col-md-6"></div>
         <div class="col-md-2">
           <br><br>
@@ -135,54 +124,60 @@
     if(!empty($confirmaCompra['agendado'])){
 
       $descrMat    = $confirmaCompra['descrMat'];
-      $dataEntrega = date('Y-m-d', strtotime($confirmaCompra['dataPrazo']));
-      $uniMed      = $confirmaCompra['uniMed'];
+      $dataEntrega = date('Y-m-d', strtotime("+ 5 days"));
       $qtdeCompra  = $confirmaCompra['qtdeLote'];
       $situacao    = 'COMPRA EFETUADA, AGUARDANDO RECEBIMENTO';
       $etapa       = 1;
 
-      $realiza = $connDB->prepare("INSERT INTO mp_estoque (ETAPA_PROD, DATA_COMPRA, DESCRICAO_MP, QTDE_LOTE, UNIDADE_MEDIDA, SITUACAO_QUALI)
-                                          VALUES (:etapa, :dataEntrega, :descrMat, :qtdeLote, :uniMed, :situacao)");
-      $realiza->bindParam(':etapa'      , $etapa      , PDO::PARAM_STR);                                    
-      $realiza->bindParam(':dataEntrega', $dataEntrega, PDO::PARAM_STR);
-      $realiza->bindParam(':descrMat'   , $descrMat   , PDO::PARAM_STR);
-      $realiza->bindParam(':qtdeLote'   , $qtdeCompra , PDO::PARAM_STR);
-      $realiza->bindParam(':uniMed'     , $uniMed     , PDO::PARAM_STR);
-      $realiza->bindParam(':situacao'   , $situacao   , PDO::PARAM_STR);
+      $query_material = $connDB->prepare("SELECT ID_ESTOQUE, UNIDADE FROM materiais_estoque WHERE DESCRICAO = :descrMat");
+      $query_material->bindParam(':descrMat', $descrMat, PDO::PARAM_STR);
+      $query_material->execute(); $rowMaterial = $query_material->fetch(PDO::FETCH_ASSOC);
+
+      $realiza = $connDB->prepare("INSERT INTO materiais_lotes (ID_ESTOQUE, DESCRICAO, QTDE_LOTE, UNIDADE, ETAPA_PROCESS, SITUACAO)
+                                          VALUES (:idEstoque, :descrMat, :qtdeLote, :uniMed, :etapa, :situacao)");
+      $realiza->bindParam(':idEstoque', $rowMaterial['ID_ESTOQUE'], PDO::PARAM_STR);                                    
+      $realiza->bindParam(':descrMat' , $descrMat                 , PDO::PARAM_STR);
+      $realiza->bindParam(':qtdeLote' , $qtdeCompra               , PDO::PARAM_STR);
+      $realiza->bindParam(':uniMed'   , $rowMaterial['UNIDADE']   , PDO::PARAM_STR);
+      $realiza->bindParam(':etapa'    , $etapa                    , PDO::PARAM_STR);
+      $realiza->bindParam(':situacao' , $situacao                 , PDO::PARAM_STR);
       $realiza->execute();
       
       if(!empty($_GET['id'])){
 
-        $idCompra = $connDB->prepare("SELECT MAX(ID_ESTOQUE_MP) AS ultimo FROM mp_estoque WHERE DESCRICAO_MP = :descrMat");
+        $idCompra = $connDB->prepare("SELECT MAX(ID_ESTOQUE) AS ultimo FROM materiais_estoque WHERE DESCRICAO = :descrMat");
         $idCompra->bindParam(':descrMat', $descrMat, PDO::PARAM_STR);
         $idCompra->execute();
         $rowID = $idCompra->fetch(PDO::FETCH_ASSOC);
 
-        $atualiza = $connDB->prepare("UPDATE agenda_compra SET SITUACAO_QUALI = :situacao, ID_ESTOQUE = :idEstoque WHERE DESCRICAO_MP = :descrMat");
-        $atualiza->bindParam(':descrMat' , $descrMat       , PDO::PARAM_STR);
-        $atualiza->bindParam(':situacao' , $situacao       , PDO::PARAM_STR);
-        $atualiza->bindParam(':idEstoque', $rowID['ultimo'], PDO::PARAM_STR);
+        $atualiza = $connDB->prepare("UPDATE materiais_compra SET SITUACAO = :situacao WHERE DESCRICAO = :descrMat");
+        $atualiza->bindParam(':descrMat', $descrMat, PDO::PARAM_STR);
+        $atualiza->bindParam(':situacao', $situacao, PDO::PARAM_STR);
         $atualiza->execute();
       }
-
       header('Location: ./00SeletorAdministrativo.php');
     }
     if(!empty($confirmaCompra['reposicao'])){
 
       $descrMat    = $confirmaCompra['descrMat'];
       $dataEntrega = date('Y-m-d', strtotime($confirmaCompra['dataPrazo']));
-      $uniMed      = $confirmaCompra['uniMed'];
       $qtdeCompra  = $confirmaCompra['qtdeLote'];
       $situacao    = 'COMPRA EFETUADA, AGUARDANDO RECEBIMENTO';
 
-      $realiza = $connDB->prepare("INSERT INTO mp_estoque (DATA_COMPRA, DESCRICAO_MP, QTDE_LOTE, UNIDADE_MEDIDA, SITUACAO_QUALI)
-                                          VALUES (:dataEntrega, :descrMat, :qtdeLote, :uniMed, :situacao)");
-      $realiza->bindParam(':dataEntrega', $dataEntrega, PDO::PARAM_STR);
-      $realiza->bindParam(':descrMat'   , $descrMat   , PDO::PARAM_STR);
-      $realiza->bindParam(':qtdeLote'   , $qtdeCompra , PDO::PARAM_STR);
-      $realiza->bindParam(':uniMed'     , $uniMed     , PDO::PARAM_STR);
-      $realiza->bindParam(':situacao'   , $situacao   , PDO::PARAM_STR);
-      $realiza->execute(); 
+      $query_material = $connDB->prepare("SELECT ID_ESTOQUE, UNIDADE FROM materiais_estoque WHERE DESCRICAO = :descrMat");
+      $query_material->bindParam(':descrMat', $descrMat, PDO::PARAM_STR);
+      $query_material->execute(); $rowMaterial = $query_material->fetch(PDO::FETCH_ASSOC);     
+
+      $realiza = $connDB->prepare("INSERT INTO materiais_lotes (ID_ESTOQUE, DESCRICAO, QTDE_LOTE, UNIDADE, ETAPA_PROCESS, SITUACAO)
+                                          VALUES (:idEstoque, :descrMat, :qtdeLote, :uniMed, :etapa, :situacao)");
+      $realiza->bindParam(':idEstoque', $rowMaterial['ID_ESTOQUE'], PDO::PARAM_STR);                                    
+      $realiza->bindParam(':descrMat' , $descrMat                 , PDO::PARAM_STR);
+      $realiza->bindParam(':qtdeLote' , $qtdeCompra               , PDO::PARAM_STR);
+      $realiza->bindParam(':uniMed'   , $rowMaterial['UNIDADE']   , PDO::PARAM_STR);
+      $realiza->bindParam(':etapa'    , $etapa                    , PDO::PARAM_STR);
+      $realiza->bindParam(':situacao' , $situacao                 , PDO::PARAM_STR);
+      $realiza->execute();
+      header('Location: ./00SeletorAdministrativo.php');
     }?>
   </div>
 </div>

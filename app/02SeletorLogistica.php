@@ -55,7 +55,7 @@ include_once './RastreadorAtividades.php';
           <div class="col-md-6">
             <h6>Lista de Materiais para Recebimento</h6>
             <div class="row g-1"><?php
-              $materiais = $connDB->prepare("SELECT * FROM mp_estoque WHERE ETAPA_PROD < 2");
+              $materiais = $connDB->prepare("SELECT * FROM materiais_lotes WHERE ETAPA_PROCESSO < 2");
               $materiais->execute();
               while($rowMat = $materiais->fetch(PDO::FETCH_ASSOC)){
                 $id = $rowMat['ID_ESTOQUE_MP']; ?>
@@ -161,34 +161,41 @@ include_once './RastreadorAtividades.php';
         <h5 style="color: aqua">Estoque de Materiais e Insumos</h5>
         <div class="container">
           <div class="overflow-auto"><?php
-            $listaEstoque = $connDB->prepare("SELECT * FROM mp_estoque ORDER BY DESCRICAO_MP ASC"); $listaEstoque->execute(); ?>
+            $listaEstoque = $connDB->prepare("SELECT * FROM materiais_estoque ORDER BY DESCRICAO ASC"); $listaEstoque->execute(); ?>
             <table class="table table-dark table-hover">
               <thead style="font-size: 12px">
                 <tr>
-                  <th scope="col" style="width: 35%">Descrição do Material</th>
-                  <th scope="col" style="width: 10%; text-align: center">ID Interno</th>
-                  <th scope="col" style="width: 10%; text-align: center">Qtde Lote</th>
-                  <th scope="col" style="width: 10%; text-align: center">Qtde em Estoque</th>
-                  <th scope="col" style="width: 10%; text-align: center">Qtde Reservada</th>
+                  <th scope="col" style="width: 30%">Descrição do Material</th>
+                  <th scope="col" style="width: 15%; text-align: center">Total em Estoque</th>
+                  <th scope="col" style="width: 15%; text-align: center">ID Interno</th>
+                  <th scope="col" style="width: 15%; text-align: center">Qtde do Lote</th>
                   <th scope="col" style="width: 25%">Situação Atual</th>
                 </tr>
               </thead>
-              <tbody style="height: 80%; font-size: 11px;">
-                <?php while($rowEstoque = $listaEstoque->fetch(PDO::FETCH_ASSOC)){ ?>
+              <tbody style="height: 80%; font-size: 11px;"><?php
+              while($rowEstoque = $listaEstoque->fetch(PDO::FETCH_ASSOC)){ ?>
                 <tr>
-                  <td style="width: 35%; font-size: 14px"> 
-                    <?php echo $rowEstoque['DESCRICAO_MP'] . '<BR>' . ' [ ' . $rowEstoque['NUMERO_LOTE_FORNECEDOR'] . ' ] ' . $rowEstoque['FORNECEDOR']; ?> </td>
-                  <td style="width: 10%; font-size: 18px; text-align: center"> 
-                    <?php echo $rowEstoque['NUMERO_LOTE_INTERNO']; ?> </td>
-                  <td style="width: 10%; font-size: 18px; text-align: center"> 
-                    <?php echo $rowEstoque['QTDE_LOTE'] . ' ' . $rowEstoque['UNIDADE_MEDIDA'] ?> </td>
-                  <td style="width: 10%; font-size: 18px; text-align: center"> 
-                    <?php echo $rowEstoque['QTDE_ESTOQUE'] . ' ' . $rowEstoque['UNIDADE_MEDIDA'] ?> </td>
-                  <td style="width: 10%; font-size: 18px; text-align: center"> 
-                    <?php echo $rowEstoque['QTDE_RESERVADA'] . ' ' . $rowEstoque['UNIDADE_MEDIDA'] ?> </td>
-                  <td style="width: 25%; font-size: 14px"> 
-                    <?php echo $rowEstoque['SITUACAO_QUALI']  ?> </td>
-                </tr><?php } ?>
+                  <td style="width: 35%; font-size: 14px"><?php echo $rowEstoque['DESCRICAO'] . '<br>' . $rowEstoque['FORNECEDOR']; ?></td>
+                  <td style="width: 10%; font-size: 18px; text-align: center"><?php echo $rowEstoque['QTDE_ESTOQUE'] . ' ' . $rowEstoque['UNIDADE'] ?></td>
+                  <?php
+                  $listaLotes = $connDB->prepare("SELECT NUMERO_LOTE, ID_INTERNO, QTDE_LOTE, SITUACAO FROM materiais_lotes WHERE ID_ESTOQUE = :idLote");
+                  $listaLotes->bindParam(':idLote', $rowEstoque['ID_ESTOQUE'], PDO::PARAM_INT); $listaLotes->execute();
+                  while($rowLotes = $listaLotes->fetch(PDO::FETCH_ASSOC)){ ?>
+                    <td style="width: 10%; font-size: 18px; text-align: center"><?php
+                      if($rowLotes['QTDE_LOTE'] == null){ echo ' empty ';}
+                      if($rowLotes['QTDE_LOTE'] > 0){ echo $rowLotes['ID_INTERNO'] . '<br>' . 'No.Lote Forn:[ ' . $rowLotes['NUMERO_LOTE'] . ' ]';} ?>
+                    </td>
+                    <td style="width: 10%; font-size: 18px; text-align: center"><?php
+                      if($rowLotes['QTDE_LOTE'] == null){ echo ' - ';}
+                      if($rowLotes['QTDE_LOTE'] > 0){ echo $rowLotes['QTDE_LOTE'];} ?>                   
+                    </td>
+                    <td style="width: 25%; font-size: 14px"><?php 
+                      if($rowLotes['QTDE_LOTE'] == null){ echo 'Estoque está vazio';}
+                      if($rowLotes['QTDE_LOTE'] > 0){ echo $rowLotes['SITUACAO'];} ?>                      
+                    </td> <?php 
+                  } ?>
+                </tr><?php 
+              } ?>
               </tbody>
             </table>
           </div>

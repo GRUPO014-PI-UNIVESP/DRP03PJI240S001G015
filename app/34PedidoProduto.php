@@ -32,19 +32,25 @@
   <div class="container-fluid"><br>
     <div>
       <h5>Pedido de Produto</h>
-    </div>
+    </div><?php
+      $query_produto = $connDB->prepare("SELECT * FROM produtos WHERE PRODUTO = :produto");
+      $query_produto->bindParam(':produto', $_SESSION['nomeProduto'], PDO::PARAM_STR);
+      $query_produto->execute(); $rowProduto = $query_produto->fetch(PDO::FETCH_ASSOC); ?>
     <div class="row g-1" id="entradaProduto">
       <div class="col-md-2">
         <label for="pedidoNum" class="form-label" style="font-size: 10px; color:aqua">Pedido No.</label>
-        <input style="font-size: 16px; text-align: center; color:yellow; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="" name="" value="<?php echo $_SESSION['numPedido'] ?>" readonly>
+        <input style="font-size: 16px; text-align: center; color:yellow; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="" name="" 
+        value="<?php echo $_SESSION['numPedido'] ?>" readonly>
       </div>
       <div class="col-md-2">
         <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Quantidade do Pedido</label>
-        <input style="font-size: 16px; color:yellow; text-align:right; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="" name="" value="<?php echo $_SESSION['qtdeLote'] . ' Kg' ?>" readonly>
+        <input style="font-size: 16px; color:yellow; text-align:right; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="" name="" 
+        value="<?php echo $_SESSION['qtdeLote'] . ' ' . $rowProduto['UNIDADE'] ?>" readonly>
       </div>
       <div class="col-md-8">
-        <label for="" class="form-label" style="font-size: 10px; color:aqua">Descrição do Produto</label>
-        <input style="font-size: 16px; color:yellow; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="" name="" value="<?php echo $_SESSION['nomeProduto'] ?>" readonly>
+        <label for="" class="form-label" style="font-size: 10px; color:aqua">Produto</label>
+        <input style="font-size: 16px; color:yellow; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="" name="" 
+        value="<?php echo $_SESSION['nomeProduto'] ?>" readonly>
       </div>
     </div><!-- Fim da div row entradaProduto --><br>
 
@@ -65,32 +71,35 @@
             $qtdeLote    = $_SESSION['qtdeLote']   ; $xtend  = $_SESSION['xtend'];
             $numPedido   = $_SESSION['numPedido']  ;
             $verificador = 0;
-            $query_material = $connDB->prepare("SELECT * FROM pf_tabela WHERE NOME_PRODUTO = :nomeProduto");
+            $query_material = $connDB->prepare("SELECT * FROM produtos WHERE PRODUTO = :nomeProduto");
             $query_material->bindParam(':nomeProduto', $nomeProduto, PDO::PARAM_STR);
             $query_material->execute(); ?>
           <tbody> <?php            
             while($rowLista = $query_material->fetch(PDO::FETCH_ASSOC)){
-              $contador = 1; $capacidadeProcess = $rowLista['CAPACIDADE_PROCESS'];?>
+              $contador = 1; $capacidadeProcess = $rowLista['CAPAC_PROCESS'];?>
               <tr>
                 <td scope="col" style="width: 30%; font-size: 13px; color: yellow"> <?php
-                  $descrMaterial = $rowLista['DESCRICAO_MP'];
-                  echo $rowLista['DESCRICAO_MP'] . '<br>';
-                  echo 'Proporção: [ ' . $rowLista['PROPORCAO_MATERIAL'] . ' %]'; ?>
+                  $descrMaterial = $rowLista['MATERIAL_COMPONENTE'];
+                  echo $rowLista['MATERIAL_COMPONENTE'] . '<br>';
+                  echo 'Proporção: [ ' . $rowLista['PROPORCAO'] . ' %]'; ?>
                 </td>
 
                 <td scope="col" style="width: 10%; text-align: center; font-size: 18px; color: yellow"> <?php
-                  $qtdeMaterial = $qtdeLote * ($rowLista['PROPORCAO_MATERIAL'] / 100);
-                  echo $qtdeMaterial . ' ' . $rowLista['UNIDADE_MEDIDA']; ?>
+                  $qtdeMaterial = $qtdeLote * ($rowLista['PROPORCAO'] / 100);
+                  echo $qtdeMaterial . ' ' . $rowLista['UNIDADE']; ?>
                 </td>
 
                 <td scope="col" style="width: 10%; text-align: center; font-size: 18px; color:yellow"> <?php
-                  $query_disponivel = $connDB->prepare("SELECT SUM(QTDE_ESTOQUE) AS estoque, SUM(QTDE_RESERVADA) AS reservado 
-                                                               FROM mp_estoque WHERE DESCRICAO_MP = :material");
-                  $query_disponivel->bindParam(':material', $descrMaterial, PDO::PARAM_STR);
-                  $query_disponivel->execute();
-                  $resultado = $query_disponivel->fetch(PDO::FETCH_ASSOC);
-                  $qtdeDisponivel = $resultado['estoque'] - $resultado['reservado'];
-                  echo $qtdeDisponivel . ' ' . $rowLista['UNIDADE_MEDIDA']; ?>
+                  $query_Estoque = $connDB->prepare("SELECT ID_ESTOQUE, SUM(QTDE_ESTOQUE) AS TOTAL_ESTOQUE FROM materiais_estoque WHERE DESCRICAO = :descrMat");
+                  $query_Estoque->bindParam(':descrMat', $descrMaterial, PDO::PARAM_STR);
+                  $query_Estoque->execute(); $resultEstoque = $query_Estoque->fetch(PDO::FETCH_ASSOC);
+
+                  $query_reserva = $connDB->prepare("SELECT SUM(QTDE_RESERVA) AS TOTAL_RESERVA FROM materiais_reserva WHERE ID_ESTOQUE = :idEstoque");
+                  $query_reserva->bindParam(':idEstoque', $resultEstoque['ID_ESTOQUE'], PDO::PARAM_INT);
+                  $query_reserva->execute(); $resultReserva = $query_reserva->fetch(PDO::FETCH_ASSOC);
+
+                  $qtdeDisponivel = $resultEstoque['TOTAL_ESTOQUE'] - $resultReserva['TOTAL_RESERVA'];
+                  echo $qtdeDisponivel . ' ' . $rowLista['UNIDADE']; ?>
                 </td> <?php
                   if($qtdeDisponivel >= $qtdeMaterial){
                     $barra = 'alert alert-success';
@@ -131,7 +140,7 @@
       <div class="row g-2">
         <div class="col-md-5" style="text-align: center"><br>
           <!-- Descartar dados -->
-          <button class="btn btn-secondary" style="float:inline-end" onclick="location.href='./35DescartarPedido.php'">Descartar e Sair</button>
+          <button class="btn btn-danger" style="float:inline-end" onclick="location.href='./35DescartarPedido.php'">Descartar e Sair</button>
         </div>
         <div class="col-md-7"><br>
           <!-- Button trigger modal -->
@@ -264,7 +273,7 @@
             <select style="font-size: 16px;color:yellow; background: rgba(0,0,0,0.3)" class="form-select" id="cliente" name="cliente" required>
               <option style="font-size: 16px; background: rgba(0,0,0,0.3), color: black" selected>Selecione o Cliente, caso não esteja relacionado será necessário fazer o cadastramento</option><?php
                 //Pesquisa de descrição do PRODUTO para seleção
-                $query_cliente = $connDB->prepare("SELECT DISTINCT NOME_FANTASIA FROM pf_cliente");
+                $query_cliente = $connDB->prepare("SELECT DISTINCT NOME_FANTASIA FROM cliente");
                 $query_cliente->execute();
                 // inclui nome dos produtos como opções de seleção da tag <select>
                 while($rowCliente = $query_cliente->fetch(PDO::FETCH_ASSOC)){?>
@@ -297,30 +306,29 @@
     </form><?php
     $confirmaPedido = filter_input_array(INPUT_POST, FILTER_DEFAULT);
     if(!empty($confirmaPedido['salvar3'])){
-      $etapaProd = 0;
+      $etapaProcess = 0;
       $nomeCliente = $confirmaPedido['cliente'];
       $dataPedido = date('Y-m-d');
-      $uniMed = 'KG';
       $situacao = 'PEDIDO REGISTRADO, PROVIDENCIANDO MATERIAIS';
       $responsavel = $_SESSION['nome_func'];
 
-      $registraPedido = $connDB->prepare("INSERT INTO pf_pedido (ETAPA_PROD, NUMERO_PEDIDO, DATA_PEDIDO, CLIENTE, NOME_PRODUTO, DATA_FABRI, QTDE_LOTE_PF, CAPACIDADE_PROCESS, UNIDADE_MEDIDA, SITUACAO_QUALI, DATA_ENTREGA, REGISTRO_PEDIDO) 
-                                                 VALUES (:etapaProd, :numPedido, :dataPedido, :nomeCliente, :nomeProduto, :dataFabri, :qtdeLote, :capacidade, :uniMed, :situacao, :dataEntrega, :responsavel)");
-      $registraPedido->bindParam(':etapaProd'  , $etapaProd               , PDO::PARAM_INT);
+      $registraPedido = $connDB->prepare("INSERT INTO pedidos (NUMERO_PEDIDO, CLIENTE, PRODUTO, QTDE_PEDIDO, UNIDADE, CAPAC_PROCESS, DATA_PEDIDO, DATA_ENTREGA, ENCARREGADO_PEDIDO, ETAPA_PROCESS, SITUACAO) 
+                                                              VALUES (:numPedido, :nomeCliente, :nomeProduto, :qtdePedido, :uniMed, :capacidade, :dataPedido, :dataFabri, :responsavel, :etapa, :situacao)");
+      
       $registraPedido->bindParam(':numPedido'  , $numPedido               , PDO::PARAM_INT);
-      $registraPedido->bindParam(':dataPedido' , $dataPedido              , PDO::PARAM_STR);
       $registraPedido->bindParam(':nomeCliente', $nomeCliente             , PDO::PARAM_STR);
       $registraPedido->bindParam(':nomeProduto', $nomeProduto             , PDO::PARAM_STR);
-      $registraPedido->bindParam(':dataFabri'  , $_SESSION['dataAgendada'], PDO::PARAM_STR);
-      $registraPedido->bindParam(':qtdeLote'   , $qtdeLote                , PDO::PARAM_STR);
+      $registraPedido->bindParam(':qtdePedido' , $qtdeLote                , PDO::PARAM_STR);
+      $registraPedido->bindParam(':uniMed'     , $rowProduto['UNIDADE']   , PDO::PARAM_STR);
       $registraPedido->bindParam(':capacidade' , $_SESSION['capacidade']  , PDO::PARAM_INT);
-      $registraPedido->bindParam(':uniMed'     , $uniMed                  , PDO::PARAM_STR);
-      $registraPedido->bindParam(':situacao'   , $situacao                , PDO::PARAM_STR);
-      $registraPedido->bindParam(':dataEntrega', $_SESSION['dataEntrega'] , PDO::PARAM_STR);
+      $registraPedido->bindParam(':dataPedido' , $dataPedido              , PDO::PARAM_STR);
+      $registraPedido->bindParam(':dataFabri'  , $_SESSION['dataAgendada'], PDO::PARAM_STR);
       $registraPedido->bindParam(':responsavel', $responsavel             , PDO::PARAM_STR);
+      $registraPedido->bindParam(':etapa'      , $etapaProcess            , PDO::PARAM_INT);
+      $registraPedido->bindParam(':situacao'   , $situacao                , PDO::PARAM_STR);
       $registraPedido->execute();
 
-      $alocaFila = $connDB->prepare("INSERT INTO fila_ocupacao (PEDIDO_NUM, DATA_AGENDA, NOME_PRODUTO, QTDE_LOTE, CAPACIDADE_PROCESS, SITUACAO_QUALI) 
+      $alocaFila = $connDB->prepare("INSERT INTO fila_ocupacao (NUMERO_PEDIDO, DATA_AGENDA, PRODUTO, QTDE_LOTE, CAPAC_PROCESS, SITUACAO) 
                                             VALUES (:numPedido, :dataFabri, :nomeProduto, :qtdeLote, :capaProcess, :situacao)");
       $alocaFila->bindParam(':numPedido'  , $numPedido               , PDO::PARAM_INT);
       $alocaFila->bindParam(':dataFabri'  , $_SESSION['dataAgendada'], PDO::PARAM_STR);
@@ -329,21 +337,6 @@
       $alocaFila->bindParam(':capaProcess', $_SESSION['capacidade']  , PDO::PARAM_STR);
       $alocaFila->bindParam(':situacao'   , $situacao                , PDO::PARAM_STR);
       $alocaFila->execute();
-
-      $itens = $connDB->prepare("SELECT DESCRICAO_MP, PROPORCAO_MATERIAL, UNIDADE_MEDIDA FROM pf_tabela WHERE NOME_PRODUTO = :nomeProduto");
-      $itens->bindParam(':nomeProduto', $nomeProduto, PDO::PARAM_STR); $itens->execute();
-      while($rowItens = $itens->fetch(PDO::FETCH_ASSOC)){
-        $qUso = $qtdeLote * ($rowItens['PROPORCAO_MATERIAL'] / 100);
-        $componentes = $connDB->prepare("INSERT INTO pf_componentes (NUMERO_PEDIDO, DESCRICAO_MP, QTDE_USO, UNIDADE_MEDIDA)
-                                                                    VALUES (:nPedido, :descrMat, :qtdeUso, :uniMed)");
-        $componentes->bindParam(':nPedido' , $numPedido                 , PDO::PARAM_INT);
-        $componentes->bindParam(':descrMat', $rowItens['DESCRICAO_MP']  , PDO::PARAM_STR);
-        $componentes->bindParam(':qtdeUso' , $qUso                      , PDO::PARAM_STR);
-        $componentes->bindParam(':uniMed'  , $rowItens['UNIDADE_MEDIDA'], PDO::PARAM_STR);
-        $componentes->execute();
-      }
-
-      
 
       header('Location: ./33PedidoProduto.php');
     } ?>

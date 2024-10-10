@@ -21,7 +21,7 @@
     }
     function resetTimer() {
       clearTimeout(time);
-        time = setTimeout(deslogar, 600000);
+        time = setTimeout(deslogar, 6000000);
     }
   };
   inactivityTime();
@@ -69,7 +69,7 @@
 
             <div class="col-md-9">
               <h5>Lista dos Pedidos em Execução</h5><?php
-              $produtos = $connDB->prepare("SELECT * FROM pf_pedido WHERE ETAPA_PROD < 4");
+              $produtos = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 4");
               $produtos->execute();
 
               while($rowPedido = $produtos->fetch(PDO::FETCH_ASSOC)){
@@ -86,13 +86,13 @@
                         <div class="col-md-9">
                           <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Produto</span>
                             <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none"
-                                   value="<?php echo $rowPedido['NOME_PRODUTO'] ?>" readonly>
+                                   value="<?php echo $rowPedido['PRODUTO'] ?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-3">
                           <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Quantidade</span>
                             <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: right; background: none"
-                                   value="<?php echo $rowPedido['QTDE_LOTE_PF'] . ' ' . $rowPedido['UNIDADE_MEDIDA'] ?>" readonly>
+                                   value="<?php echo $rowPedido['QTDE_PEDIDO'] . ' ' . $rowPedido['UNIDADE'] ?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-9">
@@ -104,8 +104,8 @@
                         <div class="col-md-3">
                           <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Uso da Planta</span>
                             <?php 
-                            if($rowPedido['CAPACIDADE_PROCESS'] != 0 || $rowPedido['CAPACIDADE_PROCESS'] != null){
-                              $tempo = $rowPedido['QTDE_LOTE_PF'] / $rowPedido['CAPACIDADE_PROCESS']; $id = $rowPedido['NUMERO_PEDIDO'];?>
+                            if($rowPedido['CAPAC_PROCESS'] != 0 || $rowPedido['CAPAC_PROCESS'] != null){
+                              $tempo = $rowPedido['QTDE_PEDIDO'] / $rowPedido['CAPAC_PROCESS']; $id = $rowPedido['NUMERO_PEDIDO'];?>
                               <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: center; background: none"
                                      value="<?php echo round($tempo) . ' horas'?>" readonly><?php
                             } else { $tempo = 0; ?> 
@@ -117,7 +117,7 @@
                         <div class="col-md-3">
                           <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Fabricação</span>
                             <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: center; background: none"
-                                   value="<?php echo date('d/m/Y',strtotime($rowPedido['DATA_FABRI'])) ?>" readonly>
+                                   value="" readonly>
                           </div>
                         </div>
                         <div class="col-md-3">
@@ -137,7 +137,7 @@
                         <div class="col-md-12">
                           <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
                             <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none; color: orange"
-                                   value="<?php echo $rowPedido['SITUACAO_QUALI'] ?>" readonly>
+                                   value="<?php echo $rowPedido['SITUACAO'] ?>" readonly>
                           </div>
                         </div>
                       </div><!-- fim da DIV row g2 -->
@@ -161,29 +161,29 @@
 
             <div class="col-md-9">
               <h5>Lista de Compra Agendada</h5><?php
-              $material = $connDB->prepare("SELECT DISTINCT DESCRICAO_MP FROM agenda_compra ORDER BY SITUACAO_QUALI ASC");
+              $material = $connDB->prepare("SELECT DISTINCT DESCRICAO FROM materiais_compra ORDER BY SITUACAO ASC");
               $material->execute();
 
               while($rowMaterial = $material->fetch(PDO::FETCH_ASSOC)){
-                $descrMat = $rowMaterial['DESCRICAO_MP'];
+                $descrMat = $rowMaterial['DESCRICAO'];
 
-                $dados = $connDB->prepare("SELECT * FROM agenda_compra WHERE DESCRICAO_MP = :descrMat");
+                $dados = $connDB->prepare("SELECT * FROM materiais_compra WHERE DESCRICAO = :descrMat");
                 $dados->bindParam(':descrMat', $descrMat, PDO::PARAM_STR);
                 $dados->execute();
                 $rowDados = $dados->fetch(PDO::FETCH_ASSOC);
 
-                $situacao   = $rowDados['SITUACAO_QUALI']; 
-                $numPedido  = $rowDados['PEDIDO_NUM'];
+                $situacao   = $rowDados['SITUACAO']; 
+                $numPedido  = $rowDados['NUMERO_PEDIDO'];
                 $dataAgenda = $rowDados['DATA_AGENDA'];
-                $uniMed     = $rowDados['UNIDADE_MEDIDA'];
+                $uniMed     = $rowDados['UNIDADE'];
 
-                $prazo = $connDB->prepare("SELECT DATA_FABRI FROM pf_pedido WHERE NUMERO_PEDIDO = :numPedido");
+                $prazo = $connDB->prepare("SELECT DATA_AGENDA FROM materiais_compra WHERE NUMERO_PEDIDO = :numPedido");
                 $prazo->bindParam(':numPedido', $numPedido, PDO::PARAM_INT);
                 $prazo->execute();
                 $dataMax = $prazo->fetch(PDO::FETCH_ASSOC);
-                $dataLimite = date('Y-m-d', strtotime($dataMax['DATA_FABRI']."- 2 days"));
+                $dataLimite = date('Y-m-d', strtotime($dataMax['DATA_AGENDA']."- 2 days"));
 
-                $compras = $connDB->prepare("SELECT SUM(QTDE_PEDIDO) AS QTDETOTAL FROM agenda_compra WHERE DESCRICAO_MP = :descrMat");
+                $compras = $connDB->prepare("SELECT SUM(QTDE_PEDIDO) AS QTDETOTAL FROM materiais_compra WHERE DESCRICAO = :descrMat");
                 $compras->bindParam(':descrMat', $descrMat, PDO::PARAM_STR);
                 $compras->execute();
                 $totalQtde = $compras->fetch(PDO::FETCH_ASSOC);
@@ -226,7 +226,7 @@
                       <?php
                       // verifica se compra já foi efetuada para desativar botão de compra
                       $sitCompra = 'COMPRA AGENDADA';
-                      if($rowDados['SITUACAO_QUALI'] == $sitCompra){ ?>
+                      if($rowDados['SITUACAO'] == $sitCompra){ ?>
                         <div class="col-md-3">
                           <button class="btn btn-primary" style="font-size: 14px; float: right" onclick="location.href='./21CompraMaterial.php?id=<?php echo $descrMat ?>'">Autorizar Compra</button>
                         </div> <?php                        

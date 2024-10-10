@@ -7,7 +7,7 @@
 
    $numPedido = $_SESSION['numPedido'];
 
-   $cancelaPedido = $connDB->prepare("DELETE FROM agenda_compra WHERE PEDIDO_NUM = :numPedido");
+   $cancelaPedido = $connDB->prepare("DELETE FROM agenda_compra WHERE NUMERO_PEDIDO = :numPedido");
    $cancelaPedido->bindParam(':numPedido', $numPedido, PDO::PARAM_INT);
    $cancelaPedido->execute();
 

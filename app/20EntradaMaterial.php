@@ -175,8 +175,8 @@ $responsavel = $_SESSION['nome_func'];
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3"><?php
-              $reserva = $connDB->prepare("SELECT SUM(QTDE_PEDIDO) AS RESERVA FROM agenda_compra WHERE DESCRICAO_MP = :descrMat");
-              $reserva->bindParam(':descrMat', $rowMP['DESCRICAO_MP'], PDO::PARAM_STR);
+              $reserva = $connDB->prepare("SELECT SUM(QTDE_PEDIDO) AS RESERVA FROM agenda_compra WHERE DESCRICAO = :descrMat");
+              $reserva->bindParam(':descrMat', $rowMP['DESCRICAO'], PDO::PARAM_STR);
               $reserva->execute();
               $rowReserva = $reserva->fetch(PDO::FETCH_ASSOC);
               ?>
@@ -220,7 +220,7 @@ $responsavel = $_SESSION['nome_func'];
       $atualizaPedido->bindParam(':numPedido', $rowReserva['PEDIDO_NUM'], PDO::PARAM_STR);
       $atualizaPedido->execute();
 
-      $limpaAgenda = $connDB->prepare("DELETE FROM agenda_compra WHERE DESCRICAO_MP = :descrMat");
+      $limpaAgenda = $connDB->prepare("DELETE FROM agenda_compra WHERE DESCRICAO = :descrMat");
       $limpaAgenda->bindParam(':descrMat', $descrMat, PDO::PARAM_STR);
       $limpaAgenda->execute();
 
