@@ -21,7 +21,7 @@
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 600000);
+       time = setTimeout(deslogar, 6000000);
      }
   };
   inactivityTime();
@@ -58,17 +58,17 @@
 
       <!-- Entrada de Dados --><?php
       if(!empty($_GET['id'])){
-        $dadosMaterial = $connDB->prepare("SELECT * FROM mp_estoque WHERE ID_ESTOQUE_MP = :idMat");
+        $dadosMaterial = $connDB->prepare("SELECT * FROM materiais_lotes WHERE ID_ESTOQUE = :idMat");
         $dadosMaterial->bindParam(':idMat', $_GET['id'], PDO::PARAM_INT);
         $dadosMaterial->execute(); $rowMaterial = $dadosMaterial->fetch(PDO::FETCH_ASSOC);
         $dataRegistro = date('Y-m-d');
-        $_SESSION['nLoteI']     = $rowMaterial['NUMERO_LOTE_INTERNO'];
-        $_SESSION['nLoteF']     = $rowMaterial['NUMERO_LOTE_FORNECEDOR'];
+        $_SESSION['nLoteI']     = $rowMaterial['ID_INTERNO'];
+        $_SESSION['nLoteF']     = $rowMaterial['NUMERO_LOTE'];
         $_SESSION['fornecedor'] = $rowMaterial['FORNECEDOR'];
-        $_SESSION['dataFabri']  = $rowMaterial['DATA_FABRICACAO'];
-        $_SESSION['dataVali']   = $rowMaterial['DATA_VALIDADE'];
-        $_SESSION['notaFiscal'] = $rowMaterial['NOTA_FISCAL_LOTE'];
-        $_SESSION['descrMat']   = $rowMaterial['DESCRICAO_MP'];
+        $_SESSION['dataFabri']  = $rowMaterial['DATA_FABRI'];
+        $_SESSION['dataVali']   = $rowMaterial['DATA_VALI'];
+        $_SESSION['notaFiscal'] = $rowMaterial['NOTA_FISCAL'];
+        $_SESSION['descrMat']   = $rowMaterial['DESCRICAO'];
         $_SESSION['qtdeLote']   = $rowMaterial['QTDE_LOTE'];
 
       } ?>
@@ -86,7 +86,7 @@
           <div class="col-md-2">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="nLoteInterno" name="nLoteInterno" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
-                     value="<?php echo $rowMaterial['NUMERO_LOTE_INTERNO'] ?>" readonly>
+                     value="<?php echo $rowMaterial['ID_INTERNO'] ?>" readonly>
               <label for="nLoteInterno" style="color: aqua; font-size: 12px; background: none">No.de Lote Interno</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
@@ -94,7 +94,7 @@
           <div class="col-md-2">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="nLoteFornecedor" name="nLoteFornecedor" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
-                     value="<?php echo $rowMaterial['NUMERO_LOTE_FORNECEDOR'] ?>" readonly>
+                     value="<?php echo $rowMaterial['NUMERO_LOTE'] ?>" readonly>
               <label for="nLoteFornecedor" style="color: aqua; font-size: 12px; background: none">No.de Lote do Fornecedor</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
@@ -110,7 +110,7 @@
           <div class="col-md-2">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="dataFabri" name="dataFabri" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
-                     value="<?php echo date('d/m/Y', strtotime($rowMaterial['DATA_FABRICACAO'])) ?>" readonly>
+                     value="<?php echo date('d/m/Y', strtotime($rowMaterial['DATA_FABRI'])) ?>" readonly>
               <label for="dataFabri" style="color: aqua; font-size: 12px; background: none">Data de Fabricação</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
@@ -118,7 +118,7 @@
           <div class="col-md-2">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="dataVali" name="dataVali" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
-                     value="<?php echo date('d/m/Y', strtotime($rowMaterial['DATA_VALIDADE'])) ?>" readonly>
+                     value="<?php echo date('d/m/Y', strtotime($rowMaterial['DATA_VALI'])) ?>" readonly>
               <label for="dataVali" style="color: aqua; font-size: 12px; background: none">Data de Validade</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
@@ -126,7 +126,7 @@
           <div class="col-md-2">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="notaFiscal" name="notaFiscal" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
-                     value="<?php echo $rowMaterial['NOTA_FISCAL_LOTE'] ?>" readonly>
+                     value="<?php echo $rowMaterial['NOTA_FISCAL'] ?>" readonly>
               <label for="notaFiscal" style="color: aqua; font-size: 12px; background: none">Nota Fiscal</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
@@ -134,7 +134,7 @@
           <div class="col-md-6">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="descrMat" name="descrMat" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" 
-                     value="<?php echo $rowMaterial['DESCRICAO_MP'] ?>" readonly>
+                     value="<?php echo $rowMaterial['DESCRICAO'] ?>" readonly>
               <label for="descrMat" style="color: aqua; font-size: 12px; background: none">Descrição do Material</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>

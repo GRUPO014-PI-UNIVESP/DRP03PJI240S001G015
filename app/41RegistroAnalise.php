@@ -21,7 +21,7 @@
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 600000);
+       time = setTimeout(deslogar, 6000000);
      }
   };
   inactivityTime();
@@ -252,7 +252,7 @@
           $registra = filter_input_array(INPUT_POST, FILTER_DEFAULT);
           if(!empty($registra['registra'])){
             $dataAnalise = date('Y-m-d');
-            $regAnalise = $connDB->prepare("INSERT INTO analise_mp (NUMERO_LOTE_MP, DESCRICAO_MP, QTDE_LOTE_MP, ASPECTO, COLORACAO, ODOR, CONTAMINANTES, PERDA_MASSA, ESCALA_PH,
+            $regAnalise = $connDB->prepare("INSERT INTO materiais_analise (ID_INTERNO, DESCRICAO, QTDE_LOTE, ASPECTO, COLORACAO, ODOR, CONTAMINANTES, PERDA_MASSA, ESCALA_PH,
                                                                           PUREZA, CONDICAO, OBSERVACOES, DATA_ANALISE, ANALISTA, RESPONSAVEL)
                                                    VALUES (:nLote, :descrMat, :qtdeLote, :aspecto, :cor, :odor, :contam, :perda, :ph, :pureza, :condicao, :observ, :dataAnalise, :analista, :responsavel)");
             $regAnalise->bindParam(':nLote'      , $_SESSION['nLoteI']       , PDO::PARAM_STR);
@@ -273,7 +273,7 @@
             $regAnalise->execute();
 
             $etapa = 3; $situacao = 'MATERIAL LIBERADO PARA USO';
-            $atualiza = $connDB->prepare("UPDATE mp_estoque SET ETAPA_PROD = :etapa, SITUACAO_QUALI = :situacao WHERE NUMERO_LOTE_INTERNO = :nLoteInterno");
+            $atualiza = $connDB->prepare("UPDATE materiais_lotes SET ETAPA_PROCESS = :etapa, SITUACAO = :situacao WHERE ID_INTERNO = :nLoteInterno");
             $atualiza->bindParam(':etapa'       , $etapa             , PDO::PARAM_INT);
             $atualiza->bindParam(':situacao'    , $situacao          , PDO::PARAM_STR);
             $atualiza->bindParam(':nLoteInterno', $_SESSION['nLoteI'], PDO::PARAM_STR);
