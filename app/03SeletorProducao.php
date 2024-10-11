@@ -54,10 +54,7 @@ include_once './RastreadorAtividades.php';
 
         <div class="tab-pane fade show active" id="manage-tab-pane" role="tabpanel" aria-labelledby="manage-tab" tabindex="0"><br><br>
           <div class="row g-3">
-            <div class="col-md-3"><?php
-            
-            ?>
-            </div><!-- fim da div coluna esquerda para botões -->
+            <div class="col-md-3"> </div><!-- fim da div coluna esquerda para botões -->
             <div class="col-md-9">
               <?php
                 $listaPedido = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 2");
@@ -125,7 +122,33 @@ include_once './RastreadorAtividades.php';
                             } ?>
                           </div>
                           <?php
-                            
+                            $query_reserva = $connDB->prepare("SELECT * FROM materiais_reserva WHERE NUMERO_PEDIDO = :numPedido");
+                            $query_reserva->bindParam('numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_STR);
+                            $query_reserva->execute();
+                            while($rowReserva = $query_reserva->fetch(PDO::FETCH_ASSOC)){
+                              $query_lotes = $connDB->prepare("SELECT DESCRICAO, ID_INTERNO, QTDE_LOTE, UNIDADE, SITUACAO, SUM(QTDE_LOTE) AS TOTAL_ESTOQUE 
+                                                                      FROM materiais_lotes WHERE ID_ESTOQUE = :idEstoque");
+                              $query_lotes->bindParam('idEstoque', $rowReserva['ID_ESTOQUE'], PDO::PARAM_INT);
+                              $query_lotes->execute();
+                              while($rowLotes = $query_lotes->fetch(PDO::FETCH_ASSOC)){ 
+                                $descrMat = $rowLotes['DESCRICAO'] ;
+                                $id       = $rowLotes['ID_INTERNO'];
+                                $qtde     = $rowLotes['QTDE_LOTE'];
+                                $uni      = $rowLotes['UNIDADE'];
+                                $sit      = $rowLotes['SITUACAO'];
+                                ?>
+                                <div class="col-md-12">
+                                  <div class="input-group mb-12"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Materiais:</span>
+                                    <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none"
+                                           value="<?php echo $descrMat . 
+                                                      ' [' . $id       . 
+                                                     '] [' . $qtde     . 
+                                                      ' ' . $uni       .
+                                                      '] ' . $sit;?>" readonly>
+                                  </div>
+                                </div><?php
+                              }
+                            }
                           ?>
                           <div class="col-md-12">
                             <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
