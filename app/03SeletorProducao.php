@@ -22,7 +22,7 @@ include_once './RastreadorAtividades.php';
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 6000000);
+       time = setTimeout(deslogar, 600000);
      }
   };
   inactivityTime();
@@ -54,7 +54,10 @@ include_once './RastreadorAtividades.php';
 
         <div class="tab-pane fade show active" id="manage-tab-pane" role="tabpanel" aria-labelledby="manage-tab" tabindex="0"><br><br>
           <div class="row g-3">
-            <div class="col-md-3"> </div><!-- fim da div coluna esquerda para botões -->
+            <div class="col-md-3"><br>
+              <button type="button" class="btn btn-outline-danger" style="width:250px" 
+                      onclick="">Relatório de Produção</button><br><br>  
+            </div>
             <div class="col-md-9">
               <?php
                 $listaPedido = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 2");
@@ -64,28 +67,28 @@ include_once './RastreadorAtividades.php';
                     <div class="card text-bg-success mb-3" style="width: 50rem;">
                       <div class="card-body">
                         <div class="row g-2">
+                          <div class="col-md-6">
+                            <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Produto</span>
+                              <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none"
+                                     value="<?php echo $rowPedido['PRODUTO'] ?>" readonly>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Cliente</span>
+                              <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none"
+                                     value="<?php echo $rowPedido['CLIENTE'] ?>" readonly>
+                            </div>
+                          </div>
                           <div class="col-md-3">
                             <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Pedido No.</span>
                               <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: center; background: none;"
                                      value="<?php echo $rowPedido['NUMERO_PEDIDO']?>" readonly>
                             </div>
                           </div>
-                          <div class="col-md-9">
-                            <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Produto</span>
-                              <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none"
-                                     value="<?php echo $rowPedido['PRODUTO'] ?>" readonly>
-                            </div>
-                          </div>
                           <div class="col-md-3">
                             <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Quantidade</span>
                               <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: right; background: none"
                                      value="<?php echo $rowPedido['QTDE_PEDIDO'] . ' ' . $rowPedido['UNIDADE'] ?>" readonly>
-                            </div>
-                          </div>
-                          <div class="col-md-9">
-                            <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Cliente</span>
-                              <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none"
-                                     value="<?php echo $rowPedido['CLIENTE'] ?>" readonly>
                             </div>
                           </div>
                           <div class="col-md-3">
@@ -102,15 +105,60 @@ include_once './RastreadorAtividades.php';
                             </div>
                           </div>
                           <div class="col-md-3">
-                            <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Fabricação</span>
-                              <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: center; background: none"
-                                     value="" readonly>
-                            </div>
-                          </div>
-                          <div class="col-md-3">
                             <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Entrega</span>
                               <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: center; background: none"
                                      value="<?php echo date('d/m/Y',strtotime($rowPedido['DATA_ENTREGA'])) ?>" readonly>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="row g-0"><?php
+                              $query_reserva = $connDB->prepare("SELECT * FROM materiais_reserva WHERE NUMERO_PEDIDO = :numPedido");
+                              $query_reserva->bindParam('numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_STR);
+                              $query_reserva->execute(); $nMats = $query_reserva->rowCount(); $verify = 0;
+                              while($rowReserva = $query_reserva->fetch(PDO::FETCH_ASSOC)){
+                                $query_lotes = $connDB->prepare("SELECT DESCRICAO, ID_INTERNO, QTDE_LOTE, UNIDADE, SITUACAO, SUM(QTDE_LOTE) AS TOTAL_ESTOQUE 
+                                                                        FROM materiais_lotes WHERE ID_ESTOQUE = :idEstoque");
+                                $query_lotes->bindParam('idEstoque', $rowReserva['ID_ESTOQUE'], PDO::PARAM_INT);
+                                $query_lotes->execute();
+                                while($rowLotes = $query_lotes->fetch(PDO::FETCH_ASSOC)){ 
+                                  $descrMat = $rowLotes['DESCRICAO'] ;
+                                  $id       = $rowLotes['ID_INTERNO'];
+                                  $qtde     = $rowLotes['TOTAL_ESTOQUE'];
+                                  $uni      = $rowLotes['UNIDADE'];
+                                  $sit      = $rowLotes['SITUACAO']; ?>
+                                  <h6 style="color:aqua">Condição dos Materiais Ingredientes</h6>
+                                  <div class="col-md-4">
+                                    <p><?php echo $descrMat ?></p>
+                                  </div>
+                                  <div class="col-md-2">
+                                    <p><?php echo $qtde . ' ' . $uni ?></p>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <p><?php echo $sit ?></p>
+                                  </div> <?php
+                                  if($rowLotes['TOTAL_ESTOQUE'] > $rowPedido['QTDE_PEDIDO']){
+                                    $verify = $verify + 1;
+                                  }
+                                }
+                              }
+                              if($verify == $nMats){
+                                $novaEtapa = 1; $novaSituacao = 'PRODUTO LIBERADO PARA FABRICAÇÃO';
+                                $atualizaPedido = $connDB->prepare("UPDATE pedidos SET ETAPA_PROCESS = :etapa, SITUACAO = :situacao WHERE NUMERO_PEDIDO = :numPedido");
+                                $atualizaPedido->bindParam(':etapa'    , $novaEtapa   , PDO::PARAM_INT);
+                                $atualizaPedido->bindParam(':situacao' , $novaSituacao, PDO::PARAM_STR);
+                                $atualizaPedido->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);
+                                $atualizaPedido->execute();
+                              } ?>
+                            </div>
+                          </div>
+                          <div class="col-md-12"><?php
+                            $query_situacao = $connDB->prepare("SELECT SITUACAO FROM pedidos WHERE NUMERO_PEDIDO = :numPedido");
+                            $query_situacao->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);
+                            $query_situacao->execute(); $rowSit = $query_situacao->fetch(PDO::FETCH_ASSOC);
+                          ?>
+                            <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
+                              <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none; color: orange"
+                                     value="<?php echo $rowSit['SITUACAO']?>" readonly>
                             </div>
                           </div>
                           <div class="col-md-3"><?php
@@ -120,41 +168,6 @@ include_once './RastreadorAtividades.php';
                             if($rowPedido['ETAPA_PROCESS'] == 1){ ?>
                               <button class="btn btn-primary" style="font-size: 14px; float: right" onclick="location.href='./37ProcessaPedido.php?id=<?php echo $id ?>'">Registro da Fabricação</button><?php
                             } ?>
-                          </div>
-                          <?php
-                            $query_reserva = $connDB->prepare("SELECT * FROM materiais_reserva WHERE NUMERO_PEDIDO = :numPedido");
-                            $query_reserva->bindParam('numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_STR);
-                            $query_reserva->execute();
-                            while($rowReserva = $query_reserva->fetch(PDO::FETCH_ASSOC)){
-                              $query_lotes = $connDB->prepare("SELECT DESCRICAO, ID_INTERNO, QTDE_LOTE, UNIDADE, SITUACAO, SUM(QTDE_LOTE) AS TOTAL_ESTOQUE 
-                                                                      FROM materiais_lotes WHERE ID_ESTOQUE = :idEstoque");
-                              $query_lotes->bindParam('idEstoque', $rowReserva['ID_ESTOQUE'], PDO::PARAM_INT);
-                              $query_lotes->execute();
-                              while($rowLotes = $query_lotes->fetch(PDO::FETCH_ASSOC)){ 
-                                $descrMat = $rowLotes['DESCRICAO'] ;
-                                $id       = $rowLotes['ID_INTERNO'];
-                                $qtde     = $rowLotes['QTDE_LOTE'];
-                                $uni      = $rowLotes['UNIDADE'];
-                                $sit      = $rowLotes['SITUACAO'];
-                                ?>
-                                <div class="col-md-12">
-                                  <div class="input-group mb-12"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Materiais:</span>
-                                    <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none"
-                                           value="<?php echo $descrMat . 
-                                                      ' [' . $id       . 
-                                                     '] [' . $qtde     . 
-                                                      ' ' . $uni       .
-                                                      '] ' . $sit;?>" readonly>
-                                  </div>
-                                </div><?php
-                              }
-                            }
-                          ?>
-                          <div class="col-md-12">
-                            <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
-                              <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none; color: orange"
-                                     value="<?php echo $rowPedido['SITUACAO']?>" readonly>
-                            </div>
                           </div>
                         </div><!-- fim da DIV row g2 -->
                       </div><!-- fim da DIV do corpo do cartão -->
