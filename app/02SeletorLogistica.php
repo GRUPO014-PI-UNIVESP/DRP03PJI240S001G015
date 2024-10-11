@@ -189,7 +189,7 @@ include_once './RastreadorAtividades.php';
                       if($rowLotes['QTDE_LOTE'] == null){ echo ' - ';}
                       if($rowLotes['QTDE_LOTE'] > 0){ echo $rowLotes['QTDE_LOTE'] . ' ' . $rowLotes['UNIDADE'];} ?>                   
                     </td>
-                    <td style="width: 25%; font-size: 12px"><?php 
+                    <td style="width: 25%; font-size: 12px"><?php
                       if($rowLotes['QTDE_LOTE'] == null){ echo 'Estoque está vazio';}
                       if($rowLotes['QTDE_LOTE'] > 0){ echo $rowLotes['SITUACAO'];} ?>                      
                     </td> <?php 

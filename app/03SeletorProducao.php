@@ -22,7 +22,7 @@ include_once './RastreadorAtividades.php';
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 600000);
+       time = setTimeout(deslogar, 6000000);
      }
   };
   inactivityTime();
@@ -117,13 +117,16 @@ include_once './RastreadorAtividades.php';
                             </div>
                           </div>
                           <div class="col-md-3"><?php
-                            if($rowPedido['ETAPA_PROD'] != 1){ ?>
+                            if($rowPedido['ETAPA_PROCESS'] != 1){ ?>
                               <button class="btn btn-secondary" style="font-size: 14px; float: right" onclick="" disabled>Registro da Fabricação</button> <?php 
                             }
-                            if($rowPedido['ETAPA_PROD'] == 1){ ?>
+                            if($rowPedido['ETAPA_PROCESS'] == 1){ ?>
                               <button class="btn btn-primary" style="font-size: 14px; float: right" onclick="location.href='./37ProcessaPedido.php?id=<?php echo $id ?>'">Registro da Fabricação</button><?php
                             } ?>
                           </div>
+                          <?php
+                            
+                          ?>
                           <div class="col-md-12">
                             <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
                               <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none; color: orange"

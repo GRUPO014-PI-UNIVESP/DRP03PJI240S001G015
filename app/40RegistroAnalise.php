@@ -70,6 +70,7 @@
         $_SESSION['notaFiscal'] = $rowMaterial['NOTA_FISCAL'];
         $_SESSION['descrMat']   = $rowMaterial['DESCRICAO'];
         $_SESSION['qtdeLote']   = $rowMaterial['QTDE_LOTE'];
+        $_SESSION['idEstoque']  = $rowMaterial['ID_ESTOQUE'];
 
       } ?>
       <div class="tab-pane fade show active" id="entrada-tab-pane" role="tabpanel" aria-labelledby="entrada-tab" tabindex="0"><br>
