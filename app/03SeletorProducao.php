@@ -22,7 +22,7 @@ include_once './RastreadorAtividades.php';
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 600000);
+       time = setTimeout(deslogar, 6000000);
      }
   };
   inactivityTime();
@@ -37,7 +37,7 @@ include_once './RastreadorAtividades.php';
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="plant-tab" data-bs-toggle="tab" data-bs-target="#plant-tab-pane" type="button" 
-            role="tab" aria-controls="plant-tab-pane" aria-selected="false">Plantas</button>
+            role="tab" aria-controls="plant-tab-pane" aria-selected="false">Planta</button>
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="manutention-tab" data-bs-toggle="tab" data-bs-target="#manutention-tab-pane" type="button" 
@@ -111,6 +111,7 @@ include_once './RastreadorAtividades.php';
                             </div>
                           </div>
                           <div class="col-md-12">
+                            <h6 style="color:aqua">Condição dos Materiais Ingredientes</h6>
                             <div class="row g-0"><?php
                               $query_reserva = $connDB->prepare("SELECT * FROM materiais_reserva WHERE NUMERO_PEDIDO = :numPedido");
                               $query_reserva->bindParam('numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_STR);
@@ -126,7 +127,6 @@ include_once './RastreadorAtividades.php';
                                   $qtde     = $rowLotes['TOTAL_ESTOQUE'];
                                   $uni      = $rowLotes['UNIDADE'];
                                   $sit      = $rowLotes['SITUACAO']; ?>
-                                  <h6 style="color:aqua">Condição dos Materiais Ingredientes</h6>
                                   <div class="col-md-4">
                                     <p><?php echo $descrMat ?></p>
                                   </div>
@@ -180,11 +180,11 @@ include_once './RastreadorAtividades.php';
         </div><!-- fim da tab manager -->
           
         <div class="tab-pane fade" id="plant-tab-pane" role="tabpanel" aria-labelledby="plant-tab" tabindex="0"><br><br>
-          <button type="button" class="btn btn-outline-info" style="width:300px" onclick="">Ocorrências</button><br><br>   
+          <button type="button" class="btn btn-outline-info" style="width:300px" onclick="">Calendário de Ocupação</button><br><br>   
         </div><!-- fim da tab planta -->
 
         <div class="tab-pane fade" id="manutention-tab-pane" role="tabpanel" aria-labelledby="manutention-tab" tabindex="0"><br><br>
-          <button type="button" class="btn btn-outline-info" style="width:400px" onclick="">Cronograma de Manutenção</button><br><br>
+          <button type="button" class="btn btn-outline-info" style="width:300px" onclick="">Cronograma de Manutenção</button><br><br>
         </div><!-- fim da tab manutenção -->
 
         <div class="tab-pane fade" id="other-tab-pane" role="tabpanel" aria-labelledby="other-tab" tabindex="0" style="color: whitesmoke"><br><br></div>
