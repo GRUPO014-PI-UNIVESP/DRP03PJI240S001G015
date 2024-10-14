@@ -178,6 +178,11 @@
       $realiza->bindParam(':etapa'    , $etapa                    , PDO::PARAM_STR);
       $realiza->bindParam(':situacao' , $situacao                 , PDO::PARAM_STR);
       $realiza->execute();
+
+      $atualizaReserva = $connDB->prepare("UPDATE materiais_reserva SET DISPONIBILIDADE = :disp WHERE ID_ESTOQUE = :idEstoque");
+      $atualizaReserva->bindParam(':disp'     , $etapa                    , PDO::PARAM_STR);
+      $atualizaReserva->bindParam(':idEstoque', $rowMaterial['ID_ESTOQUE'], PDO::PARAM_STR); $atualizaReserva->execute();
+
       header('Location: ./00SeletorAdministrativo.php');
     }?>
   </div>

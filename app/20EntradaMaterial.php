@@ -264,6 +264,10 @@ $responsavel = $_SESSION['nome_func'];
       $atualEstoque->bindParam(':idEstoque'   , $rowEstoque['ID_ESTOQUE'], PDO::PARAM_STR);
       $atualEstoque->execute();
 
+      $atualizaReserva = $connDB->prepare("UPDATE materiais_reserva SET DISPONIBILIDADE = :disp WHERE ID_ESTOQUE = :idEstoque");
+      $atualizaReserva->bindParam(':disp'     , $etapa                    , PDO::PARAM_STR);
+      $atualizaReserva->bindParam(':idEstoque', $rowEstoque['ID_ESTOQUE'] , PDO::PARAM_STR); $atualizaReserva->execute();
+
       $limpaAgenda = $connDB->prepare("DELETE FROM materiais_compra WHERE DESCRICAO = :descrMat");
       $limpaAgenda->bindParam(':descrMat', $descrMat, PDO::PARAM_STR);
       $limpaAgenda->execute();

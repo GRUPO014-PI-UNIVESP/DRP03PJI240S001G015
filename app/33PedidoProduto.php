@@ -115,7 +115,7 @@
 
           if($alerta == 'INSUFICIENTE'){
             $dataPedido = date('Y-m-d');
-            $situacao   = 'COMPRA AGENDADA';
+            $situacao   = 'COMPRA AGENDADA'; $disp = 0;
             $compra = $connDB->prepare("INSERT INTO materiais_compra (ID_ESTOQUE, DESCRICAO, NUMERO_PEDIDO, PRODUTO, DATA_PEDIDO, QTDE_PEDIDO, UNIDADE, SITUACAO, CAPAC_PROCESS) 
                                                VALUES (:idEstoque, :descrMaterial, :numPedido, :nomeProduto, :dataPedido, :qtdePedido, :uniMed, :situacao, :capacidade)");
             $compra->bindParam(':idEstoque'    , $resultEstoque['ID_ESTOQUE'], PDO::PARAM_INT);
@@ -129,12 +129,13 @@
             $compra->bindParam(':capacidade'   , $_SESSION['capacidade']     , PDO::PARAM_INT);
             $compra->execute();
 
-            $reserva = $connDB->prepare("INSERT INTO materiais_reserva (NUMERO_PEDIDO, ID_ESTOQUE, QTDE_RESERVA, UNIDADE) 
-                                                VALUES (:numPedido, :idEstoque, :qtdeReserva, :uniMed)");
+            $reserva = $connDB->prepare("INSERT INTO materiais_reserva (NUMERO_PEDIDO, ID_ESTOQUE, QTDE_RESERVA, UNIDADE, DISPONIBILIDADE) 
+                                                VALUES (:numPedido, :idEstoque, :qtdeReserva, :uniMed, :disp)");
             $reserva->bindParam(':numPedido'  , $numPedido                  , PDO::PARAM_INT);
             $reserva->bindParam(':idEstoque'  , $resultEstoque['ID_ESTOQUE'], PDO::PARAM_STR);
             $reserva->bindParam(':qtdeReserva', $qtdeMaterial               , PDO::PARAM_STR);
             $reserva->bindParam(':uniMed'     , $uniMed                     , PDO::PARAM_STR);
+            $reserva->bindParam(':disp'       , $disp                       , PDO::PARAM_STR);
             $reserva->execute();            
           }
         }

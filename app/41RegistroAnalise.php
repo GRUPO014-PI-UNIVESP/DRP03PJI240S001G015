@@ -289,6 +289,10 @@
             $estoqueAtual->bindParam(':idEstoque', $_SESSION['idEstoque'], PDO::PARAM_STR);
             $estoqueAtual->execute();
 
+            $atualizaReserva = $connDB->prepare("UPDATE materiais_reserva SET DISPONIBILIDADE = :disp WHERE ID_ESTOQUE = :idEstoque");
+            $atualizaReserva->bindParam(':disp'     , $etapa                , PDO::PARAM_STR);
+            $atualizaReserva->bindParam(':idEstoque', $_SESSION['idEstoque'], PDO::PARAM_STR); $atualizaReserva->execute();
+
             header('Location: ./01SeletorGQualidade.php');
 
           }?>
