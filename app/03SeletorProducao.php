@@ -113,59 +113,24 @@ include_once './RastreadorAtividades.php';
                           <div class="col-md-12">
                             <h6 style="color:aqua">Condição dos Materiais Ingredientes</h6>
                             <div class="row g-0"><?php
-                              $query_reserva = $connDB->prepare("SELECT * FROM materiais_reserva WHERE NUMERO_PEDIDO = :numPedido");
-                              $query_reserva->bindParam('numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_STR);
-                              $query_reserva->execute(); $nMats = $query_reserva->rowCount(); $verify = 0;
-                              while($rowReserva = $query_reserva->fetch(PDO::FETCH_ASSOC)){
-                                $query_lotes = $connDB->prepare("SELECT DESCRICAO, ID_INTERNO, QTDE_LOTE, UNIDADE, SITUACAO, SUM(QTDE_LOTE) AS TOTAL_ESTOQUE 
-                                                                        FROM materiais_lotes WHERE ID_ESTOQUE = :idEstoque");
-                                $query_lotes->bindParam('idEstoque', $rowReserva['ID_ESTOQUE'], PDO::PARAM_INT);
-                                $query_lotes->execute();
-                                while($rowLotes = $query_lotes->fetch(PDO::FETCH_ASSOC)){ 
-                                  $descrMat = $rowLotes['DESCRICAO'] ;
-                                  $id       = $rowLotes['ID_INTERNO'];
-                                  $qtde     = $rowLotes['TOTAL_ESTOQUE'];
-                                  $uni      = $rowLotes['UNIDADE'];
-                                  $sit      = $rowLotes['SITUACAO']; ?>
-                                  <div class="col-md-4">
-                                    <p><?php echo $descrMat ?></p>
-                                  </div>
-                                  <div class="col-md-2">
-                                    <p><?php echo $qtde . ' ' . $uni ?></p>
-                                  </div>
-                                  <div class="col-md-6">
-                                    <p><?php echo $sit ?></p>
-                                  </div> <?php
-                                  if($rowLotes['TOTAL_ESTOQUE'] > $rowPedido['QTDE_PEDIDO']){
-                                    $verify = $verify + 1;
-                                  }
-                                }
-                              }
-                              if($verify == $nMats){
-                                $novaEtapa = 1; $novaSituacao = 'PRODUTO LIBERADO PARA FABRICAÇÃO';
-                                $atualizaPedido = $connDB->prepare("UPDATE pedidos SET ETAPA_PROCESS = :etapa, SITUACAO = :situacao WHERE NUMERO_PEDIDO = :numPedido");
-                                $atualizaPedido->bindParam(':etapa'    , $novaEtapa   , PDO::PARAM_INT);
-                                $atualizaPedido->bindParam(':situacao' , $novaSituacao, PDO::PARAM_STR);
-                                $atualizaPedido->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);
-                                $atualizaPedido->execute();
-                              } ?>
+                               ?>
                             </div>
                           </div>
                           <div class="col-md-12"><?php
-                            $query_situacao = $connDB->prepare("SELECT SITUACAO FROM pedidos WHERE NUMERO_PEDIDO = :numPedido");
+                            $query_situacao = $connDB->prepare("SELECT ETAPA_PROCESS, SITUACAO FROM pedidos WHERE NUMERO_PEDIDO = :numPedido");
                             $query_situacao->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);
-                            $query_situacao->execute(); $rowSit = $query_situacao->fetch(PDO::FETCH_ASSOC);
-                          ?>
+                            $query_situacao->execute(); $rowSit = $query_situacao->fetch(PDO::FETCH_ASSOC); ?>
+
                             <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
                               <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none; color: orange"
                                      value="<?php echo $rowSit['SITUACAO']?>" readonly>
                             </div>
                           </div>
                           <div class="col-md-3"><?php
-                            if($rowPedido['ETAPA_PROCESS'] != 1){ ?>
+                            if($rowSit['ETAPA_PROCESS'] != 1){ ?>
                               <button class="btn btn-secondary" style="font-size: 14px; float: right" onclick="" disabled>Registro da Fabricação</button> <?php 
                             }
-                            if($rowPedido['ETAPA_PROCESS'] == 1){ ?>
+                            if($rowSit['ETAPA_PROCESS'] == 1){ ?>
                               <button class="btn btn-primary" style="font-size: 14px; float: right" onclick="location.href='./37ProcessaPedido.php?id=<?php echo $id ?>'">Registro da Fabricação</button><?php
                             } ?>
                           </div>

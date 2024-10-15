@@ -129,10 +129,11 @@
             $compra->bindParam(':capacidade'   , $_SESSION['capacidade']     , PDO::PARAM_INT);
             $compra->execute();
 
-            $reserva = $connDB->prepare("INSERT INTO materiais_reserva (NUMERO_PEDIDO, ID_ESTOQUE, QTDE_RESERVA, UNIDADE, DISPONIBILIDADE) 
-                                                VALUES (:numPedido, :idEstoque, :qtdeReserva, :uniMed, :disp)");
+            $reserva = $connDB->prepare("INSERT INTO materiais_reserva (NUMERO_PEDIDO, ID_ESTOQUE, DESCRICAO, QTDE_RESERVA, UNIDADE, DISPONIBILIDADE) 
+                                                VALUES (:numPedido, :idEstoque, :descrMat, :qtdeReserva, :uniMed, :disp)");
             $reserva->bindParam(':numPedido'  , $numPedido                  , PDO::PARAM_INT);
             $reserva->bindParam(':idEstoque'  , $resultEstoque['ID_ESTOQUE'], PDO::PARAM_STR);
+            $reserva->bindParam(':descrMat'   , $descrMaterial              , PDO::PARAM_STR);
             $reserva->bindParam(':qtdeReserva', $qtdeMaterial               , PDO::PARAM_STR);
             $reserva->bindParam(':uniMed'     , $uniMed                     , PDO::PARAM_STR);
             $reserva->bindParam(':disp'       , $disp                       , PDO::PARAM_STR);
