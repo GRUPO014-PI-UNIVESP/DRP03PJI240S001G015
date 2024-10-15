@@ -189,7 +189,7 @@
                       </thead><!-- fim do cabeçalho da tabela calendario -->
               
                       <tbody><!-- início do corpo da tabela calendario -->
-                        <style>td:hover{background-color: rgba(0, 0, 0, 0.5);}</style> <?php
+                        <style> td:hover{background-color: rgba(0, 0, 0, 0.5);} </style> <?php
                         $diaSemana = date('w', strtotime("+$media days")); 
                         $nDias = $media + 1; 
                         $vDias = $media + 0; 

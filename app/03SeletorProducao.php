@@ -113,24 +113,52 @@ include_once './RastreadorAtividades.php';
                           <div class="col-md-12">
                             <h6 style="color:aqua">Condição dos Materiais Ingredientes</h6>
                             <div class="row g-0"><?php
-                               ?>
+                              $query_disp = $connDB->prepare("SELECT * FROM materiais_reserva WHERE NUMERO_PEDIDO = :numPedido");
+                              $query_disp->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);
+                              $query_disp->execute(); $nDisp = $query_disp->rowCount();
+                              while($rowDisp = $query_disp->fetch(PDO::FETCH_ASSOC)){ ?>
+                                <div class="col-md-5">
+                                  <?php echo $rowDisp['DESCRICAO']; ?>
+                                </div>
+                                <div class="col-md-2">
+                                  <?php echo number_format($rowDisp['QTDE_RESERVA'], 0, ',', '.') . ' ' . $rowDisp['UNIDADE']; ?>
+                                </div>
+                                <div class="col-md-3"> <?php 
+                                  if($rowDisp['DISPONIBILIDADE'] == 3){
+                                    echo 'DISPONÍVEL';
+                                  } else {
+                                    echo 'INDISPONÍVEL';
+                                  } ?>
+                                </div> <?php
+                              } ?>
                             </div>
                           </div>
                           <div class="col-md-12"><?php
-                            $query_situacao = $connDB->prepare("SELECT ETAPA_PROCESS, SITUACAO FROM pedidos WHERE NUMERO_PEDIDO = :numPedido");
-                            $query_situacao->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);
-                            $query_situacao->execute(); $rowSit = $query_situacao->fetch(PDO::FETCH_ASSOC); ?>
-
+                            $query_libera = $connDB->prepare("SELECT DISPONIBILIDADE FROM materiais_reserva WHERE NUMERO_PEDIDO = :numPedido and DISPONIBILIDADE = 3");
+                            $query_libera->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);
+                            $query_libera->execute(); $nLib = $query_libera->rowCount();
+                            if($nDisp == $nLib){
+                              $situacao = 'LIBERADO PARA PROCESSAMENTO';
+                              $etapa = 1; 
+                              $query_atualiza = $connDB->prepare("UPDATE pedidos SET ETAPA_PROCESS = :etapa, SITUACAO = :situacao WHERE NUMERO_PEDIDO = :numPedido");
+                              $query_atualiza->bindParam(':etapa', $etapa, PDO::PARAM_INT);
+                              $query_atualiza->bindParam(':situacao', $situacao, PDO::PARAM_STR);
+                              $query_atualiza->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);
+                              $query_atualiza->execute();
+                            }
+                            if($nDisp != $nLib){
+                              $situacao = $rowPedido['SITUACAO'];
+                              $etapa = 0; } ?>
                             <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
                               <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none; color: orange"
-                                     value="<?php echo $rowSit['SITUACAO']?>" readonly>
+                                     value="<?php echo $situacao; ?>" readonly>
                             </div>
                           </div>
                           <div class="col-md-3"><?php
-                            if($rowSit['ETAPA_PROCESS'] != 1){ ?>
+                            if($etapa != 1){ ?>
                               <button class="btn btn-secondary" style="font-size: 14px; float: right" onclick="" disabled>Registro da Fabricação</button> <?php 
                             }
-                            if($rowSit['ETAPA_PROCESS'] == 1){ ?>
+                            if($etapa == 1){ ?>
                               <button class="btn btn-primary" style="font-size: 14px; float: right" onclick="location.href='./37ProcessaPedido.php?id=<?php echo $id ?>'">Registro da Fabricação</button><?php
                             } ?>
                           </div>

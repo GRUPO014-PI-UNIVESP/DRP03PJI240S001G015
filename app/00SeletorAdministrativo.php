@@ -31,11 +31,11 @@
     <div class="container-fluid">
       <ul style="padding:5px" class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="rh-tab" data-bs-toggle="tab" data-bs-target="#rh-tab-pane" type="button" 
+          <button class="nav-link" id="rh-tab" data-bs-toggle="tab" data-bs-target="#rh-tab-pane" type="button" 
                   role="tab" aria-controls="rh-tab-pane" aria-selected="true">Recursos Humanos</button>
         </li>
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="comercial-tab" data-bs-toggle="tab" data-bs-target="#comercial-tab-pane" type="button" 
+          <button class="nav-link active" id="comercial-tab" data-bs-toggle="tab" data-bs-target="#comercial-tab-pane" type="button" 
                   role="tab" aria-controls="comercial-tab-pane" aria-selected="false">Setor de Vendas</button>
         </li>
         <li class="nav-item" role="presentation">
@@ -46,7 +46,7 @@
       </ul>
       <div class="tab-content" id="myTabContent">
         <!-- Menu do Recursos Humanos -->
-        <div class="tab-pane fade show active" id="rh-tab-pane" role="tabpanel" aria-labelledby="rh-tab" tabindex="0"><br><br>
+        <div class="tab-pane fade" id="rh-tab-pane" role="tabpanel" aria-labelledby="rh-tab" tabindex="0"><br><br>
           <button type="button" class="btn btn-outline-info" style="width:300px" 
                   onclick="location.href='<?php echo $acesso5; ?>'">Quadro de Funcionários</button><br><br>
           <button type="button" class="btn btn-outline-info" style="width:300px" 
@@ -56,7 +56,7 @@
         </div><!-- fim da div id = rh-tab-pane -->
 
         <!-- Menu do Setor Comercial -->
-        <div class="tab-pane fade" id="comercial-tab-pane" role="tabpanel" aria-labelledby="prod-tab" tabindex="0"><br>
+        <div class="tab-pane fade show active" id="comercial-tab-pane" role="tabpanel" aria-labelledby="prod-tab" tabindex="0"><br>
           <div class="row g-3">
             <div class="col-md-3"><br>
               <button type="button" class="btn btn-outline-light" style="width:250px" 

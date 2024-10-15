@@ -128,7 +128,7 @@ $responsavel = $_SESSION['nome_func'];
           <div class="col-md-7"></div>
           <div class="col-md-2"></div>
           <div class="col-md-2">
-            <div class="form-floating mb-3"><?php
+            <div class="form-floating mb-3"><?php $estoque = 0;
               $queryEstoque = $connDB->prepare("SELECT * FROM materiais_estoque WHERE ID_ESTOQUE = :idEstoque");
               $queryEstoque->bindParam(':idEstoque', $_GET['id'], PDO::PARAM_INT);
               $queryEstoque->execute(); $rowEstoque = $queryEstoque->fetch(PDO::FETCH_ASSOC);
