@@ -65,9 +65,9 @@ include_once './RastreadorAtividades.php';
         <div class="col-md-3"></div>
         <div class="col-md-2">
           <div class="form-floating mb-2">
-            <input type="text" class="form-control" id="qtdeLote" name="qtdeLote" style="font-weight: bolder; background: rgba(0,0,0,0.3); text-align: center;color: yellow" 
-              value="<?php echo $rowPedido['QTDE_PEDIDO'] . ' ' . $rowPedido['UNIDADE'] ?>" readonly>
-            <label for="qtdeLote" style="color: aqua; font-size: 12px; background: none">Quantidade do Pedido</label>
+            <input type="text" class="form-control" id="qtdeLote" name="qtdePedido" style="font-weight: bolder; background: rgba(0,0,0,0.3); text-align: center;color: yellow" 
+              value="<?php echo number_format($rowPedido['QTDE_PEDIDO'], 0, ',', '.') . ' ' . $rowPedido['UNIDADE'] ?>" readonly>
+            <label for="qtdePedido" style="color: aqua; font-size: 12px; background: none">Quantidade do Pedido</label>
             <p style="font-size: 11px; color: grey"></p>
           </div>
         </div>
@@ -156,27 +156,6 @@ include_once './RastreadorAtividades.php';
           </div>
         </div>
         <div class="col-md-4"></div>
-        <h6 atyle="color: aqua">Materiais Utilizados</h6> <?php
-          $listaMat = $connDB->prepare("SELECT * FROM produtos WHERE PRODUTO = :nomeProduto");
-          $listaMat->bindParam(':nomeProduto', $rowPedido['PRODUTO'], PDO::PARAM_STR);
-          $listaMat->execute(); $nComponentes = $listaMat->rowCount(); $j = 1;
-          while($rowMat = $listaMat->fetch(PDO::FETCH_ASSOC)){
-            $loteMat = $connDB->prepare("SELECT * FROM materiais_lotes WHERE DESCRICAO = :material");
-            $loteMat->bindParam(':material', $rowMat['DESCRICAO'], PDO::PARAM_STR);
-            $loteMat->execute(); $nLoteMat = $loteMat->rowCount(); $qtdeMat = $rowPedido['QTDE_PEDIDO'] * ($rowMat['PROPORCAO'] / 100); ?>
-            <div class="col-md-4" style="border-style: ridge; border-color: grey; border-radius: 6px; padding: 5px">
-              <h6 style="color: yellow; font-size: 12px"><?php echo $rowMat['DESCRICAO'] . ' [ Qtde Necessária: ' . $qtdeMat . ' ' . $rowMat['UNIDADE'] . ' ]' ?></h6> <?php $i = 1; 
-              while($rowLote = $loteMat->fetch(PDO::FETCH_ASSOC)){ 
-                $campo[$j][$i] = 'campo' . $j . $i; $idLote[$j][$i] = $rowLote['ID_INTERNO']; ?>
-                <div class="input-group mb-3">
-                  <span class="input-group-text" id="<?php echo $campo[$j][$i] ?>"><?php echo $rowLote['IDINTERNO'] ?></span>
-                  <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
-                          id="<?php echo $campo[$j][$i] ?>" name="<?php echo $campo[$j][$i] ?>" style="background: rgba(0,0,0,0.3); text-align:center" required>
-                  <span class="input-group-text" id="<?php echo $campo[$j][$i] ?>"><?php echo $rowLote['UNIDADE'] ?></span>
-                </div> <?php echo $campo[$j][$i]; $i = $i + 1;
-              } ?>
-            </div><?php $j = $j + 1;
-          } ?>
         <div class="col-md-2">
           <div class="form-floating mb-3"><br>
             <input class="btn btn-primary" type="submit" id="confirma" name="confirma" value="Confirmar" style="font-size:18px; width: 160px">
@@ -191,74 +170,20 @@ include_once './RastreadorAtividades.php';
     </form> <?php
     $confirma = filter_input_array(INPUT_POST, FILTER_DEFAULT);
     if(!empty($confirma['confirma'])){
-      $dataFabri = date('Y-m-d', strtotime($confirma['dataFabri']));
-      $situacao = 'FABRICAÇÃO FINALIZADA';
-      
-      // retira pedido da fila de ocupação da planta de fabricação
-      $tiraFila = $connDB->prepare("DELETE FROM fila_ocupacao WHERE NUMERO_PEDIDO = :numPedido");
-      $tiraFila->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);
-      $tiraFila->execute();
+      $_SESSION['dataPedido']  = date('Y-m-d', strtotime($confirma['dataPedido'])) ;
+      $_SESSION['numPedido']   = $confirma['numPedido']  ;
+      $_SESSION['nomeProduto'] = $confirma['nomeProduto'];
+      $_SESSION['qtdePedido']  = $confirma['qtdePedido'] ;
+      $_SESSION['unidade']     = $rowPedido['UNIDADE']   ;
+      $_SESSION['cliente']     = $confirma['cliente']    ;
+      $_SESSION['dataFabri']   = $confirma['dataFabri']  ;
+      $_SESSION['planta']      = $confirma['planta']     ;
+      $_SESSION['horaInicio']  = $confirma['inicio']     ;
+      $_SESSION['horaFinali']  = $confirma['fim']        ;
+      $_SESSION['qtdeReal']    = $confirma['qtdeProd']   ;
+      $_SESSION['nLoteProd']   = $confirma['nLotePF']    ;
 
-      // registra processamento do pedido
-      $registra = $connDB->prepare("INSERT INTO producao (NUMERO_PEDIDO, DATA_FABRICACAO, NOME_PRODUTO, QTDE_PRODUZIDA, PLANTA, HORA_INICIO, HORA_FIM, NUMERO_LOTE_PF, SITUACAO_QUALI)
-                                           VALUES (:numPedido, :dataFabri, :nomeProduto, :qtdeProd, :planta, :horaIni, :horaFim, :nLotePF, :situacao)");
-      $registra->bindParam(':numPedido'  , $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);
-      $registra->bindParam(':dataFabri'  , $dataFabri                 , PDO::PARAM_STR);
-      $registra->bindParam(':nomeProduto', $rowPedido['NOME_PRODUTO'] , PDO::PARAM_STR);
-      $registra->bindParam(':qtdeProd'   , $confirma['qtdeProd']      , PDO::PARAM_INT);
-      $registra->bindParam(':planta'     , $confirma['planta']        , PDO::PARAM_STR);
-      $registra->bindParam(':horaIni'    , $confirma['inicio']        , PDO::PARAM_STR);
-      $registra->bindParam(':horaFim'    , $confirma['fim']           , PDO::PARAM_STR);
-      $registra->bindParam(':nLotePF'    , $confirma['nLotePF']       , PDO::PARAM_STR);
-      $registra->bindParam(':situacao'   , $situacao                  , PDO::PARAM_STR);
-      $registra->execute();
-
-      // atualiza dados do pedido
-      $etapa = 2;
-      $atualizaPedido = $connDB->prepare("UPDATE pf_pedido SET ETAPA_PROD = :etapa, DATA_FABRI = :dataFabri, SITUACAO_QUALI = :situacao, NUMERO_LOTE_PF = :nLotePF,
-                                                                      N_LOTE_SEQ = :nLoteSeq, N_LOTE_MES = :nLoteMes, N_LOTE_ANO = :nLoteAno, REGISTRO_PRODUCAO = :responsavel
-                                                                  WHERE NUMERO_PEDIDO = :numPedido ");
-      $atualizaPedido->bindParam(':etapa'      , $etapa                     , PDO::PARAM_INT);
-      $atualizaPedido->bindParam(':dataFabri'  , $dataFabri                 , PDO::PARAM_STR);
-      $atualizaPedido->bindParam(':situacao'   , $situacao                  , PDO::PARAM_STR);
-      $atualizaPedido->bindParam(':nLotePF'    , $confirma['nLotePF']       , PDO::PARAM_STR);
-      $atualizaPedido->bindParam(':nLoteSeq'   , $seqAtual                  , PDO::PARAM_STR);
-      $atualizaPedido->bindParam(':nLoteMes'   , $mesAtual                  , PDO::PARAM_STR);
-      $atualizaPedido->bindParam(':nLoteAno'   , $anoAtual                  , PDO::PARAM_STR);
-      $atualizaPedido->bindParam(':responsavel', $_SESSION['nome_func']     , PDO::PARAM_STR);
-      $atualizaPedido->bindParam(':numPedido'  , $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_STR);
-      $atualizaPedido->execute();
-      
-      // atualiza estoque de materiais
-      $j = 1;
-      $listaMat = $connDB->prepare("SELECT * FROM pf_tabela WHERE NOME_PRODUTO = :nomeProduto");
-      $listaMat->bindParam(':nomeProduto', $rowPedido['NOME_PRODUTO'], PDO::PARAM_STR);
-      $listaMat->execute(); $nComponentes = $listaMat->rowCount();
-      while($rowMat = $listaMat->fetch(PDO::FETCH_ASSOC)){
-        $i = 1;
-        $loteMat = $connDB->prepare("SELECT * FROM mp_estoque WHERE DESCRICAO_MP = :descrMat");
-        $loteMat->bindParam(':descrMat', $rowMat['DESCRICAO_MP'], PDO::PARAM_STR);
-        $loteMat->execute(); $nLoteMat = $loteMat->rowCount(); $qtdeMat = $rowPedido['QTDE_LOTE_PF'] * ($rowMat['PROPORCAO_MATERIAL'] / 100);
-        while($rowLote = $loteMat->fetch(PDO::FETCH_ASSOC)){ 
-          $idComp = $idLote[$j][$i];
-          $qUse   = $campo[$j][$i];
-          if($idComp == $rowLote['NUMERO_LOTE_INTERNO']){
-            $atual  = $rowLote['QTDE_ESTOQUE'] - $confirma[$qUse];
-            $retira = $rowLote['QTDE_RESERVADA'] - $confirma[$qUse];
-            if($retira < 0){
-              $retira = 0;
-            }
-            $atualizaEstoque = $connDB->prepare("UPDATE mp_estoque SET QTDE_ESTOQUE = :estoque, QTDE_RESERVADA = :reserva WHERE NUMERO_LOTE_INTERNO = :nLoteI ");
-            $atualizaEstoque->bindParam(':estoque', $atual , PDO::PARAM_STR);
-            $atualizaEstoque->bindParam(':reserva', $retira, PDO::PARAM_STR);
-            $atualizaEstoque->bindParam(':nLoteI' , $idComp, PDO::PARAM_STR);
-            $atualizaEstoque->execute();
-          }
-          $i = $i +1;
-        }
-        $j = $j + 1;
-      }
-      header('Location: ./03SeletorProducao.php');         
+      header('Location: ./38ProcessaPedido.php');
     } ?>
   </div><!-- fim da container fluid -->
 </div><!-- fim da main -->
