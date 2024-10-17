@@ -37,7 +37,12 @@ include_once './RastreadorAtividades.php';
         </div><?php
         $dadosPedido = $connDB->prepare("SELECT * FROM pedidos WHERE NUMERO_PEDIDO = :idPed");
         $dadosPedido->bindParam(':idPed', $_GET['id'], PDO::PARAM_INT);
-        $dadosPedido->execute(); $rowPedido = $dadosPedido->fetch(PDO::FETCH_ASSOC); ?>
+        $dadosPedido->execute(); $rowPedido = $dadosPedido->fetch(PDO::FETCH_ASSOC);
+        
+        $dadosProduto = $connDB->prepare("SELECT * FROM produtos WHERE PRODUTO = :produto");
+        $dadosProduto->bindParam(':produto', $rowPedido['PRODUTO'], PDO::PARAM_STR); 
+        $dadosProduto->execute(); $rowProduto = $dadosProduto->fetch(PDO::FETCH_ASSOC); $tempoFabri = $rowPedido['QTDE_PEDIDO'] / $rowProduto['CAPAC_PROCESS'];
+        ?>
         <div class="col-md-2">
           <div class="form-floating mb-2">
             <input type="text" class="form-control" id="dataPedido" name="dataPedido" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
@@ -65,7 +70,7 @@ include_once './RastreadorAtividades.php';
         <div class="col-md-3"></div>
         <div class="col-md-2">
           <div class="form-floating mb-2">
-            <input type="text" class="form-control" id="qtdeLote" name="qtdePedido" style="font-weight: bolder; background: rgba(0,0,0,0.3); text-align: center;color: yellow" 
+            <input type="text" class="form-control" id="qtdePedido" name="qtdePedido" style="font-weight: bolder; background: rgba(0,0,0,0.3); text-align: center;color: yellow" 
               value="<?php echo number_format($rowPedido['QTDE_PEDIDO'], 0, ',', '.') . ' ' . $rowPedido['UNIDADE'] ?>" readonly>
             <label for="qtdePedido" style="color: aqua; font-size: 12px; background: none">Quantidade do Pedido</label>
             <p style="font-size: 11px; color: grey"></p>
@@ -134,14 +139,14 @@ include_once './RastreadorAtividades.php';
         <div class="col-md-2">
           <div class="form-floating mb-2">
             <input type="text" class="form-control" id="fim" name="fim" style="font-weight: bolder; background: rgba(0,0,0,0.3); text-align:center" 
-              value="<?php echo date('H:i') ?>" required>
+              value="<?php echo date('H:i', strtotime("+ $tempoFabri hours")) ?>" required>
             <label for="fim" style="color: aqua; font-size: 12px; background: none">Encerramento</label>
-            <p style="font-size: 11px; color: grey">Inserir hora</p>
+            <p style="font-size: 11px; color: grey">Inserir hora <?php echo $tempoFabri ?></p>
           </div>
         </div>
         <div class="col-md-2">
           <div class="form-floating mb-2">
-            <input type="number" class="form-control" id="qtdeProd" name="qtdeProd" style="font-weight: bolder; background: rgba(0,0,0,0.3); text-align:center" 
+            <input type="number" class="form-control" id="qtdeReal" name="qtdeReal" style="font-weight: bolder; background: rgba(0,0,0,0.3); text-align:center" 
               value="" required>
             <label for="fim" style="color: aqua; font-size: 12px; background: none">Quantidade Produzida</label>
             <p style="font-size: 11px; color: grey">Inserir a quantidade gerada</p>
@@ -170,18 +175,14 @@ include_once './RastreadorAtividades.php';
     </form> <?php
     $confirma = filter_input_array(INPUT_POST, FILTER_DEFAULT);
     if(!empty($confirma['confirma'])){
-      $_SESSION['dataPedido']  = date('Y-m-d', strtotime($confirma['dataPedido'])) ;
-      $_SESSION['numPedido']   = $confirma['numPedido']  ;
-      $_SESSION['nomeProduto'] = $confirma['nomeProduto'];
-      $_SESSION['qtdePedido']  = $confirma['qtdePedido'] ;
-      $_SESSION['unidade']     = $rowPedido['UNIDADE']   ;
-      $_SESSION['cliente']     = $confirma['cliente']    ;
-      $_SESSION['dataFabri']   = $confirma['dataFabri']  ;
-      $_SESSION['planta']      = $confirma['planta']     ;
-      $_SESSION['horaInicio']  = $confirma['inicio']     ;
-      $_SESSION['horaFinali']  = $confirma['fim']        ;
-      $_SESSION['qtdeReal']    = $confirma['qtdeProd']   ;
-      $_SESSION['nLoteProd']   = $confirma['nLotePF']    ;
+      $_SESSION['dataFabri']  = $confirma['dataFabri']  ;
+      $_SESSION['planta']     = $confirma['planta']     ;
+      $_SESSION['horaInicio'] = $confirma['inicio']     ;
+      $_SESSION['horaFinali'] = $confirma['fim']        ;
+      $_SESSION['qtdeReal']   = $confirma['qtdeReal']   ;
+      $_SESSION['nLoteProd']  = $confirma['nLotePF']    ;
+      $_SESSION['idPedido']   = $_GET['id']             ;
+      $_SESSION['idProd']     = $rowPedido['ID_PRODUTO'];
 
       header('Location: ./38ProcessaPedido.php');
     } ?>
