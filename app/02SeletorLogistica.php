@@ -63,25 +63,25 @@ include_once './RastreadorAtividades.php';
                   <div class="card-body">
                     <div class="row g-1">
                       <div class="col-md-12">
-                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Descrição do Material</span>
-                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none;"
+                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 11px; background: rgba(0,0,0,0.3); color: aqua">Descrição do Material</span>
+                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
                                  value="<?php echo $rowMat['DESCRICAO']?>" readonly>
                         </div>
                       </div>
                       <div class="col-md-6">
-                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Quantidade da Compra</span>
-                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none;"
-                                 value="<?php echo $rowMat['QTDE_PEDIDO'] . ' ' . $rowMat['UNIDADE']  ?>" readonly>
+                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 11px; background: rgba(0,0,0,0.3); color: aqua">Quantidade da Compra</span>
+                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
+                                 value="<?php echo number_format($rowMat['QTDE_PEDIDO'], 0, ',', '.') . ' ' . $rowMat['UNIDADE']  ?>" readonly>
                         </div>
                       </div>
                       <div class="col-md-6">
-                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Data Prevista</span>
-                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none;"
+                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 11px; background: rgba(0,0,0,0.3); color: aqua">Data Prevista</span>
+                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
                                  value="<?php echo date('d/m/Y', strtotime($rowMat['DATA_PRAZO'])) ?>" readonly>
                         </div>
                       </div>
                       <div class="col-md-12">
-                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
+                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 11px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
                           <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none; color: orange;"
                                  value="<?php echo $rowMat['SITUACAO']?>" readonly>
                         </div>
@@ -108,31 +108,31 @@ include_once './RastreadorAtividades.php';
                   <div class="card-body">
                     <div class="row g-1">
                       <div class="col-md-8">
-                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Produto</span>
-                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none;"
+                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 11px; background: rgba(0,0,0,0.3); color: aqua">Produto</span>
+                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
                                  value="<?php echo $rowPedido['PRODUTO']; ?>" readonly>
                         </div>
                       </div>
                       <div class="col-md-4">
-                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Quantidade</span>
-                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: center; background: none;"
-                                 value="<?php echo $rowPedido['QTDE_PEDIDO'] . ' ' . $rowPedido['UNIDADE']; ?>" readonly>
+                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 11px; background: rgba(0,0,0,0.3); color: aqua">Qtde</span>
+                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; text-align: center; background: none;"
+                                 value="<?php echo number_format($rowPedido['QTDE_PEDIDO'], 0, ',', '.') . ' ' . $rowPedido['UNIDADE']; ?>" readonly>
                         </div>
                       </div>
                       <div class="col-md-8">
-                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Cliente</span>
-                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; background: none;"
+                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 11px; background: rgba(0,0,0,0.3); color: aqua">Cliente</span>
+                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
                                  value="<?php echo $rowPedido['CLIENTE']; ?>" readonly>
                         </div>
                       </div>
                       <div class="col-md-4">
-                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Entrega</span>
-                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: center; background: none;"
+                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 11px; background: rgba(0,0,0,0.3); color: aqua">Entrega</span>
+                          <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; text-align: center; background: none;"
                                  value="<?php echo date('d/m/Y', strtotime($rowPedido['DATA_ENTREGA'])); ?>" readonly>
                         </div>
                       </div>
                       <div class="col-md-12">
-                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
+                        <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 11px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
                           <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none; color:orange"
                                  value="<?php echo $rowPedido['SITUACAO']; ?>" readonly>
                         </div>

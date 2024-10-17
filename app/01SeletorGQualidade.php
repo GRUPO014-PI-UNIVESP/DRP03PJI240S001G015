@@ -56,6 +56,12 @@
                 $materiais = $connDB->prepare("SELECT * FROM materiais_lotes WHERE ETAPA_PROCESS = 2");
                 $materiais->execute();
                 while($rowMat = $materiais->fetch(PDO::FETCH_ASSOC)){
+                  $verificaUso = $connDB->prepare("SELECT MIN(NUMERO_PEDIDO) AS N_PED FROM materiais_reserva WHERE ID_ESTOQUE = :idEstoque");
+                  $verificaUso->bindParam(':idEstoque', $rowMat['ID_ESTOQUE'], PDO::PARAM_INT);
+                  $verificaUso->execute(); $numPedido = $verificaUso->fetch(PDO::FETCH_ASSOC);
+                  $verificaPed = $connDB->prepare("SELECT DATA_AGENDA FROM pedidos WHERE NUMERO_PEDIDO = :numPedido");
+                  $verificaPed->bindParam(':numPedido', $numPedido['N_PED']);
+                  $verificaPed->execute(); $dataAgenda = $verificaPed->fetch(PDO::FETCH_ASSOC);
                   $id = $rowMat['ID_ESTOQUE']; ?>
                   <div class="card text-bg-success mb-2" style="width: 45rem;">
                     <div class="card-body">
@@ -75,13 +81,13 @@
                         <div class="col-md-4">
                           <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Qtde</span>
                             <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
-                                value="<?php echo $rowMat['QTDE_LOTE'] . ' ' . $rowMat['UNIDADE'] ?>" readonly>
+                                value="<?php echo number_format($rowMat['QTDE_LOTE'], 0, ',', '.') . ' ' . $rowMat['UNIDADE'] ?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-4">
                           <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Limite</span>
                             <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
-                                value="<?php echo date('d/m/Y', strtotime($rowMat['DATA_FABRI'])) ?>" readonly>
+                                value="<?php echo date('d/m/Y', strtotime($dataAgenda['DATA_AGENDA']."- 2 days")) ?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-12">
@@ -126,7 +132,7 @@
                         <div class="col-md-4">
                           <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Qtde</span>
                             <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
-                                value="<?php echo $rowPedido['QTDE_PEDIDO'] . ' ' . $rowPedido['UNIDADE'] ?>" readonly>
+                                value="<?php echo number_format($rowPedido['QTDE_PEDIDO'], 0, ',', '.') . ' ' . $rowPedido['UNIDADE'] ?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-4">

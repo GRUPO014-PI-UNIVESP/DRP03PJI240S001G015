@@ -200,42 +200,60 @@ include_once './RastreadorAtividades.php';
                           <input style="width: 120px; height: 36px; font-size:18px; text-align: center; font-weight: bolder; background: rgba(0,0,0,0.3)" type="text" id="uso" name="uso" 
                                  value="<?php echo number_format($qtdeUso, 0, ',', '.') ?>" required autofocus>
                         </td>
-                        <td>
+                        <td><?php echo $qtdeUso . '<br>' . $qtdeNecessaria . '<br>' . ($qtdeNecessaria - $qtdeUso) ?>
                           <input class="btn btn-outline-primary" type="submit" id="usa" name="usa" value="Confirma">
                         </td>
                       </form><?php
                       $atualiza = filter_input_array(INPUT_POST, FILTER_DEFAULT);
                       if(!empty($atualiza['usa'])){
-                        $qtdeNecessaria = $rowMat['QTDE_RESERVA'] - $qtdeUso;
+                        $qtdeNecessaria = $rowLote['QTDE_LOTE'] - $qtdeUso;
+                        // atualiza a quantidade do lote usado e altera situação
+                        /*
                         $ajusteLote = $connDB->prepare("UPDATE materiais_lotes SET QTDE_LOTE = :qtdeUso, ETAPA_PROCESS = :etapa WHERE ID_INTERNO = :idLote");
-                        $ajusteLote->bindParam(':qtdeUso', $qtdeUso              , PDO::PARAM_STR);
+                        $ajusteLote->bindParam(':qtdeUso', $qtdeNecessaria       , PDO::PARAM_STR);
                         $ajusteLote->bindParam(':etapa'  , $etapa                , PDO::PARAM_STR);
                         $ajusteLote->bindParam(':idLote' , $rowLote['ID_INTERNO'], PDO::PARAM_STR);
                         $ajusteLote->execute();
-
+                        // busca a quantidade em estoque para calcular uso
+                        $verificaEstoque = $connDB->prepare("SELECT QTDE_ESTOQUE FROM materiais_estoque WHERE ID_ESTOQUE = :idEstoque");
+                        $verificaEstoque->bindParam(':idEstoque', $rowMat['ID_ESTOQUE'], PDO::PARAM_INT);
+                        $verificaEstoque->execute(); $qStk = $verificaEstoque->fetch(PDO::FETCH_ASSOC);
+                        $sobra = $qStk['QTDE_ESTOQUE'] - $qtdeUso;
+                        // atualiza quantidade em estoque do material 
                         $ajustaEstoque = $connDB->prepare("UPDATE materiais_estoque SET QTDE_ESTOQUE = :qtdeEstoque WHERE ID_ESTOQUE = :idEstoque");
-                        $ajustaEstoque->bindParam(':qtdeEstoque', $qtdeNecessaria      , PDO::PARAM_STR);
+                        $ajustaEstoque->bindParam(':qtdeEstoque', $sobra               , PDO::PARAM_STR);
                         $ajustaEstoque->bindParam(':idEstoque'  , $rowMat['ID_ESTOQUE'], PDO::PARAM_INT);
                         $ajustaEstoque->execute();
-
+                        // registra dados da fabricação do produto com lote do material usado n vezes necessário
                         $regProd = $connDB->prepare("INSERT INTO producao (ID_PRODUTO, NUMERO_LOTE, ID_MATERIAL, MATERIAL_COMPONENTE, QTDE_UTILIZADA, NLPSEQ, NLPMES, NLPANO, DATA_FABRI, DATA_VALI, ENCARREGADO_PRODUCAO, RESPONSAVEL) 
                                                             VALUES (:idProd, :numLote, :idMat, :matComp, :qtdeUtil, :nlpSeq, :nlpMes, :nlpAno, :dataFabri, :dataVali, :colaborador, :responsavel)");
                         $regProd->bindParam(':idProd'     , $_SESSION['idProd']     , PDO::PARAM_INT);
-                        $regProd->bindParam(':numLote'    , $_SESSION['nLoteProd']  , PDO::PARAM_INT);
-                        $regProd->bindParam(':idMat'      , $rowLote['ID_INTERNO']  , PDO::PARAM_INT);
-                        $regProd->bindParam(':matComp'    , $rowLote['DESCRICAO']   , PDO::PARAM_INT);
-                        $regProd->bindParam(':qtdeUtil'   , $qtdeUso                , PDO::PARAM_INT);
+                        $regProd->bindParam(':numLote'    , $_SESSION['nLoteProd']  , PDO::PARAM_STR);
+                        $regProd->bindParam(':idMat'      , $rowLote['ID_INTERNO']  , PDO::PARAM_STR);
+                        $regProd->bindParam(':matComp'    , $rowLote['DESCRICAO']   , PDO::PARAM_STR);
+                        $regProd->bindParam(':qtdeUtil'   , $qtdeUso                , PDO::PARAM_STR);
                         $regProd->bindParam(':nlpSeq'     , $seqAtual               , PDO::PARAM_INT);
                         $regProd->bindParam(':nlpMes'     , $mesAtual               , PDO::PARAM_INT);
                         $regProd->bindParam(':nlpAno'     , $anoAtual               , PDO::PARAM_INT);
-                        $regProd->bindParam(':dataFabri'  , $_SESSION['dataFabri']  , PDO::PARAM_INT);
-                        $regProd->bindParam(':dataVali'   , $_SESSION['dataFabri']  , PDO::PARAM_INT);
-                        $regProd->bindParam(':colaborador', $_SESSION['colaborador'], PDO::PARAM_INT);
-                        $regProd->bindParam(':responsavel', $_SESSION['nome_func']  , PDO::PARAM_INT);
-                        $regProd->execute(); 
+                        $regProd->bindParam(':dataFabri'  , $_SESSION['dataFabri']  , PDO::PARAM_STR);
+                        $regProd->bindParam(':dataVali'   , $_SESSION['dataFabri']  , PDO::PARAM_STR);
+                        $regProd->bindParam(':colaborador', $_SESSION['colaborador'], PDO::PARAM_STR);
+                        $regProd->bindParam(':responsavel', $_SESSION['nome_func']  , PDO::PARAM_STR);
+                        $regProd->execute(); */ ?>                       
+                        <td>
+                          <div class="alert alert-success" role="alert">
+                            Executado!
+                          </div>  
+                        </td> <?php
                       }
                     }
                   }
+                  //retira a reserva de material necessario
+                  /*
+                  $retiraReserva = $connDB->prepare("DELETE FROM materiais_reserva WHERE NUMERO_PEDIDO = :numPedido");
+                  $retiraReserva->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);
+                  $retiraReserva->execute();
+                  */
                 } ?>                 
               </tr>
             </tbody>           
@@ -246,17 +264,35 @@ include_once './RastreadorAtividades.php';
             Materiais processados com sucesso!
           </div>
         </div>
-        <div class="col-md-2">
-          <div class="form-floating mb-3"><br>
-            <input class="btn btn-primary" type="submit" id="confirma" name="confirma" value="Confirmar" style="font-size:18px; width: 160px">
+        <form method="POST">
+          <div class="col-md-2">
+            <div class="form-floating mb-3"><br>
+              <input class="btn btn-primary" type="submit" id="confirma" name="confirma" value="Confirmar" style="font-size:18px; width: 160px">
+            </div>
           </div>
-        </div>
-        <div class="col-md-2">
-          <div class="form-floating mb-3"><br>
-            <input class="btn btn-danger" type="reset" id="descarta" name="descarta" value="Descartar" style="font-size:18px; width: 160px" onclick="location.href='./03SeletorProducao.php'">
+          <div class="col-md-2">
+            <div class="form-floating mb-3"><br>
+              <input class="btn btn-danger" type="reset" id="descarta" name="descarta" value="Descartar" style="font-size:18px; width: 160px" onclick="location.href='./03SeletorProducao.php'">
+            </div>
           </div>
-        </div>  
+        </form><?php
+        $confirma = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+        if(!empty($confirma['confirma'])){ $etapaPedido = 2; $situacaoPedido = 'PROCESSAMENTO CONCLUÍDO, AGUARDANDO ANÁLISE.';
+          //deleta pedido da fila de ocupação da planta
+          /*
+          $retiraFila = $connDB->prepare("DELETE FROM fila_ocupacao WHERE NUMERO_PEDIDO = :numPedido");
+          $retiraFila->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);
+          $retiraFila->execute();
+          //atualiza situação do pedido
+          $pedidoAtual = $connDB->prepare("UPDATE pedidos SET ETAPA_PROCESS = :etapa, SITUACAO = :situacao WHERE NUMERO_PEDIDO = :numPedido");
+          $pedidoAtual->bindParam(':etapa'    , $etapaPedido               , PDO::PARAM_INT);
+          $pedidoAtual->bindParam(':situacao' , $situacaoPedido            , PDO::PARAM_STR);
+          $pedidoAtual->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);
+          $pedidoAtual->execute();
+          */
+          header('Location: ./03SeletorProducao.php');
+
+        } ?>
       </div><!-- fim da row g2 -->
- 
   </div><!-- fim da container fluid -->
 </div><!-- fim da main -->
