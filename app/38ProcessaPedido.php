@@ -178,7 +178,7 @@ include_once './RastreadorAtividades.php';
                   $query_lote->bindParam(':idEstoque', $rowMat['ID_ESTOQUE'], PDO::PARAM_INT);
                   $query_lote->execute(); $nLotes = $query_lote->rowCount(); $qtdeNecessaria = $rowMat['QTDE_RESERVA'];
 
-                  while($qtdeNecessaria > 0){
+                  if($qtdeNecessaria > 0){
                     while($rowLote = $query_lote->fetch(PDO::FETCH_ASSOC)){ ?>
 
                       <td scope="col" style="width: 10%; color: yellow; font-weight: bolder">
@@ -193,10 +193,10 @@ include_once './RastreadorAtividades.php';
                         <?php echo number_format($rowLote['QTDE_LOTE'], 0, ',', '.') . ' ' . $rowLote['UNIDADE'] ?>
                       </td>
 
-                      <form method="POST"></form>
+                      <form method="POST">
                         <td scope="col" style="width: 10%; text-align:center; color: whitesmoke"><?php
-                          if($rowMat['QTDE_RESERVA'] > $rowLote['QTDE_LOTE']){ $qtdeUso = $rowLote['QTDE_LOTE'];}
-                          if($rowMat['QTDE_RESERVA'] < $rowLote['QTDE_LOTE']){ $qtdeUso = $rowMat['QTDE_RESERVA'];} ?>
+                          if($qtdeNecessaria > $rowLote['QTDE_LOTE']){ $qtdeUso = $rowLote['QTDE_LOTE']; $etapa = 4;}
+                          if($qtdeNecessaria < $rowLote['QTDE_LOTE']){ $qtdeUso = $qtdeNecessaria; $etapa = 3;} ?>
                           <input style="width: 120px; height: 36px; font-size:18px; text-align: center; font-weight: bolder; background: rgba(0,0,0,0.3)" type="text" id="uso" name="uso" 
                                  value="<?php echo number_format($qtdeUso, 0, ',', '.') ?>" required autofocus>
                         </td>
@@ -207,13 +207,19 @@ include_once './RastreadorAtividades.php';
                       $atualiza = filter_input_array(INPUT_POST, FILTER_DEFAULT);
                       if(!empty($atualiza['usa'])){
                         $qtdeNecessaria = $rowMat['QTDE_RESERVA'] - $qtdeUso;
-                        $ajustaLote = $connDB->prepare("UPDATE materiais_lotes SET QTDE_LOTE = :qtdeUso WHERE ID_INTERNO = :idLote");
+                        $ajusteLote = $connDB->prepare("UPDATE materiais_lotes SET QTDE_LOTE = :qtdeUso, ETAPA_PROCESS = :etapa WHERE ID_INTERNO = :idLote");
                         $ajusteLote->bindParam(':qtdeUso', $qtdeUso              , PDO::PARAM_STR);
+                        $ajusteLote->bindParam(':etapa'  , $etapa                , PDO::PARAM_STR);
                         $ajusteLote->bindParam(':idLote' , $rowLote['ID_INTERNO'], PDO::PARAM_STR);
                         $ajusteLote->execute();
 
+                        $ajustaEstoque = $connDB->prepare("UPDATE materiais_estoque SET QTDE_ESTOQUE = :qtdeEstoque WHERE ID_ESTOQUE = :idEstoque");
+                        $ajustaEstoque->bindParam(':qtdeEstoque', $qtdeNecessaria      , PDO::PARAM_STR);
+                        $ajustaEstoque->bindParam(':idEstoque'  , $rowMat['ID_ESTOQUE'], PDO::PARAM_INT);
+                        $ajustaEstoque->execute();
+
                         $regProd = $connDB->prepare("INSERT INTO producao (ID_PRODUTO, NUMERO_LOTE, ID_MATERIAL, MATERIAL_COMPONENTE, QTDE_UTILIZADA, NLPSEQ, NLPMES, NLPANO, DATA_FABRI, DATA_VALI, ENCARREGADO_PRODUCAO, RESPONSAVEL) 
-                                                            VALUES (:idProd, :numLote, :idMat, :matComp, :qtdeUtil, :nlpSeq, :nlpMes, :nlpAno, :dataFabri, :dataVali, :encarregado, :responsavel)");
+                                                            VALUES (:idProd, :numLote, :idMat, :matComp, :qtdeUtil, :nlpSeq, :nlpMes, :nlpAno, :dataFabri, :dataVali, :colaborador, :responsavel)");
                         $regProd->bindParam(':idProd'     , $_SESSION['idProd']     , PDO::PARAM_INT);
                         $regProd->bindParam(':numLote'    , $_SESSION['nLoteProd']  , PDO::PARAM_INT);
                         $regProd->bindParam(':idMat'      , $rowLote['ID_INTERNO']  , PDO::PARAM_INT);
@@ -224,11 +230,10 @@ include_once './RastreadorAtividades.php';
                         $regProd->bindParam(':nlpAno'     , $anoAtual               , PDO::PARAM_INT);
                         $regProd->bindParam(':dataFabri'  , $_SESSION['dataFabri']  , PDO::PARAM_INT);
                         $regProd->bindParam(':dataVali'   , $_SESSION['dataFabri']  , PDO::PARAM_INT);
-                        $regProd->bindParam(':encarregado', $_SESSION['encarregado'], PDO::PARAM_INT);
+                        $regProd->bindParam(':colaborador', $_SESSION['colaborador'], PDO::PARAM_INT);
                         $regProd->bindParam(':responsavel', $_SESSION['nome_func']  , PDO::PARAM_INT);
-                        $regProd->execute();
-
-                      } 
+                        $regProd->execute(); 
+                      }
                     }
                   }
                 } ?>                 
@@ -236,7 +241,11 @@ include_once './RastreadorAtividades.php';
             </tbody>           
           </table>
         </div>
-
+        <div class="col-md-12">
+          <div class="alert alert-success" role="alert">
+            Materiais processados com sucesso!
+          </div>
+        </div>
         <div class="col-md-2">
           <div class="form-floating mb-3"><br>
             <input class="btn btn-primary" type="submit" id="confirma" name="confirma" value="Confirmar" style="font-size:18px; width: 160px">

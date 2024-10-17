@@ -34,7 +34,7 @@ include_once './RastreadorAtividades.php';
         <div class="col-md-12"><br>
           <h5>Registro de Execução de Fabricação</h5><br>
           <h6 style="color:aqua">Informações do Pedido</h6>
-        </div><?php
+        </div><?php $idPedido = $_GET['id'];
         $dadosPedido = $connDB->prepare("SELECT * FROM pedidos WHERE NUMERO_PEDIDO = :idPed");
         $dadosPedido->bindParam(':idPed', $_GET['id'], PDO::PARAM_INT);
         $dadosPedido->execute(); $rowPedido = $dadosPedido->fetch(PDO::FETCH_ASSOC);
@@ -160,7 +160,21 @@ include_once './RastreadorAtividades.php';
             <p style="font-size: 11px; color: grey">Gerado automaticamente</p>
           </div>
         </div>
-        <div class="col-md-4"></div>
+        <div class="col-md-7">
+          <div class="form-floating"><?php
+            $depto = 'PRODUÇÃO';
+            $query_analista = $connDB->prepare("SELECT NOME_FUNCIONARIO FROM quadro_funcionarios WHERE DEPARTAMENTO = :depto");
+            $query_analista->bindParam(':depto', $depto, PDO::PARAM_STR);
+            $query_analista->execute(); ?>
+            <select class="form-select" id="colaborador" name="colaborador" aria-label="Floating label select example" style="background: rgba(0,0,0,0.3);">
+              <option style="font-size: 14px; color: black; background: rgba(0,0,0,0.3)" selected>Selecione o nome do colaborador</option><?php
+                while($rowAna = $query_analista->fetch(PDO::FETCH_ASSOC)){ ?>
+                  <option style="font-size: 14px; color: black; background: rgba(0,0,0,0.3)"><?php echo $rowAna['NOME_FUNCIONARIO']; ?></option><?php 
+                } ?>
+            </select>
+            <label for="colaborador" style="font-size: 12px; color:aqua">Colaborador Encarregado</label>
+          </div>
+        </div>
         <div class="col-md-2">
           <div class="form-floating mb-3"><br>
             <input class="btn btn-primary" type="submit" id="confirma" name="confirma" value="Confirmar" style="font-size:18px; width: 160px">
@@ -175,14 +189,15 @@ include_once './RastreadorAtividades.php';
     </form> <?php
     $confirma = filter_input_array(INPUT_POST, FILTER_DEFAULT);
     if(!empty($confirma['confirma'])){
-      $_SESSION['dataFabri']  = $confirma['dataFabri']  ;
-      $_SESSION['planta']     = $confirma['planta']     ;
-      $_SESSION['horaInicio'] = $confirma['inicio']     ;
-      $_SESSION['horaFinali'] = $confirma['fim']        ;
-      $_SESSION['qtdeReal']   = $confirma['qtdeReal']   ;
-      $_SESSION['nLoteProd']  = $confirma['nLotePF']    ;
-      $_SESSION['idPedido']   = $_GET['id']             ;
-      $_SESSION['idProd']     = $rowPedido['ID_PRODUTO'];
+      $_SESSION['dataFabri']   = $confirma['dataFabri']  ;
+      $_SESSION['planta']      = $confirma['planta']     ;
+      $_SESSION['horaInicio']  = $confirma['inicio']     ;
+      $_SESSION['horaFinali']  = $confirma['fim']        ;
+      $_SESSION['qtdeReal']    = $confirma['qtdeReal']   ;
+      $_SESSION['nLoteProd']   = $confirma['nLotePF']    ;
+      $_SESSION['idPedido']    = $idPedido               ;
+      $_SESSION['idProd']      = $rowPedido['ID_PRODUTO'];
+      $_SESSION['colaborador'] = $confirma['colaborador'];
 
       header('Location: ./38ProcessaPedido.php');
     } ?>
