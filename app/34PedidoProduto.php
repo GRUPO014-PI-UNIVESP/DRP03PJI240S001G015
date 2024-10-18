@@ -45,7 +45,7 @@
       <div class="col-md-2">
         <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Quantidade do Pedido</label>
         <input style="font-size: 16px; color:yellow; text-align:right; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="" name="" 
-        value="<?php echo $_SESSION['qtdeLote'] . ' ' . $rowProduto['UNIDADE'] ?>" readonly>
+        value="<?php echo number_format($_SESSION['qtdeLote'], 0,  ',', '.') . ' ' . $rowProduto['UNIDADE'] ?>" readonly>
       </div>
       <div class="col-md-8">
         <label for="" class="form-label" style="font-size: 10px; color:aqua">Produto</label>
@@ -86,7 +86,7 @@
 
                 <td scope="col" style="width: 10%; text-align: center; font-size: 18px; color: yellow"> <?php
                   $qtdeMaterial = $qtdeLote * ($rowLista['PROPORCAO'] / 100);
-                  echo $qtdeMaterial . ' ' . $rowLista['UNIDADE']; ?>
+                  echo number_format($qtdeMaterial, 0, ',', '.') . ' ' . $rowLista['UNIDADE']; ?>
                 </td>
 
                 <td scope="col" style="width: 10%; text-align: center; font-size: 18px; color:yellow"> <?php
@@ -99,7 +99,7 @@
                   $query_reserva->execute(); $resultReserva = $query_reserva->fetch(PDO::FETCH_ASSOC);
 
                   $qtdeDisponivel = $resultEstoque['TOTAL_ESTOQUE'] - $resultReserva['TOTAL_RESERVA'];
-                  echo $qtdeDisponivel . ' ' . $rowLista['UNIDADE']; ?>
+                  echo number_format($qtdeDisponivel, 0, ',', '.') . ' ' . $rowLista['UNIDADE']; ?>
                 </td> <?php
                   if($qtdeDisponivel >= $qtdeMaterial){
                     $barra = 'alert alert-success';
@@ -270,7 +270,7 @@
           </div>
           <div class="col-md-8">
             <label for="cliente" class="form-label" style="font-size: 10px; color:aqua">Nome do Cliente</label>
-            <select style="font-size: 16px;color:yellow; background: rgba(0,0,0,0.3)" class="form-select" id="cliente" name="cliente" required>
+            <select style="font-size: 16px;color:whitesmoke; background: rgba(0,0,0,0.3)" class="form-select" id="cliente" name="cliente" required>
               <option style="font-size: 16px; background: rgba(0,0,0,0.3), color: black" selected>Selecione o Cliente, caso não esteja relacionado será necessário fazer o cadastramento</option><?php
                 //Pesquisa de descrição do PRODUTO para seleção
                 $query_cliente = $connDB->prepare("SELECT DISTINCT NOME_FANTASIA FROM cliente");
@@ -285,7 +285,7 @@
           <div class="col-md-1"></div>
           <div class="col-md-2">
             <label for="dataPrazo" class="form-label" style="font-size: 10px; color:aqua">Data Estimada de Entrega</label>
-            <input style="font-size: 16px; text-align: center; color: yellow" type="text" class="form-control" id="dataPrazo" name="dataPrazo"
+            <input style="font-size: 16px; text-align: center; color: yellow; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="dataPrazo" name="dataPrazo"
                    value="<?php echo date('d/m/Y', strtotime($_SESSION['dataEntrega'])) ?>" readonly>
           </div>
 

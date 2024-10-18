@@ -178,9 +178,9 @@ include_once './RastreadorAtividades.php';
                   $query_lote->bindParam(':idEstoque', $rowMat['ID_ESTOQUE'], PDO::PARAM_INT);
                   $query_lote->execute(); $nLotes = $query_lote->rowCount(); $qtdeNecessaria = $rowMat['QTDE_RESERVA'];
 
-                  if($qtdeNecessaria > 0){
-                    while($rowLote = $query_lote->fetch(PDO::FETCH_ASSOC)){ ?>
-
+                  
+                  while($rowLote = $query_lote->fetch(PDO::FETCH_ASSOC)){
+                    if($qtdeNecessaria > 0){ ?>
                       <td scope="col" style="width: 10%; color: yellow; font-weight: bolder">
                         <?php echo $rowLote['DESCRICAO'] . '<br>' . $rowLote['ID_INTERNO'] ?>
                       </td>
@@ -200,31 +200,15 @@ include_once './RastreadorAtividades.php';
                           <input style="width: 120px; height: 36px; font-size:18px; text-align: center; font-weight: bolder; background: rgba(0,0,0,0.3)" type="text" id="uso" name="uso" 
                                  value="<?php echo number_format($qtdeUso, 0, ',', '.') ?>" required autofocus>
                         </td>
-                        <td><?php echo $qtdeUso . '<br>' . $qtdeNecessaria . '<br>' . ($qtdeNecessaria - $qtdeUso) ?>
+                        <td>
                           <input class="btn btn-outline-primary" type="submit" id="usa" name="usa" value="Confirma">
                         </td>
                       </form><?php
                       $atualiza = filter_input_array(INPUT_POST, FILTER_DEFAULT);
                       if(!empty($atualiza['usa'])){
-                        $qtdeNecessaria = $rowLote['QTDE_LOTE'] - $qtdeUso;
-                        // atualiza a quantidade do lote usado e altera situação
-                        /*
-                        $ajusteLote = $connDB->prepare("UPDATE materiais_lotes SET QTDE_LOTE = :qtdeUso, ETAPA_PROCESS = :etapa WHERE ID_INTERNO = :idLote");
-                        $ajusteLote->bindParam(':qtdeUso', $qtdeNecessaria       , PDO::PARAM_STR);
-                        $ajusteLote->bindParam(':etapa'  , $etapa                , PDO::PARAM_STR);
-                        $ajusteLote->bindParam(':idLote' , $rowLote['ID_INTERNO'], PDO::PARAM_STR);
-                        $ajusteLote->execute();
-                        // busca a quantidade em estoque para calcular uso
-                        $verificaEstoque = $connDB->prepare("SELECT QTDE_ESTOQUE FROM materiais_estoque WHERE ID_ESTOQUE = :idEstoque");
-                        $verificaEstoque->bindParam(':idEstoque', $rowMat['ID_ESTOQUE'], PDO::PARAM_INT);
-                        $verificaEstoque->execute(); $qStk = $verificaEstoque->fetch(PDO::FETCH_ASSOC);
-                        $sobra = $qStk['QTDE_ESTOQUE'] - $qtdeUso;
-                        // atualiza quantidade em estoque do material 
-                        $ajustaEstoque = $connDB->prepare("UPDATE materiais_estoque SET QTDE_ESTOQUE = :qtdeEstoque WHERE ID_ESTOQUE = :idEstoque");
-                        $ajustaEstoque->bindParam(':qtdeEstoque', $sobra               , PDO::PARAM_STR);
-                        $ajustaEstoque->bindParam(':idEstoque'  , $rowMat['ID_ESTOQUE'], PDO::PARAM_INT);
-                        $ajustaEstoque->execute();
+                        $qtdeNecessaria = $qtdeNecessaria - $qtdeUso;
                         // registra dados da fabricação do produto com lote do material usado n vezes necessário
+                        $dataVali = date('Y-m-d', strtotime($_SESSION['dataFabri']."+ 180 days" ));
                         $regProd = $connDB->prepare("INSERT INTO producao (ID_PRODUTO, NUMERO_LOTE, ID_MATERIAL, MATERIAL_COMPONENTE, QTDE_UTILIZADA, NLPSEQ, NLPMES, NLPANO, DATA_FABRI, DATA_VALI, ENCARREGADO_PRODUCAO, RESPONSAVEL) 
                                                             VALUES (:idProd, :numLote, :idMat, :matComp, :qtdeUtil, :nlpSeq, :nlpMes, :nlpAno, :dataFabri, :dataVali, :colaborador, :responsavel)");
                         $regProd->bindParam(':idProd'     , $_SESSION['idProd']     , PDO::PARAM_INT);
@@ -236,10 +220,10 @@ include_once './RastreadorAtividades.php';
                         $regProd->bindParam(':nlpMes'     , $mesAtual               , PDO::PARAM_INT);
                         $regProd->bindParam(':nlpAno'     , $anoAtual               , PDO::PARAM_INT);
                         $regProd->bindParam(':dataFabri'  , $_SESSION['dataFabri']  , PDO::PARAM_STR);
-                        $regProd->bindParam(':dataVali'   , $_SESSION['dataFabri']  , PDO::PARAM_STR);
+                        $regProd->bindParam(':dataVali'   , $dataVali               , PDO::PARAM_STR);
                         $regProd->bindParam(':colaborador', $_SESSION['colaborador'], PDO::PARAM_STR);
                         $regProd->bindParam(':responsavel', $_SESSION['nome_func']  , PDO::PARAM_STR);
-                        $regProd->execute(); */ ?>                       
+                        $regProd->execute(); ?>                       
                         <td>
                           <div class="alert alert-success" role="alert">
                             Executado!
@@ -249,11 +233,9 @@ include_once './RastreadorAtividades.php';
                     }
                   }
                   //retira a reserva de material necessario
-                  /*
                   $retiraReserva = $connDB->prepare("DELETE FROM materiais_reserva WHERE NUMERO_PEDIDO = :numPedido");
                   $retiraReserva->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);
                   $retiraReserva->execute();
-                  */
                 } ?>                 
               </tr>
             </tbody>           

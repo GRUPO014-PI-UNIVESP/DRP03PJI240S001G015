@@ -52,7 +52,7 @@ $responsavel = $_SESSION['nome_func'];
           <div class="col-md-2">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="qtdeLote" name="qtdeLote" style="font-weight: bolder; text-align:right; background: rgba(0,0,0,0.3); color: yellow; text-align: center" 
-                     value="<?php echo $rowMP['QTDE_LOTE'] . ' ' . $rowMP['UNIDADE'] ?>" readonly>
+                     value="<?php echo number_format($rowMP['QTDE_LOTE'], 0, ',', '.') . ' ' . $rowMP['UNIDADE'] ?>" readonly>
               <label for="qtdeLote" style="color: aqua; font-size: 12px; background: none">Quantidade Recebida</label>
               <p style="font-size: 11px; color: grey">Somente consulta</p>
             </div>
@@ -136,7 +136,7 @@ $responsavel = $_SESSION['nome_func'];
               if($rowEstoque['QTDE_ESTOQUE'] > 0){ $estoque = $rowEstoque['QTDE_ESTOQUE']; }
               $atualizado = $estoque + $rowEstoque['QTDE_ESTOQUE']; ?>
               <input type="text" class="form-control" id="estoque" name="estoque" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center" 
-                     value="<?php echo $estoque . ' ' . $rowEstoque['UNIDADE'] ?>" readonly>
+                     value="<?php echo number_format($estoque, 0, ',', '.') . ' ' . $rowEstoque['UNIDADE'] ?>" readonly>
               <label for="estoque" style="color: aqua; font-size: 12px; background: none">Qtde em Estoque</label>
               <p style="font-size: 11px; color: grey">Somente consulta</p>
             </div>
@@ -177,7 +177,7 @@ $responsavel = $_SESSION['nome_func'];
             <div class="form-floating mb-3"><?php
               $estoque = $rowEstoque['QTDE_ESTOQUE'] + $rowMP['QTDE_LOTE']; ?>
               <input type="text" class="form-control" id="atualizado" name="atualizado" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center" 
-                     value="<?php echo $estoque . ' ' . $rowEstoque['UNIDADE'] ?>" readonly>
+                     value="<?php echo number_format($estoque, 0, ',', '.') . ' ' . $rowEstoque['UNIDADE'] ?>" readonly>
               <label for="atualizado" style="color: aqua; font-size: 12px; background: none">Estoque Atualizado</label>
               <p style="font-size: 11px; color: grey">Somente consulta</p>
             </div>
@@ -190,7 +190,7 @@ $responsavel = $_SESSION['nome_func'];
               $rowReserva = $reserva->fetch(PDO::FETCH_ASSOC);
               ?>
               <input type="text" class="form-control" id="reservado" name="reservado" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center" 
-                     value="<?php echo $rowReserva['RESERVA'] . ' ' . $rowReserva['UNIDADE'] ?>" readonly>
+                     value="<?php echo number_format($rowReserva['RESERVA'], 0, ',', '.') . ' ' . $rowReserva['UNIDADE'] ?>" readonly>
               <label for="reservado" style="color: aqua; font-size: 12px; background: none">Quantidade Reservada</label>
               <p style="font-size: 11px; color: grey">Somente consulta</p>
             </div>
