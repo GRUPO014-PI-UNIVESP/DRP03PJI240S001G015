@@ -187,7 +187,7 @@ include_once './RastreadorAtividades.php';
                     </td>
                     <td style="width: 10%; font-size: 15px; text-align: center"><?php
                       if($rowLotes['QTDE_LOTE'] == null){ echo ' - ';}
-                      if($rowLotes['QTDE_LOTE'] > 0){ echo $rowLotes['QTDE_LOTE'] . ' ' . $rowLotes['UNIDADE'];} ?>                   
+                      if($rowLotes['QTDE_LOTE'] > 0){ echo number_format($rowLotes['QTDE_LOTE'], 0, ',', '.') . ' ' . $rowLotes['UNIDADE'];} ?>                   
                     </td>
                     <td style="width: 25%; font-size: 12px"><?php
                       if($rowLotes['QTDE_LOTE'] == null){ echo 'Estoque está vazio';}

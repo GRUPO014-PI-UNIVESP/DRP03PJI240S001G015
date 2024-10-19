@@ -66,7 +66,7 @@
         <div class="col-md-2">
           <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Quantidade Necessária</label>
           <input style="font-weight: bold; font-size: 25px; background: rgba(0,0,0,0.3); text-align: center" type="text" class="form-control" 
-                 id="qtdeLote" name="qtdeLote" value="<?php echo number_format($totalCompra, 0, ',', '.') ?>" autofocus>
+                 id="qtdeLote" name="qtdeLote" value="<?php echo $totalCompra?>" autofocus required>
           <p style="font-size: 13px; color: grey">Aumente a quantidade caso seja necessário</p>
         </div>
         <div class="col-md-2">
@@ -135,11 +135,11 @@
 
       $realiza = $connDB->prepare("INSERT INTO materiais_lotes (ID_ESTOQUE, DESCRICAO, QTDE_LOTE, UNIDADE, ETAPA_PROCESS, SITUACAO)
                                           VALUES (:idEstoque, :descrMat, :qtdeLote, :uniMed, :etapa, :situacao)");
-      $realiza->bindParam(':idEstoque', $rowMaterial['ID_ESTOQUE'], PDO::PARAM_STR);                                    
+      $realiza->bindParam(':idEstoque', $rowMaterial['ID_ESTOQUE'], PDO::PARAM_INT);                                    
       $realiza->bindParam(':descrMat' , $descrMat                 , PDO::PARAM_STR);
       $realiza->bindParam(':qtdeLote' , $qtdeCompra               , PDO::PARAM_STR);
       $realiza->bindParam(':uniMed'   , $rowMaterial['UNIDADE']   , PDO::PARAM_STR);
-      $realiza->bindParam(':etapa'    , $etapa                    , PDO::PARAM_STR);
+      $realiza->bindParam(':etapa'    , $etapa                    , PDO::PARAM_INT);
       $realiza->bindParam(':situacao' , $situacao                 , PDO::PARAM_STR);
       $realiza->execute();
       
@@ -152,7 +152,7 @@
 
         $atualiza = $connDB->prepare("UPDATE materiais_compra SET ETAPA_PROCESS = :etapa, SITUACAO = :situacao WHERE DESCRICAO = :descrMat");
         $atualiza->bindParam(':descrMat', $descrMat, PDO::PARAM_STR);
-        $atualiza->bindParam(':etapa'   , $etapa   , PDO::PARAM_STR);
+        $atualiza->bindParam(':etapa'   , $etapa   , PDO::PARAM_INT);
         $atualiza->bindParam(':situacao', $situacao, PDO::PARAM_STR);
         $atualiza->execute();
       }
@@ -171,16 +171,16 @@
 
       $realiza = $connDB->prepare("INSERT INTO materiais_lotes (ID_ESTOQUE, DESCRICAO, QTDE_LOTE, UNIDADE, ETAPA_PROCESS, SITUACAO)
                                           VALUES (:idEstoque, :descrMat, :qtdeLote, :uniMed, :etapa, :situacao)");
-      $realiza->bindParam(':idEstoque', $rowMaterial['ID_ESTOQUE'], PDO::PARAM_STR);                                    
+      $realiza->bindParam(':idEstoque', $rowMaterial['ID_ESTOQUE'], PDO::PARAM_INT);                                    
       $realiza->bindParam(':descrMat' , $descrMat                 , PDO::PARAM_STR);
       $realiza->bindParam(':qtdeLote' , $qtdeCompra               , PDO::PARAM_STR);
       $realiza->bindParam(':uniMed'   , $rowMaterial['UNIDADE']   , PDO::PARAM_STR);
-      $realiza->bindParam(':etapa'    , $etapa                    , PDO::PARAM_STR);
+      $realiza->bindParam(':etapa'    , $etapa                    , PDO::PARAM_INT);
       $realiza->bindParam(':situacao' , $situacao                 , PDO::PARAM_STR);
       $realiza->execute();
 
       $atualizaReserva = $connDB->prepare("UPDATE materiais_reserva SET DISPONIBILIDADE = :disp WHERE ID_ESTOQUE = :idEstoque");
-      $atualizaReserva->bindParam(':disp'     , $etapa                    , PDO::PARAM_STR);
+      $atualizaReserva->bindParam(':disp'     , $etapa                    , PDO::PARAM_INT);
       $atualizaReserva->bindParam(':idEstoque', $rowMaterial['ID_ESTOQUE'], PDO::PARAM_STR); $atualizaReserva->execute();
 
       header('Location: ./00SeletorAdministrativo.php');
