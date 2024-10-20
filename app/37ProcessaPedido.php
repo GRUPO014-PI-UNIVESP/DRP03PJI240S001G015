@@ -189,15 +189,15 @@ include_once './RastreadorAtividades.php';
     </form> <?php
     $confirma = filter_input_array(INPUT_POST, FILTER_DEFAULT);
     if(!empty($confirma['confirma'])){
-      $_SESSION['dataFabri']   = $confirma['dataFabri']  ;
-      $_SESSION['planta']      = $confirma['planta']     ;
-      $_SESSION['horaInicio']  = $confirma['inicio']     ;
-      $_SESSION['horaFinali']  = $confirma['fim']        ;
-      $_SESSION['qtdeReal']    = $confirma['qtdeReal']   ;
-      $_SESSION['nLoteProd']   = $confirma['nLotePF']    ;
-      $_SESSION['idPedido']    = $idPedido               ;
-      $_SESSION['idProd']      = $rowPedido['ID_PRODUTO'];
-      $_SESSION['colaborador'] = $confirma['colaborador'];
+      $_SESSION['dataFabri']   = $confirma['dataFabri']   ;
+      $_SESSION['planta']      = $confirma['planta']      ;
+      $_SESSION['horaInicio']  = $confirma['inicio']      ;
+      $_SESSION['horaFinali']  = $confirma['fim']         ;
+      $_SESSION['qtdeReal']    = $confirma['qtdeReal']    ;
+      $_SESSION['nLoteProd']   = $confirma['nLotePF']     ;
+      $_SESSION['idPedido']    = $idPedido                ;
+      $_SESSION['idProd']      = $rowProduto['ID_PRODUTO'];
+      $_SESSION['colaborador'] = $confirma['colaborador'] ;
 
       header('Location: ./38ProcessaPedido.php');
     } ?>

@@ -155,28 +155,102 @@ include_once './RastreadorAtividades.php';
       <div class="col-md-12 overflow-auto">
         <table class="table">
           <thead class="table-dark">
-            <tr style="color: grey; font-size: 14px">
-              <th scope="col" style="width: 30%"><?php echo 'Descrição do Material' . '<br>' . 'ID Interno' ?></th>
-              <th scope="col" style="width: 10%; text-align:center">Qtde. Necessária</th>
-              <th scope="col" style="width: 10%; text-align:center">Qtde. Disponível</th>
-              <th scope="col" style="width: 10%; text-align:center">Qtde. Utilizada</th>
-              <th scope="col" style="width: 10%; text-align:center">Ação</th>
-              <th scope="col" style="width: 20%; text-align:center">Situação</th>
+            <tr style="color: grey; font-size: 11px">
+              <th scope="col" style="width: 30%; color: grey;"><?php echo 'Descrição do Material' . '<br>' . 'ID Interno' ?></th>
+              <th scope="col" style="width: 10%; text-align:center; color: grey;">Qtde. Necessária</th>
+              <th scope="col" style="width: 10%; text-align:center; color: grey;">Qtde. Disponível</th>
+              <th scope="col" style="width: 15%; text-align:center; color: grey;">Qtde. Utilizada</th>
+              <th scope="col" style="width: 10%; text-align:center; color: grey;">Ação</th>
+              <th scope="col" style="width: 15%; text-align:center; color: grey;">Situação</th>
             </tr>
           </thead>
-          <tbody>
-            <tr style="color: yellow; font-size: 15px">
-              <td> 
-                
-              </td>
-            </tr>
+          <tbody> <?php $finalizado = 0;
+            $query_materiais = $connDB->prepare("SELECT * FROM materiais_reserva WHERE NUMERO_PEDIDO = :numPedido");
+            $query_materiais->bindParam(':numPedido', $_SESSION['idPedido'], PDO::PARAM_INT);
+            $query_materiais->execute(); $nTipos = $query_materiais->rowCount(); 
+            // verifica cada item da lista de componentes do produto
+            while($rowMats = $query_materiais->fetch(PDO::FETCH_ASSOC)){
+              $qtdeNecessaria = $rowMats['QTDE_RESERVA'];
+              if($qtdeNecessaria > 0){
+                $query_lotes = $connDB->prepare("SELECT ID_ESTOQUE, DESCRICAO, ID_INTERNO, QTDE_LOTE, UNIDADE, FORNECEDOR 
+                                                        FROM materiais_lotes WHERE ID_ESTOQUE = :idEstoque AND QTDE_LOTE > 0 ORDER BY QTDE_LOTE ASC LIMIT 1");
+                $query_lotes->bindParam(':idEstoque', $rowMats['ID_ESTOQUE'], PDO::PARAM_INT);
+                $query_lotes->execute(); $rowLotes = $query_lotes->fetch(PDO::FETCH_ASSOC); ?>
+                <tr style="font-size: 15px">
+                  <td scope="col" style="width: 30%; font-size: 13px; color: yellow; font-weight: bold"> 
+                    <?php echo $rowLotes['DESCRICAO'] . '<br>' . $rowLotes['ID_INTERNO'] . ' [ ' . $rowLotes['FORNECEDOR'] . ' ]'; ?>
+                  </td>
+                  <td scope="col" style="width: 10%; text-align:center; font-size: 20px; color: yellow; font-weight: bold"> 
+                    <?php echo number_format($qtdeNecessaria, 0, ',', '.') . ' ' . $rowMats['UNIDADE']; ?>
+                  </td>
+                  <td scope="col" style="width: 10%; text-align:center; font-size: 20px; color: green; font-weight: bold"> 
+                    <?php echo number_format($rowLotes['QTDE_LOTE'], 0, ',', '.') . ' ' . $rowLotes['UNIDADE']; ?>
+                  </td>
+                  <form method="POST">
+                    <td scope="col" style="width: 15%;">
+                      <div class="input-group mb-3">
+                        <input type="number" class="form-control" aria-label="Recipient's username" aria-describedby="basic-addon2" id="qtdeUsada" name="qtdeUsada" style="width:100px; text-align: center; color: whitesmoke; font-size: 16px"
+                              value="<?php echo $rowLotes['QTDE_LOTE'] ?>" autofocus required>
+                        <span class="input-group-text" id="basic-addon2"><?php echo $rowLotes['UNIDADE'] ?></span>
+                        <p style="font-size: 10px; color: grey">Ajuste a quantidade</p>  
+                      </div>
+                                        
+                    </td>
+                    <td scope="col" style="width: 10%; font-size: 16px; text-align:center;">
+                      <input class="btn btn-primary" type="submit" id="confirma" name="confirma" value="Confirmar">
+                    </td>
+                  </form><?php
+                  $confirma = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+                  if(!empty($confirma['confirma'])){
+                    $qtdeNecessaria = $qtdeNecessaria - $confirma['qtdeUsada'];
+                    $regMatProd = $connDB->prepare("INSERT INTO producao (ID_PRODUTO, NUMERO_LOTE, ID_MATERIAL, MATERIAL_COMPONENTE, QTDE_UTILIZADA, NLPSEQ, NLPMES, NLPANO, DATA_FABRI, ENCARREGADO_PRODUCAO, RESPONSAVEL) 
+                                                           VALUES (:idProduto, :numLote, :idMaterial, :descrMat, :qtdeUsada, :nlpSeq, :nlpMes, :nlpAno, :dataFabri, :encarregado, :responsavel)");
+                    $regMatProd->bindParam(':idProduto'  , $_SESSION['idProd']     , PDO::PARAM_INT);
+                    $regMatProd->bindParam(':numLote'    , $nLoteInterno           , PDO::PARAM_STR);
+                    $regMatProd->bindParam(':idMaterial' , $rowLotes['ID_INTERNO'] , PDO::PARAM_STR);
+                    $regMatProd->bindParam(':descrMat'   , $rowLotes['DESCRICAO']  , PDO::PARAM_STR);
+                    $regMatProd->bindParam(':qtdeUsada'  , $confirma['qtdeUsada']  , PDO::PARAM_STR);
+                    $regMatProd->bindParam(':nlpSeq'     , $seqAtual               , PDO::PARAM_INT);
+                    $regMatProd->bindParam(':nlpMes'     , $mesAtual               , PDO::PARAM_INT);
+                    $regMatProd->bindParam(':nlpAno'     , $anoAtual               , PDO::PARAM_INT);
+                    $regMatProd->bindParam(':dataFabri'  , $_SESSION['dataFabri']  , PDO::PARAM_STR);
+                    $regMatProd->bindParam(':encarregado', $_SESSION['colaborador'], PDO::PARAM_STR);
+                    $regMatProd->bindParam(':responsavel', $_SESSION['nome_func']  , PDO::PARAM_STR);
+                    $regMatProd->execute();
+
+                    if($qtdeNecessaria == 0){ $etapa = 4; $situacao = 'MATERIAL ESGOTADO';}
+                    if($qtdeNecessaria >= 1){ $etapa = 3; $situacao = 'MATERIAL LIBERADO PARA USO';}
+                    $atualizaLote = $connDB->prepare("UPDATE materiais_lotes SET QTDE_LOTE = :qNec, ETAPA_PROCESS = :etapa, SITUACAO = :situacao WHERE ID_INTERNO = :idInterno");
+                    $atualizaLote->bindParam(':qNec'     , $qtdeNecessaria        , PDO::PARAM_STR);
+                    $atualizaLote->bindParam(':etapa'    , $etapa                 , PDO::PARAM_INT);
+                    $atualizaLote->bindParam(':situacao' , $situacao              , PDO::PARAM_STR);
+                    $atualizaLote->bindParam(':idInterno', $rowLotes['ID_INTERNO'], PDO::PARAM_STR);
+                    $atualizaLote->execute();
+
+                    $atualizaReserva = $connDB->prepare("UPDATE materiais_reserva SET QTDE_RESERVA = :qNec, DISPONIBILIDADE = :etapa WHERE NUMERO_PEDIDO = :numPedido AND ID_ESTOQUE = :idEstoque");
+                    $atualizaReserva->bindParam(':qNec'     , $qtdeNecessaria       , PDO::PARAM_STR);
+                    $atualizaReserva->bindParam(':etapa'    , $etapa                , PDO::PARAM_INT);
+                    $atualizaReserva->bindParam(':numPedido', $_SESSION['idPedido'] , PDO::PARAM_INT);
+                    $atualizaReserva->bindParam(':idEstoque', $rowMats['ID_ESTOQUE'], PDO::PARAM_INT);
+                    $atualizaReserva->execute(); ?>
+                    <td>
+                      <div class="alert alert-success" role="alert">
+                        Executado!           
+                      </div>
+                    </td><?php
+                  } ?>                
+                </tr><?php 
+              }
+            } ?>               
           </tbody>           
         </table>
       </div>
-      <div class="col-md-12">
-        <div class="alert alert-success" role="alert">
-          <?php ?>           
-        </div>
+      <div class="col-md-12"><?php
+        if($finalizado == 1){ ?>
+          <div class="alert alert-success" role="alert">
+            Materiais processados com sucesso           
+          </div><?php
+        } ?>       
       </div>
       <form method="POST">
         <div class="col-md-2">
