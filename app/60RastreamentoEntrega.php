@@ -77,17 +77,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->execute();
         $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if (count($dados) > 0) {
-            $cabecalho = '<tr><th style="color: #556B2F;">Número do Pedido</th><th style="color: #556B2F;">Cliente</th><th style="color: #556B2F;">Data do Pedido</th><th style="color: #556B2F;">Data de Entrega</th><th style="color: #556B2F;">Transportadora</th><th style="color: #556B2F;">Etapa do Processo</th><th style="color: #556B2F;">Situação</th></tr>';
+            $cabecalho = '<tr><th style="color: #00FFFF;">Número do Pedido</th><th style="color: #00FFFF;">Cliente</th><th style="color: #00FFFF;">Data do Pedido</th><th style="color: #00FFFF;">Data de Entrega</th><th style="color: #00FFFF;">Transportadora</th><th style="color: #00FFFF;">Etapa do Processo</th><th style="color: #00FFFF;">Situação</th></tr>';
             $linhas = '';
             foreach ($dados as $dado) {
+                $dpdmY = date('d/m/Y', strtotime($dado['DATA_PEDIDO']));
+                $dedmY = date('d/m/Y', strtotime($dado['DATA_ENTREGA']));
                 $linhas .= '<tr>
-                    <td style="color: #7FFF00;">' . $dado['NUMERO_PEDIDO'] . '</td>
-                    <td style="color: #7FFF00;">' . $dado['CLIENTE'] . '</td>
-                    <td style="color: #7FFF00;">' . $dado['DATA_PEDIDO'] . '</td>
-                    <td style="color: #7FFF00;">' . $dado['DATA_ENTREGA'] . '</td>
-                    <td style="color: #7FFF00;">' . $dado['TRANSPORTADORA'] . '</td>
-                    <td style="color: #7FFF00;">' . $dado['ETAPA_PROCESS'] . '</td>
-                    <td style="color: #7FFF00;">' . $dado['SITUACAO'] . '</td>
+                    <td style="color: #00FF00;">' . $dado['NUMERO_PEDIDO'] . '</td><td style="color: #00FF00;">' . $dado['CLIENTE'] . '</td><td style="color: #00FF00;">' . $dpdmY . '</td><td style="color: #00FF00;">' . $dedmY . '</td><td style="color: #00FF00;">' . $dado['TRANSPORTADORA'] . '</td><td style="color: #00FF00;">' . $dado['ETAPA_PROCESS'] . '</td><td style="color: #00FF00;">' . $dado['SITUACAO'] . '</td>
                 </tr>';
             }
             $resultado = $cabecalho . $linhas;
