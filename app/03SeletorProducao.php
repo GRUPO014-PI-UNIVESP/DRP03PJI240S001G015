@@ -22,7 +22,7 @@ include_once './RastreadorAtividades.php';
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 6000000);
+       time = setTimeout(deslogar, 600000);
      }
   };
   inactivityTime();

@@ -21,7 +21,7 @@ include_once './RastreadorAtividades.php';
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 6000000);
+       time = setTimeout(deslogar, 600000);
      }
   };
   inactivityTime();
@@ -256,10 +256,12 @@ include_once './RastreadorAtividades.php';
       </form><?php
       $registra = filter_input_array(INPUT_POST, FILTER_DEFAULT);
       if(!empty($registra['registra'])){ $etapa = 2; $situacao = 'PRODUTO FINALIZADO, AGUARDANDO ANÁLISE';
-        $atualizaPedido = $connDB->prepare("UPDATE pedidos SET ETAPA_PROCESS = :etapa, SITUACAO = :situacao WHERE NUMERO_PEDIDO = :numPedido");
+        $atualizaPedido = $connDB->prepare("UPDATE pedidos SET NUMERO_LOTE = :numLote, ETAPA_PROCESS = :etapa, SITUACAO = :situacao, DATA_FABRI = :dataFabri WHERE NUMERO_PEDIDO = :numPedido");
         $atualizaPedido->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);
+        $atualizaPedido->bindParam(':numLote'  , $nLoteInterno              , PDO::PARAM_STR);
         $atualizaPedido->bindParam(':etapa'    , $etapa                     , PDO::PARAM_INT);
         $atualizaPedido->bindParam(':situacao' , $situacao                  , PDO::PARAM_STR);
+        $atualizaPedido->bindParam(':dataFabri', $_SESSION['dataFabri']     , PDO::PARAM_STR);
         $atualizaPedido->execute();
 
         $atualizaEstoque = $connDB->prepare("SELECT SUM(QTDE) AS TOTAL, ID_ESTOQUE, ID_INTERNO, QTDE FROM materiais_ajuste WHERE NUMERO_PEDIDO = :numPedido");

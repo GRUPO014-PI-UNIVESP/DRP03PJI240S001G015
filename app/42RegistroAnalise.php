@@ -58,18 +58,18 @@
 
       <!-- Entrada de Dados --><?php
       if(!empty($_GET['id'])){
-        $dadosPedido = $connDB->prepare("SELECT * FROM pf_pedido WHERE ID_PEDIDO = :idPedido");
+        $dadosPedido = $connDB->prepare("SELECT * FROM pedidos WHERE ID_PEDIDO = :idPedido");
         $dadosPedido->bindParam(':idPedido', $_GET['id'], PDO::PARAM_INT);
         $dadosPedido->execute(); $rowPedido = $dadosPedido->fetch(PDO::FETCH_ASSOC);
-        $dataRegistro = date('Y-m-d');
-        $validade = date('Y-m-d', strtotime("+ 6 months"));
-        $_SESSION['nLotePF'] = $rowPedido['NUMERO_LOTE_PF'];
+        $dataRegistro = date('Y-m-d'); $dV = date('Y-m-d', strtotime($rowPedido['DATA_FABRI']));
+        $validade = date('Y-m-d', strtotime($dV."+ 6 months"));
+        $_SESSION['nLotePF'] = $rowPedido['NUMERO_LOTE'];
         $_SESSION['dataR']   = date('Y-m-d', strtotime($dataRegistro));
         $_SESSION['dataF']   = date('Y-m-d', strtotime($rowPedido['DATA_FABRI']));
         $_SESSION['dataV']   = date('Y-m-d', strtotime($validade));
-        $_SESSION['nProd']   = $rowPedido['NOME_PRODUTO'];
+        $_SESSION['nProd']   = $rowPedido['PRODUTO'];
         $_SESSION['nClnt']   = $rowPedido['CLIENTE'];
-        $_SESSION['qLote']   = $rowPedido['QTDE_LOTE_PF'];
+        $_SESSION['qLote']   = $rowPedido['QTDE_PEDIDO'];
       } ?>
       <div class="tab-pane fade show active" id="entrada-tab-pane" role="tabpanel" aria-labelledby="entrada-tab" tabindex="0"><br>
         <div class="row g-1">
@@ -85,7 +85,7 @@
           <div class="col-md-2">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="nLoteInterno" name="nLoteInterno" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
-              value="<?php echo $rowPedido['NUMERO_LOTE_PF'] ?>" readonly>
+              value="<?php echo $rowPedido['NUMERO_LOTE'] ?>" readonly>
               <label for="nLoteInterno" style="color: aqua; font-size: 12px; background: none">No.de Lote Interno</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
@@ -93,7 +93,7 @@
           <div class="col-md-8">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="nomeProduto" name="nomeProduto" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" 
-              value="<?php echo $rowPedido['NOME_PRODUTO'] ?>" readonly>
+              value="<?php echo $rowPedido['PRODUTO'] ?>" readonly>
               <label for="nomeProduto" style="color: aqua; font-size: 12px; background: none">Produto Analisado</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
@@ -218,15 +218,15 @@
           </form><?php
           $confirma = filter_input_array(INPUT_POST, FILTER_DEFAULT);
           if(!empty($confirma['confirma'])){
-            $_SESSION['confirma']      = $confirma['confirma'];
-            $_SESSION['aspecto']       = $confirma['aspecto'];
-            $_SESSION['cor']           = $confirma['cor'];
-            $_SESSION['odor']          = $confirma['odor'];
-            $_SESSION['contami']       = $confirma['contaminantes'];
-            $_SESSION['perdaM']    = $confirma['perdaMassa'];
-            $_SESSION['scalaPH']      = $confirma['escalaPH'];
-            $_SESSION['pureza']        = $confirma['pureza'];
-            $_SESSION['observ']    = $confirma['observacao'];
+            $_SESSION['confirma'] = $confirma['confirma']     ;
+            $_SESSION['aspecto']  = $confirma['aspecto']      ;
+            $_SESSION['cor']      = $confirma['cor']          ;
+            $_SESSION['odor']     = $confirma['odor']         ;
+            $_SESSION['contami']  = $confirma['contaminantes'];
+            $_SESSION['perdaM']   = $confirma['perdaMassa']   ;
+            $_SESSION['scalaPH']  = $confirma['escalaPH']     ;
+            $_SESSION['pureza']   = $confirma['pureza']       ;
+            $_SESSION['observ']   = $confirma['observacao']   ;
 
             header('Location: ./43RegistroAnalise.php');
           }

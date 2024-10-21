@@ -30,7 +30,7 @@ include_once './RastreadorAtividades.php';
 <div class="main">
   <div class="container-fluid"><br> <?php
     if(!empty($_GET['id'])){
-      $entrega = $connDB->prepare("SELECT * FROM pf_pedido WHERE ID_PEDIDO = :idPed");
+      $entrega = $connDB->prepare("SELECT * FROM pedidos WHERE ID_PEDIDO = :idPed");
       $entrega->bindParam(':idPed', $_GET['id'], PDO::PARAM_INT);
       $entrega->execute(); $rowEntrega = $entrega->fetch(PDO::FETCH_ASSOC);
     } ?>
@@ -40,12 +40,12 @@ include_once './RastreadorAtividades.php';
         <div class="col-md-7">
           <label for="nomeProduto" class="form-label" style="font-size: 10px; color:aqua">Nome do Produto</label>
           <input style="font-weight: bold; font-size: 18px; background: rgba(0,0,0,0.3); color: yellow" type="text" class="form-control" 
-                id="nomeProduto" name="nomeProduto" value="<?php echo $rowEntrega['NOME_PRODUTO'] ?>" readonly>
+                id="nomeProduto" name="nomeProduto" value="<?php echo $rowEntrega['PRODUTO'] ?>" readonly>
         </div>
         <div class="col-md-2">
           <label for="idLote" class="form-label" style="font-size: 10px; color:aqua">Identificação do Lote</label>
           <input style="font-weight: bold; font-size: 18px; background: rgba(0,0,0,0.3); color: yellow; text-align: center" type="text" class="form-control" 
-                id="idLote" name="idLote" value="<?php echo $rowEntrega['NUMERO_LOTE_PF'] ?>" readonly>
+                id="idLote" name="idLote" value="<?php echo $rowEntrega['NUMERO_LOTE'] ?>" readonly>
         </div>
         <div class="col-md-3"></div>
         <div class="col-md-7">
@@ -56,7 +56,7 @@ include_once './RastreadorAtividades.php';
         <div class="col-md-2">
           <label for="qLote" class="form-label" style="font-size: 10px; color:aqua">Quantidade</label>
           <input style="font-weight: bold; font-size: 18px; background: rgba(0,0,0,0.3); color: yellow; text-align: center" type="text" class="form-control" 
-                id="qLote" name="qlote" value="<?php echo $rowEntrega['QTDE_LOTE_PF'] . ' ' . $rowEntrega['UNIDADE_MEDIDA'] ?>" readonly>
+                id="qLote" name="qlote" value="<?php echo $rowEntrega['QTDE_PEDIDO'] . ' ' . $rowEntrega['UNIDADE'] ?>" readonly>
         </div>
         <div class="col-md-7">
           <label for="transport" class="form-label" style="font-size: 10px; color:aqua">Transportadora Contratada</label>
@@ -69,7 +69,7 @@ include_once './RastreadorAtividades.php';
         <div class="col-md-2">
           <label for="dataS" class="form-label" style="font-size: 10px; color:aqua">Data de Saída</label>
           <input style="font-weight: bold; font-size: 18px; background: rgba(0,0,0,0.3); text-align: center" type="date" class="form-control" 
-                id="dataS" name="dataS" value="">
+                id="dataS" name="dataS" required>
         </div>
         <div class="col-md-9"><br>
           <div class="form-floating"><?php
@@ -100,19 +100,20 @@ include_once './RastreadorAtividades.php';
     </form><?php
     $regEntrega = filter_input_array(INPUT_POST, FILTER_DEFAULT);
     if(!empty($regEntrada['entrega'])){
-      $etapa = 4;
+      $etapa = 4; $situacao = 'PRODUTO DESPACHADO COM SUCESSO.';
       $saida = date('Y-m-d', strtotime($regEntrada['dataS']));
 
-      $confirm = $connDB->prepare("UPDATE pf_pedido SET ETAPA_PROD = :etapa, DATA_ENTREGA = :dataS, TRANSPORTADORA = :transp, REGISTRO_SAIDA = :responsavel
-                                                           WHERE ID_PEDIDO = :idPed");
-      $confirm->bindParam(':etapa'      , $etapa                  , PDO::PARAM_INT);
-      $confirm->bindParam(':dataS'      , $saida                  , PDO::PARAM_STR);
-      $confirm->bindParam(':transp'     , $regEntrada['transport'], PDO::PARAM_STR);
-      $confirm->bindParam(':responsavel', $_SESSION['nome_func']  , PDO::PARAM_STR);
-      $confirm->bindParam(':idPed'      , $_GET['id']             , PDO::PARAM_INT);
-      $confirm->execute();
+      $deliveryP = $connDB->prepare("UPDATE pedidos SET ETAPA_PROCESS = :etapa, SITUACAO = :situacao, DATA_ENTREGA = :dataS, TRANSPORTADORA = :transp, ENCARREGADO_ENTREGA = :responsavel
+                                                         WHERE ID_PEDIDO = :idPed");
+      $deliveryP->bindParam(':etapa'      , $etapa                    , PDO::PARAM_INT);
+      $deliveryP->bindParam(':situacao'   , $situacao                 , PDO::PARAM_STR);
+      $deliveryP->bindParam(':dataS'      , $saida                    , PDO::PARAM_STR);
+      $deliveryP->bindParam(':transp'     , $regEntrada['transport']  , PDO::PARAM_STR);
+      $deliveryP->bindParam(':responsavel', $regEntrega['colaborador'], PDO::PARAM_STR);
+      $deliveryP->bindParam(':idPed'      , $_GET['id']               , PDO::PARAM_INT);
+      $deliveryP->execute();
       
       header('Location: ./02SeletorLogistica.php');
-    }?>
+    } ?>
   </div>
 </div>
