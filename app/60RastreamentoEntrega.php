@@ -83,13 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $dpdmY = date('d/m/Y', strtotime($dado['DATA_PEDIDO']));
                 $dedmY = date('d/m/Y', strtotime($dado['DATA_ENTREGA']));
                 $linhas .= '<tr>
-                    <td style="color: #00FF00;">' . $dado['NUMERO_PEDIDO'] . '</td>
-                    <td style="color: #00FF00;">' . $dado['CLIENTE'] . '</td>
-                    <td style="color: #00FF00;">' . $dpdmY . '</td>
-                    <td style="color: #00FF00;">' . $dedmY . '</td>
-                    <td style="color: #00FF00;">' . $dado['TRANSPORTADORA'] . '</td>
-                    <td style="color: #00FF00;">' . $dado['ETAPA_PROCESS'] . '</td>
-                    <td style="color: #00FF00;">' . $dado['SITUACAO'] . '</td>
+                    <td style="color: #00FF00;">' . $dado['NUMERO_PEDIDO'] . '</td><td style="color: #00FF00;">' . $dado['CLIENTE'] . '</td><td style="color: #00FF00;">' . $dpdmY . '</td><td style="color: #00FF00;">' . $dedmY . '</td><td style="color: #00FF00;">' . $dado['TRANSPORTADORA'] . '</td><td style="color: #00FF00;">' . $dado['ETAPA_PROCESS'] . '</td><td style="color: #00FF00;">' . $dado['SITUACAO'] . '</td>
                 </tr>';
             }
             $resultado = $cabecalho . $linhas;
