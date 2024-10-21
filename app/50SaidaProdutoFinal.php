@@ -99,16 +99,20 @@ include_once './RastreadorAtividades.php';
       </div>
     </form><?php
     $regEntrega = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-    if(!empty($regEntrada['entrega'])){
+    if(!empty($regEntrega['entrega'])){
       $etapa = 4; $situacao = 'PRODUTO DESPACHADO COM SUCESSO.';
       $saida = date('Y-m-d', strtotime($regEntrada['dataS']));
 
-      $deliveryP = $connDB->prepare("UPDATE pedidos SET ETAPA_PROCESS = :etapa, SITUACAO = :situacao, DATA_ENTREGA = :dataS, TRANSPORTADORA = :transp, ENCARREGADO_ENTREGA = :responsavel
-                                                         WHERE ID_PEDIDO = :idPed");
+      $deliveryP = $connDB->prepare("UPDATE pedidos SET ETAPA_PROCESS       = :etapa     ,
+                                                               SITUACAO            = :situacao  ,
+                                                               DATA_ENTREGA        = :dataS     ,
+                                                               TRANSPORTADORA      = :transp    ,
+                                                               ENCARREGADO_ENTREGA = :responsavel
+                                                           WHERE ID_PEDIDO = :idPed");
       $deliveryP->bindParam(':etapa'      , $etapa                    , PDO::PARAM_INT);
       $deliveryP->bindParam(':situacao'   , $situacao                 , PDO::PARAM_STR);
       $deliveryP->bindParam(':dataS'      , $saida                    , PDO::PARAM_STR);
-      $deliveryP->bindParam(':transp'     , $regEntrada['transport']  , PDO::PARAM_STR);
+      $deliveryP->bindParam(':transp'     , $regEntrega['transport']  , PDO::PARAM_STR);
       $deliveryP->bindParam(':responsavel', $regEntrega['colaborador'], PDO::PARAM_STR);
       $deliveryP->bindParam(':idPed'      , $_GET['id']               , PDO::PARAM_INT);
       $deliveryP->execute();

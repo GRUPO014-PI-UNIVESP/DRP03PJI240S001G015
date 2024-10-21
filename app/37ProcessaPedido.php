@@ -198,6 +198,9 @@ include_once './RastreadorAtividades.php';
       $_SESSION['idPedido']    = $idPedido                ;
       $_SESSION['idProd']      = $rowProduto['ID_PRODUTO'];
       $_SESSION['colaborador'] = $confirma['colaborador'] ;
+      $_SESSION['nlpSeq']      = $seqAtual                ;
+      $_SESSION['nlpMes']      = $mesAtual                ;
+      $_SESSION['nlpAno']      = $anoAtual                ;
 
       header('Location: ./38ProcessaPedido.php');
     } ?>

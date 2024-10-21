@@ -200,23 +200,23 @@ include_once './RastreadorAtividades.php';
                     </td>
                   </tr>
                 </form><?php
-                $confirma = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-                if(!empty($confirma['confirma'])){
-                  $sobra = $rowLotes['QTDE_LOTE'] - $confirma['qtdeUsada'];
-                  $falta = $rowMats['QTDE_RESERVA'] - $confirma['qtdeUsada'];
+                $confirmaP = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+                if(!empty($confirmaP['confirma'])){
+                  $sobra = $rowLotes['QTDE_LOTE'] - $confirmaP['qtdeUsada'];
+                  $falta = $rowMats['QTDE_RESERVA'] - $confirmaP['qtdeUsada'];
                   if($falta == 0){$etapa = 4; $situacao = 'LOTE ESGOTADO';}
                   if($falta >= 1){$etapa = 3; $situacao = 'MATERIAL LIBERADO PARA USO';}
 
                   $regProd = $connDB->prepare("INSERT INTO producao (ID_PRODUTO, NUMERO_LOTE, ID_MATERIAL, MATERIAL_COMPONENTE, QTDE_UTILIZADA, NLPSEQ, NLPMES, NLPANO, DATA_FABRI, ENCARREGADO_PRODUCAO, RESPONSAVEL)
                                                       VALUES (:idProduto, :numLote, :idMaterial, :descrMat, :qtdeUtil, :nlpSeq, :nlpMes, :nlpAno, :dataFabri, :encarregado, :responsavel)");
                   $regProd->bindParam(':idProduto'  , $_SESSION['idProd']     , PDO::PARAM_INT);
-                  $regProd->bindParam(':numLote'    , $nLoteInterno           , PDO::PARAM_STR);
+                  $regProd->bindParam(':numLote'    , $_SESSION['nLoteProd']  , PDO::PARAM_STR);
                   $regProd->bindParam(':idMaterial' , $rowLotes['ID_INTERNO'] , PDO::PARAM_STR);
                   $regProd->bindParam(':descrMat'   , $rowLotes['DESCRICAO']  , PDO::PARAM_STR);
-                  $regProd->bindParam(':qtdeUtil'   , $confirma['qtdeUsada']  , PDO::PARAM_STR);
-                  $regProd->bindParam(':nlpSeq'     , $seqAtual               , PDO::PARAM_INT);
-                  $regProd->bindParam(':nlpMes'     , $mesAtual               , PDO::PARAM_INT);
-                  $regProd->bindParam(':nlpAno'     , $anoAtual               , PDO::PARAM_INT);
+                  $regProd->bindParam(':qtdeUtil'   , $confirmaP['qtdeUsada'] , PDO::PARAM_STR);
+                  $regProd->bindParam(':nlpSeq'     , $_SESSION['nlpSeq']     , PDO::PARAM_INT);
+                  $regProd->bindParam(':nlpMes'     , $_SESSION['nlpMes']     , PDO::PARAM_INT);
+                  $regProd->bindParam(':nlpAno'     , $_SESSION['nlpAno']     , PDO::PARAM_INT);
                   $regProd->bindParam(':dataFabri'  , $_SESSION['dataFabri']  , PDO::PARAM_STR);
                   $regProd->bindParam(':encarregado', $_SESSION['colaborador'], PDO::PARAM_STR);
                   $regProd->bindParam(':responsavel', $_SESSION['nome_func']  , PDO::PARAM_STR);
@@ -258,7 +258,7 @@ include_once './RastreadorAtividades.php';
       if(!empty($registra['registra'])){ $etapa = 2; $situacao = 'PRODUTO FINALIZADO, AGUARDANDO ANÁLISE';
         $atualizaPedido = $connDB->prepare("UPDATE pedidos SET NUMERO_LOTE = :numLote, ETAPA_PROCESS = :etapa, SITUACAO = :situacao, DATA_FABRI = :dataFabri WHERE NUMERO_PEDIDO = :numPedido");
         $atualizaPedido->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);
-        $atualizaPedido->bindParam(':numLote'  , $nLoteInterno              , PDO::PARAM_STR);
+        $atualizaPedido->bindParam(':numLote'  , $_SESSION['nLoteProd']     , PDO::PARAM_STR);
         $atualizaPedido->bindParam(':etapa'    , $etapa                     , PDO::PARAM_INT);
         $atualizaPedido->bindParam(':situacao' , $situacao                  , PDO::PARAM_STR);
         $atualizaPedido->bindParam(':dataFabri', $_SESSION['dataFabri']     , PDO::PARAM_STR);
