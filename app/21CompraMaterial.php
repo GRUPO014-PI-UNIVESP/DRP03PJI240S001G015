@@ -133,14 +133,15 @@
       $query_material->bindParam(':descrMat', $descrMat, PDO::PARAM_STR);
       $query_material->execute(); $rowMaterial = $query_material->fetch(PDO::FETCH_ASSOC);
 
-      $realiza = $connDB->prepare("INSERT INTO materiais_lotes (ID_ESTOQUE, DESCRICAO, QTDE_LOTE, UNIDADE, ETAPA_PROCESS, SITUACAO)
-                                          VALUES (:idEstoque, :descrMat, :qtdeLote, :uniMed, :etapa, :situacao)");
+      $realiza = $connDB->prepare("INSERT INTO materiais_lotes (ID_ESTOQUE, DESCRICAO, QTDE_LOTE, UNIDADE, ETAPA_PROCESS, SITUACAO, DATA_PRAZO)
+                                          VALUES (:idEstoque, :descrMat, :qtdeLote, :uniMed, :etapa, :situacao, :dataPrazo)");
       $realiza->bindParam(':idEstoque', $rowMaterial['ID_ESTOQUE'], PDO::PARAM_INT);                                    
       $realiza->bindParam(':descrMat' , $descrMat                 , PDO::PARAM_STR);
       $realiza->bindParam(':qtdeLote' , $qtdeCompra               , PDO::PARAM_STR);
       $realiza->bindParam(':uniMed'   , $rowMaterial['UNIDADE']   , PDO::PARAM_STR);
       $realiza->bindParam(':etapa'    , $etapa                    , PDO::PARAM_INT);
       $realiza->bindParam(':situacao' , $situacao                 , PDO::PARAM_STR);
+      $realiza->bindParam(':dataPrazo', $dataPrazo                , PDO::PARAM_STR);
       $realiza->execute();
       
       if(!empty($_GET['id'])){
@@ -161,27 +162,27 @@
     if(!empty($confirmaCompra['reposicao'])){
 
       $descrMat    = $confirmaCompra['descrMat'];
-      $dataEntrega = date('Y-m-d', strtotime($confirmaCompra['dataPrazo']));
+      $dataPrazo = date('Y-m-d', strtotime("+ 1 week"));
       $qtdeCompra  = $confirmaCompra['qtdeLote'];
       $situacao    = 'COMPRA EFETUADA, AGUARDANDO RECEBIMENTO';
+      $etapa       = 1; $nPed = 0; 
 
       $query_material = $connDB->prepare("SELECT ID_ESTOQUE, UNIDADE FROM materiais_estoque WHERE DESCRICAO = :descrMat");
       $query_material->bindParam(':descrMat', $descrMat, PDO::PARAM_STR);
       $query_material->execute(); $rowMaterial = $query_material->fetch(PDO::FETCH_ASSOC);     
 
-      $realiza = $connDB->prepare("INSERT INTO materiais_lotes (ID_ESTOQUE, DESCRICAO, QTDE_LOTE, UNIDADE, ETAPA_PROCESS, SITUACAO)
-                                          VALUES (:idEstoque, :descrMat, :qtdeLote, :uniMed, :etapa, :situacao)");
+      $realiza = $connDB->prepare("INSERT INTO materiais_lotes (ID_ESTOQUE, DESCRICAO, QTDE_LOTE, UNIDADE, ETAPA_PROCESS, SITUACAO, DATA_PRAZO)
+                                          VALUES (:idEstoque, :descrMat, :qtdeLote, :uniMed, :etapa, :situacao, :dataPrazo)");
       $realiza->bindParam(':idEstoque', $rowMaterial['ID_ESTOQUE'], PDO::PARAM_INT);                                    
       $realiza->bindParam(':descrMat' , $descrMat                 , PDO::PARAM_STR);
       $realiza->bindParam(':qtdeLote' , $qtdeCompra               , PDO::PARAM_STR);
       $realiza->bindParam(':uniMed'   , $rowMaterial['UNIDADE']   , PDO::PARAM_STR);
       $realiza->bindParam(':etapa'    , $etapa                    , PDO::PARAM_INT);
       $realiza->bindParam(':situacao' , $situacao                 , PDO::PARAM_STR);
+      $realiza->bindParam(':dataPrazo', $dataPrazo                , PDO::PARAM_STR);
       $realiza->execute();
 
-      $atualizaReserva = $connDB->prepare("UPDATE materiais_reserva SET DISPONIBILIDADE = :disp WHERE ID_ESTOQUE = :idEstoque");
-      $atualizaReserva->bindParam(':disp'     , $etapa                    , PDO::PARAM_INT);
-      $atualizaReserva->bindParam(':idEstoque', $rowMaterial['ID_ESTOQUE'], PDO::PARAM_STR); $atualizaReserva->execute();
+      
 
       header('Location: ./00SeletorAdministrativo.php');
     }?>
