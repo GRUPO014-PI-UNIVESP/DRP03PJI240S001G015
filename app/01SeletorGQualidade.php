@@ -167,7 +167,7 @@
         </div><!-- fim tab -->         
         <div class="tab-pane fade" id="reagentes-tab-pane" role="tabpanel" aria-labelledby="reagentes-tab" tabindex="0"><br><br>
           <button type="button" class="btn btn-outline-info" style="width:350px" onclick="">Reabastecimento de Estoque de Reagentes</button><br><br>
-          <button type="button" class="btn btn-outline-info" style="width:350px" onclick="">Tabela Geral do Estoque de Reagentes</button><br><br>       
+          <button type="button" class="btn btn-outline-info" style="width:350px" onclick="location.href='./25TabelaGEstoqueReagentes.php'">Tabela Geral do Estoque de Reagentes</button><br><br>       
         </div>
         <div class="tab-pane fade" id="other-tab-pane" role="tabpanel" aria-labelledby="other-tab" tabindex="0" style="color: whitesmoke"><br><br>
           <a href="" class="font-family: aria-current=">
