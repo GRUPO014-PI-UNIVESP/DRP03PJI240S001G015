@@ -137,7 +137,7 @@
               </div>
               <div class="col-md-3">
                 <div class="form-floating mb-3">
-                  <input type="text" class="form-control" id="contaminantes" name="contaminantes" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center;" value="<?php echo $_SESSION['contaminantes'] ?>" readonly>
+                  <input type="text" class="form-control" id="contaminantes" name="contaminantes" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center;" value="<?php echo $_SESSION['contami'] ?>" readonly>
                   <label for="contaminantes" style="color: aqua; font-size: 12px; background: none">Contaminantes</label>
                   <p style="font-size: 11px; color: grey"></p>
                 </div>
@@ -145,7 +145,7 @@
               <div class="col-md-3">
                 <div class="form-floating mb-3">
                   <input type="text" class="form-control" id="perdaMassa" name="perdaMassa" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center;" 
-                  value="<?php echo $_SESSION['perdaMassa'] . ' %' ?>" readonly>
+                  value="<?php echo $_SESSION['perdaM'] . ' %' ?>" readonly>
                   <label for="perdaMassa" style="color: aqua; font-size: 12px; background: none">Perda de Massa</label>
                   <p style="font-size: 11px; color: grey"></p>
                 </div>
@@ -153,7 +153,7 @@
               <div class="col-md-3">
                 <div class="form-floating mb-3">
                   <input type="text" class="form-control" id="escalaPH" name="escalaPH" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center;" 
-                  value="<?php echo $_SESSION['escalaPH'] ?>" readonly>
+                  value="<?php echo $_SESSION['scalaPH'] ?>" readonly>
                   <label for="escalaPH" style="color: aqua; font-size: 12px; background: none">Escala do pH</label>
                   <p style="font-size: 11px; color: grey"></p>
                 </div>
@@ -167,13 +167,13 @@
                 </div>
               </div><?php
               if(!empty($_SESSION['confirma'])){ $c = 0;
-                if($_SESSION['aspecto']       == 'Regular')      { $c = $c + 1;} if($_SESSION['aspecto']       == 'Irregular') { $c = $c - 1;} 
-                if($_SESSION['cor']           == 'Normal')       { $c = $c + 1;} if($_SESSION['cor']           == 'Anormal')   { $c = $c - 1;}
-                if($_SESSION['odor']          == 'Normal')       { $c = $c + 1;} if($_SESSION['odor']          == 'Anormal')   { $c = $c - 1;}
-                if($_SESSION['contaminantes'] == 'Não Detectado'){ $c = $c + 1;} if($_SESSION['contaminantes'] == 'Detectado') { $c = $c - 1;}
-                if($_SESSION['perdaMassa'] < 5 )                 { $c = $c + 1;} if($_SESSION['perdaMassa'] > 5 )              { $c = $c - 1;}
-                if($_SESSION['pureza']     > 95 )                { $c = $c + 1;} if($_SESSION['pureza']     < 95 )             { $c = $c - 1;}         
-                if($_SESSION['escalaPH'] <= 9 && $_SESSION['escalaPH'] >= 5){ $c = $c + 1;} if($_SESSION['escalaPH'] <= 5 && $_SESSION['escalaPH'] >= 9){ $c = $c - 1;}
+                if($_SESSION['aspecto']   == 'Regular')      { $c = $c + 1;} if($_SESSION['aspecto'] == 'Irregular') { $c = $c - 1;} 
+                if($_SESSION['cor']       == 'Normal')       { $c = $c + 1;} if($_SESSION['cor']     == 'Anormal')   { $c = $c - 1;}
+                if($_SESSION['odor']      == 'Normal')       { $c = $c + 1;} if($_SESSION['odor']    == 'Anormal')   { $c = $c - 1;}
+                if($_SESSION['contami']   == 'Não Detectado'){ $c = $c + 1;} if($_SESSION['contami'] == 'Detectado') { $c = $c - 1;}
+                if($_SESSION['perdaM'] < 5 )                 { $c = $c + 1;} if($_SESSION['perdaM']  > 5 )           { $c = $c - 1;}
+                if($_SESSION['pureza']     > 95 )            { $c = $c + 1;} if($_SESSION['pureza']  < 95 )          { $c = $c - 1;}         
+                if($_SESSION['scalaPH'] <= 9 && $_SESSION['scalaPH'] >= 5){ $c = $c + 1;} if($_SESSION['scalaPH'] <= 5 && $_SESSION['scalaPH'] >= 9){ $c = $c - 1;}
                 if($c > 6){ $condicao = 'Aprovado'; ?>
                   <div class="col-md-1"></div>
                   <h6>Condição:</h6>
@@ -182,7 +182,7 @@
                   </div>
                   <div class="col-md-8">
                     <div class="alert alert-success" role="alert">
-                      O material pode ser liberado para uso na planta!
+                      O produto está liberado para entrega!
                     </div>
                   </div><?php              
                 }
@@ -195,7 +195,7 @@
                   </div> 
                   <div class="col-md-8">
                     <div class="alert alert-danger" role="alert">
-                      O material não foi aprovado! Comunique o responsável!
+                      O produto não foi aprovado! Comunique o responsável!
                     </div>
                   </div><?php 
                 }
@@ -204,7 +204,7 @@
           </div>           
           <div class="col-md-6">
             <div class="form-floating">
-              <textarea class="form-control" id="observacao" name="observacao" style="height: 135px; background: rgba(0,0,0,0.3); color: yellow;"><?php echo $_SESSION['observacao'] ?></textarea>
+              <textarea class="form-control" id="observacao" name="observacao" style="height: 135px; background: rgba(0,0,0,0.3); color: yellow;"><?php echo $_SESSION['observ'] ?></textarea>
               <label for="observacao" style="color: aqua; font-size: 12px; background: none">Observações da análise</label>
             </div>
             <form method="POST">
@@ -236,9 +236,42 @@
           if(!empty($regPedido['registra'])){
 
             // registra análise do produto
-            $ProdAnalisado = $connDB->prepare("INSERT INTO analise_pf (NUMERO_LOTE_PF, QTDE_LOTE_PF, NOME_PRODUTO, CLIENTE, DATA_ANALI, DATA_FABRI, DATA_VALID, ASPECTO, COLORACAO,
-                                                                              ODOR, CONTAMINANTES, PERDA_MASSA, ESCALA_PH, PUREZA, CONDICAO, OBSERVACOES, ANALISTA, RESPONSAVEL)
-                                                      VALUES (:nLote, :qLote, :nProd, :nClnt, :dataA, :dataF, :dataV, :aspec, :color, :odore, :conta, :perda, :escal, :purez, :condi, :obser, :anali, :respo)");
+            $ProdAnalisado = $connDB->prepare("INSERT INTO produto_analise (ID_INTERNO   ,
+                                                                                   QTDE_PRODUTO , 
+                                                                                   PRODUTO      , 
+                                                                                   CLIENTE      , 
+                                                                                   DATA_ANALI   , 
+                                                                                   DATA_FABRI   , 
+                                                                                   DATA_VALID   , 
+                                                                                   ASPECTO      , 
+                                                                                   COLORACAO    ,
+                                                                                   ODOR         , 
+                                                                                   CONTAMINANTES, 
+                                                                                   PERDA_MASSA  , 
+                                                                                   ESCALA_PH    , 
+                                                                                   PUREZA       , 
+                                                                                   CONDICAO     , 
+                                                                                   OBSERVACOES  , 
+                                                                                   ANALISTA     , 
+                                                                                   RESPONSAVEL)
+                                                      VALUES (:nLote, 
+                                                              :qLote, 
+                                                              :nProd, 
+                                                              :nClnt, 
+                                                              :dataA, 
+                                                              :dataF, 
+                                                              :dataV, 
+                                                              :aspec, 
+                                                              :color, 
+                                                              :odore, 
+                                                              :conta, 
+                                                              :perda, 
+                                                              :escal, 
+                                                              :purez, 
+                                                              :condi, 
+                                                              :obser, 
+                                                              :anali, 
+                                                              :respo)");
             $ProdAnalisado->bindParam(':nLote', $_SESSION['nLotePF']  , PDO::PARAM_STR);
             $ProdAnalisado->bindParam(':qLote', $_SESSION['qLote']    , PDO::PARAM_STR);
             $ProdAnalisado->bindParam(':nProd', $_SESSION['nProd']    , PDO::PARAM_STR);
@@ -260,12 +293,11 @@
 
             // atualiza tabela de pedidos
             $etapa = 3; $situacao = 'PRODUTO LIBERADO PARA ENTREGA';
-            $atualiza = $connDB->prepare("UPDATE pf_pedido SET ETAPA_PROD = :etapa, SITUACAO_QUALI = :situacao, DATA_VALIDADE = :dataV, REGISTRO_ANALISE = :respo
-                                                                  WHERE NUMERO_LOTE_PF = :nLoteInterno");
+            $atualiza = $connDB->prepare("UPDATE pedidos SET ETAPA_PROCESS = :etapa, SITUACAO = :situacao, DATA_VALI = :dataV
+                                                                  WHERE NUMERO_LOTE = :nLoteInterno");
             $atualiza->bindParam(':etapa'       , $etapa                , PDO::PARAM_INT);
             $atualiza->bindParam(':situacao'    , $situacao             , PDO::PARAM_STR);
             $atualiza->bindParam(':dataV'       , $_SESSION['dataV']    , PDO::PARAM_STR);
-            $atualiza->bindParam(':respo'       , $_SESSION['nome_func'], PDO::PARAM_STR);
             $atualiza->bindParam(':nLoteInterno', $_SESSION['nLotePF']  , PDO::PARAM_STR);
             $atualiza->execute();
 

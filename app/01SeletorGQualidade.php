@@ -126,7 +126,7 @@
                         <div class="col-md-4">
                           <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">No.Lote</span>
                             <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
-                                value="" readonly>
+                                value="<?php echo $rowPedido['NUMERO_LOTE']; ?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-4">

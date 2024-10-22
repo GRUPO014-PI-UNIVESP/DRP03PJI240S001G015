@@ -55,7 +55,7 @@ include_once './RastreadorAtividades.php';
           <div class="col-md-6">
             <h6>Lista de Materiais para Recebimento</h6>
             <div class="row g-1"><?php
-              $materiais = $connDB->prepare("SELECT * FROM materiais_compra WHERE ETAPA_PROCESS < 2");
+              $materiais = $connDB->prepare("SELECT * FROM materiais_lotes WHERE ETAPA_PROCESS < 2"); // alterado compras -> lotes
               $materiais->execute();
               while($rowMat = $materiais->fetch(PDO::FETCH_ASSOC)){
                 $id = $rowMat['ID_ESTOQUE']; ?>
@@ -71,7 +71,7 @@ include_once './RastreadorAtividades.php';
                       <div class="col-md-6">
                         <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 11px; background: rgba(0,0,0,0.3); color: aqua">Quantidade da Compra</span>
                           <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
-                                 value="<?php echo number_format($rowMat['QTDE_PEDIDO'], 0, ',', '.') . ' ' . $rowMat['UNIDADE']  ?>" readonly>
+                                 value="<?php echo number_format($rowMat['QTDE_LOTE'], 0, ',', '.') . ' ' . $rowMat['UNIDADE']  ?>" readonly>
                         </div>
                       </div>
                       <div class="col-md-6">
@@ -182,15 +182,13 @@ include_once './RastreadorAtividades.php';
                   $listaLotes->bindParam(':idLote', $rowEstoque['ID_ESTOQUE'], PDO::PARAM_INT); $listaLotes->execute();
                   while($rowLotes = $listaLotes->fetch(PDO::FETCH_ASSOC)){ ?>
                     <td style="width: 10%; font-size: 15px; text-align: center"><?php
-                      if($rowLotes['QTDE_LOTE'] == null){ echo ' empty ';}
-                      if($rowLotes['QTDE_LOTE'] > 0){ echo $rowLotes['ID_INTERNO'] . '<br>' . '[ ' . $rowLotes['NUMERO_LOTE'] . ' ]';} ?>
+                      echo $rowLotes['ID_INTERNO'] . '<br>' . '[ ' . $rowLotes['NUMERO_LOTE'] . ' ]'; ?>
                     </td>
                     <td style="width: 10%; font-size: 15px; text-align: center"><?php
-                      if($rowLotes['QTDE_LOTE'] == null){ echo ' - ';}
-                      if($rowLotes['QTDE_LOTE'] > 0){ echo number_format($rowLotes['QTDE_LOTE'], 0, ',', '.') . ' ' . $rowLotes['UNIDADE'];} ?>                   
+                      echo number_format($rowLotes['QTDE_LOTE'], 0, ',', '.') . ' ' . $rowLotes['UNIDADE']; ?>                   
                     </td>
                     <td style="width: 25%; font-size: 12px"><?php
-                      if($rowLotes['QTDE_LOTE'] == null){ echo 'Estoque está vazio';}
+                      if($rowLotes['QTDE_LOTE'] == null){ echo 'LOTE ESGOTADO';}
                       if($rowLotes['QTDE_LOTE'] > 0){ echo $rowLotes['SITUACAO'];} ?>                      
                     </td> <?php 
                   } ?>
