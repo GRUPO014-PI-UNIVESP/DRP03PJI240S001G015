@@ -127,7 +127,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             <div class="col-md-9">
               <h5>Lista de Compra Agendada</h5><?php
               $query_compra = $connDB->prepare("SELECT * FROM materiais_compra WHERE ETAPA_PROCESS = 0 ORDER BY DATA_PRAZO ASC"); $query_compra->execute();
-              while($rowCompra = $query_compra->fetch(PDO::FETCH_ASSOC)){ ?>
+              while($rowCompra = $query_compra->fetch(PDO::FETCH_ASSOC)){ $nPedido = $rowCompra['NUMERO_PEDIDO']; ?>
                 <div class="card text-bg-success mb-3" style="width: 50rem;">
                   <div class="card-body">
                     <div class="row g-2">
@@ -171,7 +171,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                       $sitCompra = 'COMPRA AGENDADA';
                       if($rowCompra['SITUACAO'] == $sitCompra){ ?>
                         <div class="col-md-3">
-                          <button class="btn btn-primary" style="font-size: 14px; float: right" onclick="location.href='./21CompraMaterial.php?id=<?php echo $descrMat ?>'">Autorizar Compra</button>
+                          <button class="btn btn-primary" style="font-size: 14px; float: right" onclick="location.href='./21CompraMaterial.php?id=<?php echo $nPedido ?>'">Autorizar Compra</button>
                         </div> <?php                        
                       } else { ?>
                         <div class="col-md-3">
