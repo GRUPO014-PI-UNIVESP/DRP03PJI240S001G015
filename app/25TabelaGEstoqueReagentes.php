@@ -29,44 +29,39 @@ include_once './RastreadorAtividades.php';
 <style>
   .table-rounded {
     position: relative;
-    border-collapse: collapse;
     display: block;
     width: fit-content;
     margin: 0 auto;
-    grid-template-columns: auto;
-    grid-gap: 10px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     background-color: dimgray;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 20px;
     overflow-y: auto;
     max-height: 500px;
+  }
+
+.table-rounded table {
+  border-collapse: separate;
+  border-spacing: 10px 0;
+  border-radius: 10px;
+  overflow: hidden;
 }
-  .table-rounded table {
-    border-collapse: separate;
-    border-spacing: 10px 0;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  .table-rounded th {
-    padding: 5px 10px;
-    border: 1px solid black;
-    margin-right: 10px;
-    white-space: nowrap;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
-    color: #333;
-    font-size: 12px;
-  }
-  .table-rounded th, .table-rounded td {
-    padding: 5px 10px;
-    border: 1px solid black;
-    text-align: center;
-    background-color: darkgray;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
-    color: black;
-    font-size: 12px;
-  }
+
+.table-rounded th, .table-rounded td {
+  padding: 5px 10px;
+  border: 1px solid black;
+  text-align: center;
+  background-color: darkgray;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+  color: black;
+  font-size: 12px;
+}
+
+.table-rounded th {
+  margin-right: 10px;
+  white-space: nowrap;
+  color: #333;
+}
 </style>
 <?php
   $query = "SELECT * FROM reagentes_estoque";
