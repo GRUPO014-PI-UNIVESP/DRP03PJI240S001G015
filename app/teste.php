@@ -26,6 +26,11 @@ include_once './RastreadorAtividades.php';
   };
   inactivityTime();
 </script>
+<style>
+  .tabela{
+    height: 480px; overflow-y: scroll; border: solid 1px grey;
+  }
+</style>
 <!-- Área Principal -->
 <div class="main">
   <div class="container-fluid">
@@ -158,47 +163,29 @@ include_once './RastreadorAtividades.php';
       </div><!-- fim da DIV tab pane manager -->
           
       <div class="tab-pane fade" id="almoxarifado-tab-pane" role="tabpanel" aria-labelledby="almoxarifado-tab" tabindex="0"><br>
-        <h5 style="color: aqua">Estoque de Materiais e Insumos</h5>
-        <div class="container">
-          <div class="overflow-auto"><?php
-            $listaEstoque = $connDB->prepare("SELECT * FROM materiais_estoque ORDER BY DESCRICAO ASC"); $listaEstoque->execute(); ?>
-            <table class="table table-dark table-hover">
-              <thead style="font-size: 12px">
-                <tr>
-                  <th scope="col" style="width: 30%"                    >Descrição do Material</th>
-                  <th scope="col" style="width: 15%; text-align: center">Total em Estoque     </th>
-                  <th scope="col" style="width: 15%; text-align: center">ID Interno           </th>
-                  <th scope="col" style="width: 15%; text-align: center">Qtde do Lote         </th>
-                  <th scope="col" style="width: 25%"                    >Situação Atual       </th>
-                </tr>
-              </thead>
-              <tbody style="height: 80%; font-size: 11px;"><?php
-              while($rowEstoque = $listaEstoque->fetch(PDO::FETCH_ASSOC)){ ?>
-                <tr>
-                  <td style="width: 35%; font-size: 14px"><?php echo $rowEstoque['DESCRICAO'] . '<br>' . $rowEstoque['FORNECEDOR']; ?></td>
-                  <td style="width: 10%; font-size: 15px; text-align: center"><?php echo $rowEstoque['QTDE_ESTOQUE'] . ' ' . $rowEstoque['UNIDADE'] ?></td>
-                  <?php
-                  $listaLotes = $connDB->prepare("SELECT NUMERO_LOTE, ID_INTERNO, QTDE_LOTE, UNIDADE, SITUACAO FROM materiais_lotes WHERE ID_ESTOQUE = :idLote");
-                  $listaLotes->bindParam(':idLote', $rowEstoque['ID_ESTOQUE'], PDO::PARAM_INT); $listaLotes->execute();
-                  while($rowLotes = $listaLotes->fetch(PDO::FETCH_ASSOC)){ ?>
-                    <td style="width: 10%; font-size: 15px; text-align: center"><?php
-                      echo $rowLotes['ID_INTERNO'] . '<br>' . '[ ' . $rowLotes['NUMERO_LOTE'] . ' ]'; ?>
-                    </td>
-                    <td style="width: 10%; font-size: 15px; text-align: center"><?php
-                      echo number_format($rowLotes['QTDE_LOTE'], 0, ',', '.') . ' ' . $rowLotes['UNIDADE']; ?>                   
-                    </td>
-                    <td style="width: 25%; font-size: 12px"><?php
-                      if($rowLotes['QTDE_LOTE'] == null){ echo 'LOTE ESGOTADO';}
-                      if($rowLotes['QTDE_LOTE'] > 0){ echo $rowLotes['SITUACAO'];} ?>                      
-                    </td> <?php 
-                  } ?>
-                </tr><?php 
-              } ?>
-              </tbody>
-            </table>
-          </div>
+        <h5 style="color: aqua">Estoque de Materiais e Insumos</h5><br>
+        <div class="row g-1">
+          <div class="col-md-4"><p style="text-align: center; color: grey">Descrição do Material</p></div>
+          <div class="col-md-2"><p style="text-align: center; color: grey">Estoque Total        </p></div>
+          <div class="col-md-2"><p style="text-align: center; color: grey">ID Interno/No.Lote   </p></div>
+          <div class="col-md-2"><p style="text-align: center; color: grey">Qtde Disponível      </p></div>
         </div>
-      </div>
+        <div class="tabela"><?php 
+          $query_material = $connDB->prepare("SELECT * FROM materiais_estoque");$query_material->execute();
+          while($rowMat = $query_material->fetch(PDO::FETCH_ASSOC)){ ?>
+            <div class="row g-1">
+              <div class="col-md-4">
+                <p><?php echo $rowMat['DESCRICAO'] ?></p>
+              </div>
+              <div class="col-md-2">
+                <p style="text-align: center"><?php echo number_format($rowMat['QTDE_ESTOQUE'], 1, ',', '.') . ' ' . $rowMat['UNIDADE'] ?></p>
+              </div>
+            </div>
+<?php
+          } ?>
+
+        </div><!-- fim da classe tabela -->
+                
 
       <div class="tab-pane fade" id="transporte-tab-pane" role="tabpanel" aria-labelledby="transporte-tab" tabindex="0"><br><br>
         <button type="button" class="btn btn-outline-info" style="width:400px" 
