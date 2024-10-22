@@ -27,16 +27,45 @@ include_once './RastreadorAtividades.php';
   inactivityTime();
 </script>
 <style>
-  .scroll-tela {
+  .table-rounded {
     position: relative;
-    left: 580px;
-    width: 50%;
-    height: 500px;
+    border-collapse: collapse;
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+    grid-template-columns: auto;
+    grid-gap: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    background-color: dimgray;
+    padding-top: 20px;
+    padding-bottom: 20px;
     overflow-y: auto;
-    border: 1px solid #ccc;
-    background-color: black;
-    padding: 10px;
-    border-radius: 5px;
+    max-height: 500px;
+}
+  .table-rounded table {
+    border-collapse: separate;
+    border-spacing: 10px 0;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .table-rounded th {
+    padding: 5px 10px;
+    border: 1px solid black;
+    margin-right: 10px;
+    white-space: nowrap;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+    color: #333;
+    font-size: 12px;
+  }
+  .table-rounded th, .table-rounded td {
+    padding: 5px 10px;
+    border: 1px solid black;
+    text-align: center;
+    background-color: darkgray;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+    color: black;
+    font-size: 12px;
   }
 </style>
 <?php
@@ -45,11 +74,11 @@ include_once './RastreadorAtividades.php';
   $stmt->execute();
   $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
   if (count($dados) > 0) {
-    $cabecalho = '<tr><th style="color: #00FFFF; padding-left: 80px;">Tipo</th><th style="color: #00FFFF; padding-left: 150px;">Desrição</th><th style="color: #00FFFF; padding-left: 150px;">Quantidade Estoque</th><th style="color: #00FFFF; padding-left: 140px;">Unidade</th></tr>';
+    $cabecalho = '<tr><th style="color: #00FFFF; paddding-left: 150px; padding-right: 10px;">Tipo</th><th style="color: #00FFFF; padding-left: 100px; padding-right: 100px;">Desrição</th><th style="color: #00FFFF; padding-left: 20px; padding-right: 20px;">Quantidade Estoque</th><th style="color: #00FFFF; padding-left: 50px; padding-right: 50px;">Unidade</th></tr>';
     $linhas = '';
     foreach ($dados as $dado) {
       $linhas .= '<tr>
-          <td style="color: #00FF00; padding-left: 75px;">' . $dado['TIPO'] . '</td><td style="color: #00FF00; padding-left: 155px;">' . $dado['DESCRICAO'] . '</td><td style="color: #00FF00; padding-left: 215px;">' . $dado['QTDE_ESTOQUE'] . '</td><td style="color: #00FF00; padding-left: 160px;">' . $dado['UNIDADE'] . '</td>
+          <td style="color: #00FF00; padding-left: 80px; padding-right: 80px;">' . $dado['TIPO'] . '</td><td style="color: #00FF00; padding-left: 125px; padding-right: 125px;">' . $dado['DESCRICAO'] . '</td><td style="color: #00FF00;">' . $dado['QTDE_ESTOQUE'] . '</td><td style="color: #00FF00;">' . $dado['UNIDADE'] . '</td>
       </tr>';
     }
     $resultado = $cabecalho . $linhas;
@@ -64,15 +93,13 @@ include_once './RastreadorAtividades.php';
   <body>
     <div class="container-fluid">
       <div class="col-2 mt-5 mb-3 mx-auto">
-        <p style="position: relative; left: 150px; font-size: 20px; color: whitesmoke">Estoque de Reagentes</p>
+        <p style="position: relative; left: 60px; font-size: 20px; color: whitesmoke">Estoque de Reagentes</p>
       </div>
-      <div class="scroll-tela" style="margin-top: 20px">
         <div class="table-rounded" style="margin-top: 1px;">
           <table>
             <?php if (isset($resultado)) { echo $resultado; } ?>
           </table>
         </div>
-      </div>
     </div>
   </body>
 </html>
