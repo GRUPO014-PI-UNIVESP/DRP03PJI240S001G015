@@ -145,7 +145,7 @@ $responsavel = $_SESSION['nome_func'];
       $notaFiscal  = $confirma['notaFiscal']                    ; $atualiza    = $confirma['atualizado'];       
       $reservado   = $confirma['reservado']                     ; $nLoteForn   = strtoupper($confirma['nLoteForn']);
       $fornecedor  = strtoupper($confirma['fornecedor']); $encarregado = strtoupper($confirma['encarregado']);
-      $dataFabri   = date('Y-m-d', strtotime($confirma['dataFabriMP'])); $dataVali    = date('Y-m-d', strtotime($confirma['dataValidade']));
+      $dataFabri   = date('Y-m-d', strtotime($confirma['dataFabriMP'])); $dataVali = date('Y-m-d', strtotime($confirma['dataValidade']));
             
       $salvaMat = $connDB->prepare("UPDATE materiais_lotes SET NUMERO_LOTE=:nLoteF, ID_INTERNO=:nLoteIn, ID1=:id1, ID2=:id2, ID3=:id3, ETAPA_PROCESS=:etapa, SITUACAO=:situacao, NOTA_FISCAL=:notaFiscal, DATA_FABRI=:dataFabri, DATA_VALI=:dataVali, DATA_COMPRA=:dataCompra, DATA_RECEBIMENTO=:dataReceb, ENCARREGADO=:encarregado, RESPONSAVEL=:responsavel WHERE DESCRICAO=:descrMat AND ETAPA_PROCESS=1");
       $salvaMat->bindParam(':nLoteF'     , $nLoteForn  , PDO::PARAM_STR); $salvaMat->bindParam(':nLoteIn'    , $nLoteIn              , PDO::PARAM_STR);
@@ -162,7 +162,7 @@ $responsavel = $_SESSION['nome_func'];
       $atualizaPedido->bindParam(':situacao', $sitProduto, PDO::PARAM_STR); $atualizaPedido->bindParam(':numPedido', $rowReserva['NUMERO_PEDIDO'], PDO::PARAM_STR); $atualizaPedido->execute();
 
       $atualEstoque = $connDB->prepare("UPDATE materiais_estoque SET QTDE_ESTOQUE = :estoqueAtual WHERE ID_ESTOQUE = :idEstoque");
-      $atualEstoque->bindParam(':estoqueAtual', $estoque, PDO::PARAM_STR); $atualEstoque->bindParam(':idEstoque'   , $rowEstoque['ID_ESTOQUE'], PDO::PARAM_STR); $atualEstoque->execute();
+      $atualEstoque->bindParam(':estoqueAtual', $estoque, PDO::PARAM_STR); $atualEstoque->bindParam(':idEstoque', $rowEstoque['ID_ESTOQUE'], PDO::PARAM_STR); $atualEstoque->execute();
 
       $atualizaReserva = $connDB->prepare("UPDATE materiais_reserva SET DISPONIBILIDADE = :disp WHERE ID_ESTOQUE = :idEstoque");
       $atualizaReserva->bindParam(':disp', $etapa, PDO::PARAM_STR); $atualizaReserva->bindParam(':idEstoque', $rowEstoque['ID_ESTOQUE'] , PDO::PARAM_STR); $atualizaReserva->execute();

@@ -287,11 +287,6 @@ include_once './RastreadorAtividades.php';
           $verificaEstoque->execute(); $rowVerify = $verificaEstoque->fetch(PDO::FETCH_ASSOC);
           $ajQtde = $rowVerify['QTDE_ESTOQUE'] - $rowStk['TOTAL'];
 
-          $novoEstoque = $connDB->prepare("UPDATE materiais_estoque SET QTDE_ESTOQUE = :qtdeUse WHERE ID_ESTOQUE = :idEstoque");
-          $novoEstoque->bindParam(':idEstoque', $rowStk['ID_ESTOQUE'], PDO::PARAM_INT);
-          $novoEstoque->bindParam(':qtdeUse'  , $ajQtde              , PDO::PARAM_STR);
-          $novoEstoque->execute();
-
           $retiraFila = $connDB->prepare("DELETE FROM fila_ocupacao WHERE NUMERO_PEDIDO = :numPedido");
           $retiraFila->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);
           $retiraFila->execute();

@@ -279,16 +279,6 @@
             $atualiza->bindParam(':nLoteInterno', $_SESSION['nLoteI'], PDO::PARAM_STR);
             $atualiza->execute();
 
-            $query_estoque = $connDB->prepare("SELECT QTDE_ESTOQUE FROM materiais_estoque WHERE ID_ESTOQUE = :idEstoque");
-            $query_estoque->bindParam(':idEstoque', $_SESSION['idEstoque'], PDO::PARAM_STR);
-            $query_estoque->execute(); $rowEstoque = $query_estoque->fetch(PDO::FETCH_ASSOC);
-            $qtdeAtual = $rowEstoque['QTDE_ESTOQUE'] + $_SESSION['qtdeLote'];
-
-            $estoqueAtual = $connDB->prepare("UPDATE materiais_estoque SET QTDE_ESTOQUE = :atualizaEstoque WHERE ID_ESTOQUE = :idEstoque");
-            $estoqueAtual->bindParam(':atualizaEstoque', $qtdeAtual, PDO::PARAM_STR);
-            $estoqueAtual->bindParam(':idEstoque', $_SESSION['idEstoque'], PDO::PARAM_STR);
-            $estoqueAtual->execute();
-
             $atualizaReserva = $connDB->prepare("UPDATE materiais_reserva SET DISPONIBILIDADE = :disp WHERE ID_ESTOQUE = :idEstoque");
             $atualizaReserva->bindParam(':disp'     , $etapa                , PDO::PARAM_STR);
             $atualizaReserva->bindParam(':idEstoque', $_SESSION['idEstoque'], PDO::PARAM_STR); $atualizaReserva->execute();

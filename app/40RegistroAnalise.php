@@ -1,30 +1,17 @@
 <?php
-  // inclusão do banco de dados e estrutura base da página web
-  include_once './ConnectDB.php';
-  include_once './EstruturaPrincipal.php';
-  $_SESSION['posicao'] = 'Registro de Análise';
-  include_once './RastreadorAtividades.php';
+// inclusão do banco de dados e estrutura base da página web
+include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSION['posicao'] = 'Registro de Análise'; include_once './RastreadorAtividades.php';
 ?>
 <script>
   // verifica inatividade da página e fecha sessão
   let inactivityTime = function () {
-    let time;
-    window.onload        = resetTimer;
-    document.onmousemove = resetTimer;
-    document.onkeypress  = resetTimer;
+    let time;window.onload        = resetTimer;document.onmousemove = resetTimer;document.onkeypress  = resetTimer;
     function deslogar() {
-      <?php
-        $_SESSION['posicao'] = 'Encerrado por inatividade';
-        include_once './RastreadorAtividades.php';
-      ?>
+      <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php';?>
       window.location.href = 'LogOut.php';
      }
-    function resetTimer() {
-      clearTimeout(time);
-       time = setTimeout(deslogar, 600000);
-     }
-  };
-  inactivityTime();
+    function resetTimer() {clearTimeout(time); time = setTimeout(deslogar, 600000);}
+  }; inactivityTime();
 </script>
 <!-- Área Principal -->
 <div class="main">
@@ -32,24 +19,19 @@
     <ul style="padding:5px" class="nav nav-tabs" id="myTab" role="tablist">
       <!-- Etiqueta das Abas -->
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="entrada-tab" data-bs-toggle="tab" data-bs-target="#entrada-tab-pane" type="button" 
-                role="tab" aria-controls="entrada-tab-pane" aria-selected="true">Entrada de Dados</button>
+        <button class="nav-link active" id="entrada-tab" data-bs-toggle="tab" data-bs-target="#entrada-tab-pane" type="button" role="tab" aria-controls="entrada-tab-pane" aria-selected="true">Entrada de Dados</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="ET-tab" data-bs-toggle="tab" data-bs-target="#ET-tab-pane" type="button" 
-                role="tab" aria-controls="ET-tab-pane" aria-selected="false">Especificações</button>
+        <button class="nav-link" id="ET-tab" data-bs-toggle="tab" data-bs-target="#ET-tab-pane" type="button" role="tab" aria-controls="ET-tab-pane" aria-selected="false">Especificações</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="MA-tab" data-bs-toggle="tab" data-bs-target="#MA-tab-pane" type="button" 
-                role="tab" aria-controls="MA-tab-pane" aria-selected="false">Metodologia</button>
+        <button class="nav-link" id="MA-tab" data-bs-toggle="tab" data-bs-target="#MA-tab-pane" type="button" role="tab" aria-controls="MA-tab-pane" aria-selected="false">Metodologia</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="PQ-tab" data-bs-toggle="tab" data-bs-target="#PQ-tab-pane" type="button" 
-                role="tab" aria-controls="PQ-tab-pane" aria-selected="false">Procedimentos</button>
+        <button class="nav-link" id="PQ-tab" data-bs-toggle="tab" data-bs-target="#PQ-tab-pane" type="button" role="tab" aria-controls="PQ-tab-pane" aria-selected="false">Procedimentos</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="RE-tab" data-bs-toggle="tab" data-bs-target="#RE-tab-pane" type="button" 
-                role="tab" aria-controls="RE-tab-pane" aria-selected="false">Referências</button>
+        <button class="nav-link" id="RE-tab" data-bs-toggle="tab" data-bs-target="#RE-tab-pane" type="button" role="tab" aria-controls="RE-tab-pane" aria-selected="false">Referências</button>
       </li>        
     </ul>
 
@@ -62,80 +44,65 @@
         $dadosMaterial->bindParam(':idMat', $_GET['id'], PDO::PARAM_INT);
         $dadosMaterial->execute(); $rowMaterial = $dadosMaterial->fetch(PDO::FETCH_ASSOC);
         $dataRegistro = date('Y-m-d');
-        $_SESSION['nLoteI']     = $rowMaterial['ID_INTERNO'];
-        $_SESSION['nLoteF']     = $rowMaterial['NUMERO_LOTE'];
-        $_SESSION['fornecedor'] = $rowMaterial['FORNECEDOR'];
-        $_SESSION['dataFabri']  = $rowMaterial['DATA_FABRI'];
-        $_SESSION['dataVali']   = $rowMaterial['DATA_VALI'];
-        $_SESSION['notaFiscal'] = $rowMaterial['NOTA_FISCAL'];
-        $_SESSION['descrMat']   = $rowMaterial['DESCRICAO'];
-        $_SESSION['qtdeLote']   = $rowMaterial['QTDE_LOTE'];
-        $_SESSION['idEstoque']  = $rowMaterial['ID_ESTOQUE'];
-
+        $_SESSION['nLoteI']   = $rowMaterial['ID_INTERNO'] ; $_SESSION['idEstoque']  = $rowMaterial['ID_ESTOQUE'] ; $_SESSION['dataFabri'] = $rowMaterial['DATA_FABRI'];
+        $_SESSION['nLoteF']   = $rowMaterial['NUMERO_LOTE']; $_SESSION['fornecedor'] = $rowMaterial['FORNECEDOR'] ; $_SESSION['descrMat']  = $rowMaterial['DESCRICAO'] ;
+        $_SESSION['dataVali'] = $rowMaterial['DATA_VALI']  ; $_SESSION['notaFiscal'] = $rowMaterial['NOTA_FISCAL']; $_SESSION['qtdeLote']  = $rowMaterial['QTDE_LOTE'] ;
       } ?>
       <div class="tab-pane fade show active" id="entrada-tab-pane" role="tabpanel" aria-labelledby="entrada-tab" tabindex="0"><br>
         <div class="row g-1">
           <h6>Informações do Material Analisado</h6>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="dataRegistro" name="dataRegistro" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
-                     value="<?php echo date('d/m/Y', strtotime($dataRegistro)) ?>" readonly>
+              <input type="text" class="form-control" id="dataRegistro" name="dataRegistro" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($dataRegistro)) ?>" readonly>
               <label for="dataRegistro" style="color: aqua; font-size: 12px; background: none">Data de Registro</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="nLoteInterno" name="nLoteInterno" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
-                     value="<?php echo $rowMaterial['ID_INTERNO'] ?>" readonly>
+              <input type="text" class="form-control" id="nLoteInterno" name="nLoteInterno" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['ID_INTERNO'] ?>" readonly>
               <label for="nLoteInterno" style="color: aqua; font-size: 12px; background: none">No.de Lote Interno</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="nLoteFornecedor" name="nLoteFornecedor" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
-                     value="<?php echo $rowMaterial['NUMERO_LOTE'] ?>" readonly>
+              <input type="text" class="form-control" id="nLoteFornecedor" name="nLoteFornecedor" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['NUMERO_LOTE'] ?>" readonly>
               <label for="nLoteFornecedor" style="color: aqua; font-size: 12px; background: none">No.de Lote do Fornecedor</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="fornecedor" name="fornecedor" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" 
-                     value="<?php echo $rowMaterial['FORNECEDOR'] ?>" readonly>
+              <input type="text" class="form-control" id="fornecedor" name="fornecedor" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['FORNECEDOR'] ?>" readonly>
               <label for="fornecedor" style="color: aqua; font-size: 12px; background: none">Fornecedor</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="dataFabri" name="dataFabri" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
-                     value="<?php echo date('d/m/Y', strtotime($rowMaterial['DATA_FABRI'])) ?>" readonly>
+              <input type="text" class="form-control" id="dataFabri" name="dataFabri" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($rowMaterial['DATA_FABRI'])) ?>" readonly>
               <label for="dataFabri" style="color: aqua; font-size: 12px; background: none">Data de Fabricação</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="dataVali" name="dataVali" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
-                     value="<?php echo date('d/m/Y', strtotime($rowMaterial['DATA_VALI'])) ?>" readonly>
+              <input type="text" class="form-control" id="dataVali" name="dataVali" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($rowMaterial['DATA_VALI'])) ?>" readonly>
               <label for="dataVali" style="color: aqua; font-size: 12px; background: none">Data de Validade</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="notaFiscal" name="notaFiscal" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" 
-                     value="<?php echo $rowMaterial['NOTA_FISCAL'] ?>" readonly>
+              <input type="text" class="form-control" id="notaFiscal" name="notaFiscal" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['NOTA_FISCAL'] ?>" readonly>
               <label for="notaFiscal" style="color: aqua; font-size: 12px; background: none">Nota Fiscal</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="descrMat" name="descrMat" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" 
-                     value="<?php echo $rowMaterial['DESCRICAO'] ?>" readonly>
+              <input type="text" class="form-control" id="descrMat" name="descrMat" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['DESCRICAO'] ?>" readonly>
               <label for="descrMat" style="color: aqua; font-size: 12px; background: none">Descrição do Material</label>
               <p style="font-size: 11px; color: grey"></p>
             </div>
@@ -236,20 +203,12 @@
           </form><?php
           $confirma = filter_input_array(INPUT_POST, FILTER_DEFAULT);
           if(!empty($confirma['confirma'])){
-            $_SESSION['confirma']      = $confirma['confirma'];
-            $_SESSION['aspecto']       = $confirma['aspecto'];
-            $_SESSION['cor']           = $confirma['cor'];
-            $_SESSION['odor']          = $confirma['odor'];
-            $_SESSION['contaminantes'] = $confirma['contaminantes'];
-            $_SESSION['perdaMassa']    = $confirma['perdaMassa'];
-            $_SESSION['escalaPH']      = $confirma['escalaPH'];
-            $_SESSION['pureza']        = $confirma['pureza'];
-            $_SESSION['observacao']    = $confirma['observacao'];
-
+            $_SESSION['odor']    = $confirma['odor']   ; $_SESSION['confirma']   = $confirma['confirma']  ; $_SESSION['contaminantes'] = $confirma['contaminantes'];
+            $_SESSION['aspecto'] = $confirma['aspecto']; $_SESSION['perdaMassa'] = $confirma['perdaMassa']; $_SESSION['pureza']        = $confirma['pureza'];
+            $_SESSION['cor']     = $confirma['cor']    ; $_SESSION['observacao'] = $confirma['observacao']; $_SESSION['escalaPH']      = $confirma['escalaPH'];  
             header('Location: ./41RegistroAnalise.php');
-          }
-
-        ?></div><!-- fim da div row g1 -->
+          } ?>
+        </div><!-- fim da div row g1 -->
       </div><!-- fim da tab entrada -->
 
       <!-- Especificações -->
