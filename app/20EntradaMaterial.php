@@ -92,9 +92,13 @@ $responsavel = $_SESSION['nome_func'];
           <div class="col-md-7"></div><div class="col-md-2"></div>
           <div class="col-md-2">
             <div class="form-floating mb-3"><?php $estoque = 0;
-              $queryEstoque = $connDB->prepare("SELECT * FROM materiais_estoque WHERE ID_ESTOQUE = :idEstoque"); $queryEstoque->bindParam(':idEstoque', $rowMP['ID_ESTOQUE'], PDO::PARAM_INT); $queryEstoque->execute(); $rowEstoque = $queryEstoque->fetch(PDO::FETCH_ASSOC);
-              if($rowEstoque['QTDE_ESTOQUE'] == null){ $estoque = 0;}  if($rowEstoque['QTDE_ESTOQUE'] > 0){ $estoque = $rowEstoque['QTDE_ESTOQUE']; }
+              $queryEstoque = $connDB->prepare("SELECT * FROM materiais_estoque WHERE ID_ESTOQUE = :idEstoque");
+              $queryEstoque->bindParam(':idEstoque', $rowMP['ID_ESTOQUE'], PDO::PARAM_INT);
+              $queryEstoque->execute(); $rowEstoque = $queryEstoque->fetch(PDO::FETCH_ASSOC);
+              if($rowEstoque['QTDE_ESTOQUE'] < 1){ $estoque = 0;} else
+              if($rowEstoque['QTDE_ESTOQUE'] > 0){ $estoque = $rowEstoque['QTDE_ESTOQUE']; }
               $atualizado = $estoque + $rowEstoque['QTDE_ESTOQUE']; ?>
+
               <input type="text" class="form-control" id="estoque" name="estoque" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center" value="<?php echo number_format($estoque, 0, ',', '.') . ' ' . $rowEstoque['UNIDADE'] ?>" readonly>
               <label for="estoque" style="color: aqua; font-size: 12px; background: none">Qtde em Estoque</label><p style="font-size: 11px; color: grey">Somente consulta</p>
             </div>
@@ -150,7 +154,8 @@ $responsavel = $_SESSION['nome_func'];
       $atualiza   = $confirma['atualizado']; $descrMat  = strtoupper($confirma['descrMat']) ; $dataFabri  = date('Y-m-d', strtotime($confirma['dataFabriMP']));       
       $reservado  = $confirma['reservado'] ; $nLoteForn = strtoupper($confirma['nLoteForn']); $dataVali   = date('Y-m-d', strtotime($confirma['dataValidade']));
                        
-      $salvaMat = $connDB->prepare("UPDATE materiais_lotes SET NUMERO_LOTE=:nLoteF, ID_INTERNO=:nLoteIn, ID1=:id1, ID2=:id2, ID3=:id3, ETAPA_PROCESS=:etapa, SITUACAO=:situacao, NOTA_FISCAL=:notaFiscal, DATA_FABRI=:dataFabri, DATA_VALI=:dataVali, DATA_COMPRA=:dataCompra, DATA_RECEBIMENTO=:dataReceb, ENCARREGADO=:encarregado, RESPONSAVEL=:responsavel WHERE DESCRICAO=:descrMat AND ETAPA_PROCESS=1");
+      $salvaMat = $connDB->prepare("UPDATE materiais_lotes SET NUMERO_LOTE=:nLoteF, ID_INTERNO=:nLoteIn, ID1=:id1, ID2=:id2, ID3=:id3, ETAPA_PROCESS=:etapa, SITUACAO=:situacao, NOTA_FISCAL=:notaFiscal, DATA_FABRI=:dataFabri, DATA_VALI=:dataVali, DATA_COMPRA=:dataCompra, DATA_RECEBIMENTO=:dataReceb, ENCARREGADO=:encarregado, RESPONSAVEL=:responsavel 
+      WHERE ID_COMPRA = :idCompra AND ETAPA_PROCESS=1");
       $salvaMat->bindParam(':nLoteF'     , $nLoteForn  , PDO::PARAM_STR); $salvaMat->bindParam(':nLoteIn'    , $nLoteIn              , PDO::PARAM_STR);
       $salvaMat->bindParam(':id1'        , $seqAtual   , PDO::PARAM_STR); $salvaMat->bindParam(':id2'        , $mesAtual             , PDO::PARAM_INT);
       $salvaMat->bindParam(':id3'        , $anoAtual   , PDO::PARAM_INT); $salvaMat->bindParam(':etapa'      , $etapa                , PDO::PARAM_INT); 
@@ -158,7 +163,7 @@ $responsavel = $_SESSION['nome_func'];
       $salvaMat->bindParam(':dataFabri'  , $dataFabri  , PDO::PARAM_STR); $salvaMat->bindParam(':dataVali'   , $dataVali             , PDO::PARAM_STR);
       $salvaMat->bindParam(':dataReceb'  , $dataEntrada, PDO::PARAM_STR); $salvaMat->bindParam(':dataCompra' , $rowMP['DATA_PEDIDO'] , PDO::PARAM_STR);
       $salvaMat->bindParam(':encarregado', $encarregado, PDO::PARAM_STR); $salvaMat->bindParam(':responsavel', $_SESSION['nome_func'], PDO::PARAM_STR);
-      $salvaMat->bindParam(':descrMat'   , $descrMat   , PDO::PARAM_STR); $salvaMat->execute();
+      $salvaMat->bindParam(':idCompra'   , $_GET['id'] , PDO::PARAM_STR); $salvaMat->execute();
 
       $sitProduto = 'AGUARDANDO LIBERAÇÃO DOS MATERIAIS';
       $atualizaPedido = $connDB->prepare("UPDATE pedidos SET SITUACAO = :situacao WHERE NUMERO_PEDIDO = :numPedido");

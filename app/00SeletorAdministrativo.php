@@ -85,7 +85,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                         </div>
                         <div class="col-md-3">
                           <div class="input-group mb-3"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Fabricação</span>
-                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: center; background: none" value="" readonly>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 14px; text-align: center; background: none" value="<?php echo date('d/m/Y', strtotime($rowPedido['DATA_AGENDA'])) ?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-3">
