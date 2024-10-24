@@ -120,7 +120,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
         <div class="tab-pane fade" id="compras-tab-pane" role="tabpanel" aria-labelledby="comercial-tab" tabindex="0"><br><br>
           <div class="row g-3">
             <div class="col-md-3">
-              <button type="button" class="btn btn-outline-warning" style="width:250px" onclick="location.href='<?php echo $acesso12 ?>'">Compra de Material</button><br><br>
+              <button type="button" class="btn btn-outline-warning" style="width:250px" onclick="location.href='<?php echo $acesso16 ?>'">Compra de Material</button><br><br>
               <button type="button" class="btn btn-outline-warning" style="width:250px" onclick="location.href='<?php echo $acesso15 ?>'">Cadastro de Novo Material</button><br><br>
             </div>
 

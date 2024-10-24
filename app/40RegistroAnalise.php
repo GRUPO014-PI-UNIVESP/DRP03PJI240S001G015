@@ -203,9 +203,9 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
           </form><?php
           $confirma = filter_input_array(INPUT_POST, FILTER_DEFAULT);
           if(!empty($confirma['confirma'])){
-            $_SESSION['odor']    = $confirma['odor']   ; $_SESSION['confirma']   = $confirma['confirma']  ; $_SESSION['contaminantes'] = $confirma['contaminantes'];
-            $_SESSION['aspecto'] = $confirma['aspecto']; $_SESSION['perdaMassa'] = $confirma['perdaMassa']; $_SESSION['pureza']        = $confirma['pureza'];
-            $_SESSION['cor']     = $confirma['cor']    ; $_SESSION['observacao'] = $confirma['observacao']; $_SESSION['escalaPH']      = $confirma['escalaPH'];  
+            $_SESSION['odor']    = $confirma['odor']   ; $_SESSION['confirma']   = $confirma['confirma']  ; $_SESSION['contami']  = $confirma['contaminantes'];
+            $_SESSION['aspecto'] = $confirma['aspecto']; $_SESSION['perdaMassa'] = $confirma['perdaMassa']; $_SESSION['pureza']   = $confirma['pureza'];
+            $_SESSION['cor']     = $confirma['cor']    ; $_SESSION['observacao'] = $confirma['observacao']; $_SESSION['escalaPH'] = $confirma['escalaPH'];  
             header('Location: ./41RegistroAnalise.php');
           } ?>
         </div><!-- fim da div row g1 -->

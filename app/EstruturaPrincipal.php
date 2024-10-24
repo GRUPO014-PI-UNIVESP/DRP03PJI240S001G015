@@ -1,45 +1,33 @@
 <?php
+// Dashboard.php
+// Home do sistema
 
-  // Dashboard.php
-  // Home do sistema
+session_start(); // inicia sessão de trabalho
+ob_start();      // limpa buffer de saída
 
-  session_start(); // inicia sessão de trabalho
-  ob_start();      // limpa buffer de saída
+//definição de hora local
+date_default_timezone_set('America/Sao_Paulo');
 
-  //definição de hora local
-  date_default_timezone_set('America/Sao_Paulo');
+//Chama conexão com banco de dados
+include_once './ConnectDB.php';
 
-  //Chama conexão com banco de dados
-  include_once './ConnectDB.php';
+$msg = $connDB->prepare("SELECT * FROM mensagens WHERE RECEPTOR_MSG = :receptor AND CONFIRMA = 'UNRE'");
+$msg->bindParam(':receptor', $_SESSION['nome_func'], PDO::PARAM_STR); $msg->execute(); $numMsg = $msg->rowCount();
 
-  $msg = $connDB->prepare("SELECT * FROM mensagens WHERE RECEPTOR_MSG = :receptor AND CONFIRMA = 'UNRE'");
-  $msg->bindParam(':receptor', $_SESSION['nome_func'], PDO::PARAM_STR);
-  $msg->execute();
-  $numMsg = $msg->rowCount();
+if($_SESSION['departamento'] === 'ADMINISTRATIVO' || $_SESSION['credencial'] >= 4){ //$_SESSION['ordena'] = 'NOME_FUNCIONARIO';
+  $acesso1  = './00SeletorAdministrativo.php'; $acesso5  = './06QuadroFuncionarios.php' ; $acesso7  = './07CadastroFuncionario.php'; $acesso8  = './08EditaRegistroFuncionario.php';
+  $acesso9  = './10DeletaFunc.php'           ; $acesso10 = './11CadastroFuncionario.php'; $acesso11 = './33PedidoProduto.php'      ; $acesso12 = './21CompraMaterial.php'          ; 
+  $acesso13 = './30CadastroCliente.php'      ; $acesso14 = './31CadastroProduto.php'    ; $acesso15 = './23CadastroMaterial.php'   ; $acesso16 = './22CompraMaterial.php'          ; 
+}else{ $acesso1 = ''; $acesso5 = ''; $acesso7 = ''; $acesso8 = ''; $acesso9 = ''; $acesso10 = ''; $acesso12 = ''; $acesso13 = ''; $acesso14 = ''; $acesso15 = ''; $acesso16 = '';}
 
-  if($_SESSION['departamento'] === 'ADMINISTRATIVO' || $_SESSION['credencial'] >= 4){
-     $acesso1  = './00SeletorAdministrativo.php'   ; //$_SESSION['ordena'] = 'NOME_FUNCIONARIO';
-     $acesso5  = './06QuadroFuncionarios.php'      ; $acesso7  = './07CadastroFuncionario.php' ;
-     $acesso8  = './08EditaRegistroFuncionario.php'; $acesso9  = './10DeletaFunc.php'          ;
-     $acesso10 = './11CadastroFuncionario.php'     ; $acesso11 = './33PedidoProduto.php'       ;
-     $acesso12 = './21CompraMaterial.php'          ; $acesso13 = './30CadastroCliente.php'     ;
-     $acesso14 = './31CadastroProduto.php'         ; $acesso15 = './22CadastroMaterial.php'    ;
+if($_SESSION['departamento'] === 'GARANTIA DA QUALIDADE'|| $_SESSION['credencial'] >= 4){
+  $acesso20 = './01SeletorGQualidade.php'; $acesso21 = './40RegistroAnalise.php'  ;  
+}else{ $acesso20 = ''; $acesso21 = ''; }
 
-  }else{ $acesso1 = ''; $acesso5 = ''; $acesso7 = ''; $acesso8 = ''; $acesso9 = ''; $acesso10 = ''; $acesso11 = '';}
+if($_SESSION['departamento'] === 'LOGÍSTICA' || $_SESSION['credencial'] >= 4){ $acesso30 = './02SeletorLogistica.php';}else{ $acesso30 = ''; }
 
-  if($_SESSION['departamento'] === 'GARANTIA DA QUALIDADE'|| $_SESSION['credencial'] >= 4){
-    $acesso20 = './01SeletorGQualidade.php';
-    $acesso21 = './40RegistroAnalise.php'  ;  
-  }else{ $acesso20 = ''; $acesso21 = ''; }
-
-  if($_SESSION['departamento'] === 'LOGÍSTICA'      || $_SESSION['credencial'] >= 4){
-    $acesso30 = './02SeletorLogistica.php';     
-  }else{ $acesso30 = ''; }
-
-  if($_SESSION['departamento'] === 'PRODUÇÃO'       || $_SESSION['credencial'] >= 4){
-    $acesso40 = './03SeletorProducao.php';      
-  }else{ $acesso40 = ''; }
-  if($_SESSION['credencial'] >= 2){ $acesso60 = './05MonitorLogin.php'; } else{ $acesso60 = ''; }
+if($_SESSION['departamento'] === 'PRODUÇÃO' || $_SESSION['credencial'] >= 4){$acesso40 = './03SeletorProducao.php';}else{ $acesso40 = ''; }
+if($_SESSION['credencial'] >= 2){ $acesso60 = './05MonitorLogin.php'; } else{ $acesso60 = ''; }
 
 function limitador($texto, $limite, $quebra = true){ $tamanho = strlen($texto);
   if($tamanho <= $limite){ $novo_texto = $texto; }else{

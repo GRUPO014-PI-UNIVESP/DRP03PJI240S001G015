@@ -125,8 +125,8 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                     <td scope="col" style="width: 30%; color: yellow; font-size: 14px"> <?php echo $rowLotes['DESCRICAO'] ?> </td>
                     <td scope="col" style="width: 10%; color: yellow; font-size: 20px; text-align:center; font-weight: bolder"><?php echo number_format($rowMats['QTDE_RESERVA'], 0, ',', '.') . ' ' . $rowMats['UNIDADE'] ?></td>
                     <td scope="col" style="width: 10%; color: yellow; font-size: 20px; text-align:center; font-weight: bolder"><?php echo $rowLotes['ID_INTERNO'] ?></td>
-                    <td scope="col" style="width: 10%; color: green; font-size: 20px; text-align:center; font-weight: bolder" ><?php echo number_format($rowLotes['QTDE_LOTE'], 0, ',', '.') . ' ' . $rowLotes['UNIDADE'] ?></td>
-                    <td scope="col" style="width: 15%; color: green; font-size: 20px; text-align:center; font-weight: bolder">
+                    <td scope="col" style="width: 10%; color: green ; font-size: 20px; text-align:center; font-weight: bolder"><?php echo number_format($rowLotes['QTDE_LOTE'], 0, ',', '.') . ' ' . $rowLotes['UNIDADE'] ?></td>
+                    <td scope="col" style="width: 15%; color: green ; font-size: 20px; text-align:center; font-weight: bolder">
                       <div class="input-group mb-3">
                         <input type="number" class="form-control" aria-label="username" aria-describedby="qtdeUsada" id="qtdeUsada" name="qtdeUsada" autofocus required>
                         <span class="input-group-text" id="qtdeUsada"><?php echo $rowLotes['UNIDADE'] ?></span>
@@ -153,8 +153,8 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                   $delReserva->bindParam(':qtdeUsada', $falta, PDO::PARAM_STR); $delReserva->bindParam(':idEstoque', $rowMats['ID_ESTOQUE']     , PDO::PARAM_INT) ; $delReserva->execute();
 
                   $ajusteLote = $connDB->prepare("INSERT INTO materiais_ajuste (NUMERO_PEDIDO, ID_ESTOQUE, ID_INTERNO, QTDE) VALUES (:numPedido, :idEstoque, :idInterno, :qtde)");                 
-                  $ajusteLote->bindParam(':idEstoque', $rowMats['ID_ESTOQUE'], PDO::PARAM_INT);$ajusteLote->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);                 
-                  $ajusteLote->bindParam(':qtde'     , $confirma['qtdeUsada'], PDO::PARAM_STR);$ajusteLote->bindParam(':idInterno', $rowLotes['ID_INTERNO']    , PDO::PARAM_STR);
+                  $ajusteLote->bindParam(':idEstoque', $rowMats['ID_ESTOQUE'] , PDO::PARAM_INT); $ajusteLote->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);                 
+                  $ajusteLote->bindParam(':qtde'     , $confirmaP['qtdeUsada'], PDO::PARAM_STR); $ajusteLote->bindParam(':idInterno', $rowLotes['ID_INTERNO']    , PDO::PARAM_STR);
                   $ajusteLote->execute(); $finalizado = 1;
                 }               
               }            
@@ -180,9 +180,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
 
         while($rowStk = $atualizaEstoque->fetch(PDO::FETCH_ASSOC)){ $verificaLote = $connDB->prepare("SELECT QTDE_LOTE FROM materiais_lotes WHERE ID_INTERNO = :idInterno");
           $verificaLote->bindParam(':idInterno', $rowStk['ID_INTERNO'], PDO::PARAM_STR); $verificaLote->execute(); $rowLote = $verificaLote->fetch(PDO::FETCH_ASSOC);
-          $loteUse = $rowLote['QTDE_LOTE'] - $rowStk['QTDE'];
-          if($loteUse <= 0){$etapaL = 4; $situacaoL = 'LOTE ESGOTADO';}
-          if($loteUse >= 1){$etapaL = 3; $situacaoL = 'MATERIAL LIBERADO PARA USO';}
+          $loteUse = $rowLote['QTDE_LOTE'] - $rowStk['QTDE'];  if($loteUse <= 0){$etapaL = 4; $situacaoL = 'LOTE ESGOTADO';} if($loteUse >= 1){$etapaL = 3; $situacaoL = 'MATERIAL LIBERADO PARA USO';}
 
           $atualizaLote = $connDB->prepare("UPDATE materiais_lotes SET QTDE_LOTE = :qtdeLote, ETAPA_PROCESS = :etapaL, SITUACAO = :situacaoL WHERE ID_INTERNO = :idInterno");          
           $atualizaLote->bindParam(':qtdeLote', $loteUse, PDO::PARAM_STR); $atualizaLote->bindParam(':idInterno', $rowStk['ID_INTERNO'], PDO::PARAM_INT);

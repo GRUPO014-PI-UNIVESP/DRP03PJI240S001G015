@@ -154,7 +154,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
               </div>
               <div class="col-md-8">
                 <div class="row g-1"><?php
-                  $query_lotes = $connDB->prepare("SELECT * FROM materiais_lotes WHERE ID_ESTOQUE = :idEstoque AND QTDE_LOTE >= 1 ORDER BY QTDE_LOTE ASC");
+                  $query_lotes = $connDB->prepare("SELECT * FROM materiais_lotes WHERE ID_ESTOQUE = :idEstoque AND QTDE_LOTE >= 1 AND ETAPA_PROCESS = 3 ORDER BY QTDE_LOTE ASC");
                   $query_lotes->bindParam(':idEstoque', $rowMat['ID_ESTOQUE'], PDO::PARAM_INT); $query_lotes->execute(); $nLotes = $query_lotes->rowCount();
                   while($rowLotes = $query_lotes->fetch(PDO::FETCH_ASSOC)){ ?>
                   <div class="col-md-3"><p style="font-size: 20px;"><?php echo $rowLotes['ID_INTERNO']; ?></p></div>
