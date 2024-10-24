@@ -20,9 +20,9 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       <div class="row g-3">
         <h5>Efetivação de Compra de Material</h5>
         <?php
-        if(!empty($_GET['id'])){$nPedido = $_GET['id'];
-          $busca = $connDB->prepare("SELECT * FROM materiais_compra WHERE NUMERO_PEDIDO = :nPedido");
-          $busca->bindParam(':nPedido', $nPedido, PDO::PARAM_INT); $busca->execute(); $rowMat = $busca->fetch(PDO::FETCH_ASSOC);
+        if(!empty($_GET['id'])){$idCompra = $_GET['id'];
+          $busca = $connDB->prepare("SELECT * FROM materiais_compra WHERE ID_COMPRA = :idCompra");
+          $busca->bindParam(':idCompra', $idCompra, PDO::PARAM_INT); $busca->execute(); $rowMat = $busca->fetch(PDO::FETCH_ASSOC);
           $dataAgenda = date('Y-m-d', strtotime($rowMat['DATA_PEDIDO'])); ?>
           
           <div class="col-md-7">
@@ -61,8 +61,9 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       </div>
     </form><?php $confirmaCompra = filter_input_array(INPUT_POST, FILTER_DEFAULT);
     if(!empty($confirmaCompra['agendado'])){ $etapa = 1; $situacao = 'COMPRA EFETUADA, AGUARDANDO RECEBIMENTO'; $qtdeCompra = $confirmaCompra['qtdeLote'];
-      $realiza = $connDB->prepare("INSERT INTO materiais_lotes (ID_ESTOQUE, DESCRICAO, QTDE_LOTE, UNIDADE, ETAPA_PROCESS, SITUACAO, DATA_PRAZO) VALUES (:idEstoque, :descrMat, :qtdeLote, :uniMed, :etapa, :situacao, :dataPrazo)");
-      $realiza->bindParam(':idEstoque', $rowMat['ID_ESTOQUE'], PDO::PARAM_INT);                                    
+      $realiza = $connDB->prepare("INSERT INTO materiais_lotes (ID_COMPRA, ID_ESTOQUE, DESCRICAO, QTDE_LOTE, UNIDADE, ETAPA_PROCESS, SITUACAO, DATA_PRAZO) VALUES (:idCompra, :idEstoque, :descrMat, :qtdeLote, :uniMed, :etapa, :situacao, :dataPrazo)");
+      $realiza->bindParam(':idCompra' , $_GET['id']          , PDO::PARAM_INT);
+      $realiza->bindParam(':idEstoque', $rowMat['ID_ESTOQUE'], PDO::PARAM_INT);                                   
       $realiza->bindParam(':descrMat' , $rowMat['DESCRICAO'] , PDO::PARAM_STR);
       $realiza->bindParam(':qtdeLote' , $qtdeCompra          , PDO::PARAM_STR);
       $realiza->bindParam(':uniMed'   , $rowMat['UNIDADE']   , PDO::PARAM_STR);
@@ -71,11 +72,11 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       $realiza->bindParam(':dataPrazo', $rowMat['DATA_PRAZO'], PDO::PARAM_STR);
       $realiza->execute();
 
-      $atualiza = $connDB->prepare("UPDATE materiais_compra SET ETAPA_PROCESS = :etapa, QTDE_PEDIDO = :qtdeLote, SITUACAO = :situacao WHERE NUMERO_PEDIDO = :nPedido");
-      $atualiza->bindParam(':nPedido' , $rowMat['NUMERO_PEDIDO'], PDO::PARAM_STR);
-      $atualiza->bindParam(':etapa'   , $etapa                  , PDO::PARAM_INT);
-      $atualiza->bindParam(':qtdeLote', $qtdeCompra             , PDO::PARAM_STR);
-      $atualiza->bindParam(':situacao', $situacao               , PDO::PARAM_STR);
+      $atualiza = $connDB->prepare("UPDATE materiais_compra SET ETAPA_PROCESS = :etapa, QTDE_PEDIDO = :qtdeLote, SITUACAO = :situacao WHERE ID_COMPRA = :idCompra");
+      $atualiza->bindParam(':idCompra', $_GET['id'], PDO::PARAM_STR);
+      $atualiza->bindParam(':etapa'   , $etapa     , PDO::PARAM_INT);
+      $atualiza->bindParam(':qtdeLote', $qtdeCompra, PDO::PARAM_STR);
+      $atualiza->bindParam(':situacao', $situacao  , PDO::PARAM_STR);
       $atualiza->execute();
 
       header('Location: ./00SeletorAdministrativo.php');

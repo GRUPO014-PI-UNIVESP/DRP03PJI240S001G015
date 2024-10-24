@@ -40,7 +40,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
 
       <!-- Entrada de Dados --><?php
       if(!empty($_GET['id'])){
-        $dadosMaterial = $connDB->prepare("SELECT * FROM materiais_lotes WHERE ID_ESTOQUE = :idMat");
+        $dadosMaterial = $connDB->prepare("SELECT * FROM materiais_lotes WHERE ID_INTERNO = :idMat");
         $dadosMaterial->bindParam(':idMat', $_GET['id'], PDO::PARAM_INT);
         $dadosMaterial->execute(); $rowMaterial = $dadosMaterial->fetch(PDO::FETCH_ASSOC);
         $dataRegistro = date('Y-m-d');

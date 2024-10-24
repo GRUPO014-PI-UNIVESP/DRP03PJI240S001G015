@@ -20,7 +20,7 @@ $responsavel = $_SESSION['nome_func'];
     <form method="POST">
       <h5>Recebimento de Material</h5><br> <h6>Dados do Material</h6> <?php
       if(!empty($_GET['id'])){ $dataEntrada = date('Y-m-d');
-        $mpEntra = $connDB->prepare("SELECT * FROM materiais_compra WHERE ID_ESTOQUE = :id"); $mpEntra->bindParam(':id', $_GET['id'], PDO::PARAM_INT); $mpEntra->execute(); $rowMP = $mpEntra->fetch(PDO::FETCH_ASSOC); ?>
+        $mpEntra = $connDB->prepare("SELECT * FROM materiais_compra WHERE ID_COMPRA = :id"); $mpEntra->bindParam(':id', $_GET['id'], PDO::PARAM_INT); $mpEntra->execute(); $rowMP = $mpEntra->fetch(PDO::FETCH_ASSOC); ?>
         <div class="row g-2">
           <div class="col-md-2">
             <div class="form-floating mb-3">
@@ -92,7 +92,7 @@ $responsavel = $_SESSION['nome_func'];
           <div class="col-md-7"></div><div class="col-md-2"></div>
           <div class="col-md-2">
             <div class="form-floating mb-3"><?php $estoque = 0;
-              $queryEstoque = $connDB->prepare("SELECT * FROM materiais_estoque WHERE ID_ESTOQUE = :idEstoque"); $queryEstoque->bindParam(':idEstoque', $_GET['id'], PDO::PARAM_INT); $queryEstoque->execute(); $rowEstoque = $queryEstoque->fetch(PDO::FETCH_ASSOC);
+              $queryEstoque = $connDB->prepare("SELECT * FROM materiais_estoque WHERE ID_ESTOQUE = :idEstoque"); $queryEstoque->bindParam(':idEstoque', $rowMP['ID_ESTOQUE'], PDO::PARAM_INT); $queryEstoque->execute(); $rowEstoque = $queryEstoque->fetch(PDO::FETCH_ASSOC);
               if($rowEstoque['QTDE_ESTOQUE'] == null){ $estoque = 0;}  if($rowEstoque['QTDE_ESTOQUE'] > 0){ $estoque = $rowEstoque['QTDE_ESTOQUE']; }
               $atualizado = $estoque + $rowEstoque['QTDE_ESTOQUE']; ?>
               <input type="text" class="form-control" id="estoque" name="estoque" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center" value="<?php echo number_format($estoque, 0, ',', '.') . ' ' . $rowEstoque['UNIDADE'] ?>" readonly>
@@ -126,7 +126,12 @@ $responsavel = $_SESSION['nome_func'];
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3"><?php
-              $reserva = $connDB->prepare("SELECT SUM(QTDE_RESERVA) AS RESERVA, UNIDADE FROM materiais_reserva WHERE ID_ESTOQUE = :idEstoque"); $reserva->bindParam(':idEstoque', $rowEstoque['ID_ESTOQUE'], PDO::PARAM_STR); $reserva->execute(); $rowReserva = $reserva->fetch(PDO::FETCH_ASSOC); ?>
+
+              $reserva = $connDB->prepare("SELECT SUM(QTDE_RESERVA) AS RESERVA, UNIDADE FROM materiais_reserva WHERE NUMERO_PEDIDO = :numPedido AND ID_ESTOQUE = :idEstoque");
+              $reserva->bindParam(':numPedido', $rowMP['NUMERO_PEDIDO'], PDO::PARAM_STR);
+              $reserva->bindParam(':idEstoque', $rowMP['ID_ESTOQUE']   , PDO::PARAM_STR);
+              $reserva->execute(); $rowReserva = $reserva->fetch(PDO::FETCH_ASSOC); ?>
+
               <input type="text" class="form-control" id="reservado" name="reservado" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center" value="<?php echo number_format($rowReserva['RESERVA'], 0, ',', '.') . ' ' . $rowReserva['UNIDADE'] ?>" readonly>
               <label for="reservado" style="color: aqua; font-size: 12px; background: none">Quantidade Reservada</label><p style="font-size: 11px; color: grey">Somente consulta</p>
             </div>
@@ -162,8 +167,9 @@ $responsavel = $_SESSION['nome_func'];
       $atualizaReserva = $connDB->prepare("UPDATE materiais_reserva SET DISPONIBILIDADE = :disp WHERE ID_ESTOQUE = :idEstoque");
       $atualizaReserva->bindParam(':disp', $etapa, PDO::PARAM_STR); $atualizaReserva->bindParam(':idEstoque', $rowEstoque['ID_ESTOQUE'] , PDO::PARAM_STR); $atualizaReserva->execute();
 
-      $limpaAgenda = $connDB->prepare("DELETE FROM materiais_compra WHERE DESCRICAO = :descrMat");
-      $limpaAgenda->bindParam(':descrMat', $descrMat, PDO::PARAM_STR); $limpaAgenda->execute();
+      $limpaAgenda = $connDB->prepare("UPDATE materiais_compra SET ETAPA_PROCESS = :etapa WHERE ID_COMPRA = :idCompra");
+      $limpaAgenda->bindParam(':etapa'   , $etapa     , PDO::PARAM_INT);
+      $limpaAgenda->bindParam(':idCompra', $_GET['id'], PDO::PARAM_INT); $limpaAgenda->execute();
 
       header('Location: ./02SeletorLogistica.php');
     } ?>

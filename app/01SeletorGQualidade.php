@@ -1,47 +1,30 @@
 <?php
-  // inclusão do banco de dados e estrutura base da página web
-  include_once './ConnectDB.php';
-  include_once './EstruturaPrincipal.php';
-  $_SESSION['posicao'] = 'Qualidade';
-  include_once './RastreadorAtividades.php';
-
+// inclusão do banco de dados e estrutura base da página web
+include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSION['posicao'] = 'Qualidade'; include_once './RastreadorAtividades.php';
 ?>
 <script>
   // verifica inatividade da página e fecha sessão
   let inactivityTime = function () {
-    let time;
-    window.onload        = resetTimer;
-    document.onmousemove = resetTimer;
-    document.onkeypress  = resetTimer;
+    let time;window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress  = resetTimer;
     function deslogar() {
-      <?php
-        $_SESSION['posicao'] = 'Encerrado por inatividade';
-        include_once './RastreadorAtividades.php';
-      ?>
+      <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php';?>
       window.location.href = 'LogOut.php';
      }
-    function resetTimer() {
-      clearTimeout(time);
-       time = setTimeout(deslogar, 600000);
-     }
-  };
-  inactivityTime();
+    function resetTimer() {clearTimeout(time); time = setTimeout(deslogar, 600000);}
+  }; inactivityTime();
 </script>
 <!-- Área Principal -->
   <div class="main">
     <div class="container-fluid">
       <ul style="padding:5px" class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="laboratorio-tab" data-bs-toggle="tab" data-bs-target="#laboratorio-tab-pane" type="button" 
-            role="tab" aria-controls="laboratorio-tab-pane" aria-selected="true">Laboratório</button>
+          <button class="nav-link active" id="laboratorio-tab" data-bs-toggle="tab" data-bs-target="#laboratorio-tab-pane" type="button" role="tab" aria-controls="laboratorio-tab-pane" aria-selected="true">Laboratório</button>
         </li>
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="reagentes-tab" data-bs-toggle="tab" data-bs-target="#reagentes-tab-pane" type="button" 
-            role="tab" aria-controls="reagentes-tab-pane" aria-selected="false">Reagentes</button>
+          <button class="nav-link" id="reagentes-tab" data-bs-toggle="tab" data-bs-target="#reagentes-tab-pane" type="button" role="tab" aria-controls="reagentes-tab-pane" aria-selected="false">Reagentes</button>
         </li>
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="other-tab" data-bs-toggle="tab" data-bs-target="#other-tab-pane" type="button" 
-            role="tab" aria-controls="other-tab-pane" aria-selected="false">Outros</button>
+          <button class="nav-link" id="other-tab" data-bs-toggle="tab" data-bs-target="#other-tab-pane" type="button" role="tab" aria-controls="other-tab-pane" aria-selected="false">Outros</button>
         </li>
         <p style="margin-left: 15%; font-size: 20px; color: whitesmoke">Garantia da Qualidade</p>
       </ul>
@@ -62,7 +45,10 @@
                   $verificaPed = $connDB->prepare("SELECT DATA_AGENDA FROM pedidos WHERE NUMERO_PEDIDO = :numPedido");
                   $verificaPed->bindParam(':numPedido', $numPedido['N_PED']);
                   $verificaPed->execute(); $dataAgenda = $verificaPed->fetch(PDO::FETCH_ASSOC);
-                  $id = $rowMat['ID_ESTOQUE']; ?>
+                  if($dataAgenda['DATA_AGENDA'] == null){
+                    $dataAg = date('Y-m-d', strtotime($rowMat['DATA_RECEBIMENTO']."+ 2 days"));
+                  } else {$dataAg = date('Y-m-d', strtotime($dataAgenda['DATA_AGENDA']."- 2 days"));}
+                  $id = $rowMat['ID_INTERNO']; ?>
                   <div class="card text-bg-success mb-2" style="width: 45rem;">
                     <div class="card-body">
                       <div class="row g-1">
@@ -87,7 +73,7 @@
                         <div class="col-md-4">
                           <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Limite</span>
                             <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
-                                value="<?php echo date('d/m/Y', strtotime($dataAgenda['DATA_AGENDA']."- 2 days")) ?>" readonly>
+                                value="<?php echo date('d/m/Y', strtotime($dataAg)) ?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-12">

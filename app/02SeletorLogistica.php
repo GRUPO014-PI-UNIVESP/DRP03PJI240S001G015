@@ -44,7 +44,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
               $materiais = $connDB->prepare("SELECT * FROM materiais_compra WHERE ETAPA_PROCESS = 1");
               $materiais->execute();
               while($rowMat = $materiais->fetch(PDO::FETCH_ASSOC)){
-                $id = $rowMat['NUMERO_PEDIDO']; ?>
+                $id = $rowMat['ID_COMPRA']; ?>
                 <div class="card text-bg-success mb-3" style="width: 35rem;">
                   <div class="card-body">
                     <div class="row g-1">
