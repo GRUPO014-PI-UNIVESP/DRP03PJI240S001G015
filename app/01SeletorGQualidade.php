@@ -36,50 +36,34 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             <div class="col-md-6">
               <h6>Lista de Materiais para Análise</h6>
               <div class="row g-1"><?php
-                $materiais = $connDB->prepare("SELECT * FROM materiais_lotes WHERE ETAPA_PROCESS = 2");
-                $materiais->execute();
-                while($rowMat = $materiais->fetch(PDO::FETCH_ASSOC)){
-                  $verificaUso = $connDB->prepare("SELECT MIN(NUMERO_PEDIDO) AS N_PED FROM materiais_reserva WHERE ID_ESTOQUE = :idEstoque");
-                  $verificaUso->bindParam(':idEstoque', $rowMat['ID_ESTOQUE'], PDO::PARAM_INT);
-                  $verificaUso->execute(); $numPedido = $verificaUso->fetch(PDO::FETCH_ASSOC);
-                  $verificaPed = $connDB->prepare("SELECT DATA_AGENDA FROM pedidos WHERE NUMERO_PEDIDO = :numPedido");
-                  $verificaPed->bindParam(':numPedido', $numPedido['N_PED']);
-                  $verificaPed->execute(); $dataAgenda = $verificaPed->fetch(PDO::FETCH_ASSOC);
-                  if($dataAgenda['DATA_AGENDA'] == null){
-                    $dataAg = date('Y-m-d', strtotime($rowMat['DATA_RECEBIMENTO']."+ 2 days"));
-                  } else {$dataAg = date('Y-m-d', strtotime($dataAgenda['DATA_AGENDA']."- 2 days"));}
-                  $id = $rowMat['ID_INTERNO']; ?>
+                $query_materiais = $connDB->prepare("SELECT * FROM materiais_lotes WHERE ETAPA_PROCESS = 2 ");$query_materiais->execute();
+                while($rowMat = $query_materiais->fetch(PDO::FETCH_ASSOC)){ $id = $rowMat['ID_INTERNO']; $dataLimite = date('Y-m-d', strtotime($rowMat['DATA_RECEBIMENTO']."+ 2 days"))?>
                   <div class="card text-bg-success mb-2" style="width: 45rem;">
                     <div class="card-body">
                       <div class="row g-1">
                         <div class="col-md-12">
                           <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Descrição do Material</span>
-                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
-                                value="<?php echo $rowMat['DESCRICAO']?>" readonly>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;" value="<?php echo $rowMat['DESCRICAO']?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-4">
                           <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">No.Lote</span>
-                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
-                                value="<?php echo $rowMat['ID_INTERNO']?>" readonly>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;" value="<?php echo $rowMat['ID_INTERNO']?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-4">
                           <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Qtde</span>
-                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
-                                value="<?php echo number_format($rowMat['QTDE_LOTE'], 0, ',', '.') . ' ' . $rowMat['UNIDADE'] ?>" readonly>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;" value="<?php echo number_format($rowMat['QTDE_LOTE'], 0, ',', '.') . ' ' . $rowMat['UNIDADE'] ?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-4">
                           <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Limite</span>
-                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
-                                value="<?php echo date('d/m/Y', strtotime($dataAg)) ?>" readonly>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;" value="<?php echo date('d/m/Y', strtotime($dataLimite)) ?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-12">
                           <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
-                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none; color: orange"
-                                value="<?php echo $rowMat['SITUACAO']?>" readonly>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none; color: orange" value="<?php echo $rowMat['SITUACAO']?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-12">
@@ -93,44 +77,36 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             </div><!-- fim da coluna de cards de materiais -->
 
             <!-- coluna para cards de produtos -->
-            <div class="col-md-6">
-              <h6>Lista de Produtos para Análise</h6>
+            <div class="col-md-6"><h6>Lista de Produtos para Análise</h6>
               <div class="row g-1"><?php
-                $pedido = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 3");
-                $pedido->execute();
-                while($rowPedido = $pedido->fetch(PDO::FETCH_ASSOC)){ // recursão de cards de pedidos
-                  $id = $rowPedido['ID_PEDIDO']; ?>
+                $pedido = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 3"); $pedido->execute();
+                while($rowPedido = $pedido->fetch(PDO::FETCH_ASSOC)){ $id = $rowPedido['ID_PEDIDO']; // recursão de cards de pedidos ?>
                   <div class="card text-bg-success mb-2" style="width: 45rem;">
                     <div class="card-body">
                       <div class="row g-1">
                         <div class="col-md-12">
                           <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Nome do Produto</span>
-                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
-                                value="<?php echo $rowPedido['PRODUTO']; ?>" readonly>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;" value="<?php echo $rowPedido['PRODUTO']; ?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-4">
                           <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">No.Lote</span>
-                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
-                                value="<?php echo $rowPedido['NUMERO_LOTE']; ?>" readonly>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;" value="<?php echo $rowPedido['NUMERO_LOTE']; ?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-4">
                           <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Qtde</span>
-                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
-                                value="<?php echo number_format($rowPedido['QTDE_PEDIDO'], 0, ',', '.') . ' ' . $rowPedido['UNIDADE'] ?>" readonly>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;" value="<?php echo number_format($rowPedido['QTDE_PEDIDO'], 0, ',', '.') . ' ' . $rowPedido['UNIDADE'] ?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-4">
                           <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Limite</span>
-                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;"
-                                value="<?php echo date('d/m/Y', strtotime($rowPedido['DATA_ENTREGA']."- 2 days")) ?>" readonly>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none;" value="<?php echo date('d/m/Y', strtotime($rowPedido['DATA_ENTREGA']."- 2 days")) ?>" readonly>
                           </div>
                         </div>
                         <div class="col-md-12">
                           <div class="input-group mb-2"><span class="input-group-text" id="basic-addon1" style="font-size: 12px; background: rgba(0,0,0,0.3); color: aqua">Situação</span>
-                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none; color: orange"
-                                value="<?php echo $rowPedido['SITUACAO']; ?>" readonly>
+                            <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none; color: orange" value="<?php echo $rowPedido['SITUACAO']; ?>" readonly>
                           </div>
                         </div><?php
                         if($rowPedido['ETAPA_PROCESS'] < 2){ ?>

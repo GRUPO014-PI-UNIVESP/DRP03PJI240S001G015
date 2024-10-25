@@ -40,10 +40,8 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
 
       <!-- Entrada de Dados --><?php
       if(!empty($_GET['id'])){
-        $dadosMaterial = $connDB->prepare("SELECT * FROM materiais_lotes WHERE ID_INTERNO = :idMat");
-        $dadosMaterial->bindParam(':idMat', $_GET['id'], PDO::PARAM_INT);
-        $dadosMaterial->execute(); $rowMaterial = $dadosMaterial->fetch(PDO::FETCH_ASSOC);
-        $dataRegistro = date('Y-m-d');
+        $dadosMaterial = $connDB->prepare("SELECT * FROM materiais_lotes WHERE ID_INTERNO = :idMat"); $dadosMaterial->bindParam(':idMat', $_GET['id'], PDO::PARAM_INT);
+        $dadosMaterial->execute(); $rowMaterial = $dadosMaterial->fetch(PDO::FETCH_ASSOC);  $dataRegistro = date('Y-m-d');
         $_SESSION['nLoteI']   = $rowMaterial['ID_INTERNO'] ; $_SESSION['idEstoque']  = $rowMaterial['ID_ESTOQUE'] ; $_SESSION['dataFabri'] = $rowMaterial['DATA_FABRI'];
         $_SESSION['nLoteF']   = $rowMaterial['NUMERO_LOTE']; $_SESSION['fornecedor'] = $rowMaterial['FORNECEDOR'] ; $_SESSION['descrMat']  = $rowMaterial['DESCRICAO'] ;
         $_SESSION['dataVali'] = $rowMaterial['DATA_VALI']  ; $_SESSION['notaFiscal'] = $rowMaterial['NOTA_FISCAL']; $_SESSION['qtdeLote']  = $rowMaterial['QTDE_LOTE'] ;
@@ -54,66 +52,56 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
           <div class="col-md-2">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="dataRegistro" name="dataRegistro" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($dataRegistro)) ?>" readonly>
-              <label for="dataRegistro" style="color: aqua; font-size: 12px; background: none">Data de Registro</label>
-              <p style="font-size: 11px; color: grey"></p>
+              <label for="dataRegistro" style="color: aqua; font-size: 12px; background: none">Data de Registro</label><p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="nLoteInterno" name="nLoteInterno" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['ID_INTERNO'] ?>" readonly>
-              <label for="nLoteInterno" style="color: aqua; font-size: 12px; background: none">No.de Lote Interno</label>
-              <p style="font-size: 11px; color: grey"></p>
+              <label for="nLoteInterno" style="color: aqua; font-size: 12px; background: none">No.de Lote Interno</label><p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="nLoteFornecedor" name="nLoteFornecedor" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['NUMERO_LOTE'] ?>" readonly>
-              <label for="nLoteFornecedor" style="color: aqua; font-size: 12px; background: none">No.de Lote do Fornecedor</label>
-              <p style="font-size: 11px; color: grey"></p>
+              <label for="nLoteFornecedor" style="color: aqua; font-size: 12px; background: none">No.de Lote do Fornecedor</label><p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="fornecedor" name="fornecedor" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['FORNECEDOR'] ?>" readonly>
-              <label for="fornecedor" style="color: aqua; font-size: 12px; background: none">Fornecedor</label>
-              <p style="font-size: 11px; color: grey"></p>
+              <label for="fornecedor" style="color: aqua; font-size: 12px; background: none">Fornecedor</label><p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="dataFabri" name="dataFabri" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($rowMaterial['DATA_FABRI'])) ?>" readonly>
-              <label for="dataFabri" style="color: aqua; font-size: 12px; background: none">Data de Fabricação</label>
-              <p style="font-size: 11px; color: grey"></p>
+              <label for="dataFabri" style="color: aqua; font-size: 12px; background: none">Data de Fabricação</label><p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="dataVali" name="dataVali" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($rowMaterial['DATA_VALI'])) ?>" readonly>
-              <label for="dataVali" style="color: aqua; font-size: 12px; background: none">Data de Validade</label>
-              <p style="font-size: 11px; color: grey"></p>
+              <label for="dataVali" style="color: aqua; font-size: 12px; background: none">Data de Validade</label><p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="notaFiscal" name="notaFiscal" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['NOTA_FISCAL'] ?>" readonly>
-              <label for="notaFiscal" style="color: aqua; font-size: 12px; background: none">Nota Fiscal</label>
-              <p style="font-size: 11px; color: grey"></p>
+              <label for="notaFiscal" style="color: aqua; font-size: 12px; background: none">Nota Fiscal</label><p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="descrMat" name="descrMat" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo $rowMaterial['DESCRICAO'] ?>" readonly>
-              <label for="descrMat" style="color: aqua; font-size: 12px; background: none">Descrição do Material</label>
-              <p style="font-size: 11px; color: grey"></p>
+              <label for="descrMat" style="color: aqua; font-size: 12px; background: none">Descrição do Material</label><p style="font-size: 11px; color: grey"></p>
             </div>
           </div>
           <form method="POST">
             <div class="row g-2">
               <div class="col-md-5">
-                <div class="row g-2">
-                  <h6>Dados Analisados</h6>
-                  <div class="col-md-5">
-                    <p style="color: aqua">Aspecto</p>
+                <div class="row g-2"><h6>Dados Analisados</h6>
+                  <div class="col-md-5"><p style="color: aqua">Aspecto</p>
                     <div class="form-check">
                       <input class="form-check-input" type="radio" name="aspecto" id="aspecto" value="Regular" checked>
                       <label class="form-check-label" for="aspecto"> Regular </label>
@@ -123,8 +111,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                       <label class="form-check-label" for="aspecto"> Irregular </label>
                     </div>           
                   </div>
-                  <div class="col-md-6">
-                    <p style="color: aqua">Coloração</p>
+                  <div class="col-md-6"><p style="color: aqua">Coloração</p>
                     <div class="form-check">
                       <input class="form-check-input" type="radio" name="cor" id="cor" value="Normal" checked>
                       <label class="form-check-label" for="cor"> Normal </label>
@@ -134,8 +121,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                       <label class="form-check-label" for="cor"> Anormal </label>
                     </div>           
                   </div>
-                  <div class="col-md-5"><br>
-                    <p style="color: aqua">Odor</p>
+                  <div class="col-md-5"><br><p style="color: aqua">Odor</p>
                     <div class="form-check">
                       <input class="form-check-input" type="radio" name="odor" id="odor" value="Normal" checked>
                       <label class="form-check-label" for="odor"> Normal </label>
@@ -145,8 +131,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                       <label class="form-check-label" for="odor"> Anormal </label>
                     </div>           
                   </div>
-                  <div class="col-md-6"><br>
-                    <p style="color: aqua">Contaminantes</p> 
+                  <div class="col-md-6"><br><p style="color: aqua">Contaminantes</p> 
                     <div class="form-check">
                       <input class="form-check-input" type="radio" name="contaminantes" id="contaminantes" value="Não Detectado" checked>
                       <label class="form-check-label" for="contaminantes"> Não Detectado </label>
@@ -165,8 +150,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                       <div class="form-floating mb-0">
                         <input type="number" class="form-control" id="perdaMassa" name="perdaMassa" style="font-weight: bolder; background: rgba(0,0,0,0.3);">
                         <label for="perdaMassa" style="color: aqua; font-size: 12px; background: none">Perda de Massa</label>
-                      </div>
-                      <span class="input-group-text">%</span>
+                      </div><span class="input-group-text">%</span>
                     </div>
                   </div>  
                   <div class="col-md-4"><br>
@@ -174,8 +158,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                       <div class="form-floating mb-0">
                         <input type="number" class="form-control" id="escalaPH" name="escalaPH" style="font-weight: bolder; background: rgba(0,0,0,0.3);">
                         <label for="escalaPH" style="color: aqua; font-size: 12px; background: none">Escala de pH</label>
-                      </div>
-                      <span class="input-group-text"></span>
+                      </div><span class="input-group-text"></span>
                     </div>
                   </div>
                   <div class="col-md-4"><br>
@@ -183,8 +166,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                       <div class="form-floating mb-0">
                         <input type="number" class="form-control" id="pureza" name="pureza" style="font-weight: bolder; background: rgba(0,0,0,0.3);">
                         <label for="pureza" style="color: aqua; font-size: 12px; background: none">Pureza</label>
-                      </div>
-                      <span class="input-group-text">%</span>
+                      </div><span class="input-group-text">%</span>
                     </div>
                   </div>
                   <div class="form-floating">

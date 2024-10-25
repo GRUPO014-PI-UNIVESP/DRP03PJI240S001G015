@@ -41,10 +41,8 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
           <div class="col-md-6">
             <h6>Lista de Materiais para Recebimento</h6>
             <div class="row g-1"><?php
-              $materiais = $connDB->prepare("SELECT * FROM materiais_compra WHERE ETAPA_PROCESS = 1");
-              $materiais->execute();
-              while($rowMat = $materiais->fetch(PDO::FETCH_ASSOC)){
-                $id = $rowMat['ID_COMPRA']; ?>
+              $materiais = $connDB->prepare("SELECT * FROM materiais_compra WHERE ETAPA_PROCESS = 1"); $materiais->execute();
+              while($rowMat = $materiais->fetch(PDO::FETCH_ASSOC)){ $id = $rowMat['ID_COMPRA']; ?>
                 <div class="card text-bg-success mb-3" style="width: 35rem;">
                   <div class="card-body">
                     <div class="row g-1">
@@ -83,8 +81,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             <h6>Lista de Produtos </h6>
             <div class="row g-1"><?php
               $query_pedido = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 4"); $query_pedido->execute(); 
-              while($rowPedido = $query_pedido->fetch(PDO::FETCH_ASSOC)){
-                $idPed = $rowPedido['ID_PEDIDO'];?>
+              while($rowPedido = $query_pedido->fetch(PDO::FETCH_ASSOC)){ $idPed = $rowPedido['ID_PEDIDO'];?>
                 <div class="card text-bg-success mb-3" style="width: 35rem;">
                   <div class="card-body">
                     <div class="row g-1">
@@ -122,8 +119,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                         <div class="col-md-12">
                           <button class="btn btn-secondary" onclick="location.href='#'" style="float: right" disabled>Efetuar Saída do Produto</button>
                         </div> <?php 
-                      }
-                      ?>
+                      } ?>
                     </div>
                   </div><!-- fim da DIV do corpo do cartão -->
                 </div><!-- fim da DIV do cartão --> <?php 
@@ -136,12 +132,12 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       <div class="tab-pane fade" id="almoxarifado-tab-pane" role="tabpanel" aria-labelledby="almoxarifado-tab" tabindex="0"><br>
         <h5 style="color: aqua">Estoque de Materiais e Insumos</h5><br>
         <div class="row g-0">
-          <div class="col-md-4"><p style="font-size:12px; color: grey;">Descrição do Material</p></div>
+          <div class="col-md-4"><p style="font-size:12px; color: grey;"                      >Descrição do Material</p></div>
           <div class="col-md-8">
             <div class="row g-0">
               <div class="col-md-3"><p style="font-size:12px; color: grey; text-align:center">ID Interno/No.Lote</p></div>
               <div class="col-md-3"><p style="font-size:12px; color: grey; text-align:center">Qtde Disponível   </p></div>
-              <div class="col-md-6"><p style="font-size:12px; color: grey">Situação do Lote  </p></div>
+              <div class="col-md-6"><p style="font-size:12px; color: grey"                   >Situação do Lote  </p></div>
             </div>
           </div>
         </div>
@@ -149,30 +145,24 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
           $query_material = $connDB->prepare("SELECT * FROM materiais_estoque");$query_material->execute();
           while($rowMat = $query_material->fetch(PDO::FETCH_ASSOC)){ ?>
             <div class="row g-0" style="border-bottom: 1px solid grey">
-              <div class="col-md-4">
-                <p style="padding-left: 5px; font-size: 16px;"><?php echo $rowMat['DESCRICAO'] ?></p>
-              </div>
+              <div class="col-md-4"> <p style="padding-left: 5px; font-size: 16px;"   ><?php echo $rowMat['DESCRICAO'] ?></p> </div>
               <div class="col-md-8">
                 <div class="row g-1"><?php
                   $query_lotes = $connDB->prepare("SELECT *FROM materiais_lotes WHERE ID_ESTOQUE = :idEstoque AND QTDE_LOTE >= 1 AND ETAPA_PROCESS = 3 ORDER BY QTDE_LOTE ASC");
                   $query_lotes->bindParam(':idEstoque', $rowMat['ID_ESTOQUE'], PDO::PARAM_INT); $query_lotes->execute(); $nLotes = $query_lotes->rowCount();
                   while($rowLotes = $query_lotes->fetch(PDO::FETCH_ASSOC)){ ?>
                   <div class="col-md-3"><p style="font-size: 16px; text-align: center"><?php echo $rowLotes['ID_INTERNO']; ?></p></div>
-                  <div class="col-md-2"><p style="font-size: 16px; text-align: right"><?php echo number_format($rowLotes['QTDE_LOTE'], 1, ',', '.') . ' ' . $rowLotes['UNIDADE']; ?></p></div>
+                  <div class="col-md-2"><p style="font-size: 16px; text-align: right" ><?php echo number_format($rowLotes['QTDE_LOTE'], 1, ',', '.') . ' ' . $rowLotes['UNIDADE']; ?></p></div>
                   <div class="col-md-6"><p style="font-size: 16px; text-align: center"><?php echo $rowLotes['SITUACAO']; ?></p></div><?php
                   } ?>
                 </div>
               </div>
             </div><?php
           } ?>
-        </div><!-- fim da classe tabela -->
-                
-
+        </div><!-- fim da classe tabela -->                
       <div class="tab-pane fade" id="transporte-tab-pane" role="tabpanel" aria-labelledby="transporte-tab" tabindex="0"><br><br>
-        <button type="button" class="btn btn-outline-info" style="width:400px" 
-                onclick="location.href='./60RastreamentoEntrega.php'">Rastreamento de Entrega</button><br><br>
+        <button type="button" class="btn btn-outline-info" style="width:400px" onclick="location.href='./60RastreamentoEntrega.php'">Rastreamento de Entrega</button><br><br>
       </div>
-
       <div class="tab-pane fade" id="other-tab-pane" role="tabpanel" aria-labelledby="other-tab" tabindex="0" style="color: whitesmoke"><br><br>
         <a href="" class="font-family: aria-current=">
       </div>
