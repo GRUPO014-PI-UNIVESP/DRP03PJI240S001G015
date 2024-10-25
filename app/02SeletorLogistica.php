@@ -14,7 +14,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
   };  inactivityTime();
 </script>
 <style>
-  .tabela{ height: 480px; overflow-y: scroll; border: solid 1px darkslategray; }
+  .tabela{ height: 480px; overflow-y: scroll; }
 </style>
 <!-- Área Principal -->
 <div class="main">
@@ -136,30 +136,30 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       <div class="tab-pane fade" id="almoxarifado-tab-pane" role="tabpanel" aria-labelledby="almoxarifado-tab" tabindex="0"><br>
         <h5 style="color: aqua">Estoque de Materiais e Insumos</h5><br>
         <div class="row g-0">
-          <div class="col-md-4"><p style="font-size:11px; color: grey;">Descrição do Material</p></div>
+          <div class="col-md-4"><p style="font-size:12px; color: grey;">Descrição do Material</p></div>
           <div class="col-md-8">
             <div class="row g-0">
-              <div class="col-md-3"><p style="font-size:11px; color: grey">ID Interno/No.Lote</p></div>
-              <div class="col-md-3"><p style="font-size:11px; color: grey">Qtde Disponível   </p></div>
-              <div class="col-md-6"><p style="font-size:11px; color: grey">Situação do Lote  </p></div>
+              <div class="col-md-3"><p style="font-size:12px; color: grey; text-align:center">ID Interno/No.Lote</p></div>
+              <div class="col-md-3"><p style="font-size:12px; color: grey; text-align:center">Qtde Disponível   </p></div>
+              <div class="col-md-6"><p style="font-size:12px; color: grey">Situação do Lote  </p></div>
             </div>
           </div>
         </div>
         <div class="tabela"><?php 
           $query_material = $connDB->prepare("SELECT * FROM materiais_estoque");$query_material->execute();
           while($rowMat = $query_material->fetch(PDO::FETCH_ASSOC)){ ?>
-            <div class="row g-0">
+            <div class="row g-0" style="border-bottom: 1px solid grey">
               <div class="col-md-4">
-                <p style="padding-left: 5px; font-size: 13px;"><?php echo $rowMat['DESCRICAO'] . '<br>' . $rowMat['FORNECEDOR']; ?></p>
+                <p style="padding-left: 5px; font-size: 16px;"><?php echo $rowMat['DESCRICAO'] ?></p>
               </div>
               <div class="col-md-8">
                 <div class="row g-1"><?php
-                  $query_lotes = $connDB->prepare("SELECT * FROM materiais_lotes WHERE ID_ESTOQUE = :idEstoque AND QTDE_LOTE >= 1 AND ETAPA_PROCESS = 3 ORDER BY QTDE_LOTE ASC");
+                  $query_lotes = $connDB->prepare("SELECT *FROM materiais_lotes WHERE ID_ESTOQUE = :idEstoque AND QTDE_LOTE >= 1 AND ETAPA_PROCESS = 3 ORDER BY QTDE_LOTE ASC");
                   $query_lotes->bindParam(':idEstoque', $rowMat['ID_ESTOQUE'], PDO::PARAM_INT); $query_lotes->execute(); $nLotes = $query_lotes->rowCount();
                   while($rowLotes = $query_lotes->fetch(PDO::FETCH_ASSOC)){ ?>
-                  <div class="col-md-3"><p style="font-size: 20px;"><?php echo $rowLotes['ID_INTERNO']; ?></p></div>
-                  <div class="col-md-3"><p style="font-size: 20px;"><?php echo number_format($rowLotes['QTDE_LOTE'], 1, ',', '.') . ' ' . $rowLotes['UNIDADE']; ?></p></div>
-                  <div class="col-md-6" style="font-size: 11px;vertical-align:center"><p style="font-size: 11px;vertical-align:center"><?php echo $rowLotes['SITUACAO']; ?></p></div><?php
+                  <div class="col-md-3"><p style="font-size: 16px; text-align: center"><?php echo $rowLotes['ID_INTERNO']; ?></p></div>
+                  <div class="col-md-2"><p style="font-size: 16px; text-align: right"><?php echo number_format($rowLotes['QTDE_LOTE'], 1, ',', '.') . ' ' . $rowLotes['UNIDADE']; ?></p></div>
+                  <div class="col-md-6"><p style="font-size: 16px; text-align: center"><?php echo $rowLotes['SITUACAO']; ?></p></div><?php
                   } ?>
                 </div>
               </div>
