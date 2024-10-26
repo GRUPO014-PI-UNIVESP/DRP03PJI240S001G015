@@ -154,7 +154,7 @@ $responsavel = $_SESSION['nome_func'];
       $atualiza   = $confirma['atualizado']; $descrMat  = strtoupper($confirma['descrMat']) ; $dataFabri  = date('Y-m-d', strtotime($confirma['dataFabriMP']));       
       $reservado  = $confirma['reservado'] ; $nLoteForn = strtoupper($confirma['nLoteForn']); $dataVali   = date('Y-m-d', strtotime($confirma['dataValidade']));
                        
-      $salvaMat = $connDB->prepare("UPDATE materiais_lotes SET NUMERO_LOTE=:nLoteF, ID_INTERNO=:nLoteIn, ID1=:id1, ID2=:id2, ID3=:id3, ETAPA_PROCESS=:etapa, SITUACAO=:situacao, NOTA_FISCAL=:notaFiscal, DATA_FABRI=:dataFabri, DATA_VALI=:dataVali, DATA_COMPRA=:dataCompra, DATA_RECEBIMENTO=:dataReceb, ENCARREGADO=:encarregado, RESPONSAVEL=:responsavel 
+      $salvaMat = $connDB->prepare("UPDATE materiais_lotes SET NUMERO_LOTE=:nLoteF, ID_INTERNO=:nLoteIn, ID1=:id1, ID2=:id2, ID3=:id3, ETAPA_PROCESS=:etapa, SITUACAO=:situacao, FORNECEDOR = :fornecedor, NOTA_FISCAL=:notaFiscal, DATA_FABRI=:dataFabri, DATA_VALI=:dataVali, DATA_COMPRA=:dataCompra, DATA_RECEBIMENTO=:dataReceb, ENCARREGADO=:encarregado, RESPONSAVEL=:responsavel 
       WHERE ID_COMPRA = :idCompra AND ETAPA_PROCESS=1");
       $salvaMat->bindParam(':nLoteF'     , $nLoteForn  , PDO::PARAM_STR); $salvaMat->bindParam(':nLoteIn'    , $nLoteIn              , PDO::PARAM_STR);
       $salvaMat->bindParam(':id1'        , $seqAtual   , PDO::PARAM_STR); $salvaMat->bindParam(':id2'        , $mesAtual             , PDO::PARAM_INT);
@@ -163,7 +163,7 @@ $responsavel = $_SESSION['nome_func'];
       $salvaMat->bindParam(':dataFabri'  , $dataFabri  , PDO::PARAM_STR); $salvaMat->bindParam(':dataVali'   , $dataVali             , PDO::PARAM_STR);
       $salvaMat->bindParam(':dataReceb'  , $dataEntrada, PDO::PARAM_STR); $salvaMat->bindParam(':dataCompra' , $rowMP['DATA_PEDIDO'] , PDO::PARAM_STR);
       $salvaMat->bindParam(':encarregado', $encarregado, PDO::PARAM_STR); $salvaMat->bindParam(':responsavel', $_SESSION['nome_func'], PDO::PARAM_STR);
-      $salvaMat->bindParam(':idCompra'   , $_GET['id'] , PDO::PARAM_STR); $salvaMat->execute();
+      $salvaMat->bindParam(':idCompra'   , $_GET['id'] , PDO::PARAM_STR); $salvaMat->bindParam(':fornecedor' , $fornecedor           , PDO::PARAM_STR); $salvaMat->execute();
 
       $sitProduto = 'AGUARDANDO LIBERAÇÃO DOS MATERIAIS';
       $atualizaPedido = $connDB->prepare("UPDATE pedidos SET SITUACAO = :situacao WHERE NUMERO_PEDIDO = :numPedido");
@@ -172,8 +172,8 @@ $responsavel = $_SESSION['nome_func'];
       $atualizaReserva = $connDB->prepare("UPDATE materiais_reserva SET DISPONIBILIDADE = :disp WHERE ID_ESTOQUE = :idEstoque");
       $atualizaReserva->bindParam(':disp', $etapa, PDO::PARAM_STR); $atualizaReserva->bindParam(':idEstoque', $rowEstoque['ID_ESTOQUE'] , PDO::PARAM_STR); $atualizaReserva->execute();
 
-      $limpaAgenda = $connDB->prepare("UPDATE materiais_compra SET ETAPA_PROCESS = :etapa WHERE ID_COMPRA = :idCompra");
-      $limpaAgenda->bindParam(':etapa'   , $etapa     , PDO::PARAM_INT);
+      $limpaAgenda = $connDB->prepare("UPDATE materiais_compra SET ETAPA_PROCESS = :etapa, SITUACAO = :situacao WHERE ID_COMPRA = :idCompra");
+      $limpaAgenda->bindParam(':etapa'   , $etapa     , PDO::PARAM_INT); $limpaAgenda->bindParam(':situacao', $situacao, PDO::PARAM_STR);
       $limpaAgenda->bindParam(':idCompra', $_GET['id'], PDO::PARAM_INT); $limpaAgenda->execute();
 
       header('Location: ./02SeletorLogistica.php');

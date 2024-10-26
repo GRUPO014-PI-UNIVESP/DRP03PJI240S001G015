@@ -48,19 +48,19 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       </div>
     </form><?php $confirmaCompra = filter_input_array(INPUT_POST, FILTER_DEFAULT);
     if(!empty($confirmaCompra['agendado'])){ 
-      $qtdeCompra = $confirmaCompra['qtdeLote']; $numPedido = 0; $etapa = 1; $situacao = 'COMPRA EFETUADA, AGUARDANDO RECEBIMENTO'; 
+      $qtdeCompra = $confirmaCompra['qtdeLote']; $numPedido = 0; $etapa = 1; $situacao = 'COMPRA EFETUADA, AGUARDANDO RECEBIMENTO'; $produto = 'REPOSIÇÃO DE ESTOQUE';
       $dataPedido = date('Y-m-d', strtotime($confirmaCompra['dataPedido'])); $dataPrazo = date('Y-m-d', strtotime($confirmaCompra['dataPrazo']));
 
       $buscaMaterial = $connDB->prepare("SELECT * FROM materiais_estoque WHERE DESCRICAO = :descrMat");
       $buscaMaterial->bindParam(':descrMat', $confirmaCompra['descrMat'], PDO::PARAM_STR);
       $buscaMaterial->execute(); $rowBusca = $buscaMaterial->fetch(PDO::FETCH_ASSOC);
 
-      $compra = $connDB->prepare("INSERT INTO materiais_compra (ID_ESTOQUE, DESCRICAO, NUMERO_PEDIDO, ETAPA_PROCESS, DATA_PEDIDO, DATA_PRAZO, QTDE_PEDIDO, UNIDADE, SITUACAO) VALUES (:idEstoque, :descrMat, :numPedido, :etapa, :dataPedido, :dataPrazo, :qtdePedido, :uniMed, :situacao)");
+      $compra = $connDB->prepare("INSERT INTO materiais_compra (ID_ESTOQUE, DESCRICAO, NUMERO_PEDIDO, PRODUTO, ETAPA_PROCESS, DATA_PEDIDO, DATA_PRAZO, QTDE_PEDIDO, UNIDADE, SITUACAO) VALUES (:idEstoque, :descrMat, :numPedido, :produto, :etapa, :dataPedido, :dataPrazo, :qtdePedido, :uniMed, :situacao)");
       $compra->bindParam(':numPedido' , $numPedido , PDO::PARAM_INT); $compra->bindParam(':idEstoque', $rowBusca['ID_ESTOQUE'], PDO::PARAM_INT);
       $compra->bindParam(':etapa'     , $etapa     , PDO::PARAM_INT); $compra->bindParam(':descrMat' , $rowBusca['DESCRICAO'] , PDO::PARAM_STR);
       $compra->bindParam(':dataPedido', $dataPedido, PDO::PARAM_STR); $compra->bindParam(':uniMed'   , $rowBusca['UNIDADE']   , PDO::PARAM_STR);
-      $compra->bindParam(':qtdePedido', $qtdeCompra, PDO::PARAM_STR); $compra->bindParam(':situacao' , $situacao            , PDO::PARAM_STR);
-      $compra->bindParam(':dataPrazo' , $dataPrazo , PDO::PARAM_STR); $compra->execute();
+      $compra->bindParam(':qtdePedido', $qtdeCompra, PDO::PARAM_STR); $compra->bindParam(':situacao' , $situacao              , PDO::PARAM_STR);
+      $compra->bindParam(':dataPrazo' , $dataPrazo , PDO::PARAM_STR); $compra->bindParam(':produto'  , $produto               , PDO::PARAM_STR); $compra->execute();
 
       $buscaCompra = $connDB->prepare("SELECT ID_COMPRA FROM materiais_compra WHERE ID_ESTOQUE =:idEstoque AND NUMERO_PEDIDO = :numPedido AND ETAPA_PROCESS = :etapa AND DATA_PRAZO = :dataPrazo LIMIT 1");
       $buscaCompra->bindParam(':idEstoque', $rowBusca['ID_ESTOQUE'], PDO::PARAM_INT);

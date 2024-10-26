@@ -224,9 +224,9 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
               $atualEstoque->bindParam(':idEstoque', $_SESSION['idEstoque'], PDO::PARAM_STR); $atualEstoque->execute(); 
             }
 
-            $atualizaReserva = $connDB->prepare("UPDATE materiais_reserva SET DISPONIBILIDADE = :disp WHERE ID_ESTOQUE = :idEstoque");
+            $atualizaReserva = $connDB->prepare("UPDATE materiais_reserva SET DISPONIBILIDADE = :disp WHERE NUMERO_PEDIDO = :numPedido");
             $atualizaReserva->bindParam(':disp'     , $etapa                , PDO::PARAM_STR);
-            $atualizaReserva->bindParam(':idEstoque', $_SESSION['idEstoque'], PDO::PARAM_STR); $atualizaReserva->execute();
+            $atualizaReserva->bindParam(':numPedido', $_SESSION['idEstoque'], PDO::PARAM_STR); $atualizaReserva->execute();
 
             header('Location: ./01SeletorGQualidade.php');
 
