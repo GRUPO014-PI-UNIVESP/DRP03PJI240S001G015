@@ -8,17 +8,13 @@ $responsavel = $_SESSION['nome_func'];
   // verifica inatividade da página e fecha sessão
   let inactivityTime = function () {
     let time; window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress  = resetTimer;
-    function deslogar() {
-      <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php'; ?>
-      window.location.href = 'LogOut.php';
-     }
-    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 600000); }
+    function deslogar() { <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php'; ?>window.location.href = 'LogOut.php'; }
+    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 6000000); }
   }; inactivityTime();
 </script>
 <div class="main">
   <div class="container-fluid"><br>
-    <form method="POST">
-      <h5>Recebimento de Material</h5><br> <h6>Dados do Material</h6> <?php
+    <form method="POST"><h5>Recebimento de Material</h5><br><h6>Dados do Material</h6> <?php
       if(!empty($_GET['id'])){ $dataEntrada = date('Y-m-d');
         $mpEntra = $connDB->prepare("SELECT * FROM materiais_compra WHERE ID_COMPRA = :id"); $mpEntra->bindParam(':id', $_GET['id'], PDO::PARAM_INT); $mpEntra->execute(); $rowMP = $mpEntra->fetch(PDO::FETCH_ASSOC); ?>
         <div class="row g-2">
@@ -91,15 +87,9 @@ $responsavel = $_SESSION['nome_func'];
           <div class="col-md-2"></div><div class="col-md-3"><h6 style="text-align: center">Informações de Estoque do Material</h6></div>
           <div class="col-md-7"></div><div class="col-md-2"></div>
           <div class="col-md-2">
-            <div class="form-floating mb-3"><?php $estoque = 0;
-              $queryEstoque = $connDB->prepare("SELECT * FROM materiais_estoque WHERE ID_ESTOQUE = :idEstoque");
-              $queryEstoque->bindParam(':idEstoque', $rowMP['ID_ESTOQUE'], PDO::PARAM_INT);
-              $queryEstoque->execute(); $rowEstoque = $queryEstoque->fetch(PDO::FETCH_ASSOC);
-              if($rowEstoque['QTDE_ESTOQUE'] < 1){ $estoque = 0;} else
-              if($rowEstoque['QTDE_ESTOQUE'] > 0){ $estoque = $rowEstoque['QTDE_ESTOQUE']; }
-              $atualizado = $estoque + $rowEstoque['QTDE_ESTOQUE']; ?>
-
-              <input type="text" class="form-control" id="estoque" name="estoque" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center" value="<?php echo number_format($estoque, 0, ',', '.') . ' ' . $rowEstoque['UNIDADE'] ?>" readonly>
+            <div class="form-floating mb-3"><?php
+              $query_estoque = $connDB->prepare("SELECT * FROM materiais_estoque WHERE ID_ESTOQUE = :idEstoque"); $query_estoque->bindParam(':idEstoque', $rowMP['ID_ESTOQUE'], pdo::PARAM_INT); $query_estoque->execute(); $rowEstoque = $query_estoque->fetch(PDO::FETCH_ASSOC); ?>
+              <input type="text" class="form-control" id="estoque" name="estoque" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center" value="<?php echo $rowEstoque['QTDE_ESTOQUE'] ?>" readonly>
               <label for="estoque" style="color: aqua; font-size: 12px; background: none">Qtde em Estoque</label><p style="font-size: 11px; color: grey">Somente consulta</p>
             </div>
           </div>
@@ -122,20 +112,16 @@ $responsavel = $_SESSION['nome_func'];
           </div> 
           <div class="col-md-6"></div><div class="col-md-2"></div>
           <div class="col-md-2">
-            <div class="form-floating mb-3"><?php
-              $estoque = $rowEstoque['QTDE_ESTOQUE'] + $rowMP['QTDE_PEDIDO']; ?>
-              <input type="text" class="form-control" id="atualizado" name="atualizado" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center" value="<?php echo number_format($estoque, 0, ',', '.') . ' ' . $rowEstoque['UNIDADE'] ?>" readonly>
+            <div class="form-floating mb-3"><?php $novoEstoque = $rowEstoque['QTDE_ESTOQUE'] + $rowMP['QTDE_PEDIDO']; ?>
+              <input type="text" class="form-control" id="atualizado" name="atualizado" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center" value="<?php echo number_format($novoEstoque, 1, ',', '.') . ' ' . $rowMP['UNIDADE'] ?>" readonly>
               <label for="atualizado" style="color: aqua; font-size: 12px; background: none">Estoque Atualizado</label><p style="font-size: 11px; color: grey">Somente consulta</p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-floating mb-3"><?php
-
               $reserva = $connDB->prepare("SELECT SUM(QTDE_RESERVA) AS RESERVA, UNIDADE FROM materiais_reserva WHERE NUMERO_PEDIDO = :numPedido AND ID_ESTOQUE = :idEstoque");
-              $reserva->bindParam(':numPedido', $rowMP['NUMERO_PEDIDO'], PDO::PARAM_STR);
-              $reserva->bindParam(':idEstoque', $rowMP['ID_ESTOQUE']   , PDO::PARAM_STR);
+              $reserva->bindParam(':numPedido', $rowMP['NUMERO_PEDIDO'], PDO::PARAM_STR); $reserva->bindParam(':idEstoque', $rowMP['ID_ESTOQUE']   , PDO::PARAM_STR);
               $reserva->execute(); $rowReserva = $reserva->fetch(PDO::FETCH_ASSOC); ?>
-
               <input type="text" class="form-control" id="reservado" name="reservado" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center" value="<?php echo number_format($rowReserva['RESERVA'], 0, ',', '.') . ' ' . $rowReserva['UNIDADE'] ?>" readonly>
               <label for="reservado" style="color: aqua; font-size: 12px; background: none">Quantidade Reservada</label><p style="font-size: 11px; color: grey">Somente consulta</p>
             </div>
@@ -169,8 +155,8 @@ $responsavel = $_SESSION['nome_func'];
       $atualizaPedido = $connDB->prepare("UPDATE pedidos SET SITUACAO = :situacao WHERE NUMERO_PEDIDO = :numPedido");
       $atualizaPedido->bindParam(':situacao', $sitProduto, PDO::PARAM_STR); $atualizaPedido->bindParam(':numPedido', $rowReserva['NUMERO_PEDIDO'], PDO::PARAM_STR); $atualizaPedido->execute();
 
-      $atualizaReserva = $connDB->prepare("UPDATE materiais_reserva SET DISPONIBILIDADE = :disp WHERE ID_ESTOQUE = :idEstoque");
-      $atualizaReserva->bindParam(':disp', $etapa, PDO::PARAM_STR); $atualizaReserva->bindParam(':idEstoque', $rowEstoque['ID_ESTOQUE'] , PDO::PARAM_STR); $atualizaReserva->execute();
+      $atualizaReserva = $connDB->prepare("UPDATE materiais_reserva SET DISPONIBILIDADE = :disp WHERE ID_COMPRA = :idCompra");
+      $atualizaReserva->bindParam(':disp', $etapa, PDO::PARAM_STR); $atualizaReserva->bindParam(':idCompra', $rowMP['ID_COMPRA'] , PDO::PARAM_STR); $atualizaReserva->execute();
 
       $limpaAgenda = $connDB->prepare("UPDATE materiais_compra SET ETAPA_PROCESS = :etapa, SITUACAO = :situacao WHERE ID_COMPRA = :idCompra");
       $limpaAgenda->bindParam(':etapa'   , $etapa     , PDO::PARAM_INT); $limpaAgenda->bindParam(':situacao', $situacao, PDO::PARAM_STR);

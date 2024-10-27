@@ -6,9 +6,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
   // verifica inatividade da página e fecha sessão
   let inactivityTime = function () {
     let time;window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress  = resetTimer;
-    function deslogar() { <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php';?>
-      window.location.href = 'LogOut.php';
-    }
+    function deslogar() { <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php';?> window.location.href = 'LogOut.php'; }
     function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 600000);}
   }; inactivityTime();
 </script>
@@ -16,8 +14,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
 <div class="main">
   <div class="container-fluid"><br>
     <div><h5>Pedido de Produto</h></div><?php
-      $query_produto = $connDB->prepare("SELECT * FROM produtos WHERE PRODUTO = :produto");$query_produto->bindParam(':produto', $_SESSION['nomeProduto'], PDO::PARAM_STR);
-      $query_produto->execute(); $rowProduto = $query_produto->fetch(PDO::FETCH_ASSOC); ?>
+      $query_produto = $connDB->prepare("SELECT * FROM produtos WHERE PRODUTO = :produto");$query_produto->bindParam(':produto', $_SESSION['nomeProduto'], PDO::PARAM_STR); $query_produto->execute(); $rowProduto = $query_produto->fetch(PDO::FETCH_ASSOC); ?>
     <div class="row g-1" id="entradaProduto">
       <div class="col-md-2">
         <label for="pedidoNum" class="form-label" style="font-size: 10px; color:aqua">Pedido No.</label>
@@ -41,19 +38,15 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
               <th scope="col" style="width: 10%; color: gray; text-align: center;">Qtde Disponível      </th><th scope="col" style="width: 10%; color: gray; text-align: center;">Condição do Estoque</th>
               <th scope="col" style="width: 10%; color: gray; text-align: center;">Ação                 </th>
             </tr>
-          </thead> <?php
-            $qtdeLote = $_SESSION['qtdeLote'] ; $xtend = $_SESSION['xtend']; $nomeProduto = $_SESSION['nomeProduto']; $padrao = $_SESSION['padrao']; $numPedido = $_SESSION['numPedido']; $verificador = 0;
-            $query_material = $connDB->prepare("SELECT * FROM produtos WHERE PRODUTO = :nomeProduto");
-            $query_material->bindParam(':nomeProduto', $nomeProduto, PDO::PARAM_STR); $query_material->execute(); ?>
+          </thead> <?php $nomeProduto = $_SESSION['nomeProduto']; $numPedido = $_SESSION['numPedido']; $qtdeLote = $_SESSION['qtdeLote']; $padrao = $_SESSION['padrao']; $xtend = $_SESSION['xtend']; $verificador = 0;
+            $query_material = $connDB->prepare("SELECT * FROM produtos WHERE PRODUTO = :nomeProduto"); $query_material->bindParam(':nomeProduto', $nomeProduto, PDO::PARAM_STR); $query_material->execute(); ?>  
           <tbody> <?php            
             while($rowLista = $query_material->fetch(PDO::FETCH_ASSOC)){ $contador = 1; $capacidadeProcess = $rowLista['CAPAC_PROCESS'];?>
               <tr>
-                <td scope="col" style="width: 30%; font-size: 13px; color: yellow"><?php
-                  $descrMaterial = $rowLista['MATERIAL_COMPONENTE'];
+                <td scope="col" style="width: 30%; font-size: 13px; color: yellow"><?php $descrMaterial = $rowLista['MATERIAL_COMPONENTE'];
                   echo $rowLista['MATERIAL_COMPONENTE'] . '<br>'; echo 'Proporção: [ ' . $rowLista['PROPORCAO'] . ' %]'; ?>
                 </td>
-                <td scope="col" style="width: 10%; text-align: center; font-size: 18px; color: yellow"><?php
-                  $qtdeMaterial = $qtdeLote * ($rowLista['PROPORCAO'] / 100);
+                <td scope="col" style="width: 10%; text-align: center; font-size: 18px; color: yellow"><?php $qtdeMaterial = $qtdeLote * ($rowLista['PROPORCAO'] / 100);
                   echo number_format($qtdeMaterial, 0, ',', '.') . ' ' . $rowLista['UNIDADE']; ?>
                 </td>
                 <td scope="col" style="width: 10%; text-align: center; font-size: 18px; color:yellow"><?php
@@ -172,10 +165,8 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
     </form><br><?php $dataLivre = filter_input_array(INPUT_POST, FILTER_DEFAULT); ?>
     <form method="POST">
       <div class="row g-2"><?php
-        if(!empty($dataLivre['agendar']) || !empty($dataLivre['dataSelecionada'])){                    
-          $dataConvert = date('Y-m-d', strtotime($dataLivre['dataSelecionada'])); $_SESSION['diff'] = round(($convert2 - $convert1) / 86400);
-          $convert1    = time(); $_SESSION['dataAgendada'] = date('Y-m-d', strtotime($dataLivre['dataSelecionada']));
-          $convert2    = strtotime($dataConvert); $_SESSION['dataEntrega'] = date('Y-m-d', strtotime($_SESSION['dataAgendada']."+ 1 week")); ?>
+        if(!empty($dataLivre['agendar']) || !empty($dataLivre['dataSelecionada'])){ $dataConvert = date('Y-m-d', strtotime($dataLivre['dataSelecionada'])); $convert1 = time(); $convert2 = strtotime($dataConvert);  
+          $_SESSION['diff'] = round(($convert2 - $convert1) / 86400); $_SESSION['dataAgendada'] = date('Y-m-d', strtotime($dataLivre['dataSelecionada'])); $_SESSION['dataEntrega']  = date('Y-m-d', strtotime($_SESSION['dataAgendada']."+ 1 week")); ?>
           <div class="col-md-1"></div>
           <div class="col-md-2">
             <label for="dataAgenda" class="form-label" style="font-size: 10px; color:aqua">Data Agendada</label>
@@ -208,8 +199,9 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
         }?>        
       </div>
     </form><?php
-    $confirmaPedido = filter_input_array(INPUT_POST, FILTER_DEFAULT); $dataLimite = date('Y-m-d', strtotime($_SESSION['dataAgendada']."- 3 days"));
-    if(!empty($confirmaPedido['salvar3'])){ $etapaProcess = 0; $nomeCliente = $confirmaPedido['cliente']; $dataPedido = date('Y-m-d'); $responsavel = $_SESSION['nome_func']; $situacao = 'PEDIDO REGISTRADO, PROVIDENCIANDO MATERIAIS';
+    $confirmaPedido = filter_input_array(INPUT_POST, FILTER_DEFAULT);    
+    if(!empty($confirmaPedido['salvar3'])){ $etapaProcess = 0; $dataLimite = date('Y-m-d', strtotime($_SESSION['dataAgendada']."- 3 days"));
+      $nomeCliente = $confirmaPedido['cliente']; $dataPedido = date('Y-m-d'); $responsavel = $_SESSION['nome_func']; $situacao = 'PEDIDO REGISTRADO, PROVIDENCIANDO MATERIAIS';
 
       $registraPedido = $connDB->prepare("INSERT INTO pedidos (NUMERO_PEDIDO, CLIENTE, PRODUTO, QTDE_PEDIDO, UNIDADE, CAPAC_PROCESS, DATA_PEDIDO, DATA_AGENDA, DATA_ENTREGA, ENCARREGADO_PEDIDO, ETAPA_PROCESS, SITUACAO) VALUES (:numPedido, :nomeCliente, :nomeProduto, :qtdePedido, :uniMed, :capacidade, :dataPedido, :dataAgenda, :dataEntrega, :responsavel, :etapa, :situacao)");      
       $registraPedido->bindParam(':numPedido'  , $numPedido  , PDO::PARAM_INT); $registraPedido->bindParam(':uniMed'     , $rowProduto['UNIDADE']   , PDO::PARAM_STR);

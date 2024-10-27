@@ -6,18 +6,14 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
   // verifica inatividade da página e fecha sessão
   let inactivityTime = function () {
     let time; window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress  = resetTimer;
-    function deslogar() {
-      <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php'; ?>
-      window.location.href = 'LogOut.php';
-    }
-    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 600000);}
+    function deslogar() { <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php'; ?> window.location.href = 'LogOut.php';}
+    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 6000000);}
   }; inactivityTime();
 </script>
 <div class="main">
   <div class="container-fluid"><br>
     <form method="POST">
-      <div class="row g-3">
-        <h5>Compra Avulsa de Material</h5>
+      <div class="row g-3"><h5>Compra Avulsa de Material</h5>
         <div class="col-md-8">
           <label for="descrMat" class="form-label" style="font-size: 10px; color:aqua">Descrição do Material</label>
           <select style="font-size: 16px;" class="form-select" id="descrMat" name="descrMat">
@@ -46,8 +42,12 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             <input class="btn btn-primary" type="submit" id="agendado" name="agendado" value="Confirmar e Autorizar Compra">
         </div>
       </div>
-    </form><?php $confirmaCompra = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-    if(!empty($confirmaCompra['agendado'])){ 
+    </form><br><?php $confirmaCompra = filter_input_array(INPUT_POST, FILTER_DEFAULT);     
+    if(!empty($confirmaCompra['agendado']) && $confirmaCompra['descrMat'] == 'Selecione o Material'){ ?>
+      <div class="alert alert-danger" role="alert">Nenhum material foi selecionado! Reinicie o procedimento.</div>
+      <div><button class="btn btn-danger" onclick="location.href='./22CompraMaterial.php'">Reiniciar</button></div><?php
+    }
+    if(!empty($confirmaCompra['agendado']) && $confirmaCompra['descrMat'] != 'Selecione o Material'){ 
       $qtdeCompra = $confirmaCompra['qtdeLote']; $numPedido = 0; $etapa = 1; $situacao = 'COMPRA EFETUADA, AGUARDANDO RECEBIMENTO'; $produto = 'REPOSIÇÃO DE ESTOQUE';
       $dataPedido = date('Y-m-d', strtotime($confirmaCompra['dataPedido'])); $dataPrazo = date('Y-m-d', strtotime($confirmaCompra['dataPrazo']));
 
@@ -74,7 +74,6 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       $realiza->bindParam(':etapa'   , $etapa     , PDO::PARAM_INT); $realiza->bindParam(':descrMat' , $rowBusca['DESCRICAO'] , PDO::PARAM_STR);
       $realiza->bindParam(':situacao', $situacao  , PDO::PARAM_STR); $realiza->bindParam(':uniMed'   , $rowBusca['UNIDADE']   , PDO::PARAM_STR);
       $realiza->bindParam(':idCompra', $lastID    , PDO::PARAM_INT); $realiza->execute();     
-
 
       header('Location: ./00SeletorAdministrativo.php');
     } ?>
