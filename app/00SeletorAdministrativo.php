@@ -43,6 +43,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
               <button type="button" class="btn btn-outline-light" style="width:250px" onclick="location.href='<?php echo $acesso11 ?>'">Pedido de Produto</button><br><br>
               <button type="button" class="btn btn-outline-light" style="width:250px" onclick="location.href='<?php echo $acesso13 ?>'">Cadastro de Novo Cliente</button><br><br>  
               <button type="button" class="btn btn-outline-light" style="width:250px" onclick="location.href='<?php echo $acesso14 ?>'">Cadastro de Novo Produto</button><br><br>
+              <button type="button" class="btn btn-outline-light" style="width:250px" onclick="">Relatório de Vendas</button><br><br>
             </div>
 
             <div class="col-md-9"> <h5>Lista dos Pedidos em Execução</h5><?php
