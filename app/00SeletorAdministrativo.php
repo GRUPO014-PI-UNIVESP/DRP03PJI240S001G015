@@ -46,7 +46,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             </div>
 
             <div class="col-md-9"> <h5>Lista dos Pedidos em Execução</h5><?php
-              $produtos = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 4"); $produtos->execute();
+              $produtos = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 1"); $produtos->execute();
               while($rowPedido = $produtos->fetch(PDO::FETCH_ASSOC)){
                 if(!empty($rowPedido['NUMERO_PEDIDO'])){ ?>
                   <div class="card text-bg-success mb-3" style="width: 50rem;">

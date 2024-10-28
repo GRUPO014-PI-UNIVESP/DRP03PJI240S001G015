@@ -38,7 +38,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
               <button type="button" class="btn btn-outline-danger" style="width:250px" onclick="">Relatório de Produção</button><br><br>  
             </div>
             <div class="col-md-9"><?php
-              $listaPedido = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 2"); $listaPedido->execute();
+              $listaPedido = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 1"); $listaPedido->execute();
               while($rowPedido = $listaPedido->fetch(PDO::FETCH_ASSOC)){
                 if(!empty($rowPedido['NUMERO_PEDIDO'])){ ?>
                   <div class="card text-bg-success mb-3" style="width: 50rem;">

@@ -80,7 +80,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
           <div class="col-md-6">
             <h6>Lista de Produtos </h6>
             <div class="row g-1"><?php
-              $query_pedido = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 4"); $query_pedido->execute(); 
+              $query_pedido = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 2"); $query_pedido->execute(); 
               while($rowPedido = $query_pedido->fetch(PDO::FETCH_ASSOC)){ $idPed = $rowPedido['ID_PEDIDO'];?>
                 <div class="card text-bg-success mb-3" style="width: 35rem;">
                   <div class="card-body">
@@ -110,12 +110,12 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                           <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none; color:orange" value="<?php echo $rowPedido['SITUACAO']; ?>" readonly>
                         </div>
                       </div><?php
-                      if($rowPedido['ETAPA_PROCESS'] == 3){ ?>
+                      if($rowPedido['ETAPA_PROCESS'] == 2){ ?>
                         <div class="col-md-12">
                           <button class="btn btn-primary" onclick="location.href='./50SaidaProdutoFinal.php?id=<?php echo $idPed ?>'" style="float: right">Efetuar Saída do Produto</button>
                         </div> <?php 
                       }
-                      if($rowPedido['ETAPA_PROCESS'] < 3){ ?>
+                      if($rowPedido['ETAPA_PROCESS'] < 2){ ?>
                         <div class="col-md-12">
                           <button class="btn btn-secondary" onclick="location.href='#'" style="float: right" disabled>Efetuar Saída do Produto</button>
                         </div> <?php 

@@ -114,7 +114,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
               </tr><?php
             }
             $query_res = $connDB->prepare("SELECT * FROM materiais_reserva WHERE NUMERO_PEDIDO = :numPedido AND QTDE_RESERVA > 1 ORDER BY ID_ESTOQUE ASC LIMIT 1");
-            $query_res->bindParam(':numPedido', $_SESSION['idPedido'], PDO::PARAM_INT); $query_res->execute();
+            $query_res->bindParam(':numPedido', $_SESSION['idPedido'], PDO::PARAM_INT); $query_res->execute(); $Qmts = $query_res->rowCount();
             while($rowRes = $query_res->fetch(PDO::FETCH_ASSOC)){
               $query_lote = $connDB->prepare("SELECT * FROM materiais_lotes WHERE DESCRICAO = :descrMat AND ETAPA_PROCESS = 3 AND QTDE_LOTE > 1 ORDER BY ID_INTERNO ASC LIMIT 1");
               $query_lote->bindParam(':descrMat', $rowRes['DESCRICAO'], pdo::PARAM_STR); $query_lote->execute(); $rowLote = $query_lote->fetch(PDO::FETCH_ASSOC);
@@ -135,8 +135,8 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                 </form><?php
                 $regLote = filter_input_array(INPUT_POST, FILTER_DEFAULT);
                 if(!empty($regLote['confirma']) && $regLote['qtdeUsada'] > 0){
-                  $sobra = $rowRes['QTDE_RESERVA'] - $regLote['qtdeUsada'];
-                  if($sobra == 0){
+                  $sobra = $rowRes['QTDE_RESERVA'] - $regLote['qtdeUsada']; $sobraLote = $rowLote['QTDE_LOTE'] - $regLote['qtdeUsada'];
+                  if($sobraLote == 0){
                     $disp = 4; $situacao = 'LOTE ESGOTADO';
                   } else { $disp = 3; $situacao = 'MATERIAL LIBERADO PARA USO'; }
                   $reajustaReserva = $connDB->prepare("UPDATE materiais_reserva SET QTDE_RESERVA = :qtdeReajuste, DISPONIBILIDADE = :disp WHERE NUMERO_PEDIDO = :numPedido AND ID_ESTOQUE = :idEstoque");
@@ -158,42 +158,74 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                   $preencheReajuste->execute();
 
                   $ajustaLote = $connDB->prepare("UPDATE materiais_lotes SET QTDE_LOTE = :qtdeSobra, ETAPA_PROCESS = :etapa, SITUACAO = :situacao WHERE ID_INTERNO = :idInterno");
-                  $ajustaLote->bindParam(':qtdeLote' , $sobra                , PDO::PARAM_STR);
+                  $ajustaLote->bindParam(':qtdeSobra', $sobraLote            , PDO::PARAM_STR);
                   $ajustaLote->bindParam(':etapa'    , $disp                 , PDO::PARAM_INT);
                   $ajustaLote->bindParam(':situacao' , $situacao             , PDO::PARAM_STR);
                   $ajustaLote->bindParam(':idInterno', $rowLote['ID_INTERNO'], PDO::PARAM_STR);
                   $ajustaLote->execute();
 
+                  $verifyEstoque = $connDB->prepare("SELECT QTDE_ESTOQUE FROM materiais_estoque WHERE ID_ESTOQUE = :idEstoque");
+                  $verifyEstoque->bindParam(':idEstoque', $rowRes['ID_ESTOQUE'], PDO::PARAM_INT); $verifyEstoque->execute(); $qtde = $verifyEstoque->fetch(PDO::FETCH_ASSOC);
+                  $Qajuste = $qtde['QTDE_ESTOQUE'] - $regLote['qtdeUsada'];
+                  $ajustaEstoque = $connDB->prepare("UPDATE materiais_estoque SET QTDE_ESTOQUE = :ajustaEstoque WHERE ID_ESTOQUE = :idEstoque");
+                  $ajustaEstoque->bindParam(':ajustaEstoque', $Qajuste             , PDO::PARAM_STR);
+                  $ajustaEstoque->bindParam(':idEstoque'    , $rowRes['ID_ESTOQUE'], PDO::PARAM_STR); $ajustaEstoque->execute();
+
+                  $regProducao = $connDB->prepare("INSERT INTO producao (ID_PRODUTO, NUMERO_LOTE, ID_MATERIAL, MATERIAL_COMPONENTE, QTDE_UTILIZADA, NLPSEQ, NLPMES, NLPANO, DATA_FABRI, ENCARREGADO_PRODUCAO, RESPONSAVEL)
+                                                          VALUES (:idProd, :numLote, :idMat, :descrMat, :qtdeMat, :nlpSeq, :nlpMes, :nlpAno, :dataFabri, :encarr, :resp)");
+                  $regProducao->bindParam(':idProd'   , $_SESSION['idProd']     , PDO::PARAM_INT);
+                  $regProducao->bindParam(':numLote'  , $_SESSION['nLoteProd']  , PDO::PARAM_STR);
+                  $regProducao->bindParam(':idMat'    , $rowLote['ID_INTERNO']  , PDO::PARAM_STR);
+                  $regProducao->bindParam(':descrMat' , $rowRes['DESCRICAO']    , PDO::PARAM_STR);
+                  $regProducao->bindParam(':qtdeMat'  , $regLote['qtdeUsada']   , PDO::PARAM_STR);
+                  $regProducao->bindParam(':nlpSeq'   , $_SESSION['nlpSeq']     , PDO::PARAM_INT);
+                  $regProducao->bindParam(':nlpMes'   , $_SESSION['nlpMes']     , PDO::PARAM_INT);
+                  $regProducao->bindParam(':nlpAno'   , $_SESSION['nlpAno']     , PDO::PARAM_INT);
+                  $regProducao->bindParam(':dataFabri', $_SESSION['dataFabri']  , PDO::PARAM_STR);
+                  $regProducao->bindParam(':encarr'   , $_SESSION['colaborador'], PDO::PARAM_STR);
+                  $regProducao->bindParam(':resp'     , $_SESSION['nome_func']  , PDO::PARAM_STR);
+                  $regProducao->execute();
+
+
+                  header('Location: ./38ProcessaPedido.php');
+
                 } ?>
-              </tr><?php
-            } ?>        
+              </tr><?php 
+            }  ?>        
           </tbody>
         </table>
-      </div>
+      </div><?php
+      $verifyFinish = $connDB->prepare("SELECT SUM(DISPONIBILIDADE) AS TOT FROM materiais_reserva WHERE NUMERO_PEDIDO = :numPedido");
+      $verifyFinish->bindParam(':numPedido', $_SESSION['idPedido'] , PDO::PARAM_INT);
+      $verifyFinish->execute(); $confere = $verifyFinish->fetch(PDO::FETCH_ASSOC); $vF = $Qmts * 4;
+      if($vF == $confere['TOT'] ){ ?>
+        <div class="alert alert-success" role="alert">
+          MATERIAIS PROCESSADOS COM SUCESSO! Finalize o Registro da Produção
+          </div><?php
+      } ?>
       <div class="col-md-12"></div>
       <form method="POST">
         <div class="col-md-3">
           <input class="btn btn-primary" type="submit" id="registra" name="registra" value="Registra Produção">
         </div>
-      </form>
+      </form><?php
+      $regProd = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+      if(!empty($regProd['registra'])){ $etapaProd = 1; $sitProd = 'FABRICAÇÃO CONCLUÍDA! AGUARDANDO ANÁLISE.';
+        $regProd = $connDB->prepare("UPDATE pedidos SET NUMERO_LOTE = :numLote, ETAPA_PROCESS = :etapaProd, SITUACAO = :sitProd, DATA_FABRI = :dataFabri WHERE NUMERO_PEDIDO = :numPedido");
+        $regProd->bindParam(':numLote'  , $_SESSION['nLoteProd'], PDO::PARAM_STR);
+        $regProd->bindParam(':etapaProd', $etapaProd            , PDO::PARAM_INT);
+        $regProd->bindParam(':sitProd'  , $sitProd              , PDO::PARAM_STR);
+        $regProd->bindParam(':dataFabri', $_SESSION['dataFabri'], PDO::PARAM_STR);
+        $regProd->bindParam(':numPedido', $_SESSION['idPedido'] , PDO::PARAM_INT);
+        $regProd->execute();
+
+        $deletaFila = $connDB->prepare("DELETE FROM pedidos_fila WHERE NUMERO_PEDIDO = :numPedido");
+        $deletaFila->bindParam(':numPedido', $_SESSION['idPedido'] , PDO::PARAM_INT); $deletaFila->execute();
+
+        header('Location: ./03SeletorProducao.php');
+        
+      }
+      ?>
     </div><!-- fim da row g2 -->
   </div><!-- fim da container fluid -->
 </div><!-- fim da main -->
-<!--
-<tr>
-<td scope="col" style="width:30%; color:yellow; font-size:14px; text-align:left  ; font-weight:none  "></td>
-<td scope="col" style="width:10%; color:yellow; font-size:20px; text-align:center; font-weight:bolder"></td>
-<td scope="col" style="width:10%; color:yellow; font-size:20px; text-align:center; font-weight:bolder"></td>
-<td scope="col" style="width:10%; color:green ; font-size:20px; text-align:center; font-weight:bolder"></td>
-<td scope="col" style="width:15%; color:green ; font-size:20px; text-align:center; font-weight:bolder"></td>
-</tr>
-
-<form method="POST">
-  <div class="input-group mb-3">
-    <input type="number" class="form-control" aria-label="username" aria-describedby="qtdeUsada" id="qtdeUsada" name="qtdeUsada" autofocus required>
-    <span class="input-group-text" id="qtdeUsada"></span>
-  </div>
-  <td scope="col" style="width: 10%;"><input class="btn btn-primary" style="width: 100%" type="submit" id="confirma" name="confirma" value="Confirmar"></td>
-</form>
-              </tr>
--->
