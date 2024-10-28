@@ -128,7 +128,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                                     $diaSemana = date('w'  , strtotime("+$nDias days")); $verificaDataOcupada = date('Y-m-d'  , strtotime("+$vDias days"));                                   
                                     $diaCal    = date('d/m', strtotime("+$nDias days")); $nDias = $nDias + 1; $vDias = $vDias +1; ?>
                                   <p style="font-size: 12px; text-align: center"> <?php
-                                    $fila = $connDB->prepare("SELECT * FROM fila_ocupacao WHERE DATA_AGENDA = :hoje");
+                                    $fila = $connDB->prepare("SELECT * FROM pedidos_fila WHERE DATA_AGENDA = :hoje");
                                     $fila->bindParam(':hoje', $verificaDataOcupada, PDO::PARAM_STR); $fila->execute(); $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
                                     if(!empty($rowFila['DATA_AGENDA'])){
                                       if($verificaDataOcupada == $rowFila['DATA_AGENDA']){ ?>
@@ -212,7 +212,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       $registraPedido->bindParam(':situacao'   , $situacao   , PDO::PARAM_STR); $registraPedido->bindParam(':responsavel', $responsavel             , PDO::PARAM_STR);
       $registraPedido->execute();
 
-      $alocaFila = $connDB->prepare("INSERT INTO fila_ocupacao (NUMERO_PEDIDO, DATA_AGENDA, PRODUTO, QTDE_LOTE, CAPAC_PROCESS, SITUACAO) VALUES (:numPedido, :dataFabri, :nomeProduto, :qtdeLote, :capaProcess, :situacao)");
+      $alocaFila = $connDB->prepare("INSERT INTO pedidos_fila (NUMERO_PEDIDO, DATA_AGENDA, PRODUTO, QTDE_LOTE, CAPAC_PROCESS, SITUACAO) VALUES (:numPedido, :dataFabri, :nomeProduto, :qtdeLote, :capaProcess, :situacao)");
       $alocaFila->bindParam(':numPedido'  , $numPedido  , PDO::PARAM_INT);$alocaFila->bindParam(':dataFabri'  , $_SESSION['dataAgendada'], PDO::PARAM_STR);      
       $alocaFila->bindParam(':nomeProduto', $nomeProduto, PDO::PARAM_STR);$alocaFila->bindParam(':capaProcess', $_SESSION['capacidade']  , PDO::PARAM_STR);
       $alocaFila->bindParam(':qtdeLote'   , $qtdeLote   , PDO::PARAM_STR);$alocaFila->bindParam(':situacao'   , $situacao                , PDO::PARAM_STR);      

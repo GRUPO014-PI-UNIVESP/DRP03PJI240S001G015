@@ -42,7 +42,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       if(!empty($_GET['id'])){
         $dadosMaterial = $connDB->prepare("SELECT * FROM materiais_lotes WHERE ID_INTERNO = :idMat"); $dadosMaterial->bindParam(':idMat', $_GET['id'], PDO::PARAM_INT);
         $dadosMaterial->execute(); $rowMaterial = $dadosMaterial->fetch(PDO::FETCH_ASSOC);  $dataRegistro = date('Y-m-d');
-        $_SESSION['nLoteI']   = $rowMaterial['ID_INTERNO'] ; $_SESSION['idEstoque']  = $rowMaterial['ID_ESTOQUE'] ; $_SESSION['dataFabri'] = $rowMaterial['DATA_FABRI'];
+        $_SESSION['nLoteI']   = $rowMaterial['ID_INTERNO'] ; $_SESSION['idEstoque']  = $rowMaterial['ID_ESTOQUE'] ; $_SESSION['dataFabri'] = $rowMaterial['DATA_FABRI']; $_SESSION['idCompra'] = $rowMaterial['ID_COMPRA'] ;
         $_SESSION['nLoteF']   = $rowMaterial['NUMERO_LOTE']; $_SESSION['fornecedor'] = $rowMaterial['FORNECEDOR'] ; $_SESSION['descrMat']  = $rowMaterial['DESCRICAO'] ;
         $_SESSION['dataVali'] = $rowMaterial['DATA_VALI']  ; $_SESSION['notaFiscal'] = $rowMaterial['NOTA_FISCAL']; $_SESSION['qtdeLote']  = $rowMaterial['QTDE_LOTE'] ;
       } ?>

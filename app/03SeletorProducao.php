@@ -91,8 +91,8 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                                 <div class="col-md-2"><?php echo $rowLote['ID_INTERNO'] ?></div>
                                 <div class="col-md-2"><?php echo number_format($rowLote['QTDE_LOTE'], 1, ',', '.') . ' ' . $rowLote['UNIDADE'] ?></div>
                                 <div class="col-md-3"><?php
-                                  if($rowLote['ETAPA_PROCESS'] == 3){?><p style="text-align:center; background:rgba(0,0,0,0.5); color:green"><?php echo 'LIBERADO!'    ; ?></p><?php }
-                                  if($rowLote['ETAPA_PROCESS'] <  3){?><p style="text-align:center; background:rgba(0,0,0,0.5); color:red"  ><?php echo 'NÃO LIBERADO!'; ?></p><?php } ?>
+                                  if($rowLote['ETAPA_PROCESS'] == 3){?><p style="text-align:center; background:green; color:yellow; font-weight: bold"><?php echo 'LIBERADO!'    ; ?></p><?php }
+                                  if($rowLote['ETAPA_PROCESS'] <  3){?><p style="text-align:center; background:red  ; color:yellow; font-weight: bold"><?php echo 'NÃO LIBERADO!'; ?></p><?php } ?>
                                 </div><?php
                               }
                             } ?>

@@ -6,10 +6,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
   // verifica inatividade da página e fecha sessão
   let inactivityTime = function () {
     let time;window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress  = resetTimer;
-    function deslogar() {
-      <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php';?>
-      window.location.href = 'LogOut.php';
-     }
+    function deslogar() { <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php';?> window.location.href = 'LogOut.php';}
     function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 600000);}
   }; inactivityTime();
 </script>
@@ -133,7 +130,6 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                   <label for="pureza" style="color: aqua; font-size: 12px; background: none">Pureza</label> <p style="font-size: 11px; color: grey"></p>
                 </div>
               </div><?php
-              $registra = filter_input_array(INPUT_POST, FILTER_DEFAULT);
               if(!empty($_SESSION['confirma'])){ $c = 0;
                 if($_SESSION['aspecto']    == 'Regular')      { $c = $c + 1;} if($_SESSION['aspecto']    == 'Irregular'){ $c = $c - 1;} 
                 if($_SESSION['cor']        == 'Normal')       { $c = $c + 1;} if($_SESSION['cor']        == 'Anormal')  { $c = $c - 1;}
@@ -216,7 +212,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             $atualiza->bindParam(':etapa'   , $etapa   , PDO::PARAM_INT); $atualiza->bindParam(':nLoteInterno', $_SESSION['nLoteI'], PDO::PARAM_STR);
             $atualiza->bindParam(':situacao', $situacao, PDO::PARAM_STR); $atualiza->execute();
             
-            if($c > 6){
+            if($c > 6){ $etapa = 3;
               $buscaEstoque = $connDB->prepare("SELECT QTDE_ESTOQUE FROM materiais_estoque WHERE ID_ESTOQUE = :idEstoque"); $buscaEstoque->bindParam(':idEstoque', $_SESSION['idEstoque'], PDO::PARAM_INT);
               $buscaEstoque->execute(); $rowEstoque = $buscaEstoque->fetch(PDO::FETCH_ASSOC); $estoque = $rowEstoque['QTDE_ESTOQUE'] + $_SESSION['qtdeLote'];
 
@@ -224,9 +220,12 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
               $atualEstoque->bindParam(':idEstoque', $_SESSION['idEstoque'], PDO::PARAM_STR); $atualEstoque->execute(); 
             }
 
-            $atualizaReserva = $connDB->prepare("UPDATE materiais_reserva SET DISPONIBILIDADE = :disp WHERE NUMERO_PEDIDO = :numPedido");
-            $atualizaReserva->bindParam(':disp'     , $etapa                , PDO::PARAM_STR);
-            $atualizaReserva->bindParam(':numPedido', $_SESSION['idEstoque'], PDO::PARAM_STR); $atualizaReserva->execute();
+            $buscaReserva = $connDB->prepare("SELECT NUMERO_PEDIDO FROM materiais_reserva WHERE DESCRICAO = :descMat ");
+
+            $atualizaReserva = $connDB->prepare("UPDATE materiais_reserva SET DISPONIBILIDADE = :disp WHERE ID_COMPRA = :idCompra");
+            $atualizaReserva->bindParam(':disp'     , $etapa               , PDO::PARAM_STR);
+            $atualizaReserva->bindParam(':idCompra' , $_SESSION['idCompra'], PDO::PARAM_STR);
+            $atualizaReserva->execute();
 
             header('Location: ./01SeletorGQualidade.php');
 

@@ -6,10 +6,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
   // verifica inatividade da página e fecha sessão
   let inactivityTime = function () {
     let time;window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress  = resetTimer;
-    function deslogar() {
-      <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php';?>
-      window.location.href = 'LogOut.php';
-     }
+    function deslogar() { <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php';?> window.location.href = 'LogOut.php';}
     function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 600000);}
   }; inactivityTime();
 </script>
@@ -25,8 +22,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
         $dadosPedido->bindParam(':idPed', $_GET['id'], PDO::PARAM_INT); $dadosPedido->execute(); $rowPedido = $dadosPedido->fetch(PDO::FETCH_ASSOC);
         
         $dadosProduto = $connDB->prepare("SELECT * FROM produtos WHERE PRODUTO = :produto"); $dadosProduto->bindParam(':produto', $rowPedido['PRODUTO'], PDO::PARAM_STR); 
-        $dadosProduto->execute(); $rowProduto = $dadosProduto->fetch(PDO::FETCH_ASSOC); $tempoFabri = $rowPedido['QTDE_PEDIDO'] / $rowProduto['CAPAC_PROCESS'];
-        ?>
+        $dadosProduto->execute(); $rowProduto = $dadosProduto->fetch(PDO::FETCH_ASSOC); $tempoFabri = round($rowPedido['QTDE_PEDIDO'] / $rowProduto['CAPAC_PROCESS']);?>
         <div class="col-md-2">
           <div class="form-floating mb-2">
             <input type="text" class="form-control" id="dataPedido" name="dataPedido" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($rowPedido['DATA_PEDIDO'])) ?>" readonly>
@@ -72,6 +68,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
         }
         if(empty($resultado['U_SEQ'])){ $seqLote = '001'; $seqAtual = 1; $mesAtual = intval(date('m')); $anoAtual = intval(date('y')); }
         $nLoteInterno = $seqLote . ' ' . $codLetra[$mesAtual] . ' ' . $anoAtual; ?>
+
         <div class="col-md-12"> <h6 style="color:aqua">Informações da Fabricação</h6> </div>
         <div class="col-md-2">
           <div class="form-floating mb-2">
@@ -96,7 +93,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
         <div class="col-md-2">
           <div class="form-floating mb-2">
             <input type="text" class="form-control" id="fim" name="fim" style="font-weight: bolder; background: rgba(0,0,0,0.3); text-align:center" value="<?php echo date('H:i', strtotime("+ $tempoFabri hours")) ?>" required>
-            <label for="fim" style="color: aqua; font-size: 12px; background: none">Encerramento</label> <p style="font-size: 11px; color: grey">Inserir hora <?php echo $tempoFabri ?></p>
+            <label for="fim" style="color: aqua; font-size: 12px; background: none">Encerramento</label> <p style="font-size: 11px; color: grey">Inserir hora <?php echo $tempoFabri . ' hrs' ?></p>
           </div>
         </div>
         <div class="col-md-2">
@@ -120,8 +117,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                 while($rowAna = $query_analista->fetch(PDO::FETCH_ASSOC)){ ?>
                   <option style="font-size: 14px; color: black; background: rgba(0,0,0,0.3)"><?php echo $rowAna['NOME_FUNCIONARIO']; ?></option><?php 
                 } ?>
-            </select>
-            <label for="colaborador" style="font-size: 12px; color:aqua">Colaborador Encarregado</label>
+            </select><label for="colaborador" style="font-size: 12px; color:aqua">Colaborador Encarregado</label>
           </div>
         </div>
         <div class="col-md-2">
@@ -137,8 +133,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       </div><!-- fim da row g2 -->
     </form> <?php
     $confirma = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-    if(!empty($confirma['confirma'])){
-      
+    if(!empty($confirma['confirma'])){      
       $_SESSION['planta']     = $confirma['planta']; $_SESSION['colaborador'] = $confirma['colaborador'] ;
       $_SESSION['horaInicio'] = $confirma['inicio']; $_SESSION['idProd']      = $rowProduto['ID_PRODUTO'];
       $_SESSION['horaFinali'] = $confirma['fim']   ; $_SESSION['dataFabri']   = $confirma['dataFabri']   ;      
