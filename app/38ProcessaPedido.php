@@ -186,23 +186,13 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                   $regProducao->bindParam(':resp'     , $_SESSION['nome_func']  , PDO::PARAM_STR);
                   $regProducao->execute();
 
-
                   header('Location: ./38ProcessaPedido.php');
-
                 } ?>
               </tr><?php 
             }  ?>        
           </tbody>
         </table>
-      </div><?php
-      $verifyFinish = $connDB->prepare("SELECT SUM(DISPONIBILIDADE) AS TOT FROM materiais_reserva WHERE NUMERO_PEDIDO = :numPedido");
-      $verifyFinish->bindParam(':numPedido', $_SESSION['idPedido'] , PDO::PARAM_INT);
-      $verifyFinish->execute(); $confere = $verifyFinish->fetch(PDO::FETCH_ASSOC); $vF = $Qmts * 4;
-      if($vF == $confere['TOT'] ){ ?>
-        <div class="alert alert-success" role="alert">
-          MATERIAIS PROCESSADOS COM SUCESSO! Finalize o Registro da Produção
-          </div><?php
-      } ?>
+      </div>
       <div class="col-md-12"></div>
       <form method="POST">
         <div class="col-md-3">

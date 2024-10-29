@@ -63,48 +63,44 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
         <div><button class="btn btn-danger" onclick="location.href='./33PedidoProduto.php'">Reiniciar</button></div><?php
       }
       if(!empty($produto['pedido']) && $produto['nomeProduto'] != 'Selecione o Produto'){
-        $_SESSION['nomeProduto'] = $produto['nomeProduto']; $nomeProd = $produto['nomeProduto']; 
-        $_SESSION['qtdeLote']    = $produto['qtdeLote']   ; $qtdeLote = $produto['qtdeLote'];
-        $_SESSION['numPedido']   = $produto['numPedido']  ; $numPedid = $produto['numPedido']  ; 
-        $_SESSION['padrao']      = $produto['padrao']     ; 
-        $_SESSION['xtend']       = $produto['xtend']      ;
+        $_SESSION['nomeProduto'] = $produto['nomeProduto']; $nomeProd = $produto['nomeProduto']; $_SESSION['qtdeLote'] = $produto['qtdeLote']; $qtdeLote = $produto['qtdeLote'];
+        $_SESSION['numPedido']   = $produto['numPedido']  ; $numPedid = $produto['numPedido']  ; $_SESSION['padrao']   = $produto['padrao']  ; $_SESSION['xtend'] = $produto['xtend'];
 
         $query_material = $connDB->prepare("SELECT * FROM produtos WHERE PRODUTO = :nomeProduto");
-        $query_material->bindParam(':nomeProduto', $nomeProd, PDO::PARAM_STR);
-        $query_material->execute();
+        $query_material->bindParam(':nomeProduto', $nomeProd, PDO::PARAM_STR); $query_material->execute();
 
         while($rowLista = $query_material->fetch(PDO::FETCH_ASSOC)){ $_SESSION['capacidade'] = $rowLista['CAPAC_PROCESS'];          
-          $descrMat = $rowLista['MATERIAL_COMPONENTE'];
-          $uniMed   = $rowLista['UNIDADE'];           
-          $qtdeMat  = $qtdeLote * ($rowLista['PROPORCAO'] / 100);
+          $descrMat = $rowLista['MATERIAL_COMPONENTE']; $uniMed = $rowLista['UNIDADE']; $qtdeMat = $qtdeLote * ($rowLista['PROPORCAO'] / 100);
 
           $query_estoque = $connDB->prepare("SELECT ID_ESTOQUE, SUM(QTDE_ESTOQUE) AS TOTAL_ESTOQUE FROM materiais_estoque WHERE DESCRICAO = :material");
           $query_estoque->bindParam(':material', $descrMat, PDO::PARAM_STR); 
-          $query_estoque->execute(); 
-          $resultEstoque = $query_estoque->fetch(PDO::FETCH_ASSOC);
+          $query_estoque->execute(); $resultEstoque = $query_estoque->fetch(PDO::FETCH_ASSOC);
 
           $query_reserva = $connDB->prepare("SELECT NUMERO_PEDIDO, SUM(QTDE_RESERVA) AS TOTAL_RESERVA FROM materiais_reserva WHERE ID_ESTOQUE = :idEstoque");
-          $query_reserva->bindParam(':idEstoque', $resultEstoque['ID_ESTOQUE'], PDO::PARAM_INT); 
-          $query_reserva->execute(); 
-          $resultReserva = $query_reserva->fetch(PDO::FETCH_ASSOC);
+          $query_reserva->bindParam(':idEstoque', $resultEstoque['ID_ESTOQUE'], PDO::PARAM_INT); $query_reserva->execute(); 
+          $resultReserva = $query_reserva->fetch(PDO::FETCH_ASSOC); $qtdeDisponivel = $resultEstoque['TOTAL_ESTOQUE'] - $resultReserva['TOTAL_RESERVA'];
 
-          $qtdeDisponivel = $resultEstoque['TOTAL_ESTOQUE'] - $resultReserva['TOTAL_RESERVA'];
-          if($qtdeDisponivel >= $qtdeMat){ $alerta = 'DISPONÍVEL'  ;} 
-          if($qtdeDisponivel < $qtdeMat) { $alerta = 'INSUFICIENTE';}
+          if($qtdeDisponivel >= $qtdeMat){ $alerta = 'DISPONÍVEL'  ;} if($qtdeDisponivel < $qtdeMat) { $alerta = 'INSUFICIENTE';}
+          if($alerta == 'DISPONÍVEL'){ $disp = 3;
+            $veriEstoque = $connDB->prepare("SELECT ID_COMPRA FROM materiais_lotes WHERE ETAPA_PROCESS = 3 AND QTDE_LOTE > :qtdePedido ORDER BY ID_INTERNO ASC");
+            $veriEstoque->bindParam(':qtdePedido', $_SESSION['qtdeLote'], PDO::PARAM_STR); $veriEstoque->execute(); $rowLote = $veriEstoque->fetch(PDO::FETCH_ASSOC); 
 
+            $reserva = $connDB->prepare("INSERT INTO materiais_reserva (NUMERO_PEDIDO, ID_COMPRA, ID_ESTOQUE, DESCRICAO, QTDE_RESERVA, UNIDADE, DISPONIBILIDADE) VALUES (:numPedido, :idCompra, :idEstoque, :descrMat, :qtdeReserva, :uniMed, :disp)");
+            $reserva->bindParam(':numPedido', $numPedid, PDO::PARAM_INT); $reserva->bindParam(':idEstoque'  , $resultEstoque['ID_ESTOQUE'], PDO::PARAM_STR);
+            $reserva->bindParam(':descrMat' , $descrMat, PDO::PARAM_STR); $reserva->bindParam(':qtdeReserva', $qtdeMat                    , PDO::PARAM_STR);
+            $reserva->bindParam(':uniMed'   , $uniMed  , PDO::PARAM_STR); $reserva->bindParam(':disp'       , $disp                       , PDO::PARAM_STR);
+            $reserva->bindParam(':idCompra' , $rowLote['ID_COMPRA'], PDO::PARAM_INT); $reserva->execute();
+          }
           if($alerta == 'INSUFICIENTE'){ $dataPedi = date('Y-m-d'); $situacao = 'COMPRA AGENDADA'; $disp = 0;
-            $compra = $connDB->prepare("INSERT INTO materiais_compra (ID_ESTOQUE, DESCRICAO, NUMERO_PEDIDO, PRODUTO, ETAPA_PROCESS, DATA_PEDIDO, QTDE_PEDIDO, UNIDADE, SITUACAO, CAPAC_PROCESS) 
-                                               VALUES (:idEstoque, :descrMat, :numPedid, :nomeProd, :etapa, :dataPedi, :qtdePedido, :uniMed, :situacao, :capacidade)");
+            $compra = $connDB->prepare("INSERT INTO materiais_compra (ID_ESTOQUE, DESCRICAO, NUMERO_PEDIDO, PRODUTO, ETAPA_PROCESS, DATA_PEDIDO, QTDE_PEDIDO, UNIDADE, SITUACAO, CAPAC_PROCESS) VALUES (:idEstoque, :descrMat, :numPedid, :nomeProd, :etapa, :dataPedi, :qtdePedido, :uniMed, :situacao, :capacidade)");
             $compra->bindParam(':numPedid', $numPedid, PDO::PARAM_INT); $compra->bindParam(':idEstoque' , $resultEstoque['ID_ESTOQUE'], PDO::PARAM_INT);
             $compra->bindParam(':descrMat', $descrMat, PDO::PARAM_STR); $compra->bindParam(':capacidade', $_SESSION['capacidade']     , PDO::PARAM_INT);            
             $compra->bindParam(':nomeProd', $nomeProd, PDO::PARAM_STR); $compra->bindParam(':etapa'     , $disp         , PDO::PARAM_INT);
             $compra->bindParam(':dataPedi', $dataPedi, PDO::PARAM_STR); $compra->bindParam(':qtdePedido', $qtdeMat      , PDO::PARAM_STR);
-            $compra->bindParam(':uniMed'  , $uniMed  , PDO::PARAM_STR); $compra->bindParam(':situacao'  , $situacao     , PDO::PARAM_STR);
-            $compra->execute();
+            $compra->bindParam(':uniMed'  , $uniMed  , PDO::PARAM_STR); $compra->bindParam(':situacao'  , $situacao     , PDO::PARAM_STR); $compra->execute();
 
             $buscaIDcompra = $connDB->prepare("SELECT ID_COMPRA FROM materiais_compra WHERE NUMERO_PEDIDO = :numPedido AND ID_ESTOQUE = :idEstoque");
-            $buscaIDcompra->bindParam(':numPedido', $numPedid                   , PDO::PARAM_INT); 
-            $buscaIDcompra->bindParam(':idEstoque', $resultEstoque['ID_ESTOQUE'], PDO::PARAM_INT);
+            $buscaIDcompra->bindParam(':numPedido', $numPedid                   , PDO::PARAM_INT); $buscaIDcompra->bindParam(':idEstoque', $resultEstoque['ID_ESTOQUE'], PDO::PARAM_INT);
             $buscaIDcompra->execute(); $idCompra = $buscaIDcompra->fetch(PDO::FETCH_ASSOC);
 
             $reserva = $connDB->prepare("INSERT INTO materiais_reserva (NUMERO_PEDIDO, ID_COMPRA, ID_ESTOQUE, DESCRICAO, QTDE_RESERVA, UNIDADE, DISPONIBILIDADE) VALUES (:numPedido, :idCompra, :idEstoque, :descrMat, :qtdeReserva, :uniMed, :disp)");

@@ -43,11 +43,11 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
               <button type="button" class="btn btn-outline-light" style="width:250px" onclick="location.href='<?php echo $acesso11 ?>'">Pedido de Produto</button><br><br>
               <button type="button" class="btn btn-outline-light" style="width:250px" onclick="location.href='<?php echo $acesso13 ?>'">Cadastro de Novo Cliente</button><br><br>  
               <button type="button" class="btn btn-outline-light" style="width:250px" onclick="location.href='<?php echo $acesso14 ?>'">Cadastro de Novo Produto</button><br><br>
-              <button type="button" class="btn btn-outline-light" style="width:250px" onclick="">Relatório de Vendas</button><br><br>
+              <button type="button" class="btn btn-outline-light" style="width:250px" onclick="location.href='<?php echo $acesso17 ?>'">Relatório de Vendas</button><br><br>
             </div>
 
             <div class="col-md-9"> <h5>Lista dos Pedidos em Execução</h5><?php
-              $produtos = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 1"); $produtos->execute();
+              $produtos = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 4"); $produtos->execute();
               while($rowPedido = $produtos->fetch(PDO::FETCH_ASSOC)){
                 if(!empty($rowPedido['NUMERO_PEDIDO'])){ ?>
                   <div class="card text-bg-success mb-3" style="width: 50rem;">
@@ -123,6 +123,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             <div class="col-md-3">
               <button type="button" class="btn btn-outline-warning" style="width:250px" onclick="location.href='<?php echo $acesso16 ?>'">Compra de Material</button><br><br>
               <button type="button" class="btn btn-outline-warning" style="width:250px" onclick="location.href='<?php echo $acesso15 ?>'">Cadastro de Novo Material</button><br><br>
+              <button type="button" class="btn btn-outline-warning" style="width:250px" onclick="location.href='<?php echo $acesso18 ?>'">Relatório de Compras</button><br><br>
             </div>
 
             <div class="col-md-9">

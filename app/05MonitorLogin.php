@@ -1,38 +1,23 @@
 <?php
 // inclusão do banco de dados e estrutura base da página web
-include_once './ConnectDB.php';
-include_once './EstruturaPrincipal.php';
-$_SESSION['posicao'] = 'Monitor Login';
-include_once './RastreadorAtividades.php';
+include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSION['posicao'] = 'Monitor Login'; include_once './RastreadorAtividades.php';
 
-$listar = $connDB->prepare("SELECT * FROM historico_login ORDER BY ID_LOGIN DESC");
-$listar->execute();
+$listar = $connDB->prepare("SELECT * FROM historico_login ORDER BY ID_LOGIN DESC"); $listar->execute();
 ?>
 <script>
   // verifica inatividade da página e fecha sessão
   let inactivityTime = function () {
-    let time;
-    window.onload        = resetTimer;
-    document.onmousemove = resetTimer;
-    document.onkeypress  = resetTimer;
-    function deslogar() {
-      <?php
-        $_SESSION['posicao'] = 'Encerrado por inatividade';
-        include_once './RastreadorAtividades.php';
-      ?>
+    let time; window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer;
+    function deslogar() { <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php';?>
       window.location.href = 'LogOut.php';
      }
-    function resetTimer() {
-      clearTimeout(time);
-       time = setTimeout(deslogar, 600000);
-     }
-  };
-  inactivityTime();
+    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 600000);}
+  }; inactivityTime();
 </script>
 <!-- Área Principal -->
   <div class="main">
     <div class="container">
-      <p style="margin-left: 2%; font-size: 20px; color: whitesmoke">Departamento Administrativo - Histórico de Login no Sistema</p>
+      <p style="margin-left: 2%; font-size: 20px; color: whitesmoke">Departamento Administrativo - Histórico de LogIn </p>
       <div class="overflow-auto">
         <table class="table table-dark table-hover">
           <thead style="font-size: 12px">

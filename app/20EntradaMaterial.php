@@ -89,7 +89,7 @@ $responsavel = $_SESSION['nome_func'];
           <div class="col-md-2">
             <div class="form-floating mb-3"><?php
               $query_estoque = $connDB->prepare("SELECT * FROM materiais_estoque WHERE ID_ESTOQUE = :idEstoque"); $query_estoque->bindParam(':idEstoque', $rowMP['ID_ESTOQUE'], pdo::PARAM_INT); $query_estoque->execute(); $rowEstoque = $query_estoque->fetch(PDO::FETCH_ASSOC); ?>
-              <input type="text" class="form-control" id="estoque" name="estoque" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center" value="<?php echo $rowEstoque['QTDE_ESTOQUE'] ?>" readonly>
+              <input type="text" class="form-control" id="estoque" name="estoque" style="font-weight: bolder; background: rgba(0,0,0,0.3); color: yellow; text-align: center" value="<?php echo number_format($rowEstoque['QTDE_ESTOQUE'], 1, ',', '.') . ' ' . $rowEstoque['UNIDADE'] ?>" readonly>
               <label for="estoque" style="color: aqua; font-size: 12px; background: none">Qtde em Estoque</label><p style="font-size: 11px; color: grey">Somente consulta</p>
             </div>
           </div>

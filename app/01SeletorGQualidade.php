@@ -24,7 +24,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
           <button class="nav-link" id="reagentes-tab" data-bs-toggle="tab" data-bs-target="#reagentes-tab-pane" type="button" role="tab" aria-controls="reagentes-tab-pane" aria-selected="false">Reagentes</button>
         </li>
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="other-tab" data-bs-toggle="tab" data-bs-target="#other-tab-pane" type="button" role="tab" aria-controls="other-tab-pane" aria-selected="false">Outros</button>
+          <button class="nav-link" id="other-tab" data-bs-toggle="tab" data-bs-target="#other-tab-pane" type="button" role="tab" aria-controls="other-tab-pane" aria-selected="false">Relatórios</button>
         </li>
         <p style="margin-left: 15%; font-size: 20px; color: whitesmoke">Garantia da Qualidade</p>
       </ul>
