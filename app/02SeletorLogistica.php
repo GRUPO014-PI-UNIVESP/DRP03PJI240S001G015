@@ -14,7 +14,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
   };  inactivityTime();
 </script>
 <style>
-  .tabela{ height: 480px; overflow-y: scroll; }
+  .tabela{ height: 450px; overflow-y: scroll; }
 </style>
 <!-- Área Principal -->
 <div class="main">
@@ -25,12 +25,6 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="almoxarifado-tab" data-bs-toggle="tab" data-bs-target="#almoxarifado-tab-pane" type="button" role="tab" aria-controls="almoxarifado-tab-pane" aria-selected="false">Almoxarifado</button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="transporte-tab" data-bs-toggle="tab" data-bs-target="#transporte-tab-pane" type="button" role="tab" aria-controls="transporte-tab-pane" aria-selected="false">Transporte</button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="other-tab" data-bs-toggle="tab" data-bs-target="#other-tab-pane" type="button" role="tab" aria-controls="other-tab-pane" aria-selected="false">Outros</button>
       </li>
       <p style="margin-left: 5%; font-size: 20px; color: whitesmoke">Departamento de Logística e Armazenamento</p>
     </ul>
@@ -159,7 +153,8 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
               </div>
             </div><?php
           } ?>
-        </div><!-- fim da classe tabela -->                
+        </div><!-- fim da classe tabela -->
+        <p style="color:grey">A tabela mostra somente os materiais aprovados pelo laboratório</p>
       <div class="tab-pane fade" id="transporte-tab-pane" role="tabpanel" aria-labelledby="transporte-tab" tabindex="0"><br><br>
         <button type="button" class="btn btn-outline-info" style="width:400px" onclick="location.href='./60RastreamentoEntrega.php'">Rastreamento de Entrega</button><br><br>
       </div>
