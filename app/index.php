@@ -70,7 +70,7 @@
 
               $_SESSION['idLogin'] = $tracking['ID_LOGIN'];
               //direciona fluxo
-              header("Location: ./dashboard.php");
+              header("Location: ./Dashboard.php");
             }else{
 
               //mensagem de erro de entrada
