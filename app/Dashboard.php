@@ -32,16 +32,14 @@
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 600000);
+       time = setTimeout(deslogar, 6000000);
      }
   };
   inactivityTime();
 </script>
-<div class="main">
-<br><br><br>
-      <p style="margin-left: 20%; font-size: 25px; color: yellow">Selecione o ambiente de trabalho na barra lateral</p>
-      <br><br>
-        <img style="margin-left: 20%;" src="./Abertura.jpg" width="600" height="400"/>
-        <br><br><br>
-      <p style="margin-left: 20%; font-size: 30px; color: yellow"><?php echo $Greeting; ?></p>
+<div class="main"><br><br><br>
+      <p style="margin-left: 20%; font-size: 25px; color: yellow">Selecione o ambiente de trabalho na barra lateral</p><br><br>
+        <img style="margin-left: 20%;" src="./Abertura.jpg" width="600" height="400"/><br><br><br>
+      <p style="margin-left: 20%; font-size: 30px; color: yellow"><?php echo $Greeting; ?></p><br><br>
+      <button type="button" class="btn btn-outline-info" style="width:300px; margin-left: 20%;" onclick="location.href='MapaGeral.php'">Mapa do Sistema</button><br><br>
 </div>

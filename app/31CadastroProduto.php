@@ -25,7 +25,7 @@ $responsavel = $_SESSION['nome_func'];
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 600000);
+       time = setTimeout(deslogar, 60000000);
      }
   };
   inactivityTime();
