@@ -126,7 +126,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       <div class="tab-pane fade" id="almoxarifado-tab-pane" role="tabpanel" aria-labelledby="almoxarifado-tab" tabindex="0"><br>
         <h5 style="color: aqua">Estoque de Materiais e Insumos</h5><br>
         <div class="row g-0">
-          <div class="col-md-4"><p style="font-size:12px; color: grey;"                      >Descrição do Material</p></div>
+          <div class="col-md-4"><p style="font-size:12px; color: grey;">Descrição do Material</p></div>
           <div class="col-md-8">
             <div class="row g-0">
               <div class="col-md-3"><p style="font-size:12px; color: grey; text-align:center">ID Interno/No.Lote</p></div>

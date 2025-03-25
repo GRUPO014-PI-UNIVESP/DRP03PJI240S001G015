@@ -50,6 +50,12 @@
         <a style="margin-left: 080px;"                 href="<?php echo $acesso16 ?>">Compra de Material e Insumos</a><br>
         <a style="margin-left: 080px;"                 href="<?php echo $acesso15 ?>">Cadastro de Novo Material</a><br>
         <a style="margin-left: 080px;"                 href="<?php echo $acesso18 ?>">Relatório de Compras</a><br>
+        <br>
+        <a style="margin-left: 045px;color:aquamarine" href="">Desempenho</a><br>
+        <a style="margin-left: 080px;"                 href="MonitorProduto.php">Monitor dos Pedidos em Execução</a><br>
+        <a style="margin-left: 080px;"                 href="">Desempenho de Vendas</a><br>
+        <a style="margin-left: 080px;"                 href="">Desempenho de Produtividade</a><br>
+        <a style="margin-left: 080px;"                 href=""></a><br>
       </div> 
       <div class="col md-6">
         <!-- Lista do departamento da garantia da qualidade -->
