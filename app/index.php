@@ -127,6 +127,10 @@
           <div class="d-grid gap-2">
             <input class="btn btn-secondary" type="reset" id="reset" name="reset" value="Recarregar" onclick="location.href='./index.php'">
           </div>
+          <br><br>
+          <div>
+            <p class="text-break" style="font-size: 11px; color:#DEB887; text-align: center;">Developed by DRP03PJI310S002G013 2025</p>
+          </div>
         </div>
       </div>
     </form>
