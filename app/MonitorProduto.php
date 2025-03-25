@@ -35,55 +35,63 @@ $responsavel = $_SESSION['nome_func'];
 </style>
 <!-- Área Principal -->
 <div class="main">
-  <div class="container-fluid">
-    <p style="font-size: 25px;">Monitoramento da Execução dos Pedidos</p>
-    <br><br>
-    <div class="row g-0">
-        <div class="col md-5">
-          <p style="text-align: center;">Nome do Produto</p>
-        </div>
-        <div class="col md-4">
-          <p style="text-align: center;">Quantidade</p>
-        </div>
-        <div class="col md-2">
-          <p style="text-align: center;">Data de Entrega</p>
-        </div>
-      </div>
-    <div class="tabela">
-      <div class="row g-0">
-        <div class="col md-5">
-          <p>Produto A</p>
-        </div>
-        <div class="col md-4">
-          <p style="text-align: center;">3.000 Kg</p>
-        </div>
-        <div class="col md-2">
-          <p style="text-align: center;">29/03/2025</p>
-        </div>
-      </div>
-      <div class="row g-0">
-        <div class="col md-2">
-          <p style="font-size: 12px; background-color: green; color:black; text-align: center;">Compra</p>
-        </div>
-        <div class="col md-2">
-          <p style="font-size: 12px; background-color: green; color:black; text-align: center;">Recebimento</p>
-        </div>
-        <div class="col md-2">
-          <p style="font-size: 12px; background-color: green; color:black; text-align: center;">Análise dos Materiais</p>
-        </div>
-        <div class="col md-2">
-          <p style="font-size: 12px; background-color: aquamarine; color:black; text-align: center;">Processamento</p>
-        </div>
-        <div class="col md-2">
-          <p style="font-size: 12px; background-color: deepskyblue; color:black; text-align: center;">Análise do Produto</p>
-        </div>
-        <div class="col md-2">
-          <p style="font-size: 12px; background-color: gray; color:black; text-align: center;">Entrega</p>
-        </div>
-        <div class="col md-2">
-          <p style="font-size: 12px; background-color: gray; color:black; text-align: center;">Concluído</p>
-        </div>
-      </div>
+  <div class="row g-1">
+    <div class="col md-6">
+      <br>
+      <p style="font-size: 25px; color:cyan">Monitor da Execução dos Pedidos</p>
     </div>
+    <div class="col md-6" style="text-align:center;">
+      <br>
+      <img src="./legenda de cores.jpg" />
+    </div>
+  </div>
+  <div class="overflow-y: scroll">
+    <table class="table table-dark table-hover">
+      <thead style="font-size: 12px">
+        <tr>
+          <th scope="col" style="width: 10%"><?php echo 'Data do Pedido' . '<br>' . 'Pedido No.'; ?></th>
+          <th scope="col" style="width: 30%"><?php echo 'Produto' . '<br>' . 'Cliente'; ?></th>
+          <th scope="col" style="width: 10%"><?php echo 'Quantidade' . '<br>' . 'Data de Entrega'; ?></th>
+          <th scope="col" style="width: 50%; text-align: center">Progresso</th>
+        </tr>
+      </thead>
+      <tbody style="height: 75%; font-size: 11px;">
+        <tr>
+          <th style="width: 10%;"><?php echo '01/03/2025' . '<br>' . '00001'; ?></th>
+          <td style="width: 30%;"><?php echo 'Produto A' . '<br>' . 'Food Truck da Dri'; ?></td>
+          <td style="width: 10%;"><?php echo '1.000 Kg' . '<br>' . '30/03/2025'; ?></td>
+          <td style="width: 50%;">
+            <div class="row g-1">
+              <div class="col md-2" style="font-size:12px; text-align:center; color:black; background-color:limegreen;">
+                Compra
+              </div>
+              <div class="col md-2" style="font-size:12px; text-align:center; color:black; background-color:limegreen;">
+                Recebida
+              </div>
+              <div class="col md-2" style="font-size:12px; text-align:center; color:whitesmoke; background-color:dodgerblue;">
+                Análise
+              </div>
+              <div class="col md-2" style="font-size:12px; text-align:center; color:whitesmoke; background-color:lightslategrey;">
+                Fabricação
+              </div>
+              <div class="col md-2" style="font-size:12px; text-align:center; color:whitesmoke; background-color:lightslategrey;">
+                Análise
+              </div>
+              <div class="col md-2" style="font-size:12px; text-align:center; color:whitesmoke; background-color:lightslategrey;">
+                Entrega
+              </div>
+            </div>
+            <div class="row g-1">
+              <div class="col md-6" style="font-size: 11px;">
+                Matéria Prima
+              </div>
+              <div class="col md-6" style="font-size: 11px;">
+                Produto Final
+              </div>
+            </div>
+          </td>          
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
