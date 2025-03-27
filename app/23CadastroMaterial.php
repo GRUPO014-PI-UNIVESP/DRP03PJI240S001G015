@@ -12,7 +12,7 @@ $responsavel = $_SESSION['nome_func'];
     function deslogar() {<?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php';?>
       window.location.href = 'LogOut.php';
     }
-    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 600000);}
+    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 69900000);}
   }; inactivityTime();
 </script>
 <!-- Área Principal -->
@@ -31,7 +31,7 @@ $responsavel = $_SESSION['nome_func'];
             //Pesquisa por fornecedores para seleção criar algoritmo para novos fornecedores
             $query_supplier = $connDB->prepare("SELECT DISTINCT NOME_FANTASIA FROM fornecedores"); $query_supplier->execute();
             while($supplier = $query_supplier->fetch(PDO::FETCH_ASSOC)){?>
-              <option style="font-size: 12px"><?php echo $supplier['FORNECEDOR']; ?></option> <?php
+              <option style="font-size: 12px"><?php echo $supplier['NOME_FANTASIA']; ?></option> <?php
             }?>
         </select>
       </div>

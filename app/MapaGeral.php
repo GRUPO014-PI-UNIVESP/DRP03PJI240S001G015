@@ -36,10 +36,9 @@
         <a style="margin-left: 080px;"                 href="<?php echo $acesso5 ?>">Quadro de Funcionários</a><br>
         <a style="margin-left: 105px;color:burlywood"  href="<?php echo $acesso7 ?>">Cadastro de Novo Funcionário</a><br>
         <a style="margin-left: 080px;"                 href="<?php echo $acesso60 ?>">Monitor do Histórico de Login</a><br>
-        <a style="margin-left: 080px;"                 href="">Estrutura da Organização</a><br>
         <br>
         <a style="margin-left: 045px;color:aquamarine" href="">Setor de Vendas</a><br>
-        <a style="margin-left: 080px;"                 href="<?php echo $acesso1 ?>">Lista de Pedidos Efetivados</a><br>
+        <a style="margin-left: 080px;"                 href="<?php echo $acesso2 ?>">Lista de Pedidos Efetivados</a><br>
         <a style="margin-left: 080px;"                 href="<?php echo $acesso11 ?>">Pedido do Produto</a><br>
         <a style="margin-left: 080px;"                 href="<?php echo $acesso13 ?>">Cadastro de Novo Cliente</a><br>
         <a style="margin-left: 080px;"                 href="<?php echo $acesso14 ?>">Cadastro de Novo Produto</a><br>
@@ -49,6 +48,7 @@
         <a style="margin-left: 080px;"                 href="<?php echo $acesso1 ?>">Lista de Compras Agendadas</a><br>
         <a style="margin-left: 080px;"                 href="<?php echo $acesso16 ?>">Compra de Material e Insumos</a><br>
         <a style="margin-left: 080px;"                 href="<?php echo $acesso15 ?>">Cadastro de Novo Material</a><br>
+        <a style="margin-left: 080px;"                 href="<?php echo $acesso19 ?>">Cadastro de Fornecedor</a><br>
         <a style="margin-left: 080px;"                 href="<?php echo $acesso18 ?>">Relatório de Compras</a><br>
         <br>
         <a style="margin-left: 045px;color:aquamarine" href="">Desempenho</a><br>
