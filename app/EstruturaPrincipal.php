@@ -15,7 +15,8 @@ $msg = $connDB->prepare("SELECT * FROM mensagens WHERE RECEPTOR_MSG = :receptor 
 $msg->bindParam(':receptor', $_SESSION['nome_func'], PDO::PARAM_STR); $msg->execute(); $numMsg = $msg->rowCount();
 
 if($_SESSION['departamento'] === 'ADMINISTRATIVO' || $_SESSION['credencial'] >= 6){ //$_SESSION['ordena'] = 'NOME_FUNCIONARIO';
-  $acesso1  = './00SeletorAdministrativo.php'   ; $acesso2  = './11SetorVendas.php'    ; $acesso5  = './06QuadroFuncionarios.php' ; $acesso7  = './07CadastroFuncionario.php';
+  $acesso1  = './00SeletorAdministrativo.php'   ; $acesso2  = './11SetorVendas.php'    ; $acesso3  = './12SetorCompras.php'       ; $acesso5  = './06QuadroFuncionarios.php' ;
+  $acesso7  = './07CadastroFuncionario.php'     ;
   $acesso8  = './08EditaRegistroFuncionario.php'; $acesso9  = './10DeletaFunc.php'     ; $acesso10 = './11CadastroFuncionario.php'; $acesso11 = './33PedidoProduto.php'      ;
   $acesso12 = './21CompraMaterial.php'          ; $acesso13 = './30CadastroCliente.php'; $acesso14 = './31CadastroProduto.php'    ; $acesso15 = './23CadastroMaterial.php'   ;
   $acesso16 = './22CompraMaterial.php'          ; $acesso17 = './39RelatorioVendas.php'; $acesso18 = './24RelatorioCompras.php'   ; $acesso19 = './25CadastroFornecedor.php' ;

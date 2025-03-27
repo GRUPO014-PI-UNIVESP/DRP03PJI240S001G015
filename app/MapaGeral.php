@@ -20,7 +20,7 @@
      }
     function resetTimer() {
       clearTimeout(time);
-       time = setTimeout(deslogar, 6000000);
+       time = setTimeout(deslogar, 699000000);
      }
   };
   inactivityTime();
@@ -45,7 +45,7 @@
         <a style="margin-left: 080px;"                 href="<?php echo $acesso17 ?>">Relatório de Vendas</a><br>
         <br>
         <a style="margin-left: 045px;color:aquamarine" href="">Setor de Compras</a><br>
-        <a style="margin-left: 080px;"                 href="<?php echo $acesso1 ?>">Lista de Compras Agendadas</a><br>
+        <a style="margin-left: 080px;"                 href="<?php echo $acesso3 ?>">Lista de Compras Agendadas</a><br>
         <a style="margin-left: 080px;"                 href="<?php echo $acesso16 ?>">Compra de Material e Insumos</a><br>
         <a style="margin-left: 080px;"                 href="<?php echo $acesso15 ?>">Cadastro de Novo Material</a><br>
         <a style="margin-left: 080px;"                 href="<?php echo $acesso19 ?>">Cadastro de Fornecedor</a><br>

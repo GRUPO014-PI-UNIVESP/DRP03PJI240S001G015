@@ -27,7 +27,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
           <button type="button" class="btn btn-outline-light" style="width:250px" onclick="location.href='<?php echo $acesso17 ?>'">Relatório de Vendas</button><br><br>
         </div>
         <div class="col-md-9">
-          <h5 style="text-align: center; color:aqua">Fila dos Pedidos em Execução</h5><?php
+          <h5 style="text-align: center; color:aqua">Fila dos Pedidos Efetivados</h5><?php
           $produtos = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 4"); $produtos->execute();
           while($rowPedido = $produtos->fetch(PDO::FETCH_ASSOC)){
             if(!empty($rowPedido['NUMERO_PEDIDO'])){ ?>
