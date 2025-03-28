@@ -1,0 +1,3 @@
+Reestruturar tabela de clientes
+Eliminar compra agendada em casos de descarte de pedido de produto
+algoritmo para definir especificações técnicas dos materiais e produtos para análise e produção
