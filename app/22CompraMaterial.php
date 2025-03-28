@@ -75,7 +75,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       $realiza->bindParam(':situacao', $situacao  , PDO::PARAM_STR); $realiza->bindParam(':uniMed'   , $rowBusca['UNIDADE']   , PDO::PARAM_STR);
       $realiza->bindParam(':idCompra', $lastID    , PDO::PARAM_INT); $realiza->execute();     
 
-      header('Location: ./00SeletorAdministrativo.php');
+      header('Location: ./MapaGeral.php');
     } ?>
   </div>
 </div>
