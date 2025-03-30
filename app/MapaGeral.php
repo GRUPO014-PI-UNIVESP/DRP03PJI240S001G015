@@ -1,7 +1,7 @@
 <?php
   // faz requisição da estrutura base da págima do sistema
   include_once './EstruturaPrincipal.php';
-  $_SESSION['posicao'] = 'Dashboard';
+  $_SESSION['posicao'] = 'Mapa Geral';
   include_once './RastreadorAtividades.php';
 ?>
 <script>

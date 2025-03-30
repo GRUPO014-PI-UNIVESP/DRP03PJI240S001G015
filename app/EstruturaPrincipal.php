@@ -15,12 +15,12 @@ $msg = $connDB->prepare("SELECT * FROM mensagens WHERE RECEPTOR_MSG = :receptor 
 $msg->bindParam(':receptor', $_SESSION['nome_func'], PDO::PARAM_STR); $msg->execute(); $numMsg = $msg->rowCount();
 
 if($_SESSION['departamento'] === 'ADMINISTRATIVO' || $_SESSION['credencial'] >= 6){ //$_SESSION['ordena'] = 'NOME_FUNCIONARIO';
-  $acesso1  = './00SeletorAdministrativo.php'   ; $acesso2  = './11SetorVendas.php'    ; $acesso3  = './12SetorCompras.php'       ; $acesso5  = './06QuadroFuncionarios.php' ;
-  $acesso7  = './07CadastroFuncionario.php'     ;
-  $acesso8  = './08EditaRegistroFuncionario.php'; $acesso9  = './10DeletaFunc.php'     ; $acesso10 = './11CadastroFuncionario.php'; $acesso11 = './33PedidoProduto.php'      ;
-  $acesso12 = './21CompraMaterial.php'          ; $acesso13 = './30CadastroCliente.php'; $acesso14 = './31CadastroProduto.php'    ; $acesso15 = './23CadastroMaterial.php'   ;
-  $acesso16 = './22CompraMaterial.php'          ; $acesso17 = './39RelatorioVendas.php'; $acesso18 = './24RelatorioCompras.php'   ; $acesso19 = './25CadastroFornecedor.php' ;
-}else{ $acesso1 = ''; $acesso5 = ''; $acesso7 = ''; $acesso8 = ''; $acesso9 = ''; $acesso10 = '';
+  $acesso1  = './00SeletorAdministrativo.php'; $acesso2  = './11SetorVendas.php'        ; $acesso3  = './12SetorCompras.php'       ; $acesso4  = './05VerificarDetalhes.php';
+  $acesso5  = './06QuadroFuncionarios.php'   ; $acesso6  = './'                         ; $acesso7  = './07CadastroFuncionario.php'; $acesso8  = './08EditaRegistroFuncionario.php';
+  $acesso9  = './10DeletaFunc.php'           ; $acesso10 = './11CadastroFuncionario.php'; $acesso11 = './33PedidoProduto.php'      ; $acesso12 = './21CompraMaterial.php';
+  $acesso13 = './30CadastroCliente.php'      ; $acesso14 = './31CadastroProduto.php'    ; $acesso15 = './23CadastroMaterial.php'   ; $acesso16 = './22CompraMaterial.php';
+  $acesso17 = './39RelatorioVendas.php'      ; $acesso18 = './24RelatorioCompras.php'   ; $acesso19 = './25CadastroFornecedor.php' ;
+}else{ $acesso1  = ''; $acesso2  = ''; $acesso3  = ''; $acesso4  = ''; $acesso5  = ''; $acesso7  = ''; $acesso8  = ''; $acesso9  = ''; $acesso10 = ''; $acesso11 = '';
        $acesso12 = ''; $acesso13 = ''; $acesso14 = ''; $acesso15 = ''; $acesso16 = ''; $acesso17 = ''; $acesso18 = ''; $acesso19 = '';}
 
 if($_SESSION['departamento'] === 'GARANTIA DA QUALIDADE'|| $_SESSION['credencial'] >= 4){
