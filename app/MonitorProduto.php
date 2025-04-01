@@ -31,7 +31,7 @@ $responsavel = $_SESSION['nome_func'];
   inactivityTime();
 </script>
 <style>
-  .tabela{ width: 100%; height: 500px; overflow-y: scroll;}
+  .tabela{ width: 100%; height: 680px; overflow-y: scroll;}
 </style>
 <!-- Área Principal -->
 <div class="main">
@@ -45,7 +45,7 @@ $responsavel = $_SESSION['nome_func'];
       <img src="./legenda de cores.jpg" />
     </div>
   </div>
-  <div class="overflow-y: scroll">
+  <div class="tabela">
     <table class="table table-dark table-hover">
       <thead style="font-size: 12px">
         <tr>
@@ -55,45 +55,40 @@ $responsavel = $_SESSION['nome_func'];
           <th scope="col" style="width: 50%; text-align: center">Progresso</th>
         </tr>
       </thead>
-      <?php 
-        
-      ?>
-      <tbody style="height: 75%; font-size: 11px;">
-        <tr>
-          <th style="width: 10%;"><?php echo '01/03/2025' . '<br>' . '00001'; ?></th>
-          <td style="width: 30%;"><?php echo 'Produto A' . '<br>' . 'Food Truck da Dri'; ?></td>
-          <td style="width: 10%;"><?php echo '1.000 Kg' . '<br>' . '30/03/2025'; ?></td>
-          <td style="width: 50%;">
-            <div class="row g-1">
-              <div class="col md-2" style="font-size:12px; text-align:center; color:black; background-color:limegreen;">
-                Compra
+      <?php $query_pedido = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 8 ORDER BY DATA_PEDIDO ASC"); $query_pedido->execute(); ?>
+      <tbody style="height: 75%; font-size: 11px;"><?php 
+        while($rowPedido = $query_pedido->fetch(PDO::FETCH_ASSOC)){
+          $clear = 'font-size:12px; text-align:center; color:black; background-color:limegreen;';
+          $exec  = 'font-size:12px; text-align:center; color:whitesmoke; background-color:dodgerblue;';
+          $wait  = 'font-size:12px; text-align:center; color:whitesmoke; background-color:lightslategrey;';
+          if($rowPedido['ETAPA_PROCESS'] >= 0){$a = $wait ; $b = $wait ; $c = $wait ; $d = $wait ; $e = $wait ; $f = $wait ; }
+          if($rowPedido['ETAPA_PROCESS'] >= 1){$a = $exec ; $b = $wait ; $c = $wait ; $d = $wait ; $e = $wait ; $f = $wait ; }
+          if($rowPedido['ETAPA_PROCESS'] >= 2){$a = $clear; $b = $exec ; $c = $wait ; $d = $wait ; $e = $wait ; $f = $wait ; }
+          if($rowPedido['ETAPA_PROCESS'] >= 3){$a = $clear; $b = $clear; $c = $exec ; $d = $wait ; $e = $wait ; $f = $wait ; }
+          if($rowPedido['ETAPA_PROCESS'] >= 4){$a = $clear; $b = $clear; $c = $clear; $d = $exec ; $e = $wait ; $f = $wait ; }
+          if($rowPedido['ETAPA_PROCESS'] >= 5){$a = $clear; $b = $clear; $c = $clear; $d = $clear; $e = $exec ; $f = $wait ; }
+          if($rowPedido['ETAPA_PROCESS'] >= 6){$a = $clear; $b = $clear; $c = $clear; $d = $clear; $e = $clear; $f = $exec ; }
+          if($rowPedido['ETAPA_PROCESS'] >= 7){$a = $clear; $b = $clear; $c = $clear; $d = $clear; $e = $clear; $f = $clear; } ?>
+          <tr>
+            <th scope="col" style="width: 10%; text-align:right;"><?php echo $rowPedido['DATA_PEDIDO'] . '<br>' . $rowPedido['NUMERO_PEDIDO'] ; ?></th>
+            <td scope="col" style="width: 30%;                  "><?php echo $rowPedido['PRODUTO'] . '<br>' . $rowPedido['CLIENTE']; ?></td>
+            <td scope="col" style="width: 10%; text-align:right;"><?php echo $rowPedido['QTDE_PEDIDO'] . ' ' . $rowPedido['UNIDADE'] . '<br>' . $rowPedido['DATA_ENTREGA']; ?></td>
+            <td scope="col" style="width: 50%;">
+              <div class="row g-2">
+                <div class="col md-2" style="<?php echo $a ?>">Compra</div>
+                <div class="col md-2" style="<?php echo $b ?>">Recebida</div>
+                <div class="col md-2" style="<?php echo $c ?>">Análise</div>
+                <div class="col md-2" style="<?php echo $d ?>">Fabricação</div>
+                <div class="col md-2" style="<?php echo $e ?>">Análise</div>
+                <div class="col md-2" style="<?php echo $f ?>">Entrega</div>
               </div>
-              <div class="col md-2" style="font-size:12px; text-align:center; color:black; background-color:limegreen;">
-                Recebida
+              <div class="row g-2">
+                <div class="col md-6" style="font-size: 11px; color:aqua;">Matéria Prima</div>
+                <div class="col md-6" style="font-size: 11px; color:aqua;">Produto Final</div>
               </div>
-              <div class="col md-2" style="font-size:12px; text-align:center; color:whitesmoke; background-color:dodgerblue;">
-                Análise
-              </div>
-              <div class="col md-2" style="font-size:12px; text-align:center; color:whitesmoke; background-color:lightslategrey;">
-                Fabricação
-              </div>
-              <div class="col md-2" style="font-size:12px; text-align:center; color:whitesmoke; background-color:lightslategrey;">
-                Análise
-              </div>
-              <div class="col md-2" style="font-size:12px; text-align:center; color:whitesmoke; background-color:lightslategrey;">
-                Entrega
-              </div>
-            </div>
-            <div class="row g-1">
-              <div class="col md-6" style="font-size: 11px;">
-                Matéria Prima
-              </div>
-              <div class="col md-6" style="font-size: 11px;">
-                Produto Final
-              </div>
-            </div>
-          </td>          
-        </tr>
+            </td>
+          </tr><?php
+        } ?>                    
       </tbody>
     </table>
   </div>
