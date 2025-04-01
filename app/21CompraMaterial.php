@@ -72,11 +72,13 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       $realiza->bindParam(':dataPrazo', $rowMat['DATA_PRAZO'], PDO::PARAM_STR);
       $realiza->execute();
 
-      $atualiza = $connDB->prepare("UPDATE materiais_compra SET ETAPA_PROCESS = :etapa, QTDE_PEDIDO = :qtdeLote, SITUACAO = :situacao WHERE ID_COMPRA = :idCompra");
+      $dCompra = date('Y-m-d');
+      $atualiza = $connDB->prepare("UPDATE materiais_compra SET ETAPA_PROCESS = :etapa, QTDE_PEDIDO = :qtdeLote, SITUACAO = :situacao, DATA_COMPRA = :dCompra WHERE ID_COMPRA = :idCompra");
       $atualiza->bindParam(':idCompra', $_GET['id'], PDO::PARAM_STR);
       $atualiza->bindParam(':etapa'   , $etapa     , PDO::PARAM_INT);
       $atualiza->bindParam(':qtdeLote', $qtdeCompra, PDO::PARAM_STR);
       $atualiza->bindParam(':situacao', $situacao  , PDO::PARAM_STR);
+      $atualiza->bindParam(':dCompra' , $dCompra   , PDO::PARAM_STR);
       $atualiza->execute();
 
       header('Location: ./00SeletorAdministrativo.php');

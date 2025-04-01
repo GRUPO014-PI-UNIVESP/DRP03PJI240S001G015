@@ -55,6 +55,9 @@ $responsavel = $_SESSION['nome_func'];
           <th scope="col" style="width: 50%; text-align: center">Progresso</th>
         </tr>
       </thead>
+      <?php 
+        
+      ?>
       <tbody style="height: 75%; font-size: 11px;">
         <tr>
           <th style="width: 10%;"><?php echo '01/03/2025' . '<br>' . '00001'; ?></th>
