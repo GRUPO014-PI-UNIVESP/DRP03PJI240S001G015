@@ -8,10 +8,13 @@ include_once './RastreadorAtividades.php';
 //atribui usuário como responsável por registro de entrada do material ou cadastramento
 $responsavel = $_SESSION['nome_func'];
 
-// busca de registro no banco de dados
-$query_log = $connDB->prepare("SELECT * FROM rastreamento WHERE ID_LOGADO = :regLog ORDER BY HORA_ATV DESC");
-$query_log->bindParam(':regLog', $_SESSION['id_log'], PDO::PARAM_INT);
-$query_log->execute(); $logado = $query_log->fetch(PDO::FETCH_ASSOC);
+//verifica identificador do registro para busca no banco de dados
+if(!empty($_GET['id'])){
+  $id_log   = $_GET['id'];
+  $queryLog = $connDB->prepare("SELECT * FROM rastreamento WHERE ID_LOGADO = $id_log ORDER BY HORA_ATV DESC");
+  $queryLog->execute();
+  $rowID    = $queryLog->fetch(PDO::FETCH_ASSOC);
+}
 ?>
 <script>
   // verifica inatividade da página e fecha sessão
@@ -41,7 +44,7 @@ $query_log->execute(); $logado = $query_log->fetch(PDO::FETCH_ASSOC);
 <div class="main">
   <div class="container-fluid"><br>
     <P style="font-size: 20px; color:aqua;">Atividades da Sessão</P><br><br>
-        <p>Nome: <?php echo $logado['NOME_FUNCIONARIO']; ?></p>
+        <p><?php echo 'Nome: ' . $rowID['NOME_FUNCIONARIO'] . '<BR>' . 'Data de Acesso: ' . $rowID['DATA_ATV']; ?></p>
         <div class="tabela">
             <table class="table table-dark table-hover">
                 <thead style="font-size: 12px">
@@ -51,7 +54,7 @@ $query_log->execute(); $logado = $query_log->fetch(PDO::FETCH_ASSOC);
                   </tr>
                 </thead>
                 <tbody style="height: 75%; font-size: 10px;">
-                    <?php while($nomeLista = $query_log->fetch(PDO::FETCH_ASSOC)){ ?>
+                    <?php while($nomeLista = $queryLog->fetch(PDO::FETCH_ASSOC)){ ?>
                     <tr>
                         <th style="width: 10%; text-align: center"> <?php echo $nomeLista['HORA_ATV']; ?> </th>
                         <td style="width: 20%;"> <?php echo $nomeLista['ATV_ACESSADA']; ?> </td>        

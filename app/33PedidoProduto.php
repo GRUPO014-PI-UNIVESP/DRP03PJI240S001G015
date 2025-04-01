@@ -7,7 +7,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
   let inactivityTime = function(){
     let time; window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress  = resetTimer;
     function deslogar(){ <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php'; ?> window.location.href = 'LogOut.php'; }
-    function resetTimer(){ clearTimeout(time); time = setTimeout(deslogar, 600000); }
+    function resetTimer(){ clearTimeout(time); time = setTimeout(deslogar, 69900000); }
   }; inactivityTime();
 </script>
 <!-- Área Principal -->
@@ -70,7 +70,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
         $query_material->bindParam(':nomeProduto', $nomeProd, PDO::PARAM_STR); $query_material->execute();
 
         while($rowLista = $query_material->fetch(PDO::FETCH_ASSOC)){ $_SESSION['capacidade'] = $rowLista['CAPAC_PROCESS'];          
-          $descrMat = $rowLista['MATERIAL_COMPONENTE']; $uniMed = $rowLista['UNIDADE']; $qtdeMat = $qtdeLote * ($rowLista['PROPORCAO'] / 100);
+          $descrMat = $rowLista['MATERIAL_COMPONENTE']; $uniMed = $rowLista['UNIDADE']; $qtdeMat = $qtdeLote * ($rowLista['PROPORCAO_MATERIAL'] / 100);
 
           $query_estoque = $connDB->prepare("SELECT ID_ESTOQUE, SUM(QTDE_ESTOQUE) AS TOTAL_ESTOQUE FROM materiais_estoque WHERE DESCRICAO = :material");
           $query_estoque->bindParam(':material', $descrMat, PDO::PARAM_STR); 

@@ -44,9 +44,9 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             while($rowLista = $query_material->fetch(PDO::FETCH_ASSOC)){ $contador = 1; $capacidadeProcess = $rowLista['CAPAC_PROCESS'];?>
               <tr>
                 <td scope="col" style="width: 30%; font-size: 13px; color: yellow"><?php $descrMaterial = $rowLista['MATERIAL_COMPONENTE'];
-                  echo $rowLista['MATERIAL_COMPONENTE'] . '<br>'; echo 'Proporção: [ ' . $rowLista['PROPORCAO'] . ' %]'; ?>
+                  echo $rowLista['MATERIAL_COMPONENTE'] . '<br>'; echo 'Proporção: [ ' . $rowLista['PROPORCAO_MATERIAL'] . ' %]'; ?>
                 </td>
-                <td scope="col" style="width: 10%; text-align: center; font-size: 18px; color: yellow"><?php $qtdeMaterial = $qtdeLote * ($rowLista['PROPORCAO'] / 100);
+                <td scope="col" style="width: 10%; text-align: center; font-size: 18px; color: yellow"><?php $qtdeMaterial = $qtdeLote * ($rowLista['PROPORCAO_MATERIAL'] / 100);
                   echo number_format($qtdeMaterial, 0, ',', '.') . ' ' . $rowLista['UNIDADE']; ?>
                 </td>
                 <td scope="col" style="width: 10%; text-align: center; font-size: 18px; color:yellow"><?php

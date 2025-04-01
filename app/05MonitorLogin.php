@@ -33,7 +33,7 @@ $listar = $connDB->prepare("SELECT * FROM historico_login ORDER BY ID_LOGIN DESC
           </thead>
           <tbody style="height: 80%; font-size: 11px;">
             <form class="row g-1" method="POST" action="#">
-              <?php while($rowLog = $listar->fetch(PDO::FETCH_ASSOC)){ $id1 = $rowLog['ID_LOGIN']; $_SESSION['id_log'] = $id1 ?>
+              <?php while($rowLog = $listar->fetch(PDO::FETCH_ASSOC)){ $id1 = $rowLog['ID_LOGIN'];?>
               <tr>
                 <th style="width: 10%"> 
                   <?php $dIn = $rowLog['DATA_LOGIN']; $DiN = strtotime($dIn); echo date('d/m/Y', $DiN); ?> </th>

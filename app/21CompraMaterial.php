@@ -11,10 +11,10 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php'; ?>
       window.location.href = 'LogOut.php';
     }
-    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 600000);}
+    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 69900000);}
   }; inactivityTime();
 </script>
-<div class="main">
+<div class="main"><!-- Compra de material e insumos agendados por pedido de produto -->
   <div class="container-fluid"><br>
     <form method="POST" id="agendado">
       <div class="row g-3">

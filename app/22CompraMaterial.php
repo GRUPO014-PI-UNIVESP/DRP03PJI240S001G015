@@ -13,7 +13,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
 <div class="main">
   <div class="container-fluid"><br>
     <form method="POST">
-      <div class="row g-3"><h5>Compra Avulsa de Material</h5>
+      <div class="row g-3"><h5>Compra Avulsa de Material para Reposição de Estoque Crítico</h5>
         <div class="col-md-8">
           <label for="descrMat" class="form-label" style="font-size: 10px; color:aqua">Descrição do Material</label>
           <select style="font-size: 16px;" class="form-select" id="descrMat" name="descrMat">
