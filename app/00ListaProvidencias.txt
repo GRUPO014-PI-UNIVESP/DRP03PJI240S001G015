@@ -1,3 +1,24 @@
+Fazer limpeza de código e adicionar parâmetros de digitação de dados
+Verificar todos os links para nova estrutura do sistema
+
 Reestruturar tabela de clientes
-Eliminar compra agendada em casos de descarte de pedido de produto
+
+Eliminar compra agendada em casos de descarte de pedido de produto em caso de fechamento inesperado de janela
+   algoritmo de verificação se número do pedido existe e confere com a tabela de compras
+
 algoritmo para definir especificações técnicas dos materiais e produtos para análise e produção
+
+ajustar pedido de produto:
+   1: iniciar tela com cliente, produto, quantidade
+   2: verificar se tem estoque do produto para cobrir pedido mostrando estoque disponível
+      dependendo do resultado da pesquisa, define uma data estimada de entrega
+         a pronta entrega tem que reajustar quantidade do estoque e definir para entrega nas etapas de processo
+         com prazo de fabricação e análise caso já tenha matéria prima disponível
+         com prazo estendido para compra de matéria prima
+   3: verificar agenda da planta e definir data de acordo com disponibilidade da matéria prima
+   4: reajustar etapa de processo de acordo
+
+Novo algoritmo para cadastro de novos produtos, com definição de especificações do produto e processos de fabricação
+
+
+   

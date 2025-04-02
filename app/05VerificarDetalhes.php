@@ -43,25 +43,32 @@ if(!empty($_GET['id'])){
 <!-- Área Principal -->
 <div class="main">
   <div class="container-fluid"><br>
-    <P style="font-size: 20px; color:aqua;">Atividades da Sessão</P><br><br>
-        <p><?php echo 'Nome: ' . $rowID['NOME_FUNCIONARIO'] . '<BR>' . 'Data de Acesso: ' . $rowID['DATA_ATV']; ?></p>
-        <div class="tabela">
-            <table class="table table-dark table-hover">
-                <thead style="font-size: 12px">
-                  <tr>
-                    <th scope="col" style="width: 10%; text-align: center">Hora de Acesso</th>
-                    <th scope="col" style="width: 20%;">Atividade</th>
-                  </tr>
-                </thead>
-                <tbody style="height: 75%; font-size: 10px;">
-                    <?php while($nomeLista = $queryLog->fetch(PDO::FETCH_ASSOC)){ ?>
-                    <tr>
-                        <th style="width: 10%; text-align: center"> <?php echo $nomeLista['HORA_ATV']; ?> </th>
-                        <td style="width: 20%;"> <?php echo $nomeLista['ATV_ACESSADA']; ?> </td>        
-                    </tr><?php } ?>
-                </tbody>
-            </table>
-        </div><br>           
-        <button type="button" class="btn btn-info" style="width: 220px;" onclick="location.href='./05MonitorLogin.php'">Voltar ao Quadro de Funcionários</button>
+    <d class="row g-2">
+      <div class="col md-6">
+        <P style="font-size: 20px; color:aqua;">Atividades da Sessão</P>
+      </div>
+      <div class="col md-6">
+      <button type="button" class="btn btn-info" style="width: 120px;" onclick="location.href='./05MonitorLogin.php'">Voltar</button>
+      </div>
+    </div>
+    <br>
+    <p><?php echo 'Nome: ' . $rowID['NOME_FUNCIONARIO'] . '<BR>' . 'Data de Acesso: ' . $rowID['DATA_ATV']; ?></p>
+    <div class="tabela">
+      <table class="table table-dark table-hover">
+        <thead style="font-size: 12px">
+          <tr>
+            <th scope="col" style="width: 10%; text-align: center">Hora de Acesso</th>
+            <th scope="col" style="width: 20%;">Atividade</th>
+          </tr>
+        </thead>
+        <tbody style="height: 75%; font-size: 10px;">
+          <?php while($nomeLista = $queryLog->fetch(PDO::FETCH_ASSOC)){ ?>
+          <tr>
+            <th style="width: 10%; text-align: center"> <?php echo $nomeLista['HORA_ATV']; ?> </th>
+            <td style="width: 20%;"> <?php echo $nomeLista['ATV_ACESSADA']; ?> </td>        
+          </tr><?php } ?>
+        </tbody>
+      </table>
+    </div><br>           
   </div>
 </div>
