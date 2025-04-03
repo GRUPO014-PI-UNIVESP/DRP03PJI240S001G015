@@ -1,29 +1,20 @@
 <?php
   // faz requisição da estrutura base da págima do sistema
-  include_once './EstruturaPrincipal.php';
-  $_SESSION['posicao'] = 'Mapa Geral';
-  include_once './RastreadorAtividades.php';
+  include_once './EstruturaPrincipal.php'; $_SESSION['posicao'] = 'Mapa Geral'; include_once './RastreadorAtividades.php';
+
+  // Verifica compra agendada com pedidos cancelados ou descartados
+  $query_compras = $connDB->prepare("SELECT * FROM materiais_compra WHERE ETAPA_PROCESS = 0"); $query_compras->execute();
+  while($elimina = $query_compras->fetch(PDO::FETCH_ASSOC) ){
+
+  }
 ?>
 <script>
   // verifica inatividade da página e fecha sessão
   let inactivityTime = function () {
-    let time;
-    window.onload        = resetTimer;
-    document.onmousemove = resetTimer;
-    document.onkeypress  = resetTimer;
-    function deslogar() {
-      <?php
-        $_SESSION['posicao'] = 'Encerrado por inatividade';
-        include_once './RastreadorAtividades.php';
-      ?>
-      window.location.href = 'LogOut.php';
-     }
-    function resetTimer() {
-      clearTimeout(time);
-       time = setTimeout(deslogar, 699000000);
-     }
-  };
-  inactivityTime();
+    let time; window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress  = resetTimer;
+    function deslogar() { <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php'; ?> window.location.href = 'LogOut.php'; }
+    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 600000); }
+  }; inactivityTime();
 </script>
 
   <div class="main"><br>

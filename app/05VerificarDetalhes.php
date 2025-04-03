@@ -1,45 +1,24 @@
 <?php
 // inclusão do banco de dados e estrutura base da página web
-include_once './ConnectDB.php';
-include_once './EstruturaPrincipal.php';
-$_SESSION['posicao'] = 'Verifica Detalhes do Log';
-include_once './RastreadorAtividades.php';
+include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSION['posicao'] = 'Verifica Detalhes do Log'; include_once './RastreadorAtividades.php';
 
 //atribui usuário como responsável por registro de entrada do material ou cadastramento
 $responsavel = $_SESSION['nome_func'];
 
 //verifica identificador do registro para busca no banco de dados
 if(!empty($_GET['id'])){
-  $id_log   = $_GET['id'];
-  $queryLog = $connDB->prepare("SELECT * FROM rastreamento WHERE ID_LOGADO = $id_log ORDER BY HORA_ATV DESC");
-  $queryLog->execute();
-  $rowID    = $queryLog->fetch(PDO::FETCH_ASSOC);
+  $id_log = $_GET['id']; $queryLog = $connDB->prepare("SELECT * FROM rastreamento WHERE ID_LOGADO = $id_log ORDER BY HORA_ATV DESC"); $queryLog->execute(); $rowID = $queryLog->fetch(PDO::FETCH_ASSOC);
 }
 ?>
 <script>
   // verifica inatividade da página e fecha sessão
   let inactivityTime = function () {
-    let time;
-    window.onload        = resetTimer;
-    document.onmousemove = resetTimer;
-    document.onkeypress  = resetTimer;
-    function deslogar() {
-      <?php
-        $_SESSION['posicao'] = 'Encerrado por inatividade';
-        include_once './RastreadorAtividades.php';
-      ?>
-      window.location.href = 'LogOut.php';
-     }
-    function resetTimer() {
-      clearTimeout(time);
-       time = setTimeout(deslogar, 69900000);
-     }
-  };
-  inactivityTime();
+    let time; window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress  = resetTimer;
+    function deslogar() { <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php'; ?> window.location.href = 'LogOut.php';}
+    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 600000);}
+  }; inactivityTime();
 </script>
-<style>
-  .tabela{ width: 500px; height: 500px; overflow-y: scroll; }
-</style>
+<style> .tabela{ width: 500px; height: 500px; overflow-y: scroll; } </style>
 <!-- Área Principal -->
 <div class="main">
   <div class="container-fluid"><br>
@@ -61,7 +40,7 @@ if(!empty($_GET['id'])){
             <th scope="col" style="width: 20%;">Atividade</th>
           </tr>
         </thead>
-        <tbody style="height: 75%; font-size: 10px;">
+        <tbody style="font-size: 10px;">
           <?php while($nomeLista = $queryLog->fetch(PDO::FETCH_ASSOC)){ ?>
           <tr>
             <th style="width: 10%; text-align: center"> <?php echo $nomeLista['HORA_ATV']; ?> </th>
