@@ -23,10 +23,10 @@ if(!empty($_GET['id'])){
 <div class="main">
   <div class="container-fluid"><br>
     <d class="row g-2">
-      <div class="col md-6">
+      <div class="col-md-4">
         <P style="font-size: 20px; color:aqua;">Atividades da Sessão</P>
       </div>
-      <div class="col md-6">
+      <div class="col-md-4">
       <button type="button" class="btn btn-info" style="width: 120px;" onclick="location.href='./05MonitorLogin.php'">Voltar</button>
       </div>
     </div>

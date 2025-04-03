@@ -16,8 +16,15 @@ $listar = $connDB->prepare("SELECT * FROM historico_login ORDER BY ID_LOGIN DESC
 </script>
 <!-- Área Principal -->
   <div class="main">
-    <div class="container">
-      <p style="margin-left: 2%; font-size: 20px; color: whitesmoke">Departamento Administrativo - Histórico de LogIn </p>
+    <div class="container"><br>
+      <div class="row g-2">
+        <div class="col-md-5">
+          <p style="margin-left: 2%; font-size: 20px; color: whitesmoke">Departamento Administrativo - Histórico de LogIn </p>
+        </div>
+        <div class="col-md-5">
+          <button type="button" class="btn btn-info" style="width: 80px; float:inline-end" onclick="location.href='./MapaGeral.php'">Voltar</button>
+        </div>
+      </div>
       <div class="overflow-auto">
         <table class="table table-dark table-hover">
           <thead style="font-size: 12px">
@@ -60,6 +67,5 @@ $listar = $connDB->prepare("SELECT * FROM historico_login ORDER BY ID_LOGIN DESC
           </tbody>
         </table>
       </div>
-      <button type="button" class="btn btn-info" style="width: 80px" onclick="location.href='./MapaGeral.php'">Voltar</button>
     </div>
   </div>
