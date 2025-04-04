@@ -17,7 +17,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
 <!-- Área Principal -->
 <div class="main">
   <div class="container-fluid"><br>
-    <div><h5>Pedido de Produto</h5></div>
+    <div><h5>Pedido de Produto - Início</h5></div>
     <form method="POST">
       <div class="row g-2">
         <div class="col-md-1"> <?php 
@@ -44,7 +44,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
         </div>
         <div class="col-md-3"></div>
         <div class="col-md-8">
-          <input class="btn btn-outline-info" type="submit" id="pedido" name="pedido" value="Verificar Estoque" style="font-size: 13px; float:inline-end">
+          <input class="btn btn-outline-info" type="submit" id="pedido" name="pedido" value="Verificar Disponibilidade" style="font-size: 13px; float:inline-end">
         </div>
       </div><!-- Fim da div row -->
     </form><br> <?php
