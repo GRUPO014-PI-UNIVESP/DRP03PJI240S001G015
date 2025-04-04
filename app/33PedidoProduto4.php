@@ -96,7 +96,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             <div class="col-md-2"></div>
             <div class="col-md-4">
               <label for="dataEstimada" class="form-label" style="font-size: 10px; color:aqua;">Disponível em:</label>
-              <input style="font-size: 14px; text-align: center; color:yellow; background: rgba(0,0,0,0.3); width:150px" type="date" class="form-control" id="dataEstimada" name="dataEstimada"
+              <input style="font-size: 14px; text-align: center; color:whitesmoke; background: rgba(0,0,0,0.3); width:150px" type="date" class="form-control" id="dataEstimada" name="dataEstimada"
                 value="" required autofocus>
                 <p style="font-size: 10px; color: grey">Selecione uma data estimada de entrega do material</p>
             </div>
@@ -113,8 +113,8 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
         <?php
           $confirmaAgenda = filter_input_array(INPUT_POST, FILTER_DEFAULT);         
           if(!empty($confirmaAgenda)){
-            $_SESSION['dataPedido']   = $confirmaAgenda['dataPedido'];
-            $_SESSION['horaPedido']   = $confirmaAgenda['dataPedido'];
+            $_SESSION['dataPedido']   = date('Y-m-d', strtotime($confirmaAgenda['dataPedido']));
+            $_SESSION['horaPedido']   = $confirmaAgenda['horaPedido'];
             $_SESSION['dataEstimada'] = $confirmaAgenda['dataEstimada'];
             header("Location: ./33PedidoProduto5.php"); 
           }
