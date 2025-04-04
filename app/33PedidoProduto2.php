@@ -11,8 +11,8 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
   }; inactivityTime();
 </script>
 <style> 
-.tabela1{ width: 300px; height: 300px; overflow-y: scroll;}
-.tabela2{ width: 800px; height: 300px; overflow-y: scroll;}
+.tabela1{ width: 300px; height: 250px; overflow-y: scroll;}
+.tabela2{ width: 800px; height: 250px; overflow-y: scroll;}
 </style>
 <!-- Área Principal -->
 <div class="main">
@@ -38,9 +38,9 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       <div class="col-md-4"><!-- Construção da tabela do estoque de produtos e disponibilidades -->
         <p style="color:aqua">Estoque Disponível</p>
         <?php
-          $query_prodDisponivel = $connDB->prepare('SELECT NUMERO_LOTE, NOME_PRODUTO, QTDE_ESTOQUE, UNIDADE_MEDIDA, SUM(QTDE_ESTOQUE) AS TOTAL_ESTOQUE FROM produto_estoque WHERE NOME_PRODUTO = :nomeProd AND QTDE_ESTOQUE >= 1 ORDER BY QTDE_ESTOQUE ASC');
+          $query_prodDisponivel = $connDB->prepare('SELECT * FROM produto_estoque WHERE NOME_PRODUTO = :nomeProd AND QTDE_ESTOQUE >= 1 ORDER BY QTDE_ESTOQUE ASC');
           $query_prodDisponivel->bindParam(':nomeProd', $_SESSION['nomeProduto'], PDO::PARAM_STR);
-          $query_prodDisponivel->execute(); $total = $query_prodDisponivel->fetch(PDO::FETCH_ASSOC); 
+          $query_prodDisponivel->execute(); 
         ?>
         <div class="tabela1">
           <table class="table table-dark table-hover">
@@ -61,14 +61,11 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             </tbody>               
           </table>
         </div><?php 
-          if($total['TOTAL_ESTOQUE'] > 0){ ?>
-            <button class="btn btn-outline-primary" onclick="location.href='./34PedidoProduto.php'">Utilizar Estoque</button><?php
-          }
-          else { ?>
-            <button class="btn btn-outline-secondary" disabled>Utilizar Estoque</button><?php
-          }
-        ?>
-
+          $totaliza = $connDB->prepare("SELECT SUM(QTDE_ESTOQUE) AS TOTAL FROM produto_estoque WHERE NOME_PRODUTO = :nomeProduto AND QTDE_ESTOQUE >=1");
+          $totaliza->bindParam(':nomeProduto', $_SESSION['nomeProduto'], PDO::PARAM_STR);
+          $totaliza->execute(); $totalLotes = $totaliza->fetch(PDO::FETCH_ASSOC);         
+          if(!empty($totalLotes['TOTAL']) && $totalLotes['TOTAL'] >= 1){ ?><button class="btn btn-outline-primary" onclick="location.href='./33PedidoProduto3.php'">Utilizar Estoque</button><?php }
+          if(empty($totalLotes['TOTAL']) && $totalLotes['TOTAL'] < 1){ ?><button class="btn btn-outline-secondary" disabled onclick="">Utilizar Estoque</button><?php }?>       
       </div>
       <div class="col-md-8"><!-- Construção da tabela dos materiais ingredientes e disponibilidades -->
         <p style="color:aqua">Materiais Ingredientes</p>
@@ -89,14 +86,14 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             </thead>
             <tbody style="height: 25%;">
               <?php 
-                while($rowMat = $query_matDisponivel->fetch(PDO::FETCH_ASSOC)){                   
+                while($rowMat = $query_matDisponivel->fetch(PDO::FETCH_ASSOC)){                 
                   $query_matLista = $connDB->prepare('SELECT * FROM materiais_estoque WHERE DESCRICAO = :nomeMat');
                   $query_matLista->bindParam(':nomeMat', $rowMat['MATERIAL_COMPONENTE'], PDO::PARAM_STR);
                   $query_matLista->execute();
                   $proporcao = $_SESSION['qtdeLote'] * ($rowMat['PROPORCAO_MATERIAL'] / 100);
                   while($dataMat = $query_matLista->fetch(PDO::FETCH_ASSOC)){ ?>
                     <tr>
-                      <th scope="col" style="width: 30%; font-size: 11px;"> <?php echo $dataMat['DESCRICAO'] ?> </th>
+                      <th scope="col" style="width: 30%; font-size: 11px;"> <?php echo $dataMat['DESCRICAO'] . ' [ ' . $rowMat['PROPORCAO_MATERIAL'] . '% ]' ?> </th>
                       <td scope="col" style="width: 20%; text-align: right; font-size: 13px;"> <?php echo number_format($proporcao, 0, ',', '.') . ' ' . $rowMat['UNIDADE'] ?> </td>        
                       <td scope="col" style="width: 20%; text-align: right; font-size: 13px;"> <?php echo number_format($dataMat['QTDE_ESTOQUE'], 0, ',', '.') . ' ' . $dataMat['UNIDADE'] ?> </td>        
                       <?php
@@ -114,7 +111,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             </tbody>               
           </table>
         </div>
-        <button class="btn btn-outline-success">Novo Lote</button>
+        <button class="btn btn-outline-success" onclick="location.href='./33PedidoProduto4.php'">Pedido de Novo Lote</button>
       </div>
     </div>
   </div><!-- Fim da div container-fluid -->
