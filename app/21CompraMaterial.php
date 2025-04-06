@@ -81,7 +81,13 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       $atualiza->bindParam(':dCompra' , $dCompra   , PDO::PARAM_STR);
       $atualiza->execute();
 
-      header('Location: ./00SeletorAdministrativo.php');
+      $atualizaPedido = $connDB->prepare("UPDATE pedidos SET ETAPA_PROCESS = :etapa, SITUACAO = :situacao WHERE NUMERO_PEDIDO = :numPedido");
+      $atualizaPedido->bindParam(':numPedido', $rowMat['NUMERO_PEDIDO'], PDO::PARAM_INT);
+      $atualizaPedido->bindParam(':etapa'    , $etapa                  , PDO::PARAM_INT);
+      $atualizaPedido->bindParam(':situacao' , $situacao               , PDO::PARAM_STR);
+      $atualizaPedido->execute();
+
+      header('Location: ./12SetorCompras.php');
     } ?>
   </div>
 </div>

@@ -200,7 +200,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
         </div>
       </form><?php
       $regProd = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-      if(!empty($regProd['registra'])){ $etapaProd = 1; $sitProd = 'FABRICAÇÃO CONCLUÍDA! AGUARDANDO ANÁLISE.';
+      if(!empty($regProd['registra'])){ $etapaProd = 4; $sitProd = 'FABRICAÇÃO CONCLUÍDA! AGUARDANDO ANÁLISE.';
         $regProd = $connDB->prepare("UPDATE pedidos SET NUMERO_LOTE = :numLote, ETAPA_PROCESS = :etapaProd, SITUACAO = :sitProd, DATA_FABRI = :dataFabri WHERE NUMERO_PEDIDO = :numPedido");
         $regProd->bindParam(':numLote'  , $_SESSION['nLoteProd'], PDO::PARAM_STR);
         $regProd->bindParam(':etapaProd', $etapaProd            , PDO::PARAM_INT);

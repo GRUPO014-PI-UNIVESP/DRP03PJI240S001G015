@@ -17,7 +17,7 @@ $msg->bindParam(':receptor', $_SESSION['nome_func'], PDO::PARAM_STR); $msg->exec
 if($_SESSION['departamento'] === 'ADMINISTRATIVO' || $_SESSION['credencial'] >= 6){ //$_SESSION['ordena'] = 'NOME_FUNCIONARIO';
   $acesso1  = './00SeletorAdministrativo.php'; $acesso2  = './11SetorVendas.php'        ; $acesso3  = './12SetorCompras.php'       ; $acesso4  = './05VerificarDetalhes.php';
   $acesso5  = './06QuadroFuncionarios.php'   ; $acesso6  = './'                         ; $acesso7  = './07CadastroFuncionario.php'; $acesso8  = './08EditaRegistroFuncionario.php';
-  $acesso9  = './10DeletaFunc.php'           ; $acesso10 = './11CadastroFuncionario.php'; $acesso11 = './33PedidoProduto1.php'      ; $acesso12 = './21CompraMaterial.php';
+  $acesso9  = './10DeletaFunc.php'           ; $acesso10 = './11CadastroFuncionario.php'; $acesso11 = './33PedidoProduto.php'      ; $acesso12 = './21CompraMaterial.php';
   $acesso13 = './30CadastroCliente.php'      ; $acesso14 = './31CadastroProduto.php'    ; $acesso15 = './23CadastroMaterial.php'   ; $acesso16 = './22CompraMaterial.php';
   $acesso17 = './39RelatorioVendas.php'      ; $acesso18 = './24RelatorioCompras.php'   ; $acesso19 = './25CadastroFornecedor.php' ;
 }else{ $acesso1  = ''; $acesso2  = ''; $acesso3  = ''; $acesso4  = ''; $acesso5  = ''; $acesso7  = ''; $acesso8  = ''; $acesso9  = ''; $acesso10 = ''; $acesso11 = '';

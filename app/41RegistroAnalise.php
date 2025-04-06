@@ -7,7 +7,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
   let inactivityTime = function () {
     let time;window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress  = resetTimer;
     function deslogar() { <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php';?> window.location.href = 'LogOut.php';}
-    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 600000);}
+    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 69900000);}
   }; inactivityTime();
 </script>
 <!-- Área Principal -->
@@ -213,19 +213,52 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             $atualiza->bindParam(':situacao', $situacao, PDO::PARAM_STR); $atualiza->execute();
             
             if($c > 6){ $etapa = 3;
-              $buscaEstoque = $connDB->prepare("SELECT QTDE_ESTOQUE FROM materiais_estoque WHERE ID_ESTOQUE = :idEstoque"); $buscaEstoque->bindParam(':idEstoque', $_SESSION['idEstoque'], PDO::PARAM_INT);
-              $buscaEstoque->execute(); $rowEstoque = $buscaEstoque->fetch(PDO::FETCH_ASSOC); $estoque = $rowEstoque['QTDE_ESTOQUE'] + $_SESSION['qtdeLote'];
+              $buscaEstoque = $connDB->prepare("SELECT QTDE_ESTOQUE FROM materiais_estoque WHERE ID_ESTOQUE = :idEstoque"); 
+              $buscaEstoque->bindParam(':idEstoque', $_SESSION['idEstoque'], PDO::PARAM_INT);
+              $buscaEstoque->execute(); 
+              $rowEstoque = $buscaEstoque->fetch(PDO::FETCH_ASSOC); 
+              $estoque    = $rowEstoque['QTDE_ESTOQUE'] + $_SESSION['qtdeLote'];
 
-              $atualEstoque = $connDB->prepare("UPDATE materiais_estoque SET QTDE_ESTOQUE = :estoque WHERE ID_ESTOQUE = :idEstoque"); $atualEstoque->bindParam(':estoque', $estoque, PDO::PARAM_STR);
-              $atualEstoque->bindParam(':idEstoque', $_SESSION['idEstoque'], PDO::PARAM_STR); $atualEstoque->execute(); 
+              $atualEstoque = $connDB->prepare("UPDATE materiais_estoque SET QTDE_ESTOQUE = :estoque WHERE ID_ESTOQUE = :idEstoque"); 
+              $atualEstoque->bindParam(':estoque'  , $estoque, PDO::PARAM_STR);
+              $atualEstoque->bindParam(':idEstoque', $_SESSION['idEstoque'], PDO::PARAM_STR); 
+              $atualEstoque->execute(); 
             }
-
-            $buscaReserva = $connDB->prepare("SELECT NUMERO_PEDIDO FROM materiais_reserva WHERE DESCRICAO = :descMat ");
 
             $atualizaReserva = $connDB->prepare("UPDATE materiais_reserva SET DISPONIBILIDADE = :disp WHERE ID_COMPRA = :idCompra");
             $atualizaReserva->bindParam(':disp'     , $etapa               , PDO::PARAM_STR);
-            $atualizaReserva->bindParam(':idCompra' , $_SESSION['idCompra'], PDO::PARAM_STR);
+            $atualizaReserva->bindParam(':idCompra' , $_SESSION['idCompra'], PDO::PARAM_INT);
             $atualizaReserva->execute();
+
+            $verifMatPedido = $connDB->prepare("SELECT * FROM materiais_reserva WHERE ID_COMPRA = :idCompra");
+            $verifMatPedido->bindParam(':idCompra', $_SESSION['idCompra'], PDO::PARAM_INT);
+            $verifMatPedido->execute();
+            $verificadorPedido = $verifMatPedido->fetch(PDO::FETCH_ASSOC);
+            $numPedido = $verificadorPedido['NUMERO_PEDIDO'];
+
+            $verifMatPedido = $connDB->prepare("SELECT * FROM materiais_reserva WHERE ID_COMPRA = :idCompra");
+            $verifMatPedido->bindParam(':idCompra', $_SESSION['idCompra'], PDO::PARAM_INT);
+            $verifMatPedido->execute();
+            $verificadorPedido = $verifMatPedido->fetch(PDO::FETCH_ASSOC);
+            $numPedido = $verificadorPedido['NUMERO_PEDIDO'];
+
+            $buscaRegMatLiberado = $connDB->prepare("SELECT * FROM materiais_reserva WHERE NUMERO_PEDIDO = :numPedido");
+            $buscaRegMatLiberado->bindParam(':numPedido', $numPedido, PDO::PARAM_INT);
+            $buscaRegMatLiberado->execute();
+            $contaMat = $buscaRegMatLiberado->rowCount(); echo $contaMat;
+            $nVerificador = $contaMat * 3;
+            $verificaDisponibilidade = $connDB->prepare("SELECT SUM(DISPONIBILIDADE) AS VERIFICADOR FROM materiais_reserva WHERE NUMERO_PEDIDO = :numPedido");
+            $verificaDisponibilidade->bindParam('numPedido', $numPedido, PDO::PARAM_INT);
+            $verificaDisponibilidade->execute(); $nDisponibilidade = $verificaDisponibilidade->fetch(PDO::FETCH_ASSOC); echo '<br>'; echo $nDisponibilidade['VERIFICADOR'];
+            if(!empty($nDisponibilidade['VERIFICADOR'])){
+              if($nVerificador == $nDisponibilidade['VERIFICADOR']){
+                $atualizaPedido = $connDB->prepare("UPDATE pedidos SET ETAPA_PROCESS = :etapa, SITUACAO = :situacao WHERE NUMERO_PEDIDO = :numPedido");
+                $atualizaPedido->bindParam(':numPedido', $numPedido, PDO::PARAM_INT);
+                $atualizaPedido->bindParam(':etapa'    , $etapa    , PDO::PARAM_INT);
+                $atualizaPedido->bindParam(':situacao' , $situacao , PDO::PARAM_STR);
+                $atualizaPedido->execute();
+              }
+            }
 
             header('Location: ./01SeletorGQualidade.php');
 

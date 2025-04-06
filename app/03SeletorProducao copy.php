@@ -38,7 +38,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
               <button type="button" class="btn btn-outline-danger" style="width:250px" onclick="">Relatório de Produção</button><br><br>  
             </div>
             <div class="col-md-9"><?php
-              $listaPedido = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 4"); $listaPedido->execute();
+              $listaPedido = $connDB->prepare("SELECT * FROM pedidos"); $listaPedido->execute();
               while($rowPedido = $listaPedido->fetch(PDO::FETCH_ASSOC)){
                 if(!empty($rowPedido['NUMERO_PEDIDO'])){ ?>
                   <div class="card text-bg-success mb-3" style="width: 50rem;">
@@ -83,13 +83,16 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                           <div class="row g-0"><?php
                             $query_material = $connDB->prepare("SELECT * FROM materiais_reserva WHERE NUMERO_PEDIDO = :numPedido");
                             $query_material->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT); $query_material->execute(); $nTipos = $query_material->rowCount();
-                            while($rowMat = $query_material->fetch(PDO::FETCH_ASSOC)){ $qtdeReserva = $rowMat['QTDE_RESERVA']; ?>
-                              <div class="col-md-5"><?php echo $rowMat['DESCRICAO'] ?></div>
-                              <div class="col-md-2"></div>
-                              <div class="col-md-2"><?php echo number_format($rowMat['QTDE_RESERVA'], 1, ',', '.') . ' ' . $rowMat['UNIDADE'] ?></div>
-                              <div class="col-md-3"><?php
-                                  if($rowMat['DISPONIBILIDADE'] == 3){?><p style="text-align:center; background:green; color:yellow; font-weight: bold"><?php echo 'LIBERADO!'    ; ?></p><?php }
-                                  if($rowMat['DISPONIBILIDADE'] <  3){?><p style="text-align:center; background:red  ; color:yellow; font-weight: bold"><?php echo 'NÃO LIBERADO!'; ?></p><?php } ?>
+                            while($rowMat = $query_material->fetch(PDO::FETCH_ASSOC)){ $qtdeReserva = $rowMat['QTDE_RESERVA'];
+                              $query_lotes = $connDB->prepare("SELECT DESCRICAO, ID_INTERNO, QTDE_LOTE, UNIDADE, ETAPA_PROCESS FROM materiais_lotes WHERE ID_ESTOQUE = :idEstoque AND ETAPA_PROCESS < 4");
+                              $query_lotes->bindParam(':idEstoque', $rowMat['ID_ESTOQUE'], PDO::PARAM_INT); $query_lotes->execute();
+                              while($rowLote = $query_lotes->fetch(PDO::FETCH_ASSOC)){ ?>
+                                <div class="col-md-5"><?php echo $rowLote['DESCRICAO'] ?></div>
+                                <div class="col-md-2"><?php echo $rowLote['ID_INTERNO'] ?></div>
+                                <div class="col-md-2"><?php echo number_format($rowLote['QTDE_LOTE'], 1, ',', '.') . ' ' . $rowLote['UNIDADE'] ?></div>
+                                <div class="col-md-3"><?php
+                                  if($rowLote['ETAPA_PROCESS'] == 3){?><p style="text-align:center; background:green; color:yellow; font-weight: bold"><?php echo 'LIBERADO!'    ; ?></p><?php }
+                                  if($rowLote['ETAPA_PROCESS'] <  3){?><p style="text-align:center; background:red  ; color:yellow; font-weight: bold"><?php echo 'NÃO LIBERADO!'; ?></p><?php } ?>
                                 </div><?php
                               }
                             } ?>
@@ -111,6 +114,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                       </div><!-- fim da DIV row g2 -->
                     </div><!-- fim da DIV do corpo do cartão -->
                   </div><!-- fim da DIV do cartão --><?php
+                }
               } ?><!-- fim da recursão -->
             </div><!-- fim da div coluna direita para cartões -->
           </div><!-- fim da div row g3 -->

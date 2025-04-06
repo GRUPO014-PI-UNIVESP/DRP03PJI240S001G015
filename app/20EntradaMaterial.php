@@ -16,7 +16,10 @@ $responsavel = $_SESSION['nome_func'];
   <div class="container-fluid"><br>
     <form method="POST"><h5>Recebimento de Material</h5><br><h6>Dados do Material</h6> <?php
       if(!empty($_GET['id'])){ $dataEntrada = date('Y-m-d');
-        $mpEntra = $connDB->prepare("SELECT * FROM materiais_compra WHERE ID_COMPRA = :id"); $mpEntra->bindParam(':id', $_GET['id'], PDO::PARAM_INT); $mpEntra->execute(); $rowMP = $mpEntra->fetch(PDO::FETCH_ASSOC); ?>
+        $mpEntra = $connDB->prepare("SELECT * FROM materiais_compra WHERE ID_COMPRA = :id");
+        $mpEntra->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
+        $mpEntra->execute();
+        $rowMP = $mpEntra->fetch(PDO::FETCH_ASSOC); ?>
         <div class="row g-2">
           <div class="col-md-2">
             <div class="form-floating mb-3">
@@ -152,8 +155,11 @@ $responsavel = $_SESSION['nome_func'];
       $salvaMat->bindParam(':idCompra'   , $_GET['id'] , PDO::PARAM_STR); $salvaMat->bindParam(':fornecedor' , $fornecedor           , PDO::PARAM_STR); $salvaMat->execute();
 
       $sitProduto = 'AGUARDANDO LIBERAÇÃO DOS MATERIAIS';
-      $atualizaPedido = $connDB->prepare("UPDATE pedidos SET SITUACAO = :situacao WHERE NUMERO_PEDIDO = :numPedido");
-      $atualizaPedido->bindParam(':situacao', $sitProduto, PDO::PARAM_STR); $atualizaPedido->bindParam(':numPedido', $rowReserva['NUMERO_PEDIDO'], PDO::PARAM_STR); $atualizaPedido->execute();
+      $atualizaPedido = $connDB->prepare("UPDATE pedidos SET ETAPA_PROCESS = :etapa, SITUACAO = :situacao WHERE NUMERO_PEDIDO = :numPedido");
+      $atualizaPedido->bindParam(':etapa'    , $etapa                      , PDO::PARAM_INT);
+      $atualizaPedido->bindParam(':situacao' , $sitProduto                 , PDO::PARAM_STR);
+      $atualizaPedido->bindParam(':numPedido', $rowMP['NUMERO_PEDIDO']     , PDO::PARAM_STR);
+      $atualizaPedido->execute();
 
       $atualizaReserva = $connDB->prepare("UPDATE materiais_reserva SET DISPONIBILIDADE = :disp WHERE ID_COMPRA = :idCompra");
       $atualizaReserva->bindParam(':disp', $etapa, PDO::PARAM_STR); $atualizaReserva->bindParam(':idCompra', $rowMP['ID_COMPRA'] , PDO::PARAM_STR); $atualizaReserva->execute();

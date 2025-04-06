@@ -115,7 +115,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
           if(!empty($confirmaAgenda)){
             $_SESSION['dataPedido']   = date('Y-m-d', strtotime($confirmaAgenda['dataPedido']));
             $_SESSION['horaPedido']   = $confirmaAgenda['horaPedido'];
-            $_SESSION['dataEstimada'] = $confirmaAgenda['dataEstimada'];
+            $_SESSION['dataEstimada'] = date('Y-m-d', strtotime($confirmaAgenda['dataEstimada']));
             header("Location: ./33PedidoProduto5.php"); 
           }
         ?>

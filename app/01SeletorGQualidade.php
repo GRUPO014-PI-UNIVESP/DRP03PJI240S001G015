@@ -79,7 +79,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             <!-- coluna para cards de produtos -->
             <div class="col-md-6"><h6>Lista de Produtos para Análise</h6>
               <div class="row g-1"><?php
-                $pedido = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 2"); $pedido->execute();
+                $pedido = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 5"); $pedido->execute();
                 while($rowPedido = $pedido->fetch(PDO::FETCH_ASSOC)){ $id = $rowPedido['ID_PEDIDO']; // recursão de cards de pedidos ?>
                   <div class="card text-bg-success mb-2" style="width: 45rem;">
                     <div class="card-body">
@@ -109,12 +109,12 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                             <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none; color: orange" value="<?php echo $rowPedido['SITUACAO']; ?>" readonly>
                           </div>
                         </div><?php
-                        if($rowPedido['ETAPA_PROCESS'] < 1){ ?>
+                        if($rowPedido['ETAPA_PROCESS'] < 4){ ?>
                           <div class="col-md-12">
                             <button class="btn btn-secondary" style="float: right" disabled>Registro da Análise</button>
                           </div> <?php                                                  
                         }
-                        if($rowPedido['ETAPA_PROCESS'] == 1){ ?>
+                        if($rowPedido['ETAPA_PROCESS'] == 4){ ?>
                           <div class="col-md-12">
                             <button class="btn btn-primary" style="float: right" onclick="location.href='./42RegistroAnalise.php?id=<?php echo $id ?>'">Registro da Análise</button>
                           </div> <?php                                                  

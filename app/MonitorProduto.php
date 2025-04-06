@@ -1,38 +1,21 @@
 <?php
 // inclusão do banco de dados e estrutura base da página web
-include_once './ConnectDB.php';
-include_once './EstruturaPrincipal.php';
-$_SESSION['posicao'] = 'Monitor de Produtos';
-include_once './RastreadorAtividades.php';
+include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSION['posicao'] = 'Monitor de Produtos'; include_once './RastreadorAtividades.php';
 
 //atribui usuário como responsável por registro de entrada do material ou cadastramento
 $responsavel = $_SESSION['nome_func'];
-
 ?>
 <script>
   // verifica inatividade da página e fecha sessão
   let inactivityTime = function () {
-    let time;
-    window.onload        = resetTimer;
-    document.onmousemove = resetTimer;
-    document.onkeypress  = resetTimer;
-    function deslogar() {
-      <?php
-        $_SESSION['posicao'] = 'Encerrado por inatividade';
-        include_once './RastreadorAtividades.php';
-      ?>
+    let time; window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress  = resetTimer;
+    function deslogar() { <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php'; ?>
       window.location.href = 'LogOut.php';
      }
-    function resetTimer() {
-      clearTimeout(time);
-       time = setTimeout(deslogar, 69900000);
-     }
-  };
-  inactivityTime();
+    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 69900000);  }
+  }; inactivityTime();
 </script>
-<style>
-  .tabela{ width: 100%; height: 680px; overflow-y: scroll;}
-</style>
+<style> .tabela{ width: 100%; height: 680px; overflow-y: scroll;} </style>
 <!-- Área Principal -->
 <div class="main">
   <div class="row g-1">
@@ -46,7 +29,7 @@ $responsavel = $_SESSION['nome_func'];
     </div>
   </div>
   <div class="tabela">
-    <table class="table table-dark table-hover">
+    <table class="table table-dark">
       <thead style="font-size: 12px">
         <tr>
           <th scope="col" style="width: 10%"><?php echo 'Data do Pedido' . '<br>' . 'Pedido No.'; ?></th>
@@ -70,9 +53,9 @@ $responsavel = $_SESSION['nome_func'];
           if($rowPedido['ETAPA_PROCESS'] >= 6){$a = $clear; $b = $clear; $c = $clear; $d = $clear; $e = $clear; $f = $exec ; }
           if($rowPedido['ETAPA_PROCESS'] >= 7){$a = $clear; $b = $clear; $c = $clear; $d = $clear; $e = $clear; $f = $clear; } ?>
           <tr>
-            <th scope="col" style="width: 10%; text-align:right;"><?php echo $rowPedido['DATA_PEDIDO'] . '<br>' . $rowPedido['NUMERO_PEDIDO'] ; ?></th>
-            <td scope="col" style="width: 30%;                  "><?php echo $rowPedido['PRODUTO'] . '<br>' . $rowPedido['CLIENTE']; ?></td>
-            <td scope="col" style="width: 10%; text-align:right;"><?php echo $rowPedido['QTDE_PEDIDO'] . ' ' . $rowPedido['UNIDADE'] . '<br>' . $rowPedido['DATA_ENTREGA']; ?></td>
+            <td scope="col" style="width: 10%; text-align:right;"><?php echo $rowPedido['DATA_PEDIDO'] . '<br>' . $rowPedido['NUMERO_PEDIDO'] ; ?></td>
+            <td scope="col" style="width: 30%;                  "><?php echo $rowPedido['PRODUTO']     . '<br>' . $rowPedido['CLIENTE']; ?></td>
+            <td scope="col" style="width: 10%; text-align:right;"><?php echo $rowPedido['QTDE_PEDIDO'] . ' '    . $rowPedido['UNIDADE'] . '<br>' . $rowPedido['DATA_ENTREGA']; ?></td>
             <td scope="col" style="width: 50%;">
               <div class="row g-2">
                 <div class="col md-2" style="<?php echo $a ?>">Compra</div>
