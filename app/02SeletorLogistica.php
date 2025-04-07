@@ -21,10 +21,10 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
   <div class="container-fluid">
     <ul style="padding:5px" class="nav nav-tabs" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="controle-tab" data-bs-toggle="tab" data-bs-target="#controle-tab-pane" type="button" role="tab" aria-controls="controle-tab-pane" aria-selected="true">Controle</button>
+        <button class="nav-link active" id="controle-tab" data-bs-toggle="tab" data-bs-target="#controle-tab-pane" type="button" role="tab" aria-controls="controle-tab-pane" aria-selected="true">Recebimento e Saída</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="almoxarifado-tab" data-bs-toggle="tab" data-bs-target="#almoxarifado-tab-pane" type="button" role="tab" aria-controls="almoxarifado-tab-pane" aria-selected="false">Almoxarifado</button>
+        <button class="nav-link" id="almoxarifado-tab" data-bs-toggle="tab" data-bs-target="#almoxarifado-tab-pane" type="button" role="tab" aria-controls="almoxarifado-tab-pane" aria-selected="false">Estoque de Materiais</button>
       </li>
       <p style="margin-left: 5%; font-size: 20px; color: whitesmoke">Departamento de Logística e Armazenamento</p>
     </ul>
@@ -104,12 +104,12 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                           <input type="text" class="form-control" aria-label="" aria-describedby="basic-addon1" style="font-weight:bold; font-size: 13px; background: none; color:orange" value="<?php echo $rowPedido['SITUACAO']; ?>" readonly>
                         </div>
                       </div><?php
-                      if($rowPedido['ETAPA_PROCESS'] == 6){ ?>
+                      if($rowPedido['ETAPA_PROCESS'] == 5){ ?>
                         <div class="col-md-12">
                           <button class="btn btn-primary" onclick="location.href='./50SaidaProdutoFinal.php?id=<?php echo $idPed ?>'" style="float: right">Efetuar Saída do Produto</button>
                         </div> <?php 
                       }
-                      if($rowPedido['ETAPA_PROCESS'] < 6){ ?>
+                      if($rowPedido['ETAPA_PROCESS'] < 5){ ?>
                         <div class="col-md-12">
                           <button class="btn btn-secondary" onclick="location.href='#'" style="float: right" disabled>Efetuar Saída do Produto</button>
                         </div> <?php 

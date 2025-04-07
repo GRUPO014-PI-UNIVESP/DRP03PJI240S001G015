@@ -68,7 +68,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
         </div>
       </div>
     </form><?php $regEntrega = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-    if(!empty($regEntrega['entrega'])){ $etapa = 4; $situacao = 'PRODUTO DESPACHADO COM SUCESSO.'; $saida = date('Y-m-d', strtotime($regEntrega['dataS']));
+    if(!empty($regEntrega['entrega'])){ $etapa = 6; $situacao = 'PRODUTO DESPACHADO COM SUCESSO.'; $saida = date('Y-m-d', strtotime($regEntrega['dataS']));
 
       $deliveryP = $connDB->prepare("UPDATE pedidos SET ETAPA_PROCESS = :etapa, SITUACAO = :situacao, DATA_ENTREGA = :dataS, TRANSPORTADORA = :transp, ENCARREGADO_ENTREGA = :responsavel WHERE ID_PEDIDO = :idPed");
       $deliveryP->bindParam(':etapa', $etapa     , PDO::PARAM_INT); $deliveryP->bindParam(':responsavel', $regEntrega['colaborador'], PDO::PARAM_STR);

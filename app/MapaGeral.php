@@ -63,7 +63,7 @@
         <a style="margin-left: 010px;color:aliceblue"  href="">Painel da Logística</a><br>
         <a style="margin-left: 045px;color:aquamarine" href="<?php echo $acesso30 ?>">Controle de Entrada e Saída</a><br>
         <br>
-        <a style="margin-left: 045px;color:aquamarine" href="">Estoque de Matéria Prima e Insumos</a><br>
+        <a style="margin-left: 045px;color:aquamarine" href="./51EstoqueMateriais.php">Estoque de Matéria Prima e Insumos</a><br>
         <br><br>
         <!-- Lista do departamento de produção -->
         <a style="margin-left: 010px;color:aliceblue"  href="">Painel da Produção</a><br>

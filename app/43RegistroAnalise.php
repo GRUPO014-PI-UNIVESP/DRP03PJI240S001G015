@@ -197,7 +197,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             $ProdAnalisado->execute();
 
             // atualiza tabela de pedidos
-            $etapa = 3; $situacao = 'PRODUTO LIBERADO PARA ENTREGA';
+            $etapa = 5; $situacao = 'PRODUTO LIBERADO PARA ENTREGA';
             $atualiza = $connDB->prepare("UPDATE pedidos SET ETAPA_PROCESS = :etapa, SITUACAO = :situacao, DATA_VALI = :dataV WHERE NUMERO_LOTE = :nLoteInterno");
             $atualiza->bindParam(':etapa'   , $etapa   , PDO::PARAM_INT);$atualiza->bindParam(':nLoteInterno', $_SESSION['nLotePF'], PDO::PARAM_STR);
             $atualiza->bindParam(':situacao', $situacao, PDO::PARAM_STR);$atualiza->bindParam(':dataV'       , $_SESSION['dataV']  , PDO::PARAM_STR);            

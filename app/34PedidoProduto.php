@@ -26,7 +26,9 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       <div class="col-md-2">
         <label for="qtdeLote" class="form-label" style="font-size: 10px; color:aqua">Quantidade do Pedido</label>
         <input style="font-size: 16px; color:yellow; text-align:right; background: rgba(0,0,0,0.3)" 
-        type="text" class="form-control" id="" name="" value="<?php echo number_format($_SESSION['qtdeLote'], 0,  ',', '.') . ' ' . $rowProduto['UNIDADE'] ?>" readonly>
+        type="text" class="form-control" id="" name="" 
+        value="<?php echo number_format($_SESSION['qtdeLote'], 0,  ',', '.')
+                          . ' ' . $rowProduto['UNIDADE'] ?>" readonly>
       </div>
       <div class="col-md-8">
         <label for="" class="form-label" style="font-size: 10px; color:aqua">Produto</label>
@@ -127,11 +129,13 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                 <div class="row g-1">
                   <div class="overflow-auto"> <?php $nDiasBase = 31;
                     if($verificador == 0){ 
-                      $media = 0; $nDiasBase = $nDiasBase + $media; 
+                      $media = 0;
+                      $nDiasBase = $nDiasBase + $media; 
                       $diaMaxi = date('d/m/Y', strtotime("+$nDiasBase days"));
                       $diaCal = date('d/m', strtotime("+$media days")); 
                       $diaHoje = date('d/m/Y', strtotime("+$media days"));                             
-                    } else if($verificador >= 1){ $media = $xtend - $padrao; 
+                    } else if($verificador >= 1){
+                      $media = $xtend - $padrao; 
                       $nDiasBase = $nDiasBase + $media; $diaMaxi = date('d/m/Y', strtotime("+$nDiasBase days"));
                       $diaCal = date('d/m', strtotime("+$media days"));
                       $diaHoje = date('d/m/Y', strtotime("+$media days"));                               
@@ -158,7 +162,8 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                             for($j = 0; $j <=6; $j++){ ?><!-- Recursão para => 0: domingo, 1: segunda, 2: terça, 3: quarta, 4: quinta, 5: sexta, 6: sabado. -->
                               <td> <?php
                                 if($j < $diaSemana){ ?> 
-                                  <p style="font-size: 20px; "></p><br><p style="font-size: 18px; color: grey; text-align: center">INDISPONÍVEL</p> <?php }
+                                  <p style="font-size: 20px; "></p><br>
+                                  <p style="font-size: 18px; color: grey; text-align: center">INDISPONÍVEL</p> <?php }
                                 if($diaSemana == $j){ ?>
                                   <p style="font-size: 18px; "><?php echo $diaCal; ?> </p><?php
                                     $diaSemana = date('w'  , strtotime("+$nDias days")); 
@@ -171,7 +176,8 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                                     $fila->execute(); $rowFila = $fila->fetch(PDO::FETCH_ASSOC);
                                     if(!empty($rowFila['DATA_AGENDA'])){
                                       if($verificaDataOcupada == $rowFila['DATA_AGENDA']){ ?>
-                                        <input type="radio" class="btn-check"><label class="btn btn-outline-warning" for="ocupado">OCUPADO</label><?php }
+                                        <input type="radio" class="btn-check"><label class="btn btn-outline-warning" 
+                                          for="ocupado">OCUPADO</label><?php }
                                       else if($verificaDataOcupada != $rowFila['DATA_AGENDA']){ ?>
                                         <input type="radio" class="btn-check" id="" name="" value="">
                                         <label class="btn btn-outline-success" for="">DISPONÍVEL</label><?php }
@@ -193,7 +199,8 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
               <div class="modal-footer">
                 <div class="col-md-2">
                   <label for="dataSelecionada" class="form-label" style="font-size: 10px; color:aqua">Selecione a Data na Fila</label>
-                  <input style="font-size: 20px; background: rgba(0,0,0,0.3)" type="date" class="form-control" id="dataSelecionada" name="dataSelecionada" autofocus required>
+                  <input style="font-size: 20px; background: rgba(0,0,0,0.3)" type="date" class="form-control" id="dataSelecionada" 
+                         name="dataSelecionada" autofocus required>
                 </div>
                 <div class="col-md-2"><br>
                   <input class="btn btn-primary" type="submit" id="agendar" name="agendar" value="Confirmar Data" style="float: right">   
@@ -206,33 +213,47 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
     </form><br><?php $dataLivre = filter_input_array(INPUT_POST, FILTER_DEFAULT); ?>
     <form method="POST">
       <div class="row g-2"><?php
-        if(!empty($dataLivre['agendar']) || !empty($dataLivre['dataSelecionada'])){ $dataConvert = date('Y-m-d', strtotime($dataLivre['dataSelecionada'])); $convert1 = time(); $convert2 = strtotime($dataConvert);  
-          $_SESSION['diff'] = round(($convert2 - $convert1) / 86400); $_SESSION['dataAgendada'] = date('Y-m-d', strtotime($dataLivre['dataSelecionada'])); $_SESSION['dataEntrega']  = date('Y-m-d', strtotime($_SESSION['dataAgendada']."+ 1 week")); ?>
+        if(!empty($dataLivre['agendar']) || !empty($dataLivre['dataSelecionada'])){
+          $dataConvert = date('Y-m-d', strtotime($dataLivre['dataSelecionada']));
+          $convert1 = time(); $convert2 = strtotime($dataConvert);  
+          $_SESSION['diff'] = round(($convert2 - $convert1) / 86400);
+          $_SESSION['dataAgendada'] = date('Y-m-d', strtotime($dataLivre['dataSelecionada']));
+          $_SESSION['dataEntrega']  = date('Y-m-d', strtotime($_SESSION['dataAgendada']."+ 1 week")); ?>
           <div class="col-md-1"></div>
           <div class="col-md-2">
             <label for="dataAgenda" class="form-label" style="font-size: 10px; color:aqua">Data Agendada</label>
-            <input style="font-size: 16px; text-align: center; color:yellow; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="dataAgenda" name="dataAgenda" value="<?php echo date('d/m/Y', strtotime($_SESSION['dataAgendada'])) ?>" readonly>
+            <input style="font-size: 16px; text-align: center; color:yellow; background: rgba(0,0,0,0.3)" 
+                   type="text" class="form-control" id="dataAgenda" name="dataAgenda" 
+                   value="<?php echo date('d/m/Y', strtotime($_SESSION['dataAgendada'])) ?>" readonly>
           </div>
           <div class="col-md-8">
             <label for="cliente" class="form-label" style="font-size: 10px; color:aqua">Nome do Cliente</label>
-            <select style="font-size: 16px;color:whitesmoke; background: rgba(0,0,0,0.3)" class="form-select" id="cliente" name="cliente" required>
-              <option style="font-size: 16px; background: rgba(0,0,0,0.3), color: black" selected>Selecione o Cliente, caso não esteja relacionado será necessário fazer o cadastramento</option><?php
+            <select style="font-size: 16px;color:whitesmoke; background: rgba(0,0,0,0.3)" class="form-select" id="cliente" 
+                    name="cliente" required>
+              <option style="font-size: 16px; background: rgba(0,0,0,0.3); color: black" selected>
+                Selecione o Cliente, caso não esteja relacionado será necessário fazer o cadastramento
+              </option><?php
                 //Pesquisa de descrição do PRODUTO para seleção
                 $query_cliente = $connDB->prepare("SELECT DISTINCT NOME_FANTASIA FROM cliente");
                 $query_cliente->execute();
                 // inclui nome dos produtos como opções de seleção da tag <select>
                 while($rowCliente = $query_cliente->fetch(PDO::FETCH_ASSOC)){?>
-                  <option style="font-size: 16px; color:black; background: rgba(0,0,0,0.3)"><?php echo $rowCliente['NOME_FANTASIA']; ?></option> <?php
+                  <option style="font-size: 16px; color:black; background: rgba(0,0,0,0.3)">
+                    <?php echo $rowCliente['NOME_FANTASIA']; ?>
+                  </option> <?php
                 } ?>
             </select>
           </div>
           <div class="col-md-1"></div><br>
           <div class="col-md-2">
             <label for="dataPrazo" class="form-label" style="font-size: 10px; color:aqua">Data Estimada de Entrega</label>
-            <input style="font-size: 16px; text-align: center; color: yellow; background: rgba(0,0,0,0.3)" type="text" class="form-control" id="dataPrazo" name="dataPrazo" value="<?php echo date('d/m/Y', strtotime($_SESSION['dataEntrega'])) ?>" readonly>
+            <input style="font-size: 16px; text-align: center; color: yellow; background: rgba(0,0,0,0.3)" 
+                   type="text" class="form-control" id="dataPrazo" name="dataPrazo" 
+                   value="<?php echo date('d/m/Y', strtotime($_SESSION['dataEntrega'])) ?>" readonly>
           </div>
           <div class="col-md-3"><br>
-            <input style="width: 140px; float:inline-end" class="btn btn-secondary" type="reset" id="reset2" name="reset2" value="Descartar" onclick="location.href='./35DescartarPedido.php'">
+            <input style="width: 140px; float:inline-end" class="btn btn-secondary" type="reset" id="reset2" name="reset2" 
+                   value="Descartar" onclick="location.href='./35DescartarPedido.php'">
           </div>
           <div class="col-md-3"><br>
             <input style="width: 180px;" class="btn btn-primary" type="submit" id="salvar3" name="salvar3" value="Confirmar e Salvar">
@@ -242,27 +263,48 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       </div>
     </form><?php
     $confirmaPedido = filter_input_array(INPUT_POST, FILTER_DEFAULT);    
-    if(!empty($confirmaPedido['salvar3'])){ $etapaProcess = 0; $dataLimite = date('Y-m-d', strtotime($_SESSION['dataAgendada']."- 3 days"));
-      $nomeCliente = $confirmaPedido['cliente']; $dataPedido = date('Y-m-d'); $responsavel = $_SESSION['nome_func']; $situacao = 'PEDIDO REGISTRADO, PROVIDENCIANDO MATERIAIS';
+    if(!empty($confirmaPedido['salvar3'])){ 
+      $etapaProcess = 0; 
+      $dataLimite   = date('Y-m-d', strtotime($_SESSION['dataAgendada']."- 3 days"));
+      $nomeCliente  = $confirmaPedido['cliente']; 
+      $dataPedido   = date('Y-m-d');
+      $responsavel  = $_SESSION['nome_func'];
+      $situacao     = 'PEDIDO REGISTRADO, PROVIDENCIANDO MATERIAIS';
 
-      $registraPedido = $connDB->prepare("INSERT INTO pedidos (NUMERO_PEDIDO, CLIENTE, PRODUTO, QTDE_PEDIDO, UNIDADE, CAPAC_PROCESS, DATA_PEDIDO, DATA_AGENDA, DATA_ENTREGA, ENCARREGADO_PEDIDO, ETAPA_PROCESS, SITUACAO) VALUES (:numPedido, :nomeCliente, :nomeProduto, :qtdePedido, :uniMed, :capacidade, :dataPedido, :dataAgenda, :dataEntrega, :responsavel, :etapa, :situacao)");      
-      $registraPedido->bindParam(':numPedido'  , $numPedido  , PDO::PARAM_INT); $registraPedido->bindParam(':uniMed'     , $rowProduto['UNIDADE']   , PDO::PARAM_STR);
-      $registraPedido->bindParam(':nomeCliente', $nomeCliente, PDO::PARAM_STR); $registraPedido->bindParam(':capacidade' , $_SESSION['capacidade']  , PDO::PARAM_INT);;
-      $registraPedido->bindParam(':nomeProduto', $nomeProduto, PDO::PARAM_STR); $registraPedido->bindParam(':dataAgenda' , $_SESSION['dataAgendada'], PDO::PARAM_STR);
-      $registraPedido->bindParam(':qtdePedido' , $qtdeLote   , PDO::PARAM_STR); $registraPedido->bindParam(':dataEntrega', $_SESSION['dataEntrega'] , PDO::PARAM_STR);      
-      $registraPedido->bindParam(':dataPedido' , $dataPedido , PDO::PARAM_STR); $registraPedido->bindParam(':etapa'      , $etapaProcess            , PDO::PARAM_INT);      
-      $registraPedido->bindParam(':situacao'   , $situacao   , PDO::PARAM_STR); $registraPedido->bindParam(':responsavel', $responsavel             , PDO::PARAM_STR);
+      $registraPedido = $connDB->prepare("INSERT INTO pedidos (NUMERO_PEDIDO, CLIENTE, PRODUTO, QTDE_PEDIDO, UNIDADE, CAPAC_PROCESS,
+                                                  DATA_PEDIDO, DATA_AGENDA, DATA_ENTREGA, ENCARREGADO_PEDIDO, ETAPA_PROCESS, SITUACAO)
+                                                 VALUES (:numPedido, :nomeCliente, :nomeProduto, :qtdePedido, :uniMed, :capacidade,
+                                                  :dataPedido, :dataAgenda, :dataEntrega, :responsavel, :etapa, :situacao)");      
+      $registraPedido->bindParam(':numPedido'  , $numPedido               , PDO::PARAM_INT);
+      $registraPedido->bindParam(':nomeCliente', $nomeCliente             , PDO::PARAM_STR);
+      $registraPedido->bindParam(':nomeProduto', $nomeProduto             , PDO::PARAM_STR);
+      $registraPedido->bindParam(':qtdePedido' , $qtdeLote                , PDO::PARAM_STR);
+      $registraPedido->bindParam(':uniMed'     , $rowProduto['UNIDADE']   , PDO::PARAM_STR);
+      $registraPedido->bindParam(':capacidade' , $_SESSION['capacidade']  , PDO::PARAM_INT);
+      $registraPedido->bindParam(':dataPedido' , $dataPedido              , PDO::PARAM_STR);
+      $registraPedido->bindParam(':dataAgenda' , $_SESSION['dataAgendada'], PDO::PARAM_STR);
+      $registraPedido->bindParam(':dataEntrega', $_SESSION['dataEntrega'] , PDO::PARAM_STR); 
+      $registraPedido->bindParam(':responsavel', $responsavel             , PDO::PARAM_STR);    
+      $registraPedido->bindParam(':etapa'      , $etapaProcess            , PDO::PARAM_INT);      
+      $registraPedido->bindParam(':situacao'   , $situacao                , PDO::PARAM_STR);
       $registraPedido->execute();
 
-      $alocaFila = $connDB->prepare("INSERT INTO pedidos_fila (NUMERO_PEDIDO, DATA_AGENDA, PRODUTO, QTDE_LOTE, CAPAC_PROCESS, SITUACAO) VALUES (:numPedido, :dataFabri, :nomeProduto, :qtdeLote, :capaProcess, :situacao)");
-      $alocaFila->bindParam(':numPedido'  , $numPedido  , PDO::PARAM_INT);$alocaFila->bindParam(':dataFabri'  , $_SESSION['dataAgendada'], PDO::PARAM_STR);      
-      $alocaFila->bindParam(':nomeProduto', $nomeProduto, PDO::PARAM_STR);$alocaFila->bindParam(':capaProcess', $_SESSION['capacidade']  , PDO::PARAM_STR);
-      $alocaFila->bindParam(':qtdeLote'   , $qtdeLote   , PDO::PARAM_STR);$alocaFila->bindParam(':situacao'   , $situacao                , PDO::PARAM_STR);      
+      $alocaFila = $connDB->prepare("INSERT INTO pedidos_fila (NUMERO_PEDIDO, DATA_AGENDA, PRODUTO, QTDE_LOTE, CAPAC_PROCESS, SITUACAO)
+                                            VALUES (:numPedido, :dataFabri, :nomeProduto, :qtdeLote, :capaProcess, :situacao)");
+      $alocaFila->bindParam(':numPedido'  , $numPedido               , PDO::PARAM_INT);
+      $alocaFila->bindParam(':dataFabri'  , $_SESSION['dataAgendada'], PDO::PARAM_STR);      
+      $alocaFila->bindParam(':nomeProduto', $nomeProduto             , PDO::PARAM_STR);
+      $alocaFila->bindParam(':qtdeLote'   , $qtdeLote                , PDO::PARAM_STR);
+      $alocaFila->bindParam(':capaProcess', $_SESSION['capacidade']  , PDO::PARAM_STR);
+      $alocaFila->bindParam(':situacao'   , $situacao                , PDO::PARAM_STR);      
       $alocaFila->execute();
      
-      $completaCompra = $connDB->prepare("UPDATE materiais_compra SET DATA_AGENDA = :dataAgenda , DATA_PRAZO = :dataLimite WHERE NUMERO_PEDIDO = :numPedido");      
-      $completaCompra->bindParam('dataLimite', $dataLimite, PDO::PARAM_STR); $completaCompra->bindParam('dataAgenda', $_SESSION['dataAgendada'], PDO::PARAM_STR);
-      $completaCompra->bindParam(':numPedido', $numPedido , PDO::PARAM_INT); $completaCompra->execute();
+      $completaCompra = $connDB->prepare("UPDATE materiais_compra SET DATA_AGENDA = :dataAgenda , DATA_PRAZO = :dataLimite
+                                                 WHERE NUMERO_PEDIDO = :numPedido");       
+      $completaCompra->bindParam('dataAgenda', $_SESSION['dataAgendada'], PDO::PARAM_STR);
+      $completaCompra->bindParam('dataLimite', $dataLimite              , PDO::PARAM_STR);
+      $completaCompra->bindParam(':numPedido', $numPedido               , PDO::PARAM_INT);
+      $completaCompra->execute();
 
       header('Location: ./33PedidoProduto.php');
     } ?>
