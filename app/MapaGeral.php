@@ -22,7 +22,7 @@
     <div class="row g-2">
       <div class="col md-6">
         <!-- Lista do departamento administrativo -->
-        <a style="margin-left: 010px;color:aliceblue"  href="">Painel Administrativo</a><br>
+        <a style="margin-left: 010px;color:aliceblue"  href="">Painel do Administrativo</a><br>
         <a style="margin-left: 045px;color:aquamarine" href="">Recursos Humanos</a><br>
         <a style="margin-left: 080px;"                 href="<?php echo $acesso5 ?>">Quadro de Funcionários</a><br>
         <a style="margin-left: 105px;color:burlywood"  href="<?php echo $acesso7 ?>">Cadastro de Novo Funcionário</a><br>
@@ -47,10 +47,14 @@
         <a style="margin-left: 080px;"                 href="">Desempenho de Vendas</a><br>
         <a style="margin-left: 080px;"                 href="">Desempenho de Produtividade</a><br>
         <a style="margin-left: 080px;"                 href=""></a><br>
+        <br>
+        <a style="margin-left: 045px;color:aquamarine" href="">Configurações do Sistema</a><br>
+        <a style="margin-left: 080px;"                 href="./ConfigTabelaProcesso.php">Revisão de Tabela de Processos</a><br>
+        <a style="margin-left: 080px;"                 href="">.</a><br>
       </div> 
       <div class="col md-6">
         <!-- Lista do departamento da garantia da qualidade -->
-        <a style="margin-left: 010px;color:aliceblue"  href="">Painel Garantia da Qualidade</a><br>
+        <a style="margin-left: 010px;color:aliceblue"  href="">Painel da Garantia da Qualidade</a><br>
         <a style="margin-left: 045px;color:aquamarine" href="<?php echo $acesso20 ?>">Laboratório de Análises</a><br>
         <br>
         <a style="margin-left: 045px;color:aquamarine" href="">Estoque de Reagentes</a><br>
