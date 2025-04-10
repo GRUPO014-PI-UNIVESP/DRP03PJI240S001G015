@@ -23,7 +23,7 @@ $responsavel = $_SESSION['nome_func'];
             <br>
             <p style="font-size: 25px; color:cyan">Revisão da Tabela de Tempo de Processos</p>
         </div>
-    </div><Br></Br>
+    </div>
     <?php
         $listaTabela = $connDB->prepare("SELECT * FROM historico_tempo WHERE NUMERO_PEDIDO = 0 ORDER BY ID_PRODUTO ASC");
         $listaTabela->execute();
@@ -44,43 +44,48 @@ $responsavel = $_SESSION['nome_func'];
 
                     </tr>
                 </thead>
+                <p style="color:bisque; float:inline-end">Os valores representam o tempo máximo de cada atividade em minutos</p>
                 <tbody style="height: 75%; font-size: 11px;"><?php 
                     while($rowTabela = $listaTabela->fetch(PDO::FETCH_ASSOC)){ $id = $rowTabela['ID_PRODUTO'];
                         $buscaProd = $connDB->prepare("SELECT PRODUTO, CAPAC_PROCESS, UNIDADE FROM produtos WHERE N_PRODUTO = :idProd");
                         $buscaProd->bindParam(':idProd', $rowTabela['ID_PRODUTO'], pdo::PARAM_INT);
                         $buscaProd->execute();
                         $rowProd = $buscaProd->fetch(PDO::FETCH_ASSOC);
-                        $compra = $rowTabela['COMPRA'] / 60;
-                        $recebe = $rowTabela['RECEBIMENTO'] / 60;
-                        $anaMat = $rowTabela['ANALISE_MATERIAL'] / 60;
-                        $anaPro = $rowTabela['ANALISE_PRODUTO'] / 60;
-                        $entreg = $rowTabela['ENTREGA'] / 60;
+                        $compra = number_format($rowTabela['COMPRA'] / 60, 2, ',', '.');
+                        $recebe = number_format($rowTabela['RECEBIMENTO'] / 60, 2, ',', '.');
+                        $anaMat = number_format($rowTabela['ANALISE_MATERIAL'] / 60, 2, ',', '.');
+                        $anaPro = number_format($rowTabela['ANALISE_PRODUTO'] / 60, 2, ',', '.');
+                        $entreg = number_format($rowTabela['ENTREGA'] / 60, 2, ',', '.');
                         ?>
                         <tr>
                             <td scope="col" style="width: 5%; text-align:center;">
                                 <input type="submit" class="btn btn-primary" id="ajustar" name="ajustar" value="<?php echo $id ?>">
                             </td>
                             <td scope="col" style="width: 20%;                   "><?php echo $rowProd['PRODUTO']?></td>
-                            <td scope="col" style="width: 10%; text-align:center;"><?php echo $rowTabela['COMPRA'] . ' [' . $compra . 'hrs]' ?></td>
-                            <td scope="col" style="width: 10%; text-align:center;"><?php echo $rowTabela['RECEBIMENTO'] . ' [' . $recebe . 'hrs]' ?></td>
-                            <td scope="col" style="width: 10%; text-align:center;"><?php echo $rowTabela['ANALISE_MATERIAL'] . ' [' . $anaMat . 'hrs]' ?></td>
-                            <td scope="col" style="width: 10%; text-align:center;"><?php echo $rowProd['CAPAC_PROCESS'] . ' ' . $rowProd['UNIDADE'] . ' /hora'?></td>
-                            <td scope="col" style="width: 10%; text-align:center;"><?php echo $rowTabela['ANALISE_PRODUTO'] . ' [' . $anaPro . 'hrs]' ?></td>
-                            <td scope="col" style="width: 10%; text-align:center;"><?php echo $rowTabela['ENTREGA'] . ' [' . $entreg . 'hrs]' ?></td>
-
+                            <td scope="col" style="width: 10%; text-align:center;">
+                                <?php echo number_format($rowTabela['COMPRA'], 0, ',', '.') . '<br>' . ' [ ' . $compra . 'hrs ]' ?></td>
+                            <td scope="col" style="width: 10%; text-align:center;">
+                                <?php echo number_format($rowTabela['RECEBIMENTO'], 0, ',', '.') . '<br>'  . ' [ ' . $recebe . 'hrs ]' ?></td>
+                            <td scope="col" style="width: 10%; text-align:center;">
+                                <?php echo number_format($rowTabela['ANALISE_MATERIAL'], 0, ',', '.') . '<br>'  . ' [ ' . $anaMat . 'hrs ]' ?></td>
+                            <td scope="col" style="width: 10%; text-align:center;">
+                                <?php echo $rowProd['CAPAC_PROCESS'] . '<br>' . $rowProd['UNIDADE'] . ' /hora'?></td>
+                            <td scope="col" style="width: 10%; text-align:center;">
+                                <?php echo number_format($rowTabela['ANALISE_PRODUTO'], 0, ',', '.') . '<br>'  . ' [ ' . $anaPro . 'hrs ]' ?></td>
+                            <td scope="col" style="width: 10%; text-align:center;">
+                                <?php echo number_format($rowTabela['ENTREGA'], 0, ',', '.') . '<br>'  . ' [ ' . $entreg . 'hrs ]' ?></td>
                         </tr><?php
-                    } ?>                    
+                    } ?>                   
                 </tbody>
-                <p style="margin-left:30%; color:bisque">Os valores representam o tempo máximo de cada atividade em minutos</p>
             </table>
-            <p style="color:darkorange">Clique no número identificador do produto para atualizar os valores de referência </p>
+            <p style="color:darkorange; font-size: 11px;">Clique no número identificador do produto para selecionar o item a alterar </p> 
         </div>
     </form><br>
     <div class="row g-2">
         <?php
             $detalhes = filter_input_array(INPUT_GET, FILTER_DEFAULT);
             if(!empty($detalhes['ajustar'])){
-                $buscaProduto = $connDB->prepare("SELECT * FROM historico_tempo WHERE ID_PRODUTO = :idProd");
+                $buscaProduto = $connDB->prepare("SELECT * FROM historico_tempo WHERE ID_PRODUTO = :idProd AND NUMERO_PEDIDO = 0");
                 $buscaProduto->bindParam(':idProd', $detalhes['ajustar'], PDO::PARAM_INT);
                 $buscaProduto->execute();
                 $rowProduto = $buscaProduto->fetch(PDO::FETCH_ASSOC);
@@ -88,9 +93,59 @@ $responsavel = $_SESSION['nome_func'];
                 $buscaNome->bindParam(':idProd', $detalhes['ajustar'], PDO::PARAM_INT);
                 $buscaNome->execute();
                 $nome = $buscaNome->fetch(PDO::FETCH_ASSOC);?>
-                <p>Produto: <?php echo $nome['PRODUTO'] ?></p>
+                <p style="color:yellow; font-size: 15px;">Produto: <?php echo $nome['PRODUTO'] ?></p>
+                <form action="" method="POST">
+                    <div class="row g-2">
+                        <div class="col-md-2">
+                            <label for="compra" class="form-label" style="font-size: 10px; color:aqua; float:inline-end">
+                                Tempo estimado para compra de materiais</label>
+                            <input style="font-size: 14px; text-align:right; background: rgba(0,0,0,0.3)" type="number" 
+                                class="form-control" id="compra" name="compra" value="<?php echo $rowProduto['COMPRA'] ?>" autofocus>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="recebe" class="form-label" style="font-size: 10px; color:aqua; float:inline-end">
+                                para recebimento de materiais</label>
+                            <input style="font-size: 14px; text-align:right; background: rgba(0,0,0,0.3)" type="number" 
+                                class="form-control" id="recebe" name="recebe" value="<?php echo $rowProduto['RECEBIMENTO'] ?>">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="anaMat" class="form-label" style="font-size: 10px; color:aqua; float:inline-end">
+                                para análise de materiais</label>
+                            <input style="font-size: 14px; text-align:right; background: rgba(0,0,0,0.3)" type="number" 
+                                class="form-control" id="anaMat" name="anaMat" value="<?php echo $rowProduto['ANALISE_MATERIAL'] ?>">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="anaPro" class="form-label" style="font-size: 10px; color:aqua; float:inline-end">
+                                para análise de produtos</label>
+                            <input style="font-size: 14px; text-align:right; background: rgba(0,0,0,0.3)" type="number" 
+                                class="form-control" id="anaPro" name="anaPro" value="<?php echo $rowProduto['ANALISE_PRODUTO'] ?>" autofocus>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="entrega" class="form-label" style="font-size: 10px; color:aqua; float:inline-end">
+                                para entrega de produtos</label>
+                            <input style="font-size: 14px; text-align:right; background: rgba(0,0,0,0.3)" type="number" 
+                                class="form-control" id="entrega" name="entrega" value="<?php echo $rowProduto['ENTREGA'] ?>" autofocus>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="submit" class="btn btn-primary" id="confirma" name="confirma" value="Confirmar">
+                        </div>
+                    </div>
+                </form><?php
+                $atualiza = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+                if(!empty($atualiza['confirma'])){
+                    $altera = $connDB->prepare("UPDATE historico_tempo SET COMPRA = :compra, RECEBIMENTO = :recebe, ANALISE_MATERIAL = :anaMat,
+                                                       ANALISE_PRODUTO = :anaPro, ENTREGA = :entrega WHERE ID_PRODUTO = :idProd AND NUMERO_PEDIDO = 0");
+                    $altera->bindParam(':idProd' , $detalhes['ajustar'], PDO::PARAM_INT);
+                    $altera->bindParam(':compra' , $atualiza['compra'] , PDO::PARAM_INT);
+                    $altera->bindParam(':recebe' , $atualiza['recebe'] , PDO::PARAM_INT);
+                    $altera->bindParam(':anaMat' , $atualiza['anaMat'] , PDO::PARAM_INT);
+                    $altera->bindParam(':anaPro' , $atualiza['anaPro'] , PDO::PARAM_INT);
+                    $altera->bindParam(':entrega', $atualiza['entrega'], PDO::PARAM_INT);
+                    $altera->execute();
 
-        <?php
-        } ?>
+                    header('Location: ./ConfigTabelaProcesso.php');
+                }
+            } 
+        ?>
     </div>     
 </div>
