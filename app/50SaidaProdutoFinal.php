@@ -83,6 +83,14 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
           $estoque->bindParam(':qtdeLote'   , $rowEntrega['QTDE_PEDIDO'], PDO::PARAM_INT); 
           $estoque->bindParam(':uniMed'     , $rowEntrega['UNIDADE']    , PDO::PARAM_STR);
           $estoque->execute();
+
+          //definição de hora local
+          date_default_timezone_set('America/Sao_Paulo');
+          $dataEntrega = date('Y-m-d H:i');
+          $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_ENTREGA = :entrega WHERE NUMERO_PEDIDO = :numPedido");
+          $marcaData->bindParam(':numPedido', $_GET['id'] , PDO::PARAM_INT);
+          $marcaData->bindParam(':entrega'   , $dataEntrega, PDO::PARAM_STR);
+          $marcaData->execute();
   
           header('Location: ./02SeletorLogistica.php');
         }
@@ -147,6 +155,14 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
         $deliveryP->bindParam(':idPed', $_GET['id'], PDO::PARAM_INT); $deliveryP->bindParam(':transp'     , $regEntrega['transport']  , PDO::PARAM_STR);
         $deliveryP->bindParam(':dataS', $saida     , PDO::PARAM_STR); $deliveryP->bindParam(':situacao'   , $situacao                 , PDO::PARAM_STR);
         $deliveryP->execute();
+
+        //definição de hora local
+        date_default_timezone_set('America/Sao_Paulo');
+        $dataEntrega = date('Y-m-d H:i');
+        $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_ENTREGA = :entrega WHERE NUMERO_PEDIDO = :numPedido");
+        $marcaData->bindParam(':numPedido', $_GET['id'] , PDO::PARAM_INT);
+        $marcaData->bindParam(':entrega'   , $dataEntrega, PDO::PARAM_STR);
+        $marcaData->execute();
         
         header('Location: ./02SeletorLogistica.php');
       } 

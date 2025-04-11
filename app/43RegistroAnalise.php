@@ -39,7 +39,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       <!-- Entrada de Dados -->
       <div class="tab-pane fade show active" id="entrada-tab-pane" role="tabpanel" aria-labelledby="entrada-tab" tabindex="0"><br>
         <div class="row g-1">
-          <h6>Informações do Material Analisado</h6>
+          <h6>Informações do Produto Analisado</h6>
           <div class="col-md-2">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="dataRegistro" name="dataRegistro" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3); color: yellow" value="<?php echo date('d/m/Y', strtotime($_SESSION['dataR'])) ?>" readonly>
@@ -202,6 +202,19 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             $atualiza->bindParam(':etapa'   , $etapa   , PDO::PARAM_INT);$atualiza->bindParam(':nLoteInterno', $_SESSION['nLotePF'], PDO::PARAM_STR);
             $atualiza->bindParam(':situacao', $situacao, PDO::PARAM_STR);$atualiza->bindParam(':dataV'       , $_SESSION['dataV']  , PDO::PARAM_STR);            
             $atualiza->execute();
+
+            $buscaPedido = $connDB->prepare("SELECT NUMERO_PEDIDO FROM pedidos WHERE NUMERO_LOTE = :nLoteInterno");
+            $buscaPedido->bindParam(':nLoteInterno', $_SESSION['nLotePF'], PDO::PARAM_STR);
+            $buscaPedido->execute();
+            $rowPedido = $buscaPedido->fetch(PDO::FETCH_ASSOC);
+
+            //definição de hora local
+            date_default_timezone_set('America/Sao_Paulo');
+            $dataAnaMt = date('Y-m-d H:i');
+            $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_ANAPRO = :anaMat WHERE NUMERO_PEDIDO = :numPedido");
+            $marcaData->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'] , PDO::PARAM_INT);
+            $marcaData->bindParam(':anaMat'   , $dataAnaMt, PDO::PARAM_STR);
+            $marcaData->execute();
 
             header('Location: ./01SeletorGQualidade.php');
 

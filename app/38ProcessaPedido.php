@@ -186,6 +186,14 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                   $regProducao->bindParam(':resp'     , $_SESSION['nome_func']  , PDO::PARAM_STR);
                   $regProducao->execute();
 
+                  //definição de hora local
+                  date_default_timezone_set('America/Sao_Paulo');
+                  $dataFabri = date('Y-m-d H:i');
+                  $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_FABRI = :fabri WHERE NUMERO_PEDIDO = :numPedido");
+                  $marcaData->bindParam(':numPedido', $_SESSION['idPedido'] , PDO::PARAM_INT);
+                  $marcaData->bindParam(':fabri'   , $dataFabri, PDO::PARAM_STR);
+                  $marcaData->execute();
+
                   header('Location: ./38ProcessaPedido.php');
                 } ?>
               </tr><?php 

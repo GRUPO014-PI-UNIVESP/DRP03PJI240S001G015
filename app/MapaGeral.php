@@ -46,7 +46,7 @@
         <a style="margin-left: 080px;"                 href="MonitorProduto.php">Monitor da Execução dos Pedidos</a><br>
         <a style="margin-left: 080px;"                 href="">Desempenho de Vendas</a><br>
         <a style="margin-left: 080px;"                 href="">Desempenho de Produtividade</a><br>
-        <a style="margin-left: 080px;"                 href=""></a><br>
+        <a style="margin-left: 080px;"                 href="./MonitorTempoProcesso.php">Histórico dos Pedidos</a><br>
         <br>
         <a style="margin-left: 045px;color:aquamarine" href="">Configurações do Sistema</a><br>
         <a style="margin-left: 080px;"                 href="./ConfigTabelaProcesso.php">Revisão de Tabela de Processos</a><br>
