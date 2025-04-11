@@ -70,8 +70,11 @@ $responsavel = $_SESSION['nome_func'];
                                     $hAnaMt = date('H:i'  , strtotime($rowTabela['T_ANAMAT']));
                                 } echo $dAnaMt . '<br>' . $hAnaMt; ?></td>
 
-                            <td scope="col" style="width: 10%; text-align:center;">
-                                <?php echo $rowProd['CAPAC_PROCESS'] . '<br>' . $rowProd['UNIDADE'] . ' /hora'?></td>
+                            <td scope="col" style="width: 10%; text-align:center;"> <?php
+                                if($rowTabela['T_FABRI'] == NULL){ $dFabri = 'Aguardando'; $hFabri = ''; } else {
+                                    $dFabri = date('d/m/Y', strtotime($rowTabela['T_FABRI']));
+                                    $hFabri = date('H:i'  , strtotime($rowTabela['T_FABRI']));
+                                } echo $dFabri . '<br>' . $hFabri; ?></td>
 
                             <td scope="col" style="width: 10%; text-align:center;"> <?php
                                 if($rowTabela['T_ANAPRO'] == NULL){ $dAnaPd = 'Aguardando'; $hAnaPd = ''; } else {

@@ -15,7 +15,7 @@ $responsavel = $_SESSION['nome_func'];
     function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 69900000);  }
   }; inactivityTime();
 </script>
-<style> .tabela{ width: 98%; overflow-y: scroll;} </style>
+<style> .tabela{ width: 98%; height:320px; overflow-y: scroll;} </style>
 <!-- Área Principal -->
 <div class="main">
     <div class="row g-1">
@@ -93,9 +93,10 @@ $responsavel = $_SESSION['nome_func'];
                 $buscaNome->bindParam(':idProd', $detalhes['ajustar'], PDO::PARAM_INT);
                 $buscaNome->execute();
                 $nome = $buscaNome->fetch(PDO::FETCH_ASSOC);?>
-                <p style="color:yellow; font-size: 15px;">Produto: <?php echo $nome['PRODUTO'] ?></p>
+                <p style="color:yellow; font-size: 15px;">Item: <?php echo $nome['PRODUTO'] ?></p>
                 <form action="" method="POST">
                     <div class="row g-2">
+                        <div class="col-md-1"></div>
                         <div class="col-md-2">
                             <label for="compra" class="form-label" style="font-size: 10px; color:aqua; float:inline-end">
                                 Tempo estimado para compra de materiais</label>
@@ -126,8 +127,9 @@ $responsavel = $_SESSION['nome_func'];
                             <input style="font-size: 14px; text-align:right; background: rgba(0,0,0,0.3)" type="number" 
                                 class="form-control" id="entrega" name="entrega" value="<?php echo $rowProduto['ENTREGA'] ?>" autofocus>
                         </div>
-                        <div class="col-md-3">
-                            <input type="submit" class="btn btn-primary" id="confirma" name="confirma" value="Confirmar">
+                        <div class="col-md-11">
+                            <br>
+                            <input type="submit" class="btn btn-primary" id="confirma" name="confirma" value="Confirmar Alterações" style="float:inline-end">
                         </div>
                     </div>
                 </form><?php

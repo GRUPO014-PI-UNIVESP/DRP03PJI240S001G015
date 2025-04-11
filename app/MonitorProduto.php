@@ -29,13 +29,14 @@ $responsavel = $_SESSION['nome_func'];
     </div>
   </div>
   <div class="tabela">
-    <table class="table table-dark">
+    <table class="table table-dark table-hover">
       <thead style="font-size: 12px">
         <tr>
-          <th scope="col" style="width: 10%"><?php echo 'Data do Pedido' . '<br>' . 'Pedido No.'; ?></th>
-          <th scope="col" style="width: 30%"><?php echo 'Produto' . '<br>' . 'Cliente'; ?></th>
-          <th scope="col" style="width: 10%"><?php echo 'Quantidade' . '<br>' . 'Data de Entrega'; ?></th>
-          <th scope="col" style="width: 50%; text-align: center">Progresso</th>
+          <th scope="col" style="width: 5%; text-align:right"><?php echo 'Data' . '<br>' . 'Pedido No.'; ?></th>
+          <th scope="col" style="width: 20%"><?php echo 'Produto' . '<br>' . 'Cliente'; ?></th>
+          <th scope="col" style="width: 5%; text-align:right"><?php echo 'Quantidade' . '<br>' . 'Entrega'; ?></th>
+          <th scope="col" style="width: 60%; text-align: center">Progresso</th>
+          <th scope="col" style="width: 10%; text-align: center">Detalhes</th>
         </tr>
       </thead>
       <?php $query_pedido = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 8 ORDER BY DATA_PEDIDO ASC"); $query_pedido->execute(); ?>
@@ -52,11 +53,15 @@ $responsavel = $_SESSION['nome_func'];
           if($rowPedido['ETAPA_PROCESS'] >= 5){$a = $clear; $b = $clear; $c = $clear; $d = $clear; $e = $exec ; $f = $wait ; }
           if($rowPedido['ETAPA_PROCESS'] >= 6){$a = $clear; $b = $clear; $c = $clear; $d = $clear; $e = $clear; $f = $exec ; }
           if($rowPedido['ETAPA_PROCESS'] >= 7){$a = $clear; $b = $clear; $c = $clear; $d = $clear; $e = $clear; $f = $clear; } ?>
-          <tr>
-            <td scope="col" style="width: 10%; text-align:right;"><?php echo $rowPedido['DATA_PEDIDO'] . '<br>' . $rowPedido['NUMERO_PEDIDO'] ; ?></td>
-            <td scope="col" style="width: 30%;                  "><?php echo $rowPedido['PRODUTO']     . '<br>' . $rowPedido['CLIENTE']; ?></td>
-            <td scope="col" style="width: 10%; text-align:right;"><?php echo $rowPedido['QTDE_PEDIDO'] . ' '    . $rowPedido['UNIDADE'] . '<br>' . $rowPedido['DATA_ENTREGA']; ?></td>
-            <td scope="col" style="width: 50%;">
+          <t>
+            <td scope="col" style="width: 5%; text-align:right;"><?php 
+              echo date('d/m/Y', strtotime($rowPedido['DATA_PEDIDO'])) . 
+              '<br>' . $rowPedido['NUMERO_PEDIDO'] ; ?></td>
+            <td scope="col" style="width: 20%;                  "><?php echo $rowPedido['PRODUTO']     . '<br>' . $rowPedido['CLIENTE']; ?></td>
+            <td scope="col" style="width: 5%; text-align:right;"><?php 
+              echo number_format($rowPedido['QTDE_PEDIDO'],0,',','.') . ' '    . $rowPedido['UNIDADE'] . 
+              '<br>' . date('d/m/Y',strtotime($rowPedido['DATA_ENTREGA'])); ?></td>
+            <td scope="col" style="width: 60%;">
               <div class="row g-2">
                 <div class="col md-2" style="<?php echo $a ?>">Compra</div>
                 <div class="col md-2" style="<?php echo $b ?>">Recebida</div>
@@ -69,6 +74,10 @@ $responsavel = $_SESSION['nome_func'];
                 <div class="col md-6" style="font-size: 11px; color:aqua;">Matéria Prima</div>
                 <div class="col md-6" style="font-size: 11px; color:aqua;">Produto Final</div>
               </div>
+            </td>
+            <td scope="col" style="width: 10%;">
+              <input type="text" class="btn btn-outline-primary" style="width:90px"
+                value="Verificar">
             </td>
           </tr><?php
         } ?>                    
