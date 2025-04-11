@@ -87,6 +87,14 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       $atualizaPedido->bindParam(':situacao' , $situacao               , PDO::PARAM_STR);
       $atualizaPedido->execute();
 
+      //definição de hora local
+      date_default_timezone_set('America/Sao_Paulo');
+      $dataCompra = date('Y-m-d H:i');
+      $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_COMPRA = :compra WHERE NUMERO_PEDIDO = :numPedido");
+      $marcaData->bindParam(':numPedido', $rowMat['NUMERO_PEDIDO'], PDO::PARAM_INT);
+      $marcaData->bindParam(':compra'   , $dataCompra             , PDO::PARAM_STR);
+      $marcaData->execute();
+
       header('Location: ./12SetorCompras.php');
     } ?>
   </div>

@@ -73,9 +73,17 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       $realiza->bindParam(':qtdeLote', $qtdeCompra, PDO::PARAM_STR); $realiza->bindParam(':idEstoque', $rowBusca['ID_ESTOQUE'], PDO::PARAM_INT);       
       $realiza->bindParam(':etapa'   , $etapa     , PDO::PARAM_INT); $realiza->bindParam(':descrMat' , $rowBusca['DESCRICAO'] , PDO::PARAM_STR);
       $realiza->bindParam(':situacao', $situacao  , PDO::PARAM_STR); $realiza->bindParam(':uniMed'   , $rowBusca['UNIDADE']   , PDO::PARAM_STR);
-      $realiza->bindParam(':idCompra', $lastID    , PDO::PARAM_INT); $realiza->execute();     
+      $realiza->bindParam(':idCompra', $lastID    , PDO::PARAM_INT); $realiza->execute();
+      
+      //definição de hora local
+      date_default_timezone_set('America/Sao_Paulo');
+      $dataCompra = date('Y-m-d H:i');
+      $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_COMPRA = :compra WHERE NUMERO_PEDIDO = :numPedido");
+      $marcaData->bindParam(':numPedido', $numPedido , PDO::PARAM_INT);
+      $marcaData->bindParam(':compra'   , $dataCompra, PDO::PARAM_STR);
+      $marcaData->execute();
 
-      header('Location: ./MapaGeral.php');
+      header('Location: ./12SetorCompras.php');
     } ?>
   </div>
 </div>

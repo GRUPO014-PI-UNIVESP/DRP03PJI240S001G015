@@ -168,6 +168,14 @@ $responsavel = $_SESSION['nome_func'];
       $limpaAgenda->bindParam(':etapa'   , $etapa     , PDO::PARAM_INT); $limpaAgenda->bindParam(':situacao', $situacao, PDO::PARAM_STR);
       $limpaAgenda->bindParam(':idCompra', $_GET['id'], PDO::PARAM_INT); $limpaAgenda->execute();
 
+      //definição de hora local
+      date_default_timezone_set('America/Sao_Paulo');
+      $dataRecebe = date('Y-m-d H:i');
+      $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_recebe = :recebe WHERE NUMERO_PEDIDO = :numPedido");
+      $marcaData->bindParam(':numPedido', $rowMP['NUMERO_PEDIDO'], PDO::PARAM_INT);
+      $marcaData->bindParam(':recebe'   , $dataRecebe            , PDO::PARAM_STR);
+      $marcaData->execute();
+
       header('Location: ./02SeletorLogistica.php');
     } ?>
   </div><!-- fim da container fluid -->

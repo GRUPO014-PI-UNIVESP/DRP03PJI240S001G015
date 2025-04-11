@@ -51,8 +51,8 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             $nomeProduto = $_SESSION['nomeProduto']; 
             $numPedido = $_SESSION['numPedido']; 
             $qtdeLote = $_SESSION['qtdeLote']; 
-            $padrao = $_SESSION['padrao']; 
-            $xtend = $_SESSION['xtend']; 
+            $padrao = 1; 
+            $xtend = 2; 
             $verificador = 0;
             $query_material = $connDB->prepare("SELECT * FROM produtos WHERE PRODUTO = :nomeProduto"); 
             $query_material->bindParam(':nomeProduto', $nomeProduto, PDO::PARAM_STR); 
@@ -218,7 +218,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
           $convert1 = time(); $convert2 = strtotime($dataConvert);  
           $_SESSION['diff'] = round(($convert2 - $convert1) / 86400);
           $_SESSION['dataAgendada'] = date('Y-m-d', strtotime($dataLivre['dataSelecionada']));
-          $_SESSION['dataEntrega']  = date('Y-m-d', strtotime($_SESSION['dataAgendada']."+ 1 week")); ?>
+          $_SESSION['dataEntrega']  = date('Y-m-d', strtotime($_SESSION['dataAgendada']."+ 3 days")); ?>
           <div class="col-md-1"></div>
           <div class="col-md-2">
             <label for="dataAgenda" class="form-label" style="font-size: 10px; color:aqua">Data Agendada</label>
@@ -305,6 +305,20 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       $completaCompra->bindParam('dataLimite', $dataLimite              , PDO::PARAM_STR);
       $completaCompra->bindParam(':numPedido', $numPedido               , PDO::PARAM_INT);
       $completaCompra->execute();
+
+      $buscaCode = $connDB->prepare("SELECT N_PRODUTO FROM produtos WHERE PRODUTO = :nomeProd");
+      $buscaCode->bindParam(':nomeProd', $nomeProduto, PDO::PARAM_STR);
+      $buscaCode->execute();
+      $code = $buscaCode->fetch(PDO::FETCH_ASSOC);
+
+      //definição de hora local
+      date_default_timezone_set('America/Sao_Paulo');
+      $dataPedido = date('Y-m-d H:i');
+      $marcaData = $connDB->prepare("INSERT INTO historico_tempo (ID_PRODUTO, NUMERO_PEDIDO, INICIO) VALUES (:idProd, :numPed, :dataPe)");
+      $marcaData->bindParam(':idProd', $code['N_PRODUTO'], PDO::PARAM_INT);
+      $marcaData->bindParam(':numPed', $numPedido, PDO::PARAM_INT);
+      $marcaData->bindParam(':dataPe', $dataPedido, PDO::PARAM_STR);
+      $marcaData->execute();
 
       header('Location: ./33PedidoProduto.php');
     } ?>

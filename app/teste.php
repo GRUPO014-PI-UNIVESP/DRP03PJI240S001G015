@@ -28,30 +28,16 @@
   } catch(PDOException $err){
     die('Erro de conexão!Verifique!!' . $err->getMessage());
   }
+
+  //definição de hora local
+date_default_timezone_set('America/Sao_Paulo');
 ?>
 
 <!-- Área Principal -->
   <div class="main">
     <?php
-        $_SESSION['idCompra'] = 5;
-        $verifMatPedido = $connDB->prepare("SELECT * FROM materiais_reserva WHERE ID_COMPRA = :idCompra");
-        $verifMatPedido->bindParam(':idCompra', $_SESSION['idCompra'], PDO::PARAM_INT);
-        $verifMatPedido->execute();
-        $verificadorPedido = $verifMatPedido->fetch(PDO::FETCH_ASSOC);
-        $numPedido = $verificadorPedido['NUMERO_PEDIDO'];
-
-        $buscaRegMatLiberado = $connDB->prepare("SELECT * FROM materiais_reserva WHERE NUMERO_PEDIDO = :numPedido");
-        $buscaRegMatLiberado->bindParam(':numPedido', $numPedido, PDO::PARAM_INT);
-        $buscaRegMatLiberado->execute();
-        $contaMat = $buscaRegMatLiberado->rowCount(); echo $contaMat;
-        $nVerificador = $contaMat * 3;
-        $verificaDisponibilidade = $connDB->prepare("SELECT SUM(DISPONIBILIDADE) AS VERIFICADOR FROM materiais_reserva WHERE NUMERO_PEDIDO = :numPedido");
-        $verificaDisponibilidade->bindParam('numPedido', $numPedido, PDO::PARAM_INT);
-        $verificaDisponibilidade->execute(); $nDisponibilidade = $verificaDisponibilidade->fetch(PDO::FETCH_ASSOC); echo '<br>'; echo $nDisponibilidade['VERIFICADOR'];
-        if(!empty($nDisponibilidade['VERIFICADOR'])){
-            if($nVerificador == $nDisponibilidade['VERIFICADOR']){ echo 'liberado';}
-            if($nVerificador != $nDisponibilidade['VERIFICADOR']){ echo 'bloqueado';}
-        }
+      $dataHoje = date('Y-m-d H:i');
+      echo ''. $dataHoje .'';
 
         ?>
 
