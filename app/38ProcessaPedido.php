@@ -186,14 +186,6 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
                   $regProducao->bindParam(':resp'     , $_SESSION['nome_func']  , PDO::PARAM_STR);
                   $regProducao->execute();
 
-                  //definição de hora local
-                  date_default_timezone_set('America/Sao_Paulo');
-                  $dataFabri = date('Y-m-d H:i');
-                  $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_FABRI = :fabri WHERE NUMERO_PEDIDO = :numPedido");
-                  $marcaData->bindParam(':numPedido', $_SESSION['idPedido'] , PDO::PARAM_INT);
-                  $marcaData->bindParam(':fabri'   , $dataFabri, PDO::PARAM_STR);
-                  $marcaData->execute();
-
                   header('Location: ./38ProcessaPedido.php');
                 } ?>
               </tr><?php 
@@ -216,6 +208,15 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
         $regProd->bindParam(':dataFabri', $_SESSION['dataFabri'], PDO::PARAM_STR);
         $regProd->bindParam(':numPedido', $_SESSION['idPedido'] , PDO::PARAM_INT);
         $regProd->execute();
+
+        //definição de hora local
+        date_default_timezone_set('America/Sao_Paulo');
+        $dataFabri = date('Y-m-d H:i');
+        $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_FABRI = :fabri, ETAPA_PROCESS = :etapa WHERE NUMERO_PEDIDO = :numPedido");
+        $marcaData->bindParam(':numPedido', $_SESSION['idPedido'] , PDO::PARAM_INT);
+        $marcaData->bindParam(':fabri'    , $dataFabri            , PDO::PARAM_STR);
+        $marcaData->bindParam(':etapa'    , $etapaProd            , PDO::PARAM_INT);
+        $marcaData->execute();
 
         $deletaFila = $connDB->prepare("DELETE FROM pedidos_fila WHERE NUMERO_PEDIDO = :numPedido");
         $deletaFila->bindParam(':numPedido', $_SESSION['idPedido'] , PDO::PARAM_INT); $deletaFila->execute();

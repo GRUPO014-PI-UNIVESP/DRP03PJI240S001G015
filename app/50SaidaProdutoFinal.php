@@ -87,9 +87,10 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
           //definição de hora local
           date_default_timezone_set('America/Sao_Paulo');
           $dataEntrega = date('Y-m-d H:i');
-          $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_ENTREGA = :entrega WHERE NUMERO_PEDIDO = :numPedido");
+          $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_ENTREGA = :entrega, ETAPA_PROCESS = :etapa WHERE NUMERO_PEDIDO = :numPedido");
           $marcaData->bindParam(':numPedido', $_GET['id'] , PDO::PARAM_INT);
-          $marcaData->bindParam(':entrega'   , $dataEntrega, PDO::PARAM_STR);
+          $marcaData->bindParam(':entrega'  , $dataEntrega, PDO::PARAM_STR);
+          $marcaData->bindParam(':etapa'    , $etapa      , PDO::PARAM_INT);
           $marcaData->execute();
   
           header('Location: ./02SeletorLogistica.php');

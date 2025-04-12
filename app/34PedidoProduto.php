@@ -314,10 +314,11 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       //definição de hora local
       date_default_timezone_set('America/Sao_Paulo');
       $dataPedido = date('Y-m-d H:i');
-      $marcaData = $connDB->prepare("INSERT INTO historico_tempo (ID_PRODUTO, NUMERO_PEDIDO, INICIO) VALUES (:idProd, :numPed, :dataPe)");
+      $marcaData = $connDB->prepare("INSERT INTO historico_tempo (ID_PRODUTO, NUMERO_PEDIDO, INICIO, ETAPA_PROCESS) VALUES (:idProd, :numPed, :dataPe, :etapa)");
       $marcaData->bindParam(':idProd', $code['N_PRODUTO'], PDO::PARAM_INT);
-      $marcaData->bindParam(':numPed', $numPedido, PDO::PARAM_INT);
-      $marcaData->bindParam(':dataPe', $dataPedido, PDO::PARAM_STR);
+      $marcaData->bindParam(':numPed', $numPedido        , PDO::PARAM_INT);
+      $marcaData->bindParam(':dataPe', $dataPedido       , PDO::PARAM_STR);
+      $marcaData->bindParam(':etapa' , $etapaProcess     , PDO::PARAM_INT);
       $marcaData->execute();
 
       header('Location: ./33PedidoProduto.php');

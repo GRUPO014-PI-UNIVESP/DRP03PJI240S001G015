@@ -211,9 +211,10 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             //definição de hora local
             date_default_timezone_set('America/Sao_Paulo');
             $dataAnaMt = date('Y-m-d H:i');
-            $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_ANAPRO = :anaMat WHERE NUMERO_PEDIDO = :numPedido");
+            $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_ANAPRO = :anaMat, ETAPA_PROCESS = :etapa WHERE NUMERO_PEDIDO = :numPedido");
             $marcaData->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'] , PDO::PARAM_INT);
-            $marcaData->bindParam(':anaMat'   , $dataAnaMt, PDO::PARAM_STR);
+            $marcaData->bindParam(':anaMat'   , $dataAnaMt                  , PDO::PARAM_STR);
+            $marcaData->bindParam(':etapa'    , $etapa                      , PDO::PARAM_INT);
             $marcaData->execute();
 
             header('Location: ./01SeletorGQualidade.php');

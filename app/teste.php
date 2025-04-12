@@ -36,8 +36,15 @@ date_default_timezone_set('America/Sao_Paulo');
 <!-- Área Principal -->
   <div class="main">
     <?php
-      $dataHoje = date('Y-m-d H:i');
-      echo ''. $dataHoje .'';
+      $dataHoje = date('Y-m-d H:i');$dataAntes = date('Y-m-d H:i', strtotime("- 35minutes"));
+
+      $dH = datetime::createFromFormat('Y-m-d H:i', $dataHoje);
+      $dA = datetime::createFromFormat('Y-m-d H:i', $dataAntes);
+      echo ''. $dataHoje .'<br>';
+      echo $dataAntes . '<br>';
+      $dif = $dA->diff($dH);
+      $a = $dif->format('%i minutos');
+      echo $a;
 
         ?>
 

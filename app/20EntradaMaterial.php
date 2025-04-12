@@ -171,9 +171,10 @@ $responsavel = $_SESSION['nome_func'];
       //definição de hora local
       date_default_timezone_set('America/Sao_Paulo');
       $dataRecebe = date('Y-m-d H:i');
-      $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_recebe = :recebe WHERE NUMERO_PEDIDO = :numPedido");
+      $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_recebe = :recebe, ETAPA_PROCESS = :etapa WHERE NUMERO_PEDIDO = :numPedido");
       $marcaData->bindParam(':numPedido', $rowMP['NUMERO_PEDIDO'], PDO::PARAM_INT);
       $marcaData->bindParam(':recebe'   , $dataRecebe            , PDO::PARAM_STR);
+      $marcaData->bindParam(':etapa'    , $etapa                 , PDO::PARAM_INT);
       $marcaData->execute();
 
       header('Location: ./02SeletorLogistica.php');
