@@ -20,5 +20,5 @@ ajustar pedido de produto:
 
 Novo algoritmo para cadastro de novos produtos, com definição de especificações do produto e processos de fabricação
 
-
+DEFINIR DATAS DE FABRI E ENTREGA A PARTIR DAS REFERÊNCICIAS
    

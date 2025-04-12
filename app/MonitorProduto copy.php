@@ -39,20 +39,20 @@ $responsavel = $_SESSION['nome_func'];
           <th scope="col" style="width: 10%; text-align: center">Detalhes</th>
         </tr>
       </thead>
-      <?php $query_pedido = $connDB->prepare("SELECT * FROM historico_tempo WHERE ETAPA_PROCESS < 7
-                                                     AND NUMERO_PEDIDO > 0 ORDER BY INICIO ASC"); $query_pedido->execute(); ?>
+      <?php $query_pedido = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 8 ORDER BY DATA_PEDIDO ASC"); $query_pedido->execute(); ?>
       <tbody style="height: 75%; font-size: 11px;"><?php 
         while($rowPedido = $query_pedido->fetch(PDO::FETCH_ASSOC)){
           $clear = 'font-size:12px; text-align:center; color:black; background-color:limegreen;';
           $exec  = 'font-size:12px; text-align:center; color:whitesmoke; background-color:dodgerblue;';
           $wait  = 'font-size:12px; text-align:center; color:whitesmoke; background-color:lightslategrey;';
-          if($rowPedido['ETAPA_PROCESS'] >= 0){$a = $exec ; $b = $wait ; $c = $wait ; $d = $wait ; $e = $wait ; $f = $wait ; }
-          if($rowPedido['ETAPA_PROCESS'] >= 1){$a = $clear; $b = $exec ; $c = $wait ; $d = $wait ; $e = $wait ; $f = $wait ; }
-          if($rowPedido['ETAPA_PROCESS'] >= 2){$a = $clear; $b = $clear; $c = $exec ; $d = $wait ; $e = $wait ; $f = $wait ; }
-          if($rowPedido['ETAPA_PROCESS'] >= 3){$a = $clear; $b = $clear; $c = $clear; $d = $exec ; $e = $wait ; $f = $wait ; }
-          if($rowPedido['ETAPA_PROCESS'] >= 4){$a = $clear; $b = $clear; $c = $clear; $d = $clear; $e = $exec ; $f = $wait ; }
-          if($rowPedido['ETAPA_PROCESS'] >= 5){$a = $clear; $b = $clear; $c = $clear; $d = $clear; $e = $clear; $f = $exec ; }
-          if($rowPedido['ETAPA_PROCESS'] >= 6){$a = $clear; $b = $clear; $c = $clear; $d = $clear; $e = $clear; $f = $clear; } ?>
+          if($rowPedido['ETAPA_PROCESS'] >= 0){$a = $wait ; $b = $wait ; $c = $wait ; $d = $wait ; $e = $wait ; $f = $wait ; }
+          if($rowPedido['ETAPA_PROCESS'] >= 1){$a = $exec ; $b = $wait ; $c = $wait ; $d = $wait ; $e = $wait ; $f = $wait ; }
+          if($rowPedido['ETAPA_PROCESS'] >= 2){$a = $clear; $b = $exec ; $c = $wait ; $d = $wait ; $e = $wait ; $f = $wait ; }
+          if($rowPedido['ETAPA_PROCESS'] >= 3){$a = $clear; $b = $clear; $c = $exec ; $d = $wait ; $e = $wait ; $f = $wait ; }
+          if($rowPedido['ETAPA_PROCESS'] >= 4){$a = $clear; $b = $clear; $c = $clear; $d = $exec ; $e = $wait ; $f = $wait ; }
+          if($rowPedido['ETAPA_PROCESS'] >= 5){$a = $clear; $b = $clear; $c = $clear; $d = $clear; $e = $exec ; $f = $wait ; }
+          if($rowPedido['ETAPA_PROCESS'] >= 6){$a = $clear; $b = $clear; $c = $clear; $d = $clear; $e = $clear; $f = $exec ; }
+          if($rowPedido['ETAPA_PROCESS'] >= 7){$a = $clear; $b = $clear; $c = $clear; $d = $clear; $e = $clear; $f = $clear; } ?>
           <t>
             <td scope="col" style="width: 5%; text-align:right;"><?php 
               echo date('d/m/Y', strtotime($rowPedido['DATA_PEDIDO'])) . 
