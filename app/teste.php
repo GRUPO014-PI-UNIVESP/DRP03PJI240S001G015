@@ -34,8 +34,9 @@ date_default_timezone_set('America/Sao_Paulo');
 ?>
 <!-- Área Principal -->
   <div class="main">
-    <?php
-      $busca = $connDB->prepare("SELECT * FROM historico_tempo WHERE ID_TEMPO = 12");
+    <?php $entraPedido = '14';
+      $busca = $connDB->prepare("SELECT * FROM historico_tempo WHERE ID_TEMPO = :numPedido");
+      $busca->bindParam(':numPedido', $entraPedido, PDO::PARAM_INT);
       $busca->execute(); $row = $busca->fetch(PDO::FETCH_ASSOC);
 
       $dataC = new datetime($row['T_COMPRA']); $dataI = new datetime($row['INICIO']); $diferenca = $dataI->diff($dataC);
@@ -71,14 +72,15 @@ date_default_timezone_set('America/Sao_Paulo');
       $total = $compra + $recebe + $anaMat + $fabri + $anaPro + $entrega;
 
       $grava = $connDB->prepare("UPDATE historico_tempo SET COMPRA = :compra, RECEBIMENTO = :recebe, ANALISE_MATERIAL = :anaMat, FABRICACAO = :fabri, ANALISE_PRODUTO = :anaPro, ENTREGA = :entrega, TOTAL = :total 
-                                        WHERE ID_TEMPO = 12");
-      $grava->bindParam(":compra" , $compra , PDO::PARAM_INT);
-      $grava->bindParam(":recebe" , $recebe , PDO::PARAM_INT);
-      $grava->bindParam(":anaMat" , $anaMat , PDO::PARAM_INT);
-      $grava->bindParam(":fabri"  , $fabri  , PDO::PARAM_INT);
-      $grava->bindParam(":anaPro" , $anaPro , PDO::PARAM_INT);
-      $grava->bindParam(":entrega", $entrega, PDO::PARAM_INT);
-      $grava->bindParam(":total"  , $total  , PDO::PARAM_INT);
+                                        WHERE ID_TEMPO = :numPedido");
+      $grava->bindParam('numPedido', $entraPedido, PDO::PARAM_INT);
+      $grava->bindParam(":compra"  , $compra     , PDO::PARAM_INT);
+      $grava->bindParam(":recebe"  , $recebe     , PDO::PARAM_INT);
+      $grava->bindParam(":anaMat"  , $anaMat     , PDO::PARAM_INT);
+      $grava->bindParam(":fabri"   , $fabri      , PDO::PARAM_INT);
+      $grava->bindParam(":anaPro"  , $anaPro     , PDO::PARAM_INT);
+      $grava->bindParam(":entrega" , $entrega    , PDO::PARAM_INT);
+      $grava->bindParam(":total"   , $total      , PDO::PARAM_INT);
       $grava->execute();
       ?>
 

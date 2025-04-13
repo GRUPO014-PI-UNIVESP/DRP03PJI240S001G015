@@ -92,8 +92,8 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
           $buscaTanaPro->bindParam(':numPedido', $_GET['id'], PDO::PARAM_INT);
           $buscaTanaPro->execute(); $rowLinha = $buscaTanaPro->fetch(PDO::FETCH_ASSOC);
 
-          $dataC  = new datetime($dataEntrega); 
-          $dataI  = new datetime($rowLinha['T_ANAPRO']);
+          $dataC   = new datetime($dataEntrega); 
+          $dataI   = new datetime($rowLinha['T_ANAPRO']);
           $entrega = ($dataC->getTimestamp() - $dataI->getTimestamp()) / 60;
 
           $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_ENTREGA = :entrega, ETAPA_PROCESS = :etapa, ENTREGA = :tentrega WHERE NUMERO_PEDIDO = :numPedido");
