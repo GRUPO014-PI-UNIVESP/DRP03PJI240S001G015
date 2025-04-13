@@ -7,7 +7,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
   let inactivityTime = function () {
     let time; window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress  = resetTimer;
     function deslogar() { <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php'; ?> window.location.href = 'LogOut.php';}
-    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 6000000);}
+    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 69900000);}
   }; inactivityTime();
 </script>
 <div class="main">

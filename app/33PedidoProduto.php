@@ -7,7 +7,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
   let inactivityTime = function(){
     let time; window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress  = resetTimer;
     function deslogar(){ <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php'; ?> window.location.href = 'LogOut.php'; }
-    function resetTimer(){ clearTimeout(time); time = setTimeout(deslogar, 69900000); }
+    function resetTimer(){ clearTimeout(time); time = setTimeout(deslogar, 600000); }
   }; inactivityTime();
 </script>
 <!-- Área Principal -->
@@ -95,7 +95,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             $reserva->bindParam(':disp'       , $disp                       , PDO::PARAM_STR);
             $reserva->execute();
           }
-          if($alerta == 'INSUFICIENTE'){ $dataPedi = date('Y-m-d'); $situacao = 'COMPRA AGENDADA'; $disp = 0;
+          if($alerta == 'INSUFICIENTE'){ $dataPedi = date('Y-m-d H:i:s'); $situacao = 'COMPRA AGENDADA'; $disp = 0;
             $compra = $connDB->prepare("INSERT INTO materiais_compra (ID_ESTOQUE, DESCRICAO, NUMERO_PEDIDO, PRODUTO, ETAPA_PROCESS, 
                                                   DATA_PEDIDO, QTDE_PEDIDO, UNIDADE, SITUACAO, CAPAC_PROCESS) 
                                                VALUES (:idEstoque, :descrMat, :numPedid, :nomeProd, :etapa,

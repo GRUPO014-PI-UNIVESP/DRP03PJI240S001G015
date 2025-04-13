@@ -20,7 +20,7 @@ $responsavel = $_SESSION['nome_func'];
 <div class="main">
     <div class="row g-1">
         <div class="col md-6"> <br>
-            <p style="font-size: 25px; color:cyan">Monitor de tempo de processos</p>
+            <p style="font-size: 25px; color:cyan">Relatório de Conclusão de Processos</p>
         </div>
     </div> <?php
         $listaTabela = $connDB->prepare("SELECT * FROM historico_tempo WHERE NUMERO_PEDIDO > 0");

@@ -101,17 +101,16 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       $calcTempo = $connDB->prepare("SELECT INICIO FROM historico_tempo WHERE NUMERO_PEDIDO = :numPedido");
       $calcTempo->bindParam(':numPedido', $rowMat['NUMERO_PEDIDO'], PDO::PARAM_INT);
       $calcTempo->execute(); $calcCompra = $calcTempo->fetch(PDO::FETCH_ASSOC);
-      $dI = datetime::createFromFormat('Y-m-d H:i', $calcCompra['INICIO']);
-      $dC = datetime::createFromFormat('Y-m-d H:i', $dataCompra);
-      $dif = $dC->diff($dI); $difCI = $dif->format('%i');
-
+      $dataC = new datetime($dataCompra); 
+      $dataI = new datetime($calcCompra['INICIO']);
+      $compra = ($dataC->getTimestamp() - $dataI->getTimestamp()) / 60;
 
       $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_COMPRA = :compra, ETAPA_PROCESS = :etapa, COMPRA = :difC 
                                             WHERE NUMERO_PEDIDO = :numPedido");
       $marcaData->bindParam(':numPedido', $rowMat['NUMERO_PEDIDO'], PDO::PARAM_INT);
       $marcaData->bindParam(':compra'   , $dataCompra             , PDO::PARAM_STR);
       $marcaData->bindParam(':etapa'    , $etapa                  , PDO::PARAM_INT);
-      $marcaData->bindParam(':difC'     , $difCI                  , PDO::PARAM_STR);
+      $marcaData->bindParam(':difC'     , $compra                 , PDO::PARAM_INT);
       $marcaData->execute();
 
       header('Location: ./12SetorCompras.php');

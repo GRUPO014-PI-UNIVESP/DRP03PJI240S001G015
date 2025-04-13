@@ -210,11 +210,21 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
 
             //definição de hora local
             date_default_timezone_set('America/Sao_Paulo');
-            $dataAnaMt = date('Y-m-d H:i');
-            $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_ANAPRO = :anaMat, ETAPA_PROCESS = :etapa WHERE NUMERO_PEDIDO = :numPedido");
+            $dataAnaMt = date('Y-m-d H:i'); 
+
+            $buscaTfabri = $connDB->prepare("SELECT T_FABRI FROM historico_tempo WHERE NUMERO_PEDIDO = :numPedido");
+            $buscaTfabri->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);
+            $buscaTfabri->execute(); $rowLinha = $buscaTfabri->fetch(PDO::FETCH_ASSOC);
+
+            $dataC  = new datetime($dataAnaMt); 
+            $dataI  = new datetime($rowLinha['T_FABRI']);
+            $anaPro = ($dataC->getTimestamp() - $dataI->getTimestamp()) / 60;
+
+            $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_ANAPRO = :anaMat, ETAPA_PROCESS = :etapa, ANALISE_PRODUTO = :anaPro WHERE NUMERO_PEDIDO = :numPedido");
             $marcaData->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'] , PDO::PARAM_INT);
             $marcaData->bindParam(':anaMat'   , $dataAnaMt                  , PDO::PARAM_STR);
             $marcaData->bindParam(':etapa'    , $etapa                      , PDO::PARAM_INT);
+            $marcaData->bindParam(':anaPro'   , $anaPro                     , PDO::PARAM_INT);
             $marcaData->execute();
 
             header('Location: ./01SeletorGQualidade.php');

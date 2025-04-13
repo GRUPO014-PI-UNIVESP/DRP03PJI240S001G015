@@ -201,21 +201,32 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       </form><?php
       $regProd = filter_input_array(INPUT_POST, FILTER_DEFAULT);
       if(!empty($regProd['registra'])){ $etapaProd = 4; $sitProd = 'FABRICAÇÃO CONCLUÍDA! AGUARDANDO ANÁLISE.';
-        $regProd = $connDB->prepare("UPDATE pedidos SET NUMERO_LOTE = :numLote, ETAPA_PROCESS = :etapaProd, SITUACAO = :sitProd, DATA_FABRI = :dataFabri WHERE NUMERO_PEDIDO = :numPedido");
-        $regProd->bindParam(':numLote'  , $_SESSION['nLoteProd'], PDO::PARAM_STR);
-        $regProd->bindParam(':etapaProd', $etapaProd            , PDO::PARAM_INT);
-        $regProd->bindParam(':sitProd'  , $sitProd              , PDO::PARAM_STR);
-        $regProd->bindParam(':dataFabri', $_SESSION['dataFabri'], PDO::PARAM_STR);
-        $regProd->bindParam(':numPedido', $_SESSION['idPedido'] , PDO::PARAM_INT);
-        $regProd->execute();
 
         //definição de hora local
         date_default_timezone_set('America/Sao_Paulo');
         $dataFabri = date('Y-m-d H:i');
-        $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_FABRI = :fabri, ETAPA_PROCESS = :etapa WHERE NUMERO_PEDIDO = :numPedido");
+
+        $regProd = $connDB->prepare("UPDATE pedidos SET NUMERO_LOTE = :numLote, ETAPA_PROCESS = :etapaProd, SITUACAO = :sitProd, DATA_FABRI = :dataFabri WHERE NUMERO_PEDIDO = :numPedido");
+        $regProd->bindParam(':numLote'  , $_SESSION['nLoteProd'], PDO::PARAM_STR);
+        $regProd->bindParam(':etapaProd', $etapaProd            , PDO::PARAM_INT);
+        $regProd->bindParam(':sitProd'  , $sitProd              , PDO::PARAM_STR);
+        $regProd->bindParam(':dataFabri', $dataFabri            , PDO::PARAM_STR);
+        $regProd->bindParam(':numPedido', $_SESSION['idPedido'] , PDO::PARAM_INT);
+        $regProd->execute();
+
+        $buscaTanalise = $connDB->prepare("SELECT T_ANAMAT FROM historico_tempo WHERE NUMERO_PEDIDO = :numPedido");
+        $buscaTanalise->bindParam(':numPedido', $_SESSION['idPedido'], PDO::PARAM_INT);
+        $buscaTanalise->execute(); $rowLinha = $buscaTanalise->fetch(PDO::FETCH_ASSOC);
+
+        $dataC = new datetime($dataFabri); 
+        $dataI = new datetime($rowLinha['T_ANAMAT']);
+        $fabri = ($dataC->getTimestamp() - $dataI->getTimestamp()) / 60;
+
+        $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_FABRI = :fabri, ETAPA_PROCESS = :etapa, FABRICACAO = :Tfabri WHERE NUMERO_PEDIDO = :numPedido");
         $marcaData->bindParam(':numPedido', $_SESSION['idPedido'] , PDO::PARAM_INT);
         $marcaData->bindParam(':fabri'    , $dataFabri            , PDO::PARAM_STR);
         $marcaData->bindParam(':etapa'    , $etapaProd            , PDO::PARAM_INT);
+        $marcaData->bindParam(':Tfabri'   , $fabri                , PDO::PARAM_INT);
         $marcaData->execute();
 
         $deletaFila = $connDB->prepare("DELETE FROM pedidos_fila WHERE NUMERO_PEDIDO = :numPedido");

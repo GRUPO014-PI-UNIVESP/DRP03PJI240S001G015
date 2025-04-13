@@ -15,7 +15,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
 <!-- Área Principal -->
 <div class="main">
   <div class="container-fluid"><br> <?php
-    if(!empty($_GET['id'])){ $entrega = $connDB->prepare("SELECT * FROM pedidos WHERE ID_PEDIDO = :idPed");
+    if(!empty($_GET['id'])){ $entrega = $connDB->prepare("SELECT * FROM pedidos WHERE NUMERO_PEDIDO = :idPed");
       $entrega->bindParam(':idPed', $_GET['id'], PDO::PARAM_INT);
       $entrega->execute();
       $rowEntrega = $entrega->fetch(PDO::FETCH_ASSOC);
@@ -67,7 +67,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
           $saida = date('Y-m-d', strtotime($regEntrega['dataS']));
 
           $deliveryP = $connDB->prepare("UPDATE pedidos SET ETAPA_PROCESS = :etapa, SITUACAO = :situacao, DATA_ENTREGA = :dataS, TRANSPORTADORA = :transp, ENCARREGADO_ENTREGA = :responsavel 
-                                                WHERE ID_PEDIDO = :idPed");
+                                                WHERE NUMERO_PEDIDO = :idPed");
           $deliveryP->bindParam(':etapa'      , $etapa                    , PDO::PARAM_INT);
           $deliveryP->bindParam(':responsavel', $regEntrega['colaborador'], PDO::PARAM_STR);
           $deliveryP->bindParam(':idPed'      , $_GET['id']               , PDO::PARAM_INT);
@@ -87,10 +87,20 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
           //definição de hora local
           date_default_timezone_set('America/Sao_Paulo');
           $dataEntrega = date('Y-m-d H:i');
-          $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_ENTREGA = :entrega, ETAPA_PROCESS = :etapa WHERE NUMERO_PEDIDO = :numPedido");
+
+          $buscaTanaPro = $connDB->prepare("SELECT T_ANAPRO FROM historico_tempo WHERE NUMERO_PEDIDO = :numPedido");
+          $buscaTanaPro->bindParam(':numPedido', $_GET['id'], PDO::PARAM_INT);
+          $buscaTanaPro->execute(); $rowLinha = $buscaTanaPro->fetch(PDO::FETCH_ASSOC);
+
+          $dataC  = new datetime($dataEntrega); 
+          $dataI  = new datetime($rowLinha['T_ANAPRO']);
+          $entrega = ($dataC->getTimestamp() - $dataI->getTimestamp()) / 60;
+
+          $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_ENTREGA = :entrega, ETAPA_PROCESS = :etapa, ENTREGA = :tentrega WHERE NUMERO_PEDIDO = :numPedido");
           $marcaData->bindParam(':numPedido', $_GET['id'] , PDO::PARAM_INT);
           $marcaData->bindParam(':entrega'  , $dataEntrega, PDO::PARAM_STR);
           $marcaData->bindParam(':etapa'    , $etapa      , PDO::PARAM_INT);
+          $marcaData->bindParam(':tentrega' , $entrega    , PDO::PARAM_INT);
           $marcaData->execute();
   
           header('Location: ./02SeletorLogistica.php');

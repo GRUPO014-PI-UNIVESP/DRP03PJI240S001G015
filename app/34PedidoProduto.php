@@ -7,7 +7,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
   let inactivityTime = function () {
     let time;window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress  = resetTimer;
     function deslogar() { <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php';?> window.location.href = 'LogOut.php'; }
-    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 69900000);}
+    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 600000);}
   }; inactivityTime();
 </script>
 <!-- Área Principal -->
@@ -59,7 +59,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             $query_material->execute(); ?>  
           <tbody> <?php            
             while($rowLista = $query_material->fetch(PDO::FETCH_ASSOC)){ 
-              $contador = 1; $capacidadeProcess = $rowLista['CAPAC_PROCESS'];?>
+              $contador = 1; $capacidadeProcess = $rowLista['CAPAC_PROCESS']; $nProduto = $rowLista['N_PRODUTO']; $tempoFabri = ceil($_SESSION['qtdeLote'] / $rowLista['CAPAC_PROCESS']);?>
               <tr>
                 <td scope="col" style="width: 30%; font-size: 13px; color: yellow"><?php 
                   $descrMaterial = $rowLista['MATERIAL_COMPONENTE'];
@@ -267,43 +267,53 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       $etapaProcess = 0; 
       $dataLimite   = date('Y-m-d', strtotime($_SESSION['dataAgendada']."- 3 days"));
       $nomeCliente  = $confirmaPedido['cliente']; 
-      $dataPedido   = date('Y-m-d');
+      $dataPedido   = date('Y-m-d H:i:s');
       $responsavel  = $_SESSION['nome_func'];
       $situacao     = 'PEDIDO REGISTRADO, PROVIDENCIANDO MATERIAIS';
+
+      $calcDatas = $connDB->prepare("SELECT * FROM historico_tempo WHERE ID_PRODUTO = :nProduto AND NUMERO_PEDIDO = 0");
+      $calcDatas->bindParam(':nProduto', $nProduto, PDO::PARAM_INT);
+      $calcDatas->execute(); $rowDatas = $calcDatas->fetch(PDO::FETCH_ASSOC);
+      $prazo = $rowDatas['COMPRA'] + $rowDatas['RECEBIMENTO'];
+      $dPrazo = date('Y-m-d H:i:s', strtotime($dataPedido."+$prazo minutes"));
+      $agenda   = $rowDatas['COMPRA'] + $rowDatas['RECEBIMENTO'] + $rowDatas['ANALISE_MATERIAL'];
+      $dAgendada = date('Y-m-d H:i:s', strtotime($dataPedido."+$agenda minutes"));
+      $entrega  = $rowDatas['COMPRA'] + $rowDatas['RECEBIMENTO'] + $rowDatas['ANALISE_MATERIAL'] + $rowDatas['ANALISE_PRODUTO'] + $rowDatas['ENTREGA'] + $tempoFabri;
+      $dEntrega = date('Y-m-d H:i:s', strtotime($dataPedido."+$entrega minutes"));
 
       $registraPedido = $connDB->prepare("INSERT INTO pedidos (NUMERO_PEDIDO, CLIENTE, PRODUTO, QTDE_PEDIDO, UNIDADE, CAPAC_PROCESS,
                                                   DATA_PEDIDO, DATA_AGENDA, DATA_ENTREGA, ENCARREGADO_PEDIDO, ETAPA_PROCESS, SITUACAO)
                                                  VALUES (:numPedido, :nomeCliente, :nomeProduto, :qtdePedido, :uniMed, :capacidade,
                                                   :dataPedido, :dataAgenda, :dataEntrega, :responsavel, :etapa, :situacao)");      
-      $registraPedido->bindParam(':numPedido'  , $numPedido               , PDO::PARAM_INT);
-      $registraPedido->bindParam(':nomeCliente', $nomeCliente             , PDO::PARAM_STR);
-      $registraPedido->bindParam(':nomeProduto', $nomeProduto             , PDO::PARAM_STR);
-      $registraPedido->bindParam(':qtdePedido' , $qtdeLote                , PDO::PARAM_STR);
-      $registraPedido->bindParam(':uniMed'     , $rowProduto['UNIDADE']   , PDO::PARAM_STR);
-      $registraPedido->bindParam(':capacidade' , $_SESSION['capacidade']  , PDO::PARAM_INT);
-      $registraPedido->bindParam(':dataPedido' , $dataPedido              , PDO::PARAM_STR);
-      $registraPedido->bindParam(':dataAgenda' , $_SESSION['dataAgendada'], PDO::PARAM_STR);
-      $registraPedido->bindParam(':dataEntrega', $_SESSION['dataEntrega'] , PDO::PARAM_STR); 
-      $registraPedido->bindParam(':responsavel', $responsavel             , PDO::PARAM_STR);    
-      $registraPedido->bindParam(':etapa'      , $etapaProcess            , PDO::PARAM_INT);      
-      $registraPedido->bindParam(':situacao'   , $situacao                , PDO::PARAM_STR);
+      $registraPedido->bindParam(':numPedido'  , $numPedido             , PDO::PARAM_INT);
+      $registraPedido->bindParam(':nomeCliente', $nomeCliente           , PDO::PARAM_STR);
+      $registraPedido->bindParam(':nomeProduto', $nomeProduto           , PDO::PARAM_STR);
+      $registraPedido->bindParam(':qtdePedido' , $qtdeLote              , PDO::PARAM_STR);
+      $registraPedido->bindParam(':uniMed'     , $rowProduto['UNIDADE'] , PDO::PARAM_STR);
+      $registraPedido->bindParam(':capacidade' , $_SESSION['capacidade'], PDO::PARAM_INT);
+      $registraPedido->bindParam(':dataPedido' , $dataPedido            , PDO::PARAM_STR);
+      $registraPedido->bindParam(':dataAgenda' , $dAgendada             , PDO::PARAM_STR);
+      $registraPedido->bindParam(':dataEntrega', $dEntrega              , PDO::PARAM_STR); 
+      $registraPedido->bindParam(':responsavel', $responsavel           , PDO::PARAM_STR);    
+      $registraPedido->bindParam(':etapa'      , $etapaProcess          , PDO::PARAM_INT);      
+      $registraPedido->bindParam(':situacao'   , $situacao              , PDO::PARAM_STR);
       $registraPedido->execute();
 
       $alocaFila = $connDB->prepare("INSERT INTO pedidos_fila (NUMERO_PEDIDO, DATA_AGENDA, PRODUTO, QTDE_LOTE, CAPAC_PROCESS, SITUACAO)
                                             VALUES (:numPedido, :dataFabri, :nomeProduto, :qtdeLote, :capaProcess, :situacao)");
-      $alocaFila->bindParam(':numPedido'  , $numPedido               , PDO::PARAM_INT);
-      $alocaFila->bindParam(':dataFabri'  , $_SESSION['dataAgendada'], PDO::PARAM_STR);      
-      $alocaFila->bindParam(':nomeProduto', $nomeProduto             , PDO::PARAM_STR);
-      $alocaFila->bindParam(':qtdeLote'   , $qtdeLote                , PDO::PARAM_STR);
-      $alocaFila->bindParam(':capaProcess', $_SESSION['capacidade']  , PDO::PARAM_STR);
-      $alocaFila->bindParam(':situacao'   , $situacao                , PDO::PARAM_STR);      
+      $alocaFila->bindParam(':numPedido'  , $numPedido             , PDO::PARAM_INT);
+      $alocaFila->bindParam(':dataFabri'  , $dAgendada             , PDO::PARAM_STR);      
+      $alocaFila->bindParam(':nomeProduto', $nomeProduto           , PDO::PARAM_STR);
+      $alocaFila->bindParam(':qtdeLote'   , $qtdeLote              , PDO::PARAM_STR);
+      $alocaFila->bindParam(':capaProcess', $_SESSION['capacidade'], PDO::PARAM_STR);
+      $alocaFila->bindParam(':situacao'   , $situacao              , PDO::PARAM_STR);      
       $alocaFila->execute();
      
       $completaCompra = $connDB->prepare("UPDATE materiais_compra SET DATA_AGENDA = :dataAgenda , DATA_PRAZO = :dataLimite
                                                  WHERE NUMERO_PEDIDO = :numPedido");       
-      $completaCompra->bindParam('dataAgenda', $_SESSION['dataAgendada'], PDO::PARAM_STR);
-      $completaCompra->bindParam('dataLimite', $dataLimite              , PDO::PARAM_STR);
-      $completaCompra->bindParam(':numPedido', $numPedido               , PDO::PARAM_INT);
+      $completaCompra->bindParam('dataAgenda', $dAgendada , PDO::PARAM_STR);
+      $completaCompra->bindParam('dataLimite', $dPrazo    , PDO::PARAM_STR);
+      $completaCompra->bindParam(':numPedido', $numPedido , PDO::PARAM_INT);
       $completaCompra->execute();
 
       $buscaCode = $connDB->prepare("SELECT N_PRODUTO FROM produtos WHERE PRODUTO = :nomeProd");

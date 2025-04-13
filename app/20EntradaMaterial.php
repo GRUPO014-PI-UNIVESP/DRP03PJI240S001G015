@@ -9,13 +9,13 @@ $responsavel = $_SESSION['nome_func'];
   let inactivityTime = function () {
     let time; window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress  = resetTimer;
     function deslogar() { <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php'; ?>window.location.href = 'LogOut.php'; }
-    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 6000000); }
+    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 600000); }
   }; inactivityTime();
 </script>
 <div class="main">
   <div class="container-fluid"><br>
     <form method="POST"><h5>Recebimento de Material</h5><br><h6>Dados do Material</h6> <?php
-      if(!empty($_GET['id'])){ $dataEntrada = date('Y-m-d');
+      if(!empty($_GET['id'])){ $dataEntrada = date('Y-m-d H:i');
         $mpEntra = $connDB->prepare("SELECT * FROM materiais_compra WHERE ID_COMPRA = :id");
         $mpEntra->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
         $mpEntra->execute();
@@ -23,8 +23,8 @@ $responsavel = $_SESSION['nome_func'];
         <div class="row g-2">
           <div class="col-md-2">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="dataEntrada" name="dataEntrada" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3);" value="<?php echo date('d/m/Y', strtotime($dataEntrada)) ?>" autofocus>
-              <label for="dataEntrada" style="color: aqua; font-size: 12px; background: none">Data de Recebimento</label><p style="font-size: 11px; color: grey">Atualize a data caso necessário</p>
+              <input type="text" class="form-control" id="dataEntrada" name="dataEntrada" style="font-weight: bolder; text-align: center; background: rgba(0,0,0,0.3);" value="<?php echo date('d/m/Y', strtotime($dataEntrada)) ?>" readonly>
+              <label for="dataEntrada" style="color: aqua; font-size: 12px; background: none">Data de Recebimento</label>
             </div>
           </div>
           <div class="col-md-2">
@@ -171,10 +171,27 @@ $responsavel = $_SESSION['nome_func'];
       //definição de hora local
       date_default_timezone_set('America/Sao_Paulo');
       $dataRecebe = date('Y-m-d H:i');
-      $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_recebe = :recebe, ETAPA_PROCESS = :etapa WHERE NUMERO_PEDIDO = :numPedido");
+      $buscaProd = $connDB->prepare("SELECT N_PRODUTO FROM produtos WHERE PRODUTO = :nomeProd");
+      $buscaProd->bindParam(':nomeProd', $rowMP['PRODUTO'], PDO::PARAM_STR);
+      $buscaProd->execute(); $rowProd = $buscaProd->fetch(PDO::FETCH_ASSOC);
+
+      $buscaRef = $connDB->prepare("SELECT RECEBIMENTO FROM historico_tempo WHERE ID_PRODUTO = :idProd");
+      $buscaRef->bindParam(':idProd', $rowProd['N_PRODUTO'], PDO::PARAM_INT);
+      $buscaRef->execute(); $rowRef = $buscaRef->fetch(PDO::FETCH_ASSOC);
+
+      $calcTempo = $connDB->prepare("SELECT T_COMPRA FROM historico_tempo WHERE NUMERO_PEDIDO = :numPedido");
+      $calcTempo->bindParam(':numPedido', $rowMP['NUMERO_PEDIDO'], PDO::PARAM_INT);
+      $calcTempo->execute(); $calcCompra = $calcTempo->fetch(PDO::FETCH_ASSOC);
+      
+      $dataC = new datetime($dataRecebe); 
+      $dataI = new datetime($calcCompra['T_COMPRA']);
+      $recebe = ($dataC->getTimestamp() - $dataI->getTimestamp()) / 60;
+
+      $marcaData = $connDB->prepare("UPDATE historico_tempo SET T_recebe = :recebe, ETAPA_PROCESS = :etapa, RECEBIMENTO = :difC WHERE NUMERO_PEDIDO = :numPedido");
       $marcaData->bindParam(':numPedido', $rowMP['NUMERO_PEDIDO'], PDO::PARAM_INT);
       $marcaData->bindParam(':recebe'   , $dataRecebe            , PDO::PARAM_STR);
       $marcaData->bindParam(':etapa'    , $etapa                 , PDO::PARAM_INT);
+      $marcaData->bindParam(':difC'     , $recebe                , PDO::PARAM_INT);
       $marcaData->execute();
 
       header('Location: ./02SeletorLogistica.php');

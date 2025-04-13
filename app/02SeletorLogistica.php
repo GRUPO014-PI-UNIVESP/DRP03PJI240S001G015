@@ -75,7 +75,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
             <h6>Lista de Produtos </h6>
             <div class="row g-1"><?php
               $query_pedido = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 6"); $query_pedido->execute(); 
-              while($rowPedido = $query_pedido->fetch(PDO::FETCH_ASSOC)){ $idPed = $rowPedido['ID_PEDIDO'];?>
+              while($rowPedido = $query_pedido->fetch(PDO::FETCH_ASSOC)){ $idPed = $rowPedido['NUMERO_PEDIDO'];?>
                 <div class="card text-bg-success mb-3" style="width: 35rem;">
                   <div class="card-body">
                     <div class="row g-1">

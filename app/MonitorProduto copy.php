@@ -39,57 +39,55 @@ $responsavel = $_SESSION['nome_func'];
           <th scope="col" style="width: 10%; text-align: center">Detalhes</th>
         </tr>
       </thead>
-      <?php $buscaLinhaTempo = $connDB->prepare("SELECT * FROM historico_tempo WHERE ETAPA_PROCESS < 7 AND NUMERO_PEDIDO > 0"); $buscaLinhaTempo->execute(); ?>
-      <tbody style="height: 75%; font-size: 11px;"><?php $clear1 = ''; $clear2 = ''; $clear3 = ''; $clear4 = ''; $clear5 = ''; $clear6 = ''; 
-        while($rowTempo = $buscaLinhaTempo->fetch(PDO::FETCH_ASSOC)){
+      <?php $query_pedido = $connDB->prepare("SELECT * FROM pedidos WHERE ETAPA_PROCESS < 8 ORDER BY DATA_PEDIDO ASC"); $query_pedido->execute(); ?>
+      <tbody style="height: 75%; font-size: 11px;"><?php 
+        while($rowPedido = $query_pedido->fetch(PDO::FETCH_ASSOC)){
+          //busca registro do pedido na tabela de histórico de tempos da atividade
+          $buscaHistorico = $connDB->prepare("SELECT * FROM historico_tempo WHERE NUMERO_PEDIDO = :numPedido");
+          $buscaHistorico->bindParam(':numPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);
+          $buscaHistorico->execute(); $rowHistorico = $buscaHistorico->fetch(PDO::FETCH_ASSOC);
 
           //busca registro do tempo de referência da atividade do produto
           $buscaReferencia = $connDB->prepare("SELECT * FROM historico_tempo WHERE ID_PRODUTO = :idProd AND NUMERO_PEDIDO = 0");
-          $buscaReferencia->bindParam('idProd', $rowTempo['ID_PRODUTO'], PDO::PARAM_INT);
+          $buscaReferencia->bindParam('idProd', $rowPedido['N_PRODUTO'], PDO::PARAM_INT);
           $buscaReferencia->execute(); $rowReferencia = $buscaReferencia->fetch(PDO::FETCH_ASSOC);
-
-          if($rowTempo['T_COMPRA'] != null || $rowTempo['T_COMPRA'] > 0 ){
-            if($rowTempo['COMPRA'] <= $rowReferencia['COMPRA']){ $clear1 = 'font-size:12px; text-align:center; color:black; background-color:limegreen;';}
-            if($rowTempo['COMPRA'] > $rowReferencia['COMPRA']) { $clear1 = 'font-size:12px; text-align:center; color:black; background-color:orange;'   ;}
+          if(!empty($rowHistorico['COMPRA']) && $rowHistorico['COMPRA'] != null && $rowHistorico['COMPRA'] != 0){
+            if($rowHistorico['COMPRA'] < $rowReferencia['COMPRA']){ $clear1 = 'font-size:12px; text-align:center; color:black; background-color:limegreen;';}
+            if($rowHistorico['COMPRA'] > $rowReferencia['COMPRA']){ $clear1 = 'font-size:12px; text-align:center; color:black; background-color:orange;'   ;}
           }
-          if($rowTempo['RECEBIMENTO'] != null || $rowTempo['RECEBIMENTO'] > 0 ){
-            if($rowTempo['RECEBIMENTO'] <= $rowReferencia['RECEBIMENTO']){ $clear2 = 'font-size:12px; text-align:center; color:black; background-color:limegreen;';}
-            if($rowTempo['RECEBIMENTO'] > $rowReferencia['RECEBIMENTO']) { $clear2 = 'font-size:12px; text-align:center; color:black; background-color:orange;'   ;}
+          if($rowHistorico['RECEBIMENTO'] != null){
+            if($rowHistorico['RECEBIMENTO'] <= $rowReferencia['RECEBIMENTO']){ $clear2 = 'font-size:12px; text-align:center; color:black; background-color:limegreen;';}
+            if($rowHistorico['RECEBIMENTO'] > $rowReferencia['RECEBIMENTO']){ $clear2 = 'font-size:12px; text-align:center; color:black; background-color:orange;'   ;}
           }
-          if($rowTempo['ANALISE_MATERIAL'] != null || $rowTempo['ANALISE_MATERIAL'] > 0 ){
-            if($rowTempo['ANALISE_MATERIAL'] <= $rowReferencia['ANALISE_MATERIAL']){ $clear3 = 'font-size:12px; text-align:center; color:black; background-color:limegreen;';}
-            if($rowTempo['ANALISE_MATERIAL'] > $rowReferencia['ANALISE_MATERIAL'] ){ $clear3 = 'font-size:12px; text-align:center; color:black; background-color:orange;'   ;}
+          if($rowHistorico['ANALISE_MATERIAL'] != null){
+            if($rowHistorico['ANALISE_MATERIAL'] <= $rowReferencia['ANALISE_MATERIAL']){ $clear3 = 'font-size:12px; text-align:center; color:black; background-color:limegreen;';}
+            if($rowHistorico['ANALISE_MATERIAL'] > $rowReferencia['ANALISE_MATERIAL']){ $clear3 = 'font-size:12px; text-align:center; color:black; background-color:orange;'   ;}
           }
-          if($rowTempo['FABRICACAO'] != null || $rowTempo['FABRICACAO'] > 0 ){
-            if($rowTempo['FABRICACAO'] <= $rowReferencia['FABRICACAO']){ $clear4 = 'font-size:12px; text-align:center; color:black; background-color:limegreen;';}
-            if($rowTempo['FABRICACAO'] > $rowReferencia['FABRICACAO']) { $clear4 = 'font-size:12px; text-align:center; color:black; background-color:orange;'   ;}
-          } 
-          if($rowTempo['ANALISE_PRODUTO'] != null || $rowTempo['ANALISE_PRODUTO'] > 0 ){
-            if($rowTempo['ANALISE_PRODUTO'] <= $rowReferencia['ANALISE_PRODUTO']){ $clear5 = 'font-size:12px; text-align:center; color:black; background-color:limegreen;';}
-            if($rowTempo['ANALISE_PRODUTO'] > $rowReferencia['ANALISE_PRODUTO']) { $clear5 = 'font-size:12px; text-align:center; color:black; background-color:orange;'   ;}
+          if($rowHistorico['FABRICACAO'] != null){
+            if($rowHistorico['FABRICACAO'] <= $rowReferencia['FABRICACAO']){ $clear4 = 'font-size:12px; text-align:center; color:black; background-color:limegreen;';}
+            if($rowHistorico['FABRICACAO'] > $rowReferencia['FABRICACAO']){ $clear4 = 'font-size:12px; text-align:center; color:black; background-color:orange;'   ;}
           }
-          if($rowTempo['ENTREGA'] != null || $rowTempo['ENTREGA'] > 0 ){
-            if($rowTempo['ENTREGA'] <= $rowReferencia['ENTREGA']){ $clear6 = 'font-size:12px; text-align:center; color:black; background-color:limegreen;';}
-            if($rowTempo['ENTREGA'] > $rowReferencia['ENTREGA']) { $clear6 = 'font-size:12px; text-align:center; color:black; background-color:orange;'   ;}
-          }  
+          if($rowHistorico['ANALISE_PRODUTO'] != null){
+            if($rowHistorico['ANALISE_PRODUTO'] <= $rowReferencia['ANALISE_PRODUTO']){ $clear5 = 'font-size:12px; text-align:center; color:black; background-color:limegreen;';}
+            if($rowHistorico['ANALISE_PRODUTO'] > $rowReferencia['ANALISE_PRODUTO']){ $clear5 = 'font-size:12px; text-align:center; color:black; background-color:orange;'   ;}
+          }
+          if($rowHistorico['ENTREGA'] != null){
+            if($rowHistorico['ENTREGA'] <= $rowReferencia['ENTREGA']){ $clear6 = 'font-size:12px; text-align:center; color:black; background-color:limegreen;';}
+            if($rowHistorico['ENTREGA'] > $rowReferencia['ENTREGA']){ $clear6 = 'font-size:12px; text-align:center; color:black; background-color:orange;'   ;}
+          }
           $exec  = 'font-size:12px; text-align:center; color:black     ; background-color:dodgerblue    ;';
           $wait  = 'font-size:12px; text-align:center; color:whitesmoke; background-color:lightslategrey;';
 
-          if($rowTempo['ETAPA_PROCESS'] == 0){ $a = $exec  ; $b = $wait  ; $c = $wait  ; $d = $wait  ; $e = $wait  ; $f = $wait  ; }
-          if($rowTempo['ETAPA_PROCESS'] == 1){ $a = $clear1; $b = $exec  ; $c = $wait  ; $d = $wait  ; $e = $wait  ; $f = $wait  ; } 
-          if($rowTempo['ETAPA_PROCESS'] == 2){ $a = $clear1; $b = $clear2; $c = $exec  ; $d = $wait  ; $e = $wait  ; $f = $wait  ; } 
-          if($rowTempo['ETAPA_PROCESS'] == 3){ $a = $clear1; $b = $clear2; $c = $clear3; $d = $exec  ; $e = $wait  ; $f = $wait  ; }
-          if($rowTempo['ETAPA_PROCESS'] == 4){ $a = $clear1; $b = $clear2; $c = $clear3; $d = $clear4; $e = $exec  ; $f = $wait  ; }
-          if($rowTempo['ETAPA_PROCESS'] == 5){ $a = $clear1; $b = $clear2; $c = $clear3; $d = $clear4; $e = $clear5; $f = $wait  ; }
-          if($rowTempo['ETAPA_PROCESS'] == 6){ $a = $clear1; $b = $clear2; $c = $clear3; $d = $clear4; $e = $clear5; $f = $clear6; }?>
+          if($rowPedido['ETAPA_PROCESS'] == 0){ $a = $exec  ; $b = $wait  ; $c = $wait  ; $d = $wait  ; $e = $wait  ; $f = $wait  ; }
+          if($rowPedido['ETAPA_PROCESS'] == 1){ $a = $clear1; $b = $exec  ; $c = $wait  ; $d = $wait  ; $e = $wait  ; $f = $wait  ; } 
+          if($rowPedido['ETAPA_PROCESS'] == 2){ $a = $clear1; $b = $clear2; $c = $exec  ; $d = $wait  ; $e = $wait  ; $f = $wait  ; } 
+          if($rowPedido['ETAPA_PROCESS'] == 3){ $a = $clear1; $b = $clear2; $c = $clear3; $d = $exec  ; $e = $wait  ; $f = $wait  ; }
+          if($rowPedido['ETAPA_PROCESS'] == 4){ $a = $clear1; $b = $clear2; $c = $clear3; $d = $clear4; $e = $exec  ; $f = $wait  ; }
+          if($rowPedido['ETAPA_PROCESS'] == 5){ $a = $clear1; $b = $clear2; $c = $clear3; $d = $clear4; $e = $clear5; $f = $wait  ; }
+          if($rowPedido['ETAPA_PROCESS'] == 6){ $a = $clear1; $b = $clear2; $c = $clear3; $d = $clear4; $e = $clear5; $f = $clear6; }?>
           <tr>
-            <td scope="col" style="width: 5%; text-align:right;"><?php
-            $buscaPedido = $connDB->prepare("SELECT * FROM pedidos WHERE NUMERO_PEDIDO = :numPedido");
-            $buscaPedido->bindParam(':numPedido', $rowTempo['NUMERO_PEDIDO'], PDO::PARAM_INT);
-            $buscaPedido->execute(); $rowPedido = $buscaPedido->fetch(PDO::FETCH_ASSOC);
-  
-
-              echo '<br>' . date('d/m/Y', strtotime($rowTempo['INICIO'])) . 
+            <td scope="col" style="width: 5%; text-align:right;"><?php 
+              echo '<br>' . date('d/m/Y', strtotime($rowPedido['DATA_PEDIDO'])) . 
               '<br>' . $rowPedido['NUMERO_PEDIDO'] ; ?></td>
             <td scope="col" style="width: 20%;                  "><?php echo '<br>' . $rowPedido['PRODUTO']     . '<br>' . $rowPedido['CLIENTE']; ?></td>
             <td scope="col" style="width: 5%; text-align:right;"><?php 

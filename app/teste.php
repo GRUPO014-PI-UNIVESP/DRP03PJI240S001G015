@@ -35,7 +35,7 @@ date_default_timezone_set('America/Sao_Paulo');
 <!-- Área Principal -->
   <div class="main">
     <?php
-      $busca = $connDB->prepare("SELECT * FROM historico_tempo WHERE ID_TEMPO = 4");
+      $busca = $connDB->prepare("SELECT * FROM historico_tempo WHERE ID_TEMPO = 12");
       $busca->execute(); $row = $busca->fetch(PDO::FETCH_ASSOC);
 
       $dataC = new datetime($row['T_COMPRA']); $dataI = new datetime($row['INICIO']); $diferenca = $dataI->diff($dataC);
@@ -71,7 +71,7 @@ date_default_timezone_set('America/Sao_Paulo');
       $total = $compra + $recebe + $anaMat + $fabri + $anaPro + $entrega;
 
       $grava = $connDB->prepare("UPDATE historico_tempo SET COMPRA = :compra, RECEBIMENTO = :recebe, ANALISE_MATERIAL = :anaMat, FABRICACAO = :fabri, ANALISE_PRODUTO = :anaPro, ENTREGA = :entrega, TOTAL = :total 
-                                        WHERE ID_TEMPO = 4");
+                                        WHERE ID_TEMPO = 12");
       $grava->bindParam(":compra" , $compra , PDO::PARAM_INT);
       $grava->bindParam(":recebe" , $recebe , PDO::PARAM_INT);
       $grava->bindParam(":anaMat" , $anaMat , PDO::PARAM_INT);

@@ -10,7 +10,7 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
       <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php'; ?>
       window.location.href = 'LogOut.php';
     }
-    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 69900000); }
+    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 600000); }
   }; inactivityTime();
 </script>
 <!-- Área Principal -->
