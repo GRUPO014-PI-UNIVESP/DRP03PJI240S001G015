@@ -18,23 +18,23 @@ $responsavel = $_SESSION['nome_func'];
 <style> .tabela{ width: 100%; height: 680px; overflow-y: scroll;} </style>
 <!-- Área Principal -->
 <div class="main">
-  <br>
-  <br>
-  <?php 
-  $nomeTabela = 'verde'; $novoID = 'ID_' . strtoupper($nomeTabela);
-  echo $novoID;
-  echo "<br>";
-  try{
-    $connDB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $query = "CREATE TABLE $nomeTabela ($novoID INT AUTO_INCREMENT PRIMARY KEY);";
-    $connDB->exec($query);
-  } catch(PDOException $e) {
-    echo 'Já existe esse nome, tente outro nome'; ?>
-    <div>
-      <br><br>
-      <button class="btn btn-danger" onclick="location.href='./CriarTabelas.php'">Reiniciar</button>
-    </div><?php
-  }
+  <form action="" method="POST">
 
+  </form>
+  <?php
+    $nomeTabela = 'verde';
+    $nomeColuna = strtoupper('COLUNA1');
+    $tipoDado   = 'DATETIME';
+    try{
+      $connDB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $addColuna = "ALTER TABLE $nomeTabela ADD COLUMN {$nomeColuna} {$tipoDado};";
+      $connDB->exec($addColuna);
+    } catch(PDOException $e) {
+      echo 'Já existe esse nome, tente outro nome'; ?>
+      <div>
+        <br><br>
+        <button class="btn btn-danger" onclick="location.href='./AlterarTabela.php'">Reiniciar</button>
+      </div><?php
+    }
   ?>
 </div>
