@@ -63,7 +63,7 @@ if (PHP_VERSION_ID < 80000) {
             {
                 fclose($this->handle);
             }
-            
+
             public function stream_lock($operation)
             {
                 return $operation ? flock($this->handle, $operation) : true;
