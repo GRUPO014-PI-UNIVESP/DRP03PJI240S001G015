@@ -50,7 +50,7 @@
         <br>
         <a style="margin-left: 045px;color:aquamarine" href="">Configurações do Sistema</a><br>
         <a style="margin-left: 080px;"                 href="./ConfigTabelaProcesso.php">Revisão de Tabela de Processos</a><br>
-        <a style="margin-left: 080px;"                 href="">.</a><br>
+        <a style="margin-left: 080px;"                 href="./ConfigurarEstrutura.php">Configuração de Tabela de Dados</a><br>
       </div> 
       <div class="col md-6">
         <!-- Lista do departamento da garantia da qualidade -->

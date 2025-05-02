@@ -22,6 +22,7 @@ $responsavel = $_SESSION['nome_func'];
 
   </form>
   <?php
+  /*
     $nomeTabela = 'verde';
     $nomeColuna = strtoupper('COLUNA1');
     $tipoDado   = 'DATETIME';
@@ -35,6 +36,6 @@ $responsavel = $_SESSION['nome_func'];
         <br><br>
         <button class="btn btn-danger" onclick="location.href='./AlterarTabela.php'">Reiniciar</button>
       </div><?php
-    }
+    } */
   ?>
 </div>

@@ -1,14 +1,10 @@
 <?php
 // inclusão do banco de dados e estrutura base da página web
-include_once './ConnectDB.php';
-include_once './EstruturaPrincipal.php';
-$_SESSION['posicao'] = 'Cadastro de Funcionário';
-include_once './RastreadorAtividades.php';
+include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSION['posicao'] = 'Cadastro de Funcionário'; include_once './RastreadorAtividades.php';
 
 // verifica o identificador do último registro
 $queryLast = $connDB->prepare("SELECT MAX(ID_FUNCIONARIO) AS ID_FUNCIONARIO FROM quadro_funcionarios");
-$queryLast->execute();
-$rowID = $queryLast->fetch(PDO::FETCH_ASSOC); $novoID = $rowID['ID_FUNCIONARIO'] + 1;
+$queryLast->execute(); $rowID = $queryLast->fetch(PDO::FETCH_ASSOC); $novoID = $rowID['ID_FUNCIONARIO'] + 1;
 
 // busca dos departamentos da tabela 'departamentos'
 $query_depto = $connDB->prepare("SELECT * FROM departamentos");
@@ -27,25 +23,21 @@ $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
 // verifica se foi digitado dados
 if(!empty($dados['submit'])){
-
-// busca dados cadastrados
-  $result = $connDB->prepare("SELECT NOME_FUNCIONARIO, DATA_NASCIMENTO
-                              FROM   quadro_funcionarios 
-                              WHERE  NOME_FUNCIONARIO = :nomeFunc AND DATA_NASCIMENTO = :dataNasc LIMIT 1");
-// atribui valor do campo para o link de dados :usuario
+  // busca dados cadastrados
+  $result = $connDB->prepare("SELECT NOME_FUNCIONARIO, DATA_NASCIMENTO FROM   quadro_funcionarios WHERE  NOME_FUNCIONARIO = :nomeFunc AND DATA_NASCIMENTO = :dataNasc LIMIT 1");
+  // atribui valor do campo para o link de dados :usuario
   $result->bindParam(':nomeFunc', $dados['nomeFunc'], PDO::PARAM_STR);
   $result->bindParam(':dataNasc', $dados['dataNasc'], PDO::PARAM_STR);
   $result->execute();
 
-// verifica se foi encontrado algum registro contendo nome e data de nascimento idênticos
+  // verifica se foi encontrado algum registro contendo nome e data de nascimento idênticos
   if(($result) AND ($result->rowCount() == 1)){
-
-// abre caixa de alerta com mensagem de erro
+  // abre caixa de alerta com mensagem de erro
     $mensagemErro = 'Erro: O nome e data nascimento correspondente já existe no banco de dados!';
     echo "<script type='text/javascript'>alert('$mensagemErro');</script>";
 
   }else{
-// atribuir valores dos campos para variáveis
+  // atribuir valores dos campos para variáveis
     $cargo       = $dados['cargo'];        $departamento = $dados['departamento']; $nomeFunc = strtoupper($dados['nomeFunc']);
     $idUser      = $geraIDuser;            $passUser     = $geraPassword;          $dataNasc = date('Y-m-d', strtotime($dados['dataNasc']));
     $responsavel = $_SESSION['nome_func']; $dataAdmi     = date('Y-m-d', strtotime($dados['dataAdmi']));
@@ -61,16 +53,16 @@ if(!empty($dados['submit'])){
     if(!empty($dados['cidade']))   {$cidade   = strtoupper($dados['cidade']);   }else{$cidade   = 'Nada Consta';}
     if(!empty($dados['uf']))       {$estado   = strtoupper($dados['uf']);       }else{$estado   = 'NC';}  
         
-// criptografar senha e usuário geradas
+  // criptografar senha e usuário geradas
     $usuario      = password_hash($geraIDuser  , PASSWORD_DEFAULT);
     $senha        = password_hash($geraPassword, PASSWORD_DEFAULT);
 
-// definir credencial de acordo com cargo
+  // definir credencial de acordo com cargo
     $query_cred = $connDB->prepare("SELECT CREDENCIAL FROM cargos WHERE CARGO = :cargo LIMIT 1");
     $query_cred->bindParam(':cargo', $dados['cargo'], PDO::PARAM_STR);
     $query_cred->execute();
     $result_cred = $query_cred->fetch(PDO::FETCH_ASSOC);
-    $credencial = $result_cred['CREDENCIAL'];
+    $credencial  = $result_cred['CREDENCIAL'];
 
     $registra = $connDB->prepare("INSERT INTO quadro_funcionarios (NOME_FUNCIONARIO, DATA_ADMISSAO, CARGO, DEPARTAMENTO,
                                   CREDENCIAL, USUARIO, SENHA, ID_USUARIO, SENHA_USUARIO, DATA_NASCIMENTO, CPF, RG, TELEFONE,
@@ -89,46 +81,26 @@ if(!empty($dados['submit'])){
     $registra->bindParam(':cplRes'      , $cplRes,       PDO::PARAM_STR);   $registra->bindParam(':bairro'      , $bairro,       PDO::PARAM_STR);
     $registra->bindParam(':cidade'      , $cidade,       PDO::PARAM_STR);   $registra->bindParam(':estado'      , $estado,       PDO::PARAM_STR);
     $registra->bindParam(':responsavel' , $responsavel,  PDO::PARAM_STR);
-
     $registra->execute();
     
     header('Location: ./07CadastroFuncionario.php');
   }
 }
 //se houver erro de entrada mostra erro na página
-if(isset($_SESSION['msg'])){
-   echo  $_SESSION['msg'];
-   unset($_SESSION['msg']);
-}
+if(isset($_SESSION['msg'])){ echo  $_SESSION['msg']; unset($_SESSION['msg']); }
 ?>
 <script>
   // verifica inatividade da página e fecha sessão
-  let inactivityTime = function () {
-    let time;
-    window.onload        = resetTimer;
-    document.onmousemove = resetTimer;
-    document.onkeypress  = resetTimer;
-    function deslogar() {
-      <?php
-        $_SESSION['posicao'] = 'Encerrado por inatividade';
-        include_once './RastreadorAtividades.php';
-      ?>
-      window.location.href = 'LogOut.php';
-     }
-    function resetTimer() {
-      clearTimeout(time);
-       time = setTimeout(deslogar, 600000);
-     }
-  };
-  inactivityTime();
+  let inactivityTime = function () { let time; window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress  = resetTimer;
+    function deslogar() { <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php'; ?> window.location.href = 'LogOut.php';  }
+    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 600000); }
+  }; inactivityTime();
 </script>
 <!-- Área Principal -->
   <div class="main">
     <div class="container">
       <p style="margin-left: 2%; font-size: 20px; color: whitesmoke">Departamento Administrativo - Cadastro de Novo Funcionário</p>
-
       <form class="row g-2" method="POST" action="#">
-
         <div class="col-md-2">
           <label for="idFunc" class="form-label" style="color:aqua; font-size: 10px">Cadastro No.</label>
           <input style="text-align: center; font-size: 12px; background: rgba(0,0,0,0.3)" type="number" class="form-control" id="idFunc" name="idFunc" value="<?php echo $novoID?>" readonly>
