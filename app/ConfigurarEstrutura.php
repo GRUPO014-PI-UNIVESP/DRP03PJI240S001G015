@@ -22,7 +22,7 @@ $responsavel = $_SESSION['nome_func'];
     document.getElementById("enviar").submit();
   }
 </script>
-<style> .tabela{ width: 98%; height: 200px; overflow-y: scroll;} </style>
+<style> .tabela{ width: 98%; height: 300px; overflow-y: scroll;} </style>
 <!-- Área Principal -->
 <div class="main"><br>
   <p style="font-size: 20px; color: whitesmoke;">Configuração da Estrutura para coleta de Dados do Sistema</p>
@@ -34,18 +34,22 @@ $responsavel = $_SESSION['nome_func'];
         <div class="col-md-1"></div>
         <div class="col-md-3">
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="novaTabela" id="adm" value="adm" onclick="submeterFormulario()"><label class="form-check-label" for="adm">Depto Administrativo</label>
+            <input class="form-check-input" type="radio" name="novaTabela" id="adm" value="adm" onclick="submeterFormulario()">
+            <label class="form-check-label" for="adm">Depto Administrativo</label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="novaTabela" id="log" value="log" onclick="submeterFormulario()"><label class="form-check-label" for="log">Depto de Logística</label>
+            <input class="form-check-input" type="radio" name="novaTabela" id="log" value="log" onclick="submeterFormulario()">
+            <label class="form-check-label" for="log">Depto de Logística</label>
           </div>
         </div>
         <div class="col-md-3">
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="novaTabela" id="gql" value="gql" onclick="submeterFormulario()"><label class="form-check-label" for="gql">Depto da Garantia de Qualidade </label>
+            <input class="form-check-input" type="radio" name="novaTabela" id="gql" value="gql" onclick="submeterFormulario()">
+            <label class="form-check-label" for="gql">Depto da Garantia de Qualidade </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="novaTabela" id="prd" value="prd" onclick="submeterFormulario()"><label class="form-check-label" for="prd">Depto de Produção</label>
+            <input class="form-check-input" type="radio" name="novaTabela" id="prd" value="prd" onclick="submeterFormulario()">
+            <label class="form-check-label" for="prd">Depto de Produção</label>
           </div>
         </div>
       </div>     
