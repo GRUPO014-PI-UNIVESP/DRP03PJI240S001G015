@@ -1,34 +1,25 @@
 <?php
 // inclusão do banco de dados e estrutura base da página web
-include_once './ConnectDB.php';
-include_once './EstruturaPrincipal.php';
-$_SESSION['posicao'] = 'Editor de Dados do Funcionário';
-include_once './RastreadorAtividades.php';
+include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSION['posicao'] = 'Editor de Dados do Funcionário'; include_once './RastreadorAtividades.php';
 
 // busca informações da tabela 'departamentos'
-$query_depto = $connDB->prepare("SELECT * FROM departamentos");
-$query_depto->execute();
+$query_depto = $connDB->prepare("SELECT * FROM departamentos"); $query_depto->execute();
+
 // busca informações da tabela 'cargos'
-$query_cargo = $connDB->prepare("SELECT * FROM cargos");
-$query_cargo->execute();
+$query_cargo = $connDB->prepare("SELECT * FROM cargos"); $query_cargo->execute();
 
 //verifica identificador do registro para busca no banco de dados
-if(!empty($_GET['id'])){
-
-  $id_edit   = $_GET['id'];
-  $queryUser = $connDB->prepare("SELECT * FROM quadro_funcionarios WHERE ID_FUNCIONARIO = $id_edit LIMIT 1");
-  $queryUser->execute();
-  $rowID     = $queryUser->fetch(PDO::FETCH_ASSOC);
+if(!empty($_GET['id'])){ $id_edit = $_GET['id'];
+  $queryUser = $connDB->prepare("SELECT * FROM quadro_funcionarios WHERE ID_FUNCIONARIO = $id_edit LIMIT 1"); $queryUser->execute(); $rowID = $queryUser->fetch(PDO::FETCH_ASSOC);
 }
 // capta os dados inseridos no formulário Login
 $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
 //verifica se foi digitado dados
 if(!empty($dados['submit'])){
-
   //atribuir valores dos campos para variáveis
-  $cargo       = strtoupper($dados['cargo']); $departamento = strtoupper($dados['departamento'])      ; $nomeFunc = strtoupper($dados['nomeFunc']);
-  $responsavel = $_SESSION['nome_func']     ; $dataNasc = date('Y-m-d', strtotime($dados['dataNasc'])); $dataAdmi = date('Y-m-d', strtotime($dados['dataAdmi']));
+  $cargo    = strtoupper($dados['cargo']); $departamento = strtoupper($dados['departamento']); $nomeFunc = strtoupper($dados['nomeFunc']); $responsavel = $_SESSION['nome_func'];
+  $dataNasc = date('Y-m-d', strtotime($dados['dataNasc'])); $dataAdmi = date('Y-m-d', strtotime($dados['dataAdmi']));
   
   if(!empty($dados['cpfFunc']))  {$cpf      = $dados['cpfFunc'];              }else{$cpf      = 'Nada Consta';}
   if(!empty($dados['rgFunc']))   {$rg       = $dados['rgFunc'];               }else{$rg       = 'Nada Consta';}
@@ -48,12 +39,9 @@ if(!empty($dados['submit'])){
   $result_cred = $query_cred->fetch(PDO::FETCH_ASSOC);
   $credencial = $result_cred['CREDENCIAL'];
 
-  $registra = $connDB->prepare("UPDATE quadro_funcionarios 
-                                SET    NOME_FUNCIONARIO = :nomeFunc, DATA_ADMISSAO = :dataAdmi, CARGO = :cargo, DEPARTAMENTO = :departamento, CREDENCIAL = :credencial, 
-                                       DATA_NASCIMENTO = :dataNasc, CPF = :cpf, RG = :rg, TELEFONE = :telefone, EMAIL = :email, RUA_RES = :ruaRes, NUM_RES = :numRes, 
-                                       COMPLEMENTO = :cplRes, BAIRRO = :bairro, CIDADE = :cidade, UF = :estado, RESPONSAVEL_CADASTRO = :responsavel 
-                                WHERE  ID_FUNCIONARIO = :idFunc");
-
+  $registra = $connDB->prepare("UPDATE quadro_funcionarios SET NOME_FUNCIONARIO = :nomeFunc, DATA_ADMISSAO = :dataAdmi, CARGO = :cargo, DEPARTAMENTO = :departamento, CREDENCIAL = :credencial, 
+                                       DATA_NASCIMENTO = :dataNasc, CPF = :cpf, RG = :rg, TELEFONE = :telefone, EMAIL = :email, RUA_RES = :ruaRes, NUM_RES = :numRes, COMPLEMENTO = :cplRes,
+                                       BAIRRO = :bairro, CIDADE = :cidade, UF = :estado, RESPONSAVEL_CADASTRO = :responsavel WHERE  ID_FUNCIONARIO = :idFunc");
   $registra->bindParam(':nomeFunc'    , $nomeFunc   , PDO::PARAM_STR);   $registra->bindParam(':dataAdmi'    , $dataAdmi    , PDO::PARAM_STR);
   $registra->bindParam(':cargo'       , $cargo      , PDO::PARAM_STR);   $registra->bindParam(':departamento', $departamento, PDO::PARAM_STR);
   $registra->bindParam(':credencial'  , $credencial , PDO::PARAM_INT);   $registra->bindParam(':dataNasc'    , $dataNasc    , PDO::PARAM_STR);
@@ -63,37 +51,17 @@ if(!empty($dados['submit'])){
   $registra->bindParam(':cplRes'      , $cplRes     , PDO::PARAM_STR);   $registra->bindParam(':bairro'      , $bairro      , PDO::PARAM_STR);
   $registra->bindParam(':cidade'      , $cidade     , PDO::PARAM_STR);   $registra->bindParam(':estado'      , $estado      , PDO::PARAM_STR);
   $registra->bindParam(':responsavel' , $responsavel, PDO::PARAM_STR);   $registra->bindParam(':idFunc'      , $id_edit     , PDO::PARAM_INT);
-
-  $registra->execute();
-  
-  header('Location: ./06QuadroFuncionarios.php');
+  $registra->execute(); header('Location: ./06QuadroFuncionarios.php');
 }
 //se houver erro de entrada mostra erro na página
-if(isset($_SESSION['msg'])){
-   echo  $_SESSION['msg'];
-   unset($_SESSION['msg']);
-}
+if(isset($_SESSION['msg'])){ echo  $_SESSION['msg']; unset($_SESSION['msg']); }
 ?>
 <script>
   // verifica inatividade da página e fecha sessão
-  let inactivityTime = function () {
-    let time;
-    window.onload        = resetTimer;
-    document.onmousemove = resetTimer;
-    document.onkeypress  = resetTimer;
-    function deslogar() {
-      <?php
-        $_SESSION['posicao'] = 'Encerrado por inatividade';
-        include_once './RastreadorAtividades.php';
-      ?>
-      window.location.href = 'LogOut.php';
-     }
-    function resetTimer() {
-      clearTimeout(time);
-       time = setTimeout(deslogar, 600000);
-     }
-  };
-  inactivityTime();
+  let inactivityTime = function () { let time; window.onload        = resetTimer; document.onmousemove = resetTimer; document.onkeypress  = resetTimer;
+    function deslogar() { <?php $_SESSION['posicao'] = 'Encerrado por inatividade'; include_once './RastreadorAtividades.php'; ?> window.location.href = 'LogOut.php'; }
+    function resetTimer() { clearTimeout(time); time = setTimeout(deslogar, 600000); }
+  }; inactivityTime();
 </script>
 <!-- Área Principal -->
   <div class="main">

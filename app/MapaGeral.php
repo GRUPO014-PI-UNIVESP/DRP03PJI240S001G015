@@ -1,12 +1,6 @@
 <?php
   // faz requisição da estrutura base da págima do sistema
   include_once './EstruturaPrincipal.php'; $_SESSION['posicao'] = 'Mapa Geral'; include_once './RastreadorAtividades.php';
-
-  // Verifica compra agendada com pedidos cancelados ou descartados
-  $query_compras = $connDB->prepare("SELECT * FROM materiais_compra WHERE ETAPA_PROCESS = 0"); $query_compras->execute();
-  while($elimina = $query_compras->fetch(PDO::FETCH_ASSOC) ){
-
-  }
 ?>
 <script>
   // verifica inatividade da página e fecha sessão
