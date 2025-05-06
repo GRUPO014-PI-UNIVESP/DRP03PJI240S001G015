@@ -159,7 +159,7 @@ $verificaID->execute(); $numeroID = $verificaID->fetch(PDO::FETCH_ASSOC); $_SESS
             $i = 1;
             $e[1] = 'NUMERO DO PEDIDO'; $c[1] = 'NUMERO_PEDIDO'; $t[1] = 'INT'     ; $d[1] = 'Numero de pedido de um produto';
             $e[2] = 'ID DO PEDIDO'    ; $c[2] = 'ID_PEDIDO'    ; $t[2] = 'INT'     ; $d[2] = 'Numero de identificação de um produto';
-            $e[1] = 'DATA DO REGISTRO'; $c[3] = 'DATA_REGISTRO'; $t[3] = 'DATETIME'; $d[3] = 'Coleta data do sistema automaticamente sobre a data de registro';
+            $e[3] = 'DATA DO REGISTRO'; $c[3] = 'DATA_REGISTRO'; $t[3] = 'DATETIME'; $d[3] = 'Coleta data do sistema automaticamente sobre a data de registro';
 
             for($i = 1; $i <=3; $i++){
               $regCampo = $connDB->prepare("INSERT INTO estrutura_campos (ID_ESTRUTURA, ETIQUETA, TIPO, CAMPO, DESCRICAO) 
