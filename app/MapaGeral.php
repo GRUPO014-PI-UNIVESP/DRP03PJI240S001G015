@@ -65,7 +65,8 @@
         <br><br>
         <!-- Lista do departamento de produção -->
         <a style="margin-left: 010px;color:aliceblue"  href="">Painel da Produção</a><br>
-        <a style="margin-left: 045px;color:aquamarine" href="<?php echo $acesso40 ?>">Gerência</a><br>
+        <a style="margin-left: 045px;color:aquamarine" href="<?php echo $acesso40 ?>">Execução de Produção</a><br>
+        <a style="margin-left: 080px;"                 href="./AdicionaisProducao.php">Coleta de Dados Adicionais</a><br>
         <br>
         <a style="margin-left: 045px;color:aquamarine" href="">Situação da Planta</a><br>
         <br>

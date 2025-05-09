@@ -20,10 +20,10 @@ $msg->bindParam(':receptor', $_SESSION['nome_func'], PDO::PARAM_STR); $msg->exec
     $acesso13 = './30CadastroCliente.php'      ; $acesso14 = './31CadastroProduto.php'    ; $acesso15 = './23CadastroMaterial.php'   ; $acesso16 = './22CompraMaterial.php';
     $acesso17 = './39RelatorioVendas.php'      ; $acesso18 = './24RelatorioCompras.php'   ; $acesso19 = './25CadastroFornecedor.php' ;
   }else{ $acesso1  = ''; $acesso2  = ''; $acesso3  = ''; $acesso4  = ''; $acesso5  = ''; $acesso7  = ''; $acesso8  = ''; $acesso9  = ''; $acesso10 = ''; $acesso11 = '';
-        $acesso12 = ''; $acesso13 = ''; $acesso14 = ''; $acesso15 = ''; $acesso16 = ''; $acesso17 = ''; $acesso18 = ''; $acesso19 = '';}
+         $acesso12 = ''; $acesso13 = ''; $acesso14 = ''; $acesso15 = ''; $acesso16 = ''; $acesso17 = ''; $acesso18 = ''; $acesso19 = '';}
 
   if($_SESSION['departamento'] === 'GARANTIA DA QUALIDADE'|| $_SESSION['credencial'] >= 4){
-    $acesso20 = './01SeletorGQualidade.php'; $acesso21 = './40RegistroAnalise.php'  ;  
+     $acesso20 = './01SeletorGQualidade.php'; $acesso21 = './40RegistroAnalise.php'  ;  
   }else{ $acesso20 = ''; $acesso21 = ''; }
 
   if($_SESSION['departamento'] === 'LOGÍSTICA' || $_SESSION['credencial'] >= 4){ $acesso30 = './02SeletorLogistica.php';}else{ $acesso30 = ''; }
