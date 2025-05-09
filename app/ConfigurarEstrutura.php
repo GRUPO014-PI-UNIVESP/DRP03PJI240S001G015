@@ -107,8 +107,9 @@ $responsavel = $_SESSION['nome_func'];
         </tbody>
       </table>
     </div><br>
-    <button class="btn btn-outline-primary" onclick="location.href='./CriarNovaTabela.php'">Criar Nova Tabela</button>
-    <button class="btn btn-outline-danger"  onclick="location.href='./MapaGeral.php'">Descartar e Voltar</button>
+    <button class="btn btn-outline-primary"   onclick="location.href='./CriarNovaTabela.php'">Criar Nova Tabela</button>
+    <button class="btn btn-outline-danger"    onclick="location.href='./MapaGeral.php'">Descartar e Voltar</button>
+    <button class="btn btn-outline-secondary" onclick="location.href='./TestadorGerador.php'">Testador</button>
     <?php
   }?>
 </div>

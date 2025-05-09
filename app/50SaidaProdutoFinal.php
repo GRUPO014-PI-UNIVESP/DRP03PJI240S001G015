@@ -44,15 +44,17 @@ include_once './ConnectDB.php'; include_once './EstruturaPrincipal.php'; $_SESSI
               <input style="font-weight: bold; font-size: 18px; background: rgba(0,0,0,0.3); text-align: center" type="date" class="form-control" id="dataS" name="dataS" required>
             </div>
             <div class="col-md-9"><br>
-            <div class="form-floating"><?php $depto = 'LOGÍSTICA';
-              $query_analista = $connDB->prepare("SELECT NOME_FUNCIONARIO FROM quadro_funcionarios WHERE DEPARTAMENTO = :depto");
-              $query_analista->bindParam(':depto', $depto, PDO::PARAM_STR); $query_analista->execute(); ?>
-              <select class="form-select" id="colaborador" name="colaborador" aria-label="Floating label select example" style="background: rgba(0,0,0,0.3);">
-                <option style="font-size: 14px; color: black; background: rgba(0,0,0,0.3)" selected>Selecione o nome do encarregado</option><?php
+              <div class="form-floating"><?php $depto = 'LOGÍSTICA';
+                $query_analista = $connDB->prepare("SELECT NOME_FUNCIONARIO FROM quadro_funcionarios WHERE DEPARTAMENTO = :depto");
+                $query_analista->bindParam(':depto', $depto, PDO::PARAM_STR); $query_analista->execute(); ?>
+                <select class="form-select" id="colaborador" name="colaborador" aria-label="Floating label select example" style="background: rgba(0,0,0,0.3);">
+                  <option style="font-size: 14px; color: black; background: rgba(0,0,0,0.3)" selected>Selecione o nome do encarregado</option><?php
                   while($rowAna = $query_analista->fetch(PDO::FETCH_ASSOC)){ ?>
-                  <option style="font-size: 14px; color: black; background: rgba(0,0,0,0.3)"><?php echo $rowAna['NOME_FUNCIONARIO']; ?></option><?php 
-                } ?>
-              </select><label for="colaborador" style="font-size: 12px; color:aqua">Encarregado pelo Transbordo</label>
+                    <option style="font-size: 14px; color: black; background: rgba(0,0,0,0.3)"><?php echo $rowAna['NOME_FUNCIONARIO']; ?></option><?php 
+                  } ?>
+                </select>
+                <label for="colaborador" style="font-size: 12px; color:aqua">Encarregado pelo Transbordo</label>
+              </div>
             </div>
             <div class="col-md-2"><br>
               <input class="btn btn-primary" type="submit" id="armazem" name="armazem" value="Confirmar" style="width: 180px">
