@@ -48,21 +48,14 @@ if(!empty($_GET['id'])){
           </tr>
         </thead>
         <tbody class="table-group-divider" style="height: 75%; font-size: 11px;"><?php
-          $novaEtiq = ''; $novoTipo = ''; $novoSize = 0; $novaDesc = ''; $novoCamp = 'Definido Automaticamente';
+          $tipo = ''; $novaEtiq = ''; $novoTipo = ''; $novoSize = null; $novaDesc = ''; $novoCamp = 'Definido Automaticamente';
           $buscaStruc = $connDB->prepare("SELECT * FROM estrutura_campos WHERE ID_ESTRUTURA = :strucColumn");
           $buscaStruc->BINDpARAM(':strucColumn', $_SESSION['ID_TABELA'], PDO::PARAM_INT);
           $buscaStruc->execute();
-          while($rowStruc = $buscaStruc->fetch(PDO::FETCH_ASSOC)){
-            switch($rowStruc['TIPO']){
-              case 'INT'      : $tipo = 'Numérico Inteiro'; break;
-              case 'DATETIME' : $tipo = 'Data e Hora'     ; break;
-              case 'VARCHAR'  : $tipo = 'Alfanumérico'    ; break;
-              case 'FLOAT'    : $tipo = 'Monetário'       ; break;
-            }
-            ?>
+          while($rowStruc = $buscaStruc->fetch(PDO::FETCH_ASSOC)){  ?>
             <tr>
               <td scope="col" style="width: 15%;"><?php echo strtoupper($rowStruc['ETIQUETA']) ?></td>
-              <td scope="col" style="width: 15%;"><?php echo $rowStruc['TIPO'] . ' [' . $tipo . '] ' ?></td>
+              <td scope="col" style="width: 15%;"><?php echo $rowStruc['TIPO'] ?></td>
               <td scope="col" style="width: 08%; text-align: right;"><?php echo $rowStruc['TAMANHO'] ?></td>
               <td scope="col" style="width: 15%;"><?php echo $rowStruc['CAMPO'] ?></td>
               <td scope="col" style="width: 50%;"><?php echo $rowStruc['DESCRICAO'] ?></td>
@@ -113,29 +106,40 @@ if(!empty($_GET['id'])){
   </form><?php
     $captaNovo = filter_input_array(INPUT_POST, FILTER_DEFAULT);
     if(!empty($captaNovo['adicionar'])){
-      if($captaNovo['novoTipo'] == 'INT'     && $captaNovo['novoSize'] > 0){ $novoTipo = strtoupper($captaNovo['novoTipo'] . '(' .  $captaNovo['novoSize'] . ')'); } else {$novoTipo = strtoupper($captaNovo['novoTipo']);}
-      if($captaNovo['novoTipo'] == 'VARCHAR' && $captaNovo['novoSize'] > 0){ $novoTipo = strtoupper($captaNovo['novoTipo'] . '(' .  $captaNovo['novoSize'] . ')'); }
+      if($captaNovo['novoTipo'] == 'INT'     && $captaNovo['novoSize'] > 0){
+        $novoTipo = strtoupper($captaNovo['novoTipo'] . '(' .  $captaNovo['novoSize'] . ')');
+      } else {$novoTipo = strtoupper($captaNovo['novoTipo']);}
+      if($captaNovo['novoTipo'] == 'VARCHAR' && $captaNovo['novoSize'] > 0){
+        $novoTipo = strtoupper($captaNovo['novoTipo'] . '(' .  $captaNovo['novoSize'] . ')');
+      }
 
       $vUltimo = $connDB->prepare("SELECT MAX(ID) AS IDMAX FROM estrutura_campos");
       $vUltimo->execute(); $ultimoID = $vUltimo->fetch(PDO::FETCH_ASSOC);
 
-      $campoDef = strtoupper($captaNovo['novoTipo'] . $ultimoID['IDMAX'] +1) ;
-      $nomeTabela = strtolower($rowTabela['NOME_TABELA']);
-      $tipoDado   = strtoupper($novoTipo);
+      $campoDef     = strtoupper($captaNovo['novoTipo'] . $ultimoID['IDMAX'] +1) ;
+      $nomeTabela   = strtolower($rowTabela['NOME_TABELA']);
+      $tipoDado     = strtoupper($novoTipo);
       $novaEtiqueta = strtoupper($captaNovo['novaEtiq']);
       try{
         $connDB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $addColuna = "ALTER TABLE $nomeTabela ADD COLUMN {$campoDef} {$tipoDado};";
         $connDB->exec($addColuna);
 
-        $atualizaEstrutura = $connDB->prepare("INSERT INTO estrutura_campos (ID_ESTRUTURA, ETIQUETA, TIPO, TAMANHO, CAMPO, DESCRICAO) VALUES (:idStruc, :etiq, :tipo, :tama, :camp, :descr)");
+        $nCampo = $connDB->prepare("SELECT MAX(N_CAMPO) AS ULTIMO_CAMPO FROM estrutura_campos WHERE ID_ESTRUTURA = :idStruc");
+        $nCampo->bindParam(':idStruc', $_SESSION['ID_TABELA'], PDO::PARAM_INT);
+        $nCampo->execute(); $ultimo = $nCampo->fetch(PDO::FETCH_ASSOC); $novoC = $ultimo['ULTIMO_CAMPO'] + 1; $inicial = substr($novoTipo, 0, 1);
+
+        $atualizaEstrutura = $connDB->prepare("INSERT INTO estrutura_campos (ID_ESTRUTURA, ETIQUETA, CODIGO, TIPO, TAMANHO, N_CAMPO, CAMPO, DESCRICAO) VALUES (:idStruc, :etiq, :code :tipo, :tama, :novoC, :camp, :descr)");
         $atualizaEstrutura->bindParam(':idStruc', $_SESSION['ID_TABELA'], PDO::PARAM_INT);
         $atualizaEstrutura->bindParam(':etiq'   , $novaEtiqueta         , PDO::PARAM_STR);
+        $atualizaEstrutura->bindParam(':code'   , $inicial              , PDO::PARAM_STR);
         $atualizaEstrutura->bindParam(':tipo'   , $novoTipo             , PDO::PARAM_STR);
         $atualizaEstrutura->bindParam(':tama'   , $captaNovo['novoSize'], PDO::PARAM_INT);
+        $atualizaEstrutura->bindParam(':novoC'  , $novoC                , PDO::PARAM_INT);
         $atualizaEstrutura->bindParam(':camp'   , $campoDef             , PDO::PARAM_STR);
         $atualizaEstrutura->bindParam(':descr'  , $captaNovo['novoDesc'], PDO::PARAM_STR);
         $atualizaEstrutura->execute();
+        $tipo = ''; $novaEtiq = ''; $novoTipo = ''; $novoSize = null; $novaDesc = ''; $novoCamp = 'Definido Automaticamente';
 
         header('Location: ./AlterarTabela.php');
 
