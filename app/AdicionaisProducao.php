@@ -8,7 +8,7 @@ $nPedido = '';
  ?>
 <!-- Área Principal -->
 <div class="main">
-  <br><p style="font-size: 20px; color: whitesmoke">Adicionar Dados Complementares de Produção</p><br>
+  <br><p style="font-size: 20px; color: whitesmoke">Dados Complementares de Produção</p><br>
   <form id="addProd" method="POST">
     <div class="row g-1">
       <div class="col-md-2">
@@ -34,3 +34,4 @@ $nPedido = '';
   function submeterFormulario() { document.getElementById("enviar").submit(); }
 </script>
 <style>  .tabela{ width: 100%; height: 480px; overflow-y: scroll;} </style>
+  

@@ -58,7 +58,7 @@ $verificaID->execute(); $numeroID = $verificaID->fetch(PDO::FETCH_ASSOC); $_SESS
           <textarea class="form-control" id="descr" name="descr" style="font-size: 14px; height: 150px; width: 450px; background: rgba(0,0,0,0.3);"></textarea>
           <label for="descr" style="color: aqua; font-size: 12px; background: none">Descrição do Objetivo da Tabela</label>
         </div>
-        <p style="font-size: 10px; color: grey">Tamanho máximo de 250 caracteres</p>
+        <p style="font-size: 10px; color: grey">Tamanho máximo de 150 caracteres</p>
       </div>
       <div class="col-md-8"></div>
       <div class="col-md-2">

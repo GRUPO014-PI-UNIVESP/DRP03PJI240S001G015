@@ -33,75 +33,144 @@
 ?>
 <!-- Área Principal -->
 <div class="main">
-  <br><p style="font-size: 20px; color: whitesmoke">Adicionar Dados Complementares de Produção</p><br>
+  <br><p style="font-size: 20px; color: whitesmoke">Dados Complementares de Produção</p><br>
   <div class="row g-2">
     <div class="col-md-2">
         <label for="nPedido" class="form-label" style="font-size: 10px; color:aqua">Número do Pedido</label>
-        <input style="font-weight: bold; font-size: 18px; background: rgba(0,0,0,0.3); text-align: center; width: 160px; color: yellow" 
+        <input style="font-weight: bold; font-size: 13px; background: rgba(0,0,0,0.3); text-align: center; width: 160px; color: yellow" 
                type="text" class="form-control" id="nPedido" name="nPedido" value="<?php echo $rowPedido['NUMERO_PEDIDO'] ?>" disabled>
     </div>
     <div class="col-md-2">
         <label for="nPedido" class="form-label" style="font-size: 10px; color:aqua">Quantidade</label>
-        <input style="font-weight: bold; font-size: 18px; background: rgba(0,0,0,0.3); text-align: right; width: 160px; color: yellow" 
+        <input style="font-weight: bold; font-size: 13px; background: rgba(0,0,0,0.3); text-align: right; width: 160px; color: yellow" 
                type="text" class="form-control" id="nPedido" name="nPedido"
                value="<?php echo number_format($rowPedido['QTDE_PEDIDO'],0,',','.') . ' ' . $rowPedido['UNIDADE'] ?>" disabled>
     </div>
     <div class="col-md-7">
         <label for="nPedido" class="form-label" style="font-size: 10px; color:aqua">Produto</label>
-        <input style="font-weight: bold; font-size: 18px; background: rgba(0,0,0,0.3); text-align: left; color: yellow" 
+        <input style="font-weight: bold; font-size: 13px; background: rgba(0,0,0,0.3); text-align: left; color: yellow" 
                type="text" class="form-control" id="nPedido" name="nPedido" value="<?php echo $rowPedido['PRODUTO'] ?>" disabled>
     </div>
     <div class="col-md-1"></div>
     <div class="col-md-2">
         <label for="nPedido" class="form-label" style="font-size: 10px; color:aqua">Numero do Lote</label>
-        <input style="font-weight: bold; font-size: 18px; background: rgba(0,0,0,0.3); text-align: center; width: 160px; color: yellow" 
+        <input style="font-weight: bold; font-size: 13px; background: rgba(0,0,0,0.3); text-align: center; width: 160px; color: yellow" 
                type="text" class="form-control" id="nPedido" name="nPedido" value="<?php echo $rowProd['NUMERO_LOTE'] ?>" disabled>
     </div>
     <div class="col-md-2">
         <label for="nPedido" class="form-label" style="font-size: 10px; color:aqua">Data de Fabricação</label>
-        <input style="font-weight: bold; font-size: 18px; background: rgba(0,0,0,0.3); text-align: center; width: 160px; color: yellow" 
+        <input style="font-weight: bold; font-size: 13px; background: rgba(0,0,0,0.3); text-align: center; width: 160px; color: yellow" 
                type="text" class="form-control" id="nPedido" name="nPedido" value="<?php echo date('d.m.Y',strtotime($rowProd['DATA_FABRI'])) ?>" disabled>
     </div>
   </div><br>
-  <div class="row g-2">
-    <div class="col-md-2"></div>
-    <di class="col-md-6">
-      <div class="tabela table-responsive">
-        <table class="table table-dark table-bordered">
-          <thead style="font-size: 12px">
-            <tr>
-              <th scope="col" style="width: 15%; text-align: center;">Etiqueta do Campo</th>
-              <th scope="col" style="width: 15%; text-align: center;">Valor</th>
-            </tr>
-          </thead>
-          <tbody class="table-group-divider" style="height: 75%; font-size: 11px;"><?php
-            $buscaStruc = $connDB->prepare("SELECT * FROM estrutura_campos WHERE ID_ESTRUTURA = :strucColumn AND N_CAMPO > 2");
-            $buscaStruc->bindParam(':strucColumn', $rowTab['ID_ESTRUTURA'], PDO::PARAM_INT);
-            $buscaStruc->execute();
-            while($rowStruc = $buscaStruc->fetch(PDO::FETCH_ASSOC)){ $i = 1;
-              $sql0 = 'SELECT ' . $rowStruc['CAMPO'] . ' FROM ' . $rowTab['NOME_TABELA'] . ' WHERE NUMERO_PEDIDO = :nPedido';
-              $buscaValor = $connDB->prepare($sql0);
-              $buscaValor->bindParam(':nPedido', $_SESSION['nPedido'], PDO::PARAM_INT);
-              $buscaValor->execute();
-              $rowValor = $buscaValor->fetch(PDO::FETCH_ASSOC); ?>
-              <tr>
-                <td scope="col" style="width: 15%;"><?php echo $rowStruc['ETIQUETA'] ?></td>
-                <td scope="col" style="width: 15%;"><?php echo $rowValor[$rowStruc['CAMPO']] ?></td>
-              </Tr> <?php
-            } ?>              
-          </tbody>
-          <tfoot>
-            <tr>
-              <td scope="col" style="width: 15%;"></td>
-              <td scope="col" style="width: 15%;"></td>
-            </tr>
-          </tfoot>
-        </table>
+  <p style="font-size: 20px; color: whitesmoke">Dados Operacionais Registrados</p><br><?php
+  $sql0 = 'SELECT * FROM estrutura_campos WHERE ID_ESTRUTURA = :idStruc AND N_CAMPO > 2';
+  $querySql0 = $connDB->prepare($sql0);
+  $querySql0->bindParam(':idStruc', $rowTab['ID_ESTRUTURA'], PDO::PARAM_INT);
+  $querySql0->execute(); ?>
+  <div class="row g-2"><?php
+    while($rowSql0 = $querySql0->fetch(PDO::FETCH_ASSOC)){ $i = 3;
+      $sql1 = 'SELECT ' . $rowSql0['CAMPO'] . ' FROM ' . $rowTab['NOME_TABELA'] . ' WHERE NUMERO_PEDIDO = :nPedido';
+      $querySql1 = $connDB->prepare($sql1);
+      $querySql1->bindParam(':nPedido', $rowPedido['NUMERO_PEDIDO'], PDO::PARAM_INT);
+      $querySql1->execute(); $rowSql1 = $querySql1->fetch(PDO::FETCH_ASSOC);
+      switch($rowSql0['CODIGO']){
+        case 'I' : ?> <div class="col-md-2">
+                        <label for="<?php echo $rowSql0['CODIGO'] . $i; ?>" class="form-label" style="font-size: 10px; color:aqua"><?php echo $rowSql0['ETIQUETA'] ?></label>
+                        <input style="font-weight: bold; font-size: 13px; background: rgba(0,0,0,0.3); text-align: right; width: 160px;" type="number" class="form-control" 
+                        id="<?php echo $rowSql0['CODIGO'] . $i; ?>" name="<?php echo $rowSql0['CODIGO'] . $i; ?>" value="<?php echo $rowSql1[$rowSql0['CAMPO']] ?>" disabled>
+                      </div><?php break;
+        case 'F' : ?> <div class="col-md-2">
+                        <label for="<?php echo $rowSql0['CODIGO'] . $i; ?>" class="form-label" style="font-size: 10px; color:aqua"><?php echo $rowSql0['ETIQUETA'] ?></label>
+                        <input style="font-weight: bold; font-size: 13px; background: rgba(0,0,0,0.3); text-align: right; width: 160px;" type="number" inputmode="decimal" class="form-control" 
+                        id="<?php echo $rowSql0['CODIGO'] . $i; ?>" name="<?php echo $rowSql0['CODIGO'] . $i; ?>" value="<?php echo $rowSql1[$rowSql0['CAMPO']] ?>" disabled>
+                      </div><?php break;
+        case 'D' : ?> <div class="col-md-2">
+                        <label for="<?php echo $rowSql0['CODIGO'] . $i; ?>" class="form-label" style="font-size: 10px; color:aqua"><?php echo $rowSql0['ETIQUETA'] ?></label>
+                        <input style="font-weight: bold; font-size: 13px; background: rgba(0,0,0,0.3); text-align: center; width: 160px;" type="datetime" class="form-control" 
+                        id="<?php echo $rowSql0['CODIGO'] . $i; ?>" name="<?php echo $rowSql0['CODIGO'] . $i; ?>" value="<?php echo $rowSql1[$rowSql0['CAMPO']] ?>" disabled>
+                      </div><?php break;
+        case 'V' :  if($rowSql0['TAMANHO'] <= 75){ ?>
+                      <div class="col-md-6">
+                        <label for="<?php echo $rowSql0['CODIGO'] . $i; ?>" class="form-label" style="font-size: 10px; color:aqua"><?php echo $rowSql0['ETIQUETA'] ?></label>
+                        <input style="font-weight: bold; font-size: 13px; background: rgba(0,0,0,0.3); text-align: left;" type="text" class="form-control" maxlength="75" 
+                        id="<?php echo $rowSql0['CODIGO'] . $i; ?>" name="<?php echo $rowSql0['CODIGO'] . $i; ?>" value="<?php echo $rowSql1[$rowSql0['CAMPO']] ?>" disabled>
+                      </div><?php break;
+                    }
+                    if($rowSql0['TAMANHO'] > 75){ ?>
+                      <div class="col-md-12">
+                        <label for="<?php echo $rowSql0['CODIGO'] . $i; ?>" class="form-label" style="font-size: 10px; color:aqua"><?php echo $rowSql0['ETIQUETA'] ?></label>
+                        <input style="font-weight: bold; font-size: 13px; background: rgba(0,0,0,0.3); text-align: left;" type="text" class="form-control" maxlength="150" 
+                        id="<?php echo $rowSql0['CODIGO'] . $i; ?>" name="<?php echo $rowSql0['CODIGO'] . $i; ?>" value="<?php echo $rowSql1[$rowSql0['CAMPO']] ?>" disabled>
+                      </div><?php break;
+                    } 
+      } $i += $i;
+    } ?>
+  </div><br><br>
+  <form method="POST">
+    <p style="font-size: 20px; color: whitesmoke">Inserir Novos Dados</p><br>
+    <div class="row g-2">
+      <div class="col-md-3"><?php
+        $sql2 = 'SELECT ETIQUETA FROM estrutura_campos WHERE ID_ESTRUTURA = :idStruc AND N_CAMPO > 2';
+        $querySql2 = $connDB->prepare($sql2);
+        $querySql2->bindParam(':idStruc', $rowTab['ID_ESTRUTURA'], PDO::PARAM_INT);
+        $querySql2->execute(); ?>
+        <label for="etiqueta" class="form-label" style="font-size: 10px; color:aqua">Etiqueta</label>
+        <select style="font-size: 18px;" class="form-select" id="etiqueta" name="etiqueta" style="background: rgba(0,0,0,0.3);">
+          <option style="font-size: 14px; background: rgba(0,0,0,0.3)" selected>Selecione</option><?php 
+          while($rowSql2 = $querySql2->fetch(PDO::FETCH_ASSOC)){ ?>
+            <option style="font-size: 14px; background: rgba(0,0,0,0.3)"><?php echo $rowSql2['ETIQUETA']; ?></option><?php
+          } ?>
+        </select><br>
+        <input type="submit" id="confirma" name="confirma" class="btn btn-outline-primary" value="Confirma Seleção" style="width: 150px">
       </div>
-      <input class="btn btn-outline-primary" type="submit" name="adicionar" id="adicionar" value="Adicionar Novo Campo">
-      <button class="btn btn-outline-danger" onclick="location.href='./MapaGeral.php'">Descartar e Sair</button>
     </div>
-  </div>
+  </form><?php
+  $coleta = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+  if(isset($_POST['confirma'])){
+    $sql3 = 'SELECT * FROM estrutura_campos WHERE ETIQUETA = :etiqueta AND ID_ESTRUTURA = :idStruc';
+    $querySql3 = $connDB->prepare($sql3);
+    $querySql3->bindParam(':idStruc', $rowTab['ID_ESTRUTURA'], PDO::PARAM_INT);
+    $querySql3->bindParam(':etiqueta', $coleta['etiqueta'], PDO::PARAM_STR);
+    $querySql3->execute(); $rowSql3 = $querySql3->fetch(PDO::FETCH_ASSOC); ?>
+    <form method="POST"><?php
+      switch($rowSql3['CODIGO']){
+        case 'I' : ?> <div class="col-md-2">
+                          <label for="<?php echo $rowSql3['CAMPO'] ?>" class="form-label" style="font-size: 10px; color:aqua"><?php echo $rowSql3['ETIQUETA'] ?></label>
+                          <input style="font-weight: bold; font-size: 13px; background: rgba(0,0,0,0.3); text-align: right; width: 150px;" type="number" class="form-control" 
+                          id="<?php echo $rowSql3['CODIGO'] . $i; ?>" name="<?php echo $rowSql3['CAMPO'] ?>" required autofocus>
+                        </div><?php break;
+        case 'F' : ?> <div class="col-md-2">
+                          <label for="<?php echo $rowSql3['CAMPO'] ?>" class="form-label" style="font-size: 10px; color:aqua"><?php echo $rowSql3['ETIQUETA'] ?></label>
+                          <input style="font-weight: bold; font-size: 13px; background: rgba(0,0,0,0.3); text-align: right; width: 150px;" type="number" inputmode="decimal" class="form-control" 
+                          id="<?php echo $rowSql3['CAMPO'] ?>" name="<?php echo $rowSql3['CAMPO'] ?>"required autofocus>
+                        </div><?php break;
+        case 'D' : ?> <div class="col-md-2">
+                          <label for="<?php echo $rowSql3['CAMPO'] ?>" class="form-label" style="font-size: 10px; color:aqua"><?php echo $rowSql3['ETIQUETA'] ?></label>
+                          <input style="font-weight: bold; font-size: 13px; background: rgba(0,0,0,0.3); text-align: center; width: 180px;" type="datetime-local" class="form-control" 
+                          id="<?php echo $rowSql3['CAMPO'] ?>" name="<?php echo $rowSql3['CAMPO'] ?>"required autofocus>
+                        </div><?php break;
+        case 'V' :  if(!empty($rowSql0['TAMANHO']) <= 75){ ?>
+                      <div class="col-md-6">
+                        <label for="<?php echo $rowSql3['CAMPO'] ?>" class="form-label" style="font-size: 10px; color:aqua"><?php echo $rowSql3['ETIQUETA'] ?></label>
+                        <input style="font-weight: bold; font-size: 13px; background: rgba(0,0,0,0.3); text-align: left;" type="text" class="form-control" maxlength="75" 
+                        id="<?php echo $rowSql3['CAMPO'] ?>" name="<?php echo $rowSql3['CAMPO'] ?>"required autofocus>
+                      </div><?php break;
+                    }
+                    if(!empty($rowSql0['TAMANHO']) > 75){ ?>
+                      <div class="col-md-12">
+                        <label for="<?php echo $rowSql3['CAMPO'] ?>" class="form-label" style="font-size: 10px; color:aqua"><?php echo $rowSql3['ETIQUETA'] ?></label>
+                        <input style="font-weight: bold; font-size: 13px; background: rgba(0,0,0,0.3); text-align: left;" type="text" class="form-control" maxlength="150" 
+                        id="<?php echo $rowSql3['CAMPO'] ?>" name="<?php echo $rowSql3['CAMPO'] ?>"required autofocus>
+                      </div><?php break;
+                    }
+        } ?>
+    </form><?php
+    $registra = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+    if(isset($_POST[$rowSql3['CODIGO']])){
+      echo $registra[$rowSql3['CODIGO']];
+    }
+  }?>
 </div>
 <script>
   // verifica inatividade da página e fecha sessão

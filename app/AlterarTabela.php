@@ -34,7 +34,7 @@ if(!empty($_GET['id'])){
     <div class="tabela table-responsive">
       <table class="table table-dark table-bordered">
         <caption>
-          <p style="font-size: 11px;">A ETIQUETA deve ser no máximo 45 caracteres. O tamanho do tipo alfanumérico VARCHAR deve ser entre 1 até 255.</p>
+          <p style="font-size: 11px;">A ETIQUETA deve ser no máximo 45 caracteres. O tamanho do tipo alfanumérico VARCHAR deve ser entre 1 até 150.</p>
           <p style="font-size: 11px;">Inteiros, valores monetários e data não é obrigatório definir tamanho</p>
         </caption>
         <P style="color: aqua;">Tabela DB: <?php echo ' ' . $rowTabela['NOME_TABELA'] ?></P>
@@ -85,7 +85,7 @@ if(!empty($_GET['id'])){
             <td scope="col" style="width: 08%;">
               <div>
                 <input style="font-size: 12px; background: rgba(0,0,0,0.3); text-align: right;" 
-                      type="number" class="form-control" id="novoSize" name="novoSize" value="<?php echo $novoSize ?>">
+                      type="number" class="form-control" id="novoSize" name="novoSize" value="<?php echo $novoSize ?>" max="150">
               </div>
             </td>
             <td scope="col" style="width: 10%;" class="align-bottom">
